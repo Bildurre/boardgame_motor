@@ -9,10 +9,11 @@ solo sus entidades.
 
 ## Índice
 
-1. [Visión y decisiones](00-vision-y-decisiones.md) — qué, por qué, decisiones cerradas.
+1. [Visión y decisiones](00-vision-y-decisiones.md) — qué, por qué, decisiones cerradas (D1–D10).
 2. [Arquitectura](01-arquitectura.md) — paquetes, topología de un juego, frontera motor/juego.
-3. [Plan de acción](02-plan-de-accion.md) — fases, dependencias, hitos.
-4. [Planes por funcionalidad](funcionalidades/00-indice.md) — el "cómo" de cada pieza.
+3. [Registro de decisiones (ADR)](03-decisiones-cerradas.md) — todas las cuestiones técnicas resueltas (DC-01 … DC-20).
+4. [Plan de acción](02-plan-de-accion.md) — fases, dependencias, hitos.
+5. [Planes por funcionalidad](funcionalidades/00-indice.md) — el "cómo" de cada pieza.
 
 ## Mapa rápido de los repos
 

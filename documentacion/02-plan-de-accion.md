@@ -29,6 +29,7 @@
 - [ ] `motor-php` esqueleto: composer.json, `MotorServiceProvider`, config publicable.
 - [ ] `motor-ui` y `motor-admin-kit` esqueleto: package.json, build (Vite library mode), barrel exports.
 - [ ] `playground`: Laravel `api` + Vue `admin` + Vue `app` que ya consumen los paquetes por *path* (workspace local) — sin publicar todavía.
+- [ ] **PWA** (DC-01): `vite-plugin-pwa` en admin y app (manifest + service worker + app-shell), instalable en móvil.
 - [ ] Tooling: Pint, ESLint/Prettier, Pest, scripts `dev` (concurrently, estilo kontuan).
 - **Hito:** `npm run dev` levanta api + admin + app del playground con un componente del motor visible.
 
@@ -123,4 +124,4 @@ Para cada una, su doc en `funcionalidades/` sigue el mismo guión:
 3. **Diseño nuevo**: modelo de datos, API, servicios, componentes Vue.
 4. **Frontera motor ↔ juego** y puntos de extensión.
 5. **Cómo se construye** (pasos) y **hito de aceptación**.
-6. **Riesgos / decisiones abiertas.**
+6. **Decisiones (cerradas)** (ver `03-decisiones-cerradas.md`) **y riesgos.**

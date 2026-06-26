@@ -62,7 +62,14 @@ GET/POST/PUT/DELETE /api/v1/admin/users   # gestión de usuarios y roles
 - Un `user` logueado ve su panel y edita su cuenta.
 - El playground añade una sección propia al panel de usuario vía slot.
 
-## Riesgos / decisiones abiertas
+## Decisiones (cerradas)
 
-- Alcance exacto de capacidades de `editor` (configurable por juego).
-- Registro público abierto vs. solo invitación (por juego).
+- **Capacidades de `editor`** → **DC-13**: por defecto gestiona contenido (CRM) y
+  entidades del juego (crear/editar), **no** usuarios/ajustes/backups/borrados;
+  configurable por juego.
+- **Registro de usuarios** → **DC-14**: auto-registro público con verificación de
+  email (rol `user`); admin/editor a mano; toggle por juego para solo-invitación.
+
+## Riesgos
+
+- Mantener `editor` "seguro por defecto" al añadir recursos nuevos del juego.

@@ -48,10 +48,14 @@ previews), atributos de color/coste.
 - La entidad demo sube imagen simple y multilingüe; se ve en admin y público; se
   borra al eliminar la entidad.
 
-## Riesgos / decisiones abiertas
+## Decisiones (cerradas)
 
-- **MediaLibrary vs traits**: MediaLibrary integra mejor con kontuan-style y da
-  conversiones/limpieza; pero las previews/PDF dependen de paths predecibles. Elegir
-  pronto porque afecta a docs 01, 02 y 03.
-- Iconos inline en richtext (los "dados" de choque) necesitan rutas estables para
-  el render a PNG.
+- **MediaLibrary vs traits** → **DC-15**: **`spatie/laravel-media-library`** con un
+  **PathGenerator propio** para rutas predecibles (las necesitan previews y PDF).
+  Imágenes multilingües como colecciones por locale.
+- **Iconos inline (dados)** → **DC-15**: como media con ruta estable, usables en el
+  texto rico (TipTap, DC-09) y en el render a PNG (doc 01).
+
+## Riesgos
+
+- Que el PathGenerator mantenga rutas estables tras borrados/regeneraciones.

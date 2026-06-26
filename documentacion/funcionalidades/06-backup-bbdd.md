@@ -44,11 +44,13 @@ si incluye media).
 - Crear y descargar un backup desde el admin.
 - Backup programado con retención que limpia los viejos.
 
-## Riesgos / decisiones abiertas
+## Decisiones (cerradas)
 
-- **`spatie/laravel-backup` vs `ifsnop/mysqldump-php`**: Spatie da retención, media,
-  notificaciones y destinos S3 "gratis"; mysqldump-php es lo que ya hay. Recomendado
-  evaluar Spatie por features. *(A confirmar al implementar.)*
-- **Restore**: ¿incluimos restauración o solo export? Propuesta: export ahora,
-  restore manual documentado; restore guiado más adelante.
-- Bases de datos grandes → ejecutar en cola.
+- **Motor de backup** → **DC-16**: **`spatie/laravel-backup`** (retención, media,
+  S3, programación, notificaciones).
+- **Restore** → **DC-16**: **export ahora**; restore manual documentado; restore
+  guiado más adelante. BBDD grandes → en cola.
+
+## Riesgos
+
+- Tamaño de backups con media incluida; vigilar disco/retención.

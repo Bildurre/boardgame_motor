@@ -165,10 +165,10 @@ mazos) las escribe el juego a mano usando `motor-ui`.
 | Roles | Spatie Permission (3 roles: admin/editor/user) |
 | Traducciones | Spatie Translatable + slugs traducibles |
 | Localización rutas | resolución por `Accept-Language` / prefijo, sin acoplar a un paquete pesado de routing en API |
-| PDF | DomPDF para ensamblar (a confirmar) |
+| PDF | DomPDF para ensamblar (DC-06) |
 | Render PNG | Spatie Browsershot (Chromium headless) |
-| Media | almacenamiento propio (revisar Spatie MediaLibrary vs. traits actuales) |
-| Backup | mysqldump (revisar `ifsnop/mysqldump-php` vs. `spatie/laravel-backup`) |
+| Media | Spatie MediaLibrary + PathGenerator propio (DC-15) |
+| Backup | `spatie/laravel-backup` (DC-16) |
 | Colas | jobs async para PDF y previews |
 | Tests | Pest |
 | Formato | Pint |
@@ -179,11 +179,14 @@ mazos) las escribe el juego a mano usando `motor-ui`.
 |---|---|
 | Framework | Vue 3 (Composition API + TypeScript) |
 | Build | Vite |
-| Routing | Vue Router (SPA) |
+| Routing | Vue Router (SPA, prefijo de locale solo en el front — DC-03) |
 | Estado | Pinia |
 | HTTP | Axios (factory configurable del motor) |
 | i18n | vue-i18n |
-| SEO (app pública) | gestión de `<head>`/meta por ruta + prerender de páginas públicas |
+| SEO (app pública) | `useHead` por ruta + prerender en build + sitemap (DC-18) |
+| Instalable | PWA vía `vite-plugin-pwa` en admin y app (DC-01) |
+| Texto rico | TipTap (DC-09) |
+| Drag & drop | vue-draggable-plus (DC-17) |
 | Estilos | SCSS con tokens del motor |
 | Calidad | ESLint + Prettier |
 

@@ -47,7 +47,11 @@ Estos traits son lo que hace que el **CRUD dirigido por DSL** del admin-kit (doc
 - Una entidad demo que usa los traits obtiene publish/draft, soft-delete+restore,
   filtros y reorder funcionando en la API y en el admin **sin código a medida**.
 
-## Riesgos / decisiones abiertas
+## Decisiones (cerradas)
 
-- Mantener los traits **componibles** (que una entidad use solo los que necesita).
-- Alinear el formato de filtros con `FiltersBar` y con el DSL de `defineResource`.
+- **Composición y filtros** → **DC-20**: traits **opt-in** por entidad; formato de
+  filtros **unificado** entre `HasFilters`, `FiltersBar` y `defineResource`.
+
+## Riesgos
+
+- Que añadir un trait nuevo no rompa el contrato del CRUD declarativo (doc 08).

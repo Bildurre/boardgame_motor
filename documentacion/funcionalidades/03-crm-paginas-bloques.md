@@ -158,13 +158,17 @@ admin se construye solo a partir de ahí (no hay formularios por tipo a mano).
 - **Añadir un tipo de bloque nuevo = registrar un `BlockType`** (sin tocar admin
   ni el render genérico).
 
-## Riesgos / decisiones abiertas
+## Decisiones (cerradas)
 
-- **Esquema de campos**: definir un mini-DSL de tipos de campo (text, richtext,
-  image, select, entity-ref, repeater…) suficientemente expresivo para no quedarse
-  corto pero simple de mapear a inputs. Es la pieza que decide si "añadir bloque"
-  es fácil de verdad.
-- **Texto rico**: editor (TinyMCE u otro) y su sanitización; los "dados" inline de
-  choque (imágenes en el richtext) deben seguir funcionando (afecta a doc 01/07).
-- **Bloques-con-datos y caché**: resolver datos en cada request puede pesar; prever
-  caché por página/locale.
+- **Esquema de campos** → **DC-08**: DSL base `text, richtext, number, boolean,
+  select, multiselect, image (simple+multilingüe), color, entity-ref, repeater,
+  group`, **compartido** con el `ResourceForm` del admin-kit (un solo renderer).
+- **Texto rico** → **DC-09**: **TipTap**, con nodos inline a medida para los
+  "dados"/iconos y sanitización en servidor.
+- **Caché de bloques-con-datos** → **DC-10**: payload por `(page, locale)`,
+  invalidado al cambiar página/bloques o entidades referenciadas.
+
+## Riesgos
+
+- Que el DSL de campos sea lo bastante expresivo sin volverse un framework propio
+  (mantener escotilla a campos a medida).

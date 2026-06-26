@@ -59,8 +59,13 @@ src/
 - `admin` y `app` del playground consumen `motor-ui`; cambiar un token de marca
   re-tematiza ambos.
 
-## Riesgos / decisiones abiertas
+## Decisiones (cerradas)
+
+- **Texto rico** → **DC-09**: TipTap. **Drag & drop** → **DC-17**: vue-draggable-plus.
+- **PWA** → **DC-01**: `motor-ui` aporta el `useHead` y el andamiaje que admin/app
+  usan para ser instalables.
+
+## Riesgos
 
 - Empezar **mínimo** (lo que pidan admin-kit y las primeras vistas) y crecer; no
-  portar los 30 componentes de kontuan de golpe.
-- Decidir librería de texto rico y de drag (SortableJS / vue-draggable) una vez.
+  portar los ~30 componentes de kontuan de golpe.

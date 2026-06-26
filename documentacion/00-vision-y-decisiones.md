@@ -56,7 +56,11 @@ Tres metas, compatibles entre sí:
 | D6 | **Frontend: 2 SPA Vue por juego** | `admin` (admin + editores) y `app` (web pública del expositor + panel de usuario al loguearse). Ambas Vue 3 + Vite + TS. **SPA, no SSR/Nuxt.** SEO se resuelve con gestión de `<head>`/meta + prerender donde haga falta. |
 | D7 | **Auth con 3 roles simples** | `admin` (yo), `editor` (ayuda con algunas cosas), `user` (sin acceso al admin). El motor trae el panel de usuario y opciones de cuenta/config montadas pero "vacías", listas para que cada juego cuelgue lo suyo. Sin roles complejos. |
 | D8 | **Pipeline PDF: fuente única de verdad** | El **componente Vue** de la entidad sirve para (a) mostrarse en web, (b) capturarse a PNG con browser headless, y (c) montar el PDF con esos PNG. Nada de plantillas de impresión duplicadas. |
-| D9 | **Distribución de paquetes: Git + tags** (propuesta) | Para un dev en solitario, repos Git con tags de versión (Composer vía VCS, npm vía Git/registry privado de GitHub). Sin montar Packagist/registry propios al principio. *(A confirmar al llegar ahí.)* |
+| D9 | **Distribución de paquetes: Git + tags** | Repos Git con tags de versión (Composer vía VCS, npm vía Git/GitHub Packages). Sin Packagist/npm públicos. *(Cerrado: ver DC-02.)* |
+| D10 | **Frontends instalables en móvil (PWA)** | `admin` y `app` son PWA instalables (Add to Home Screen) vía `vite-plugin-pwa`: manifest + service worker, app-shell cacheado, modo standalone. No offline completo de datos. *(Ver DC-01.)* |
+
+> **Todas las cuestiones técnicas que quedaban abiertas están resueltas en
+> [`03-decisiones-cerradas.md`](03-decisiones-cerradas.md) (DC-01 … DC-20).**
 
 ## 5. Glosario rápido
 

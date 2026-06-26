@@ -52,9 +52,14 @@ No hay panel de usuario. → se moderniza a SPA Vue consumiendo la API.
   cambio de idioma que conserva la entidad.
 - Panel de usuario con una sección propia del playground enganchada por extensión.
 
-## Riesgos / decisiones abiertas
+## Decisiones (cerradas)
 
-- **Prerender vs SSR**: decidimos SPA (D6); validar que el prerender de rutas
-  públicas da SEO suficiente. Si no bastara, reconsiderar SSR **solo** para público.
-- Sitemap e indexación de entidades dinámicas (muchas cartas) → generación por
-  build/cron.
+- **SEO de la SPA** → **DC-18**: **prerender en build** de rutas públicas + `useHead`
+  + **sitemap** desde páginas/entidades publicadas (build/cron). SSR descartado salvo
+  que el prerender se quede corto en páginas de entidad muy dinámicas (plan B medido).
+- **PWA** → **DC-01**: la `app` es instalable en móvil.
+
+## Riesgos
+
+- Indexación de muchas entidades dinámicas (cartas): validar que el prerender +
+  sitemap basta; si no, SSR solo para público.

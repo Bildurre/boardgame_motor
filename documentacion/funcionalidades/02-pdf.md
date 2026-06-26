@@ -134,11 +134,15 @@ POST   /api/v1/pdf-collection/generate    # → PDF temporal
 - Un usuario arma una colección temporal de ítems elegidos y descarga su PDF.
 - Asociar un PDF a una entidad nueva **sin tocar el motor** (solo `morphTo`).
 
-## Riesgos / decisiones abiertas
+## Decisiones (cerradas)
 
-- **DomPDF vs todo-Browsershot**: como los PNG ya están renderizados, DomPDF basta
-  y es más barato que abrir Chrome para el PDF. Mantener DomPDF para ensamblar;
-  reconsiderar solo si algún layout lo exige. *(Decisión a confirmar al implementar.)*
-- **Marcas de corte y sangrado**: definir presets correctos (piezas por A4, bleed)
-  para que el recorte físico cuadre. Parte del `PrintLayout`.
-- **Tamaño/peso**: PNG a scale factor alto pesan; equilibrio calidad/peso en doc 01.
+- **Motor de ensamblado** → **DC-06**: **DomPDF** ensambla desde los PNG;
+  Browsershot solo genera PNG (doc 01).
+- **Marcas de corte y sangrado** → **DC-07**: presets en `PrintLayout` (carta
+  88×126 mm con sangrado y marcas de corte, counters, A4/A3, piezas por página),
+  publicables y ampliables por juego.
+
+## Riesgos
+
+- Que los presets de corte cuadren con el recorte físico real (verificar imprimiendo).
+- Tamaño/peso de los PNG a scale factor alto (equilibrio en doc 01).

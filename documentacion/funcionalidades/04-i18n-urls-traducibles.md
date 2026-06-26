@@ -101,11 +101,16 @@ TranslatableRouting::register('pages', Page::class);
   salta entre idiomas conservando la entidad.
 - Registrar una entidad traducible nueva = **una línea**, sin tocar el motor.
 
-## Riesgos / decisiones abiertas
+## Decisiones (cerradas)
 
-- **Consulta de slug en JSON**: el `whereRaw(JSON_EXTRACT)` por locale funciona pero
-  conviene índice/columna generada para rendimiento si hay muchas entidades.
-- **Locale por defecto y fallback**: definir política (¿mostrar default si falta
-  traducción, u ocultar?). Afecta a público y a previews/PDF.
-- **Localización de rutas en API**: decidir si el prefijo de locale vive solo en el
-  front (SPA) y la API es locale-agnóstica con parámetro, que es lo más limpio.
+- **Consulta de slug en JSON** → **DC-11**: columna generada/almacenada con
+  **índice único por locale** para búsqueda y unicidad rápidas.
+- **Locale por defecto y fallback** → **DC-12**: fallback al default por campo;
+  en público, **301 a la URL canónica** del idioma correcto si el slug pedido no
+  corresponde al locale.
+- **Localización de rutas en API** → **DC-03**: la API es **agnóstica de locale**
+  (parámetro/cabecera); el prefijo `/es`·`/eu` vive solo en el router del front.
+
+## Riesgos
+
+- Migraciones de columnas generadas en MySQL (sintaxis/índices) a verificar.

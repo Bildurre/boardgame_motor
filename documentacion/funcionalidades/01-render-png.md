@@ -108,12 +108,14 @@ actual, pero **declarativa**: la entidad lista qué campos disparan regeneració
 - `preview:manage regenerate --type=demo` regenera en lote vía cola.
 - Cero referencias a rutas de CSS por glob ni base64 manual.
 
-## Riesgos / decisiones abiertas
+## Decisiones (cerradas)
 
-- **Chromium en servidor**: Browsershot necesita Chrome headless. Documentar
-  instalación y `noSandbox` en producción (ya resuelto en choque, se reutiliza).
-- **Datos para la ruta de render**: ¿la `app` pide los datos por API o el backend
-  pasa un token con payload? Propuesta: ruta de render protegida que pide por API
-  con un token de servicio.
-- **Rendimiento**: capturas en paralelo limitadas por nº de Chromes; usar cola con
-  workers acotados (como hoy).
+- **Datos de la ruta de render** → **DC-04**: la ruta `/_render` pide los datos por
+  API con un **token de servicio de vida corta** firmado; no es pública.
+- **Chromium y rendimiento** → **DC-05**: Chrome headless con `noSandbox` + args de
+  producción (reutilizado de choque); generación **en cola** con workers acotados.
+
+## Riesgos
+
+- Memoria/concurrencia de Chrome: límite de instancias configurable.
+- Calidad vs peso del PNG (scale factor) — afecta también al PDF (doc 02).

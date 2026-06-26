@@ -70,9 +70,14 @@ defineResource('cards', {
 - Declarar un recurso del playground con `defineResource` da index+form+filtros+
   publish+soft-delete+reorder **sin escribir pantallas a mano**.
 
-## Riesgos / decisiones abiertas
+## Decisiones (cerradas)
 
-- **Cuánta magia en el DSL**: el equilibrio entre "declarativo" y "escapar a
-  componentes a mano" para casos raros. El DSL debe permitir slots/overrides.
-- Mantener el DSL alineado con el esquema de campos del CRM (doc 03) para reusar
-  el mismo renderer de formularios.
+- **Magia del DSL** → **DC-19**: declarativo para lo estándar, **con slots/overrides
+  y escape a componentes a mano** para pantallas especiales.
+- **Alineación con el CRM** → **DC-08**: el `ResourceForm` usa el **mismo DSL de
+  campos y renderer** que el `BlockEditor` (doc 03).
+- **PWA** → **DC-01**: el admin es instalable (vite-plugin-pwa).
+
+## Riesgos
+
+- No convertir el DSL en un framework propio difícil de mantener.
