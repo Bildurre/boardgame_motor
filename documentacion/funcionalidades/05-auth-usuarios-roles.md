@@ -14,7 +14,7 @@ usuarios públicos. → Se rehace para API/SPA.
 
 ## Diseño nuevo
 
-**Backend (`motor-php/src/Auth/`):**
+**Backend (`core/src/Auth/`):**
 - **Sanctum** para tokens SPA. Endpoints: `register`, `login`, `logout`, `me`,
   `forgot/reset password`, verificación de email.
 - **Spatie Permission** con 3 roles fijos sembrados por el motor: `admin`, `editor`,
@@ -36,7 +36,7 @@ GET/POST/PUT/DELETE /api/v1/admin/users   # gestión de usuarios y roles
 ```
 
 **Frontend:**
-- **admin** (`motor-admin-kit/src/users/` + `stores/auth`): login, gestión de
+- **admin** (`admin-kit/src/users/` + `stores/auth`): login, gestión de
   usuarios y asignación de rol.
 - **app** (panel de usuario): layout de panel + páginas de **cuenta** y
   **configuración** vacías pero funcionales, con **puntos de extensión** (slots /

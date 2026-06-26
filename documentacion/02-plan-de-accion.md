@@ -26,8 +26,8 @@
 **Meta:** repos, paquetes vacíos y `playground` arrancando.
 
 - [ ] Estructura del monorepo del motor (`packages/*`, `playground/`).
-- [ ] `motor-php` esqueleto: composer.json, `MotorServiceProvider`, config publicable.
-- [ ] `motor-ui` y `motor-admin-kit` esqueleto: package.json, build (Vite library mode), barrel exports.
+- [ ] `core` esqueleto: composer.json, `MotorServiceProvider`, config publicable.
+- [ ] `@bgm/ui` y `admin-kit` esqueleto: package.json, build (Vite library mode), barrel exports.
 - [ ] `playground`: Laravel `api` + Vue `admin` + Vue `app` que ya consumen los paquetes por *path* (workspace local) — sin publicar todavía.
 - [ ] **PWA** (DC-01): `vite-plugin-pwa` en admin y app (manifest + service worker + app-shell), instalable en móvil.
 - [ ] Tooling: Pint, ESLint/Prettier, Pest, scripts `dev` (concurrently, estilo kontuan).

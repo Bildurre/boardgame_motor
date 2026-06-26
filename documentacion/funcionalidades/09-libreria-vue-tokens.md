@@ -14,7 +14,7 @@ inspirado en los ~30 componentes base de `@kontuan/shared`.
 
 ## Diseño nuevo
 
-**Paquete `motor-ui` (`@boardgame/motor-ui`):**
+**Paquete `@bgm/ui`:**
 
 ```
 src/
@@ -56,13 +56,13 @@ src/
 
 ## Hito de aceptación
 
-- `admin` y `app` del playground consumen `motor-ui`; cambiar un token de marca
+- `admin` y `app` del playground consumen `@bgm/ui`; cambiar un token de marca
   re-tematiza ambos.
 
 ## Decisiones (cerradas)
 
 - **Texto rico** → **DC-09**: TipTap. **Drag & drop** → **DC-17**: vue-draggable-plus.
-- **PWA** → **DC-01**: `motor-ui` aporta el `useHead` y el andamiaje que admin/app
+- **PWA** → **DC-01**: `@bgm/ui` aporta el `useHead` y el andamiaje que admin/app
   usan para ser instalables.
 
 ## Riesgos

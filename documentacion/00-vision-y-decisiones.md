@@ -58,9 +58,12 @@ Tres metas, compatibles entre sí:
 | D8 | **Pipeline PDF: fuente única de verdad** | El **componente Vue** de la entidad sirve para (a) mostrarse en web, (b) capturarse a PNG con browser headless, y (c) montar el PDF con esos PNG. Nada de plantillas de impresión duplicadas. |
 | D9 | **Distribución de paquetes: Git + tags** | Repos Git con tags de versión (Composer vía VCS, npm vía Git/GitHub Packages). Sin Packagist/npm públicos. *(Cerrado: ver DC-02.)* |
 | D10 | **Frontends instalables en móvil (PWA)** | `admin` y `app` son PWA instalables (Add to Home Screen) vía `vite-plugin-pwa`: manifest + service worker, app-shell cacheado, modo standalone. No offline completo de datos. *(Ver DC-01.)* |
+| D11 | **Marca y namespace: `bgm`** | El proyecto es **BGM** (BoardgameMotor). Paquetes `bgm/core` (Composer), `@bgm/ui` y `@bgm/admin-kit` (npm). *(Ver DC-21.)* |
+| D12 | **Infra: un droplet DigitalOcean por juego** | Cada web (api+admin+app) en su droplet, con worker de cola + Chromium. Storage configurable: disco por defecto, S3/Spaces opcional. *(Ver DC-22.)* |
+| D13 | **Locales por defecto: es / eu / en** | Euskera incluido; `es` por defecto; configurable por juego. *(Ver DC-23.)* |
 
 > **Todas las cuestiones técnicas que quedaban abiertas están resueltas en
-> [`03-decisiones-cerradas.md`](03-decisiones-cerradas.md) (DC-01 … DC-20).**
+> [`03-decisiones-cerradas.md`](03-decisiones-cerradas.md) (DC-01 … DC-23).**
 
 ## 5. Glosario rápido
 

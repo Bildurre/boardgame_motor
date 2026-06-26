@@ -20,7 +20,7 @@ No hay panel de usuario. → se moderniza a SPA Vue consumiendo la API.
 - **Listados de entidades genéricos**: un patrón de "índice + detalle por slug"
   que el juego configura para sus entidades (qué campos, qué filtros), reutilizando
   componentes del CRM (ej. el bloque `relateds`/`automatic-index`).
-- **SEO en SPA**: `useHead` (de `motor-ui`) fija `<title>`/meta por ruta desde los
+- **SEO en SPA**: `useHead` (de `@bgm/ui`) fija `<title>`/meta por ruta desde los
   `meta_*` de la página/entidad; **prerender** de las rutas públicas en el build
   para que el HTML inicial sea indexable (D6). Sitemap generado desde las páginas
   publicadas.

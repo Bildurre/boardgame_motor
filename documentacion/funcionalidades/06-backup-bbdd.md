@@ -12,7 +12,7 @@ descargable desde el admin, y programable. Una salvaguarda simple por juego.
 
 ## Diseño nuevo
 
-**Backend (`motor-php/src/Backup/`):**
+**Backend (`core/src/Backup/`):**
 - `BackupService`: dump (mysqldump-php o `spatie/laravel-backup` — a decidir),
   compresión opcional, almacenamiento en disco configurable, listado y borrado de
   backups antiguos, retención.

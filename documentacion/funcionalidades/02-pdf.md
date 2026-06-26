@@ -54,7 +54,7 @@ dentro; nunca reescribe el ensamblado.
 → Adiós `faction_id/deck_id/page_id`. Cualquier entidad del juego puede ser dueña
 vía `morphTo`.
 
-### Backend del motor (`motor-php/src/Pdf/`)
+### Backend del motor (`core/src/Pdf/`)
 
 ```
 Pdf/
@@ -102,7 +102,7 @@ DELETE /api/v1/pdf-collection/items/{key}
 POST   /api/v1/pdf-collection/generate    # → PDF temporal
 ```
 
-### Admin (`motor-admin-kit/src/pdf/`)
+### Admin (`admin-kit/src/pdf/`)
 
 - **`PdfManager`**: lista los PDF de una entidad, botones **Generar / Regenerar /
   Descargar / Borrar** (un clic), estado (en cola / listo / error), por idioma.

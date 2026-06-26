@@ -17,7 +17,7 @@ previews), atributos de color/coste.
 
 ## Diseño nuevo
 
-**Backend (`motor-php/src/Media/`):**
+**Backend (`core/src/Media/`):**
 - Decidir base: **Spatie MediaLibrary** (como kontuan) **o** traits propios
   modernizados. MediaLibrary da conversiones, colecciones y limpieza; los traits
   actuales son más ligeros. → evaluar (ver riesgos).
@@ -28,7 +28,7 @@ previews), atributos de color/coste.
 - Almacenamiento por disco configurable; helper de URL; borrado al eliminar el
   modelo; soporte de "dados"/iconos inline en texto rico (relación con doc 03).
 
-**Frontend (`motor-ui`):**
+**Frontend (`@bgm/ui`):**
 - `ImageUpload` (drag&drop + preview) y variante multilingüe (una por locale).
 
 ## Frontera motor ↔ juego
@@ -41,7 +41,7 @@ previews), atributos de color/coste.
 
 1. Decidir MediaLibrary vs traits propios.
 2. Traits del motor + almacenamiento + borrado en cascada.
-3. `ImageUpload` (simple y multilingüe) en `motor-ui`.
+3. `ImageUpload` (simple y multilingüe) en `@bgm/ui`.
 
 ## Hito de aceptación
 

@@ -47,7 +47,7 @@ de esa URL. Adiós a globbing de CSS, base64 y variables hardcodeadas.
 - El componente es **el mismo** que se usa en el expositor → fuente única (D8).
 - Acceso restringido (token interno / sólo desde el backend) para que no sea pública.
 
-### Backend del motor (`motor-php/src/Previews/`)
+### Backend del motor (`core/src/Previews/`)
 
 ```
 Previews/
@@ -94,7 +94,7 @@ actual, pero **declarativa**: la entidad lista qué campos disparan regeneració
 
 ## Pasos
 
-1. Infra Browsershot en `motor-php` (`PreviewRenderer` + config publicable).
+1. Infra Browsershot en `core` (`PreviewRenderer` + config publicable).
 2. Ruta `/_render` en el andamiaje de `app` (carga aislada de un componente).
 3. `PreviewableContract` + `HasPreviewImage` + `PreviewService`.
 4. `GeneratePreviewJob` (captura desde URL) + almacenamiento/limpieza.

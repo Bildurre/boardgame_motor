@@ -14,7 +14,7 @@ Rutas `toggle-published` y `restore` por entidad. Se conserva la idea, se genera
 
 ## Diseño nuevo
 
-**`motor-php/src/Support/Concerns/`:**
+**`core/src/Support/Concerns/`:**
 - **`HasPublishedState`** — `is_published`, scopes `published()`/`draft()`,
   `togglePublished()`; integra con el CRUD del admin (acción publicar/despublicar).
 - **`SoftDeletesWithRestore`** — soft-delete estándar + endpoint/acción de restore

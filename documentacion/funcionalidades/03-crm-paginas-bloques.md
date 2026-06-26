@@ -80,7 +80,7 @@ BlockType {
   `resolveData` consulta **sus** modelos. El motor nunca importa `Counter`/`Hero`.
 
 ```
-motor-php/src/Content/
+core/src/Content/
 ├── Page.php · Block.php
 ├── PageService.php · BlockService.php   # CRUD, reorder, traducciones
 ├── BlockType.php (abstract) + Contracts
@@ -116,7 +116,7 @@ GET    /api/v1/public/pages/{slug}          # página + bloques + datos resuelto
 `GET /block-types` devuelve el **esquema de campos** de cada tipo → el editor del
 admin se construye solo a partir de ahí (no hay formularios por tipo a mano).
 
-### Admin (`motor-admin-kit/src/content/`)
+### Admin (`admin-kit/src/content/`)
 
 - **`PageEditor`**: datos de página + SEO + plantilla + jerarquía.
 - **`BlockPalette`**: lista los `block-types` (con icono/categoría) para añadir.
@@ -129,7 +129,7 @@ admin se construye solo a partir de ahí (no hay formularios por tipo a mano).
 
 - **`PageView`**: pide `/public/pages/{slug}`, itera bloques y monta el componente
   Vue de cada tipo (`component` del `BlockType`). Los de presentación vienen en
-  `motor-ui`; los de datos, en `app` del juego.
+  `@bgm/ui`; los de datos, en `app` del juego.
 - SEO por `meta_*` (doc 10). Páginas con `is_printable` enlazan con PDF (doc 02).
 
 ## Frontera motor ↔ juego
@@ -145,7 +145,7 @@ admin se construye solo a partir de ahí (no hay formularios por tipo a mano).
 
 1. Modelos Page/Block + migraciones del motor + servicios CRUD/reorder/i18n.
 2. `BlockType` (abstract) + `BlockTypeRegistry` + contrato de esquema de campos.
-3. Bloques de presentación del motor (back + componentes en `motor-ui`).
+3. Bloques de presentación del motor (back + componentes en `@bgm/ui`).
 4. API (`/pages`, `/block-types`, render público).
 5. `PageEditor` + `BlockPalette` + `BlockEditor` dirigido por esquema en admin-kit.
 6. `PageView` en `app` (render por componente de tipo).

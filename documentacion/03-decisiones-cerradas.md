@@ -1,7 +1,8 @@
 # Registro de decisiones cerradas (ADR)
 
 > Resuelve **todas** las cuestiones que quedaban abiertas en los docs de
-> funcionalidad, más la decisión nueva de **PWA**. Cada entrada: la pregunta, la
+> funcionalidad, más las decisiones de **PWA** (DC-01), **naming/BGM** (DC-21),
+> **infraestructura** (DC-22) y **locales** (DC-23). Cada entrada: la pregunta, la
 > decisión y el porqué. Si una decisión cambia, se edita aquí y en el doc afectado.
 
 ## Transversales
@@ -15,12 +16,22 @@ nombre, iconos y color de tema.
 **Por qué:** las quieres instalables en teléfono; con SPA Vite es coste bajo y no
 obliga a SSR. (Amplía D6.)
 
-### DC-02 · Distribución de paquetes: Git + tags
-**Decisión:** repos Git con **tags de versión**. Composer vía `repositories`
-(type vcs); npm vía Git o **GitHub Packages** (registry privado) si hace falta
-scope `@boardgame`. Sin Packagist público ni npm público.
-**Por qué:** lo más simple para un dev en solitario; se migra a registry privado
-solo si aparece fricción. (Cierra D9.)
+### DC-02 · Monorepo del motor + publicación versionada
+**Decisión:** el motor vive en **un solo monorepo** (`boardgame_motor/packages/{core,ui,admin-kit}`).
+- **Durante el desarrollo (Fases 0–6):** el `playground` (y cualquier juego)
+  consume los paquetes por **enlace local** (Composer `path` repository / npm
+  workspace). **Cero infraestructura de publicación.** Es lo más limpio y sencillo.
+- **Publicación versionada (Fase 7):** se activa cuando hace falta consumir el motor
+  desde un repo de juego externo con versión fijada:
+  - **npm** (`@bgm/ui`, `@bgm/admin-kit`) → `npm publish` por paquete a **GitHub
+    Packages** (registry privado del scope `@bgm`). Sin repos extra.
+  - **Composer** (`bgm/core`) → como Composer no instala un subdirectorio por tag,
+    se **espeja** el paquete a un repo read-only (`git subtree split`) que lleva los
+    tags, automatizado con una GitHub Action al taggear. Es la única "maquinaria", y
+    es estándar.
+**Por qué:** monorepo para desarrollar (una sola fuente, simple), y solo se añade la
+mecánica de publicación cuando de verdad hace falta (Fase 7). Cumple "no romper webs"
+porque cada juego fija versión. (Cierra D9.)
 
 ### DC-03 · La API es agnóstica de locale
 **Decisión:** el prefijo de idioma (`/es`, `/eu`) vive **solo en el router del
@@ -110,6 +121,7 @@ destructivos. Cada juego puede ajustar el mapa de capacidades.
 **Decisión:** **`spatie/laravel-media-library`** con un **PathGenerator** que da
 rutas predecibles (las necesitan previews y PDF). Imágenes multilingües como
 colecciones por locale. Iconos inline (dados) como media con ruta estable.
+Almacenamiento por defecto en **disco del droplet**; **S3/Spaces opcional** (DC-22).
 **Por qué:** conversiones, colecciones y limpieza "gratis", alineado con kontuan;
 el PathGenerator resuelve la única pega (rutas estables).
 
@@ -144,6 +156,31 @@ permite slots/overrides y caer a componentes a mano para pantallas especiales.
 `HasFilters`, `FiltersBar` y `defineResource`.
 **Por qué:** cada entidad usa solo lo que necesita y el admin lo entiende sin código.
 
+## Naming, infra y locales
+
+### DC-21 · Marca y nombres de paquete: `bgm`
+**Decisión:** la marca es **BGM** (BoardgameMotor). Vendor/scope **`bgm`**:
+- Composer: **`bgm/core`** (backend Laravel).
+- npm: **`@bgm/ui`** y **`@bgm/admin-kit`**.
+- Directorios del monorepo: `packages/{core,ui,admin-kit}`.
+**Por qué:** el proyecto *es* el boardgamemotor; `bgm` es corto y sin redundancias
+("motor" ya está implícito).
+
+### DC-22 · Infraestructura: un droplet DigitalOcean por juego
+**Decisión:** **cada web/juego completo (api + admin + app) va en su propio droplet
+de DigitalOcean.** En el droplet viven también el worker de cola y **Chromium**
+(para el render PNG, doc 01). El **almacenamiento es configurable**: por defecto
+**disco del droplet**; **S3 / DigitalOcean Spaces opcional** (lo soportan media —
+DC-15 — y backup — DC-16 — sin cambiar código). Esquema de despliegue al estilo del
+`deploy.sh` de choque.
+**Por qué:** aislamiento por juego (un fallo no afecta a otros), simple de operar; el
+storage queda abierto para crecer a objetos cuando convenga.
+
+### DC-23 · Locales por defecto: es / eu / en
+**Decisión:** los locales de contenido del motor son **`es`, `eu`, `en`** (euskera
+incluido), con **`es`** por defecto. Configurable por juego en `config/motor.php`.
+**Por qué:** es el set que usas; el motor lo trae listo y cada juego lo ajusta.
+
 ---
 
 ## Tabla resumen
@@ -170,3 +207,6 @@ permite slots/overrides y caer a componentes a mano para pantallas especiales.
 | DC-18 | SEO | prerender + sitemap; SSR plan B |
 | DC-19 | Admin DSL | declarativo con slots/escape |
 | DC-20 | Traits | componibles; filtros unificados |
+| DC-21 | Naming | marca BGM; `bgm/core`, `@bgm/ui`, `@bgm/admin-kit` |
+| DC-22 | Infra | droplet DO por juego; storage configurable (disco / S3 opcional) |
+| DC-23 | Locales | es / eu / en (default es) |

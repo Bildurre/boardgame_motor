@@ -16,7 +16,7 @@ configuración.
 
 ## Diseño nuevo
 
-**Paquete `motor-admin-kit` (Vue, sobre `motor-ui`):**
+**Paquete `admin-kit` (Vue, sobre `@bgm/ui`):**
 
 ```
 src/
@@ -39,7 +39,7 @@ src/
   `BlockEditor` (doc 03).
 - **`AdminLayout`**: el juego registra sus secciones de menú y monta sus rutas; las
   pantallas estándar salen del DSL, las muy específicas las escribe el juego con
-  `motor-ui`.
+  `@bgm/ui`.
 
 **Cómo lo usa un juego:**
 ```ts

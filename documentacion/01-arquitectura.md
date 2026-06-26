@@ -12,9 +12,9 @@
 │  boardgame_motor/   (monorepo donde se DESARROLLA el motor)    │
 │                                                                │
 │  packages/                                                     │
-│   ├── motor-php          (paquete Composer — backend Laravel)  │
-│   ├── motor-ui           (paquete npm — componentes Vue + SCSS)│
-│   └── motor-admin-kit    (paquete npm — layout + CRUD admin)   │
+│   ├── core        →  bgm/core        (Composer — backend)      │
+│   ├── ui          →  @bgm/ui         (npm — Vue + SCSS)        │
+│   └── admin-kit   →  @bgm/admin-kit  (npm — layout + CRUD)     │
 │  playground/             (juego-demo mínimo para probar motor) │
 │  documentacion/                                                │
 └──────────────────────────────────────────────────────────────┘
@@ -23,9 +23,9 @@
 ┌──────────────────────────────────────────────────────────────┐
 │  choque_de_leyendas/  (y cada juego futuro — su PROPIO repo)   │
 │                                                                │
-│  api/     Laravel  → require boardgame/motor-php:^1.0          │
-│  admin/   Vue SPA  → deps @boardgame/motor-ui + motor-admin-kit│
-│  app/     Vue SPA  → deps @boardgame/motor-ui                  │
+│  api/     Laravel  → require bgm/core:^1.0          │
+│  admin/   Vue SPA  → deps @bgm/ui + admin-kit│
+│  app/     Vue SPA  → deps @bgm/ui                  │
 │  assets/  documentacion/                                       │
 └──────────────────────────────────────────────────────────────┘
 ```
@@ -37,15 +37,15 @@ específico de ese juego.
 
 ## 2. Los paquetes del motor
 
-### 2.1. `motor-php` (Composer)
+### 2.1. `core` (Composer)
 
-Paquete Laravel instalable (`boardgame/motor-php`). Aporta backend reutilizable
+Paquete Laravel instalable (`bgm/core`). Aporta backend reutilizable
 vía un `ServiceProvider` con auto-registro de rutas, migraciones publicables,
 config publicable y comandos artisan.
 
 ```
-motor-php/
-├── composer.json                 # name: boardgame/motor-php
+core/
+├── composer.json                 # name: bgm/core
 ├── config/motor.php              # config publicable (locales, pdf, storage…)
 ├── database/migrations/          # tablas del motor (pages, blocks, generated_pdfs,
 │                                 #   users, roles, media, …) publicables
@@ -84,14 +84,14 @@ motor-php/
 - **Render a PNG**: el juego declara qué entidades son "renderizables" y a qué
   ruta del frontend corresponde su componente visual.
 
-### 2.2. `motor-ui` (npm — `@boardgame/motor-ui`)
+### 2.2. `ui` (npm — `@bgm/ui`)
 
 Equivalente a `@kontuan/shared`: componentes Vue 3 base + tokens y estilos SCSS,
 sin lógica de negocio. Lo consumen **admin** y **app** de cada juego.
 
 ```
-motor-ui/
-├── package.json                  # @boardgame/motor-ui
+ui/                               # paquete @bgm/ui
+├── package.json                  # @bgm/ui
 ├── src/
 │   ├── components/
 │   │   ├── base/                 # BaseButton, BaseInput, BaseModal, BaseTable…
@@ -107,15 +107,15 @@ motor-ui/
     └── components/
 ```
 
-### 2.3. `motor-admin-kit` (npm — `@boardgame/motor-admin-kit`)
+### 2.3. `admin-kit` (npm — `@bgm/admin-kit`)
 
 Lo que evita rehacer el admin en cada juego: **layout del panel**, scaffolding de
 CRUD, editor de bloques del CRM, gestor de PDF/previews, gestión de usuarios.
-Construido sobre `motor-ui`.
+Construido sobre `@bgm/ui`.
 
 ```
-motor-admin-kit/
-├── package.json                  # @boardgame/motor-admin-kit
+admin-kit/                        # paquete @bgm/admin-kit
+├── package.json                  # @bgm/admin-kit
 ├── src/
 │   ├── layout/                   # AdminLayout, Sidebar, Topbar, Breadcrumbs
 │   ├── crud/                     # ResourceList, ResourceForm, FiltersBar, useResource()
@@ -130,21 +130,21 @@ motor-admin-kit/
 **Cómo lo extiende un juego:** el admin del juego importa `AdminLayout` y registra
 sus secciones/CRUDs declarándolos (modelo, campos, columnas) o componiendo con
 `ResourceList`/`ResourceForm`. Las pantallas muy específicas (ej. constructor de
-mazos) las escribe el juego a mano usando `motor-ui`.
+mazos) las escribe el juego a mano usando `@bgm/ui`.
 
 ## 3. Anatomía de un juego (ej. estructura futura de choque)
 
 ```
 <juego>/
 ├── api/                          # Laravel
-│   ├── composer.json             # require boardgame/motor-php
+│   ├── composer.json             # require bgm/core
 │   ├── app/Models/               # Card, Hero, Faction… (entidades del juego)
 │   ├── app/Http/Controllers/     # extienden los del motor
 │   ├── app/BlockTypes/           # bloques-con-datos del juego (counters-list…)
 │   ├── app/Previews/             # declaración de entidades renderizables a PNG
 │   ├── database/migrations/      # tablas del juego (las del motor vienen publicadas)
 │   └── routes/api.php            # rutas propias del juego
-├── admin/                        # Vue SPA — @boardgame/motor-ui + motor-admin-kit
+├── admin/                        # Vue SPA — @bgm/ui + admin-kit
 │   └── src/                      # registra CRUDs y pantallas propias
 ├── app/                          # Vue SPA — público + panel usuario
 │   └── src/                      # vistas públicas, componentes visuales de entidades
@@ -155,7 +155,7 @@ mazos) las escribe el juego a mano usando `motor-ui`.
 
 ## 4. Stack tecnológico
 
-### Backend (`motor-php` + api de cada juego)
+### Backend (`core` + api de cada juego)
 
 | Pieza | Tecnología |
 |---|---|
@@ -173,7 +173,7 @@ mazos) las escribe el juego a mano usando `motor-ui`.
 | Tests | Pest |
 | Formato | Pint |
 
-### Frontend (`motor-ui` + `motor-admin-kit` + admin/app de cada juego)
+### Frontend (`@bgm/ui` + `admin-kit` + admin/app de cada juego)
 
 | Pieza | Tecnología |
 |---|---|
