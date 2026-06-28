@@ -22,16 +22,17 @@
 
 ## Fases
 
-### Fase 0 — Andamiaje del monorepo (base)
+### Fase 0 — Andamiaje del monorepo (base) ✅
 **Meta:** repos, paquetes vacíos y `playground` arrancando.
 
-- [ ] Estructura del monorepo del motor (`packages/*`, `playground/`).
-- [ ] `core` esqueleto: composer.json, `MotorServiceProvider`, config publicable.
-- [ ] `@bgm/ui` y `admin-kit` esqueleto: package.json, build (Vite library mode), barrel exports.
-- [ ] `playground`: Laravel `api` + Vue `admin` + Vue `app` que ya consumen los paquetes por *path* (workspace local) — sin publicar todavía.
-- [ ] **PWA** (DC-01): `vite-plugin-pwa` en admin y app (manifest + service worker + app-shell), instalable en móvil.
-- [ ] Tooling: Pint, ESLint/Prettier, Pest, scripts `dev` (concurrently, estilo kontuan).
-- **Hito:** `npm run dev` levanta api + admin + app del playground con un componente del motor visible.
+- [x] Estructura del monorepo del motor (`packages/*`, `playground/`).
+- [x] `core` esqueleto: composer.json, `MotorServiceProvider`, config publicable, ruta `api/motor/ping`.
+- [x] `@bgm/ui` y `@bgm/admin-kit` esqueleto: package.json + barrel exports apuntando a `src` (patrón kontuan, sin build en dev).
+- [x] `playground`: Laravel `api` + Vue `admin` + Vue `app` que ya consumen los paquetes por *path*/workspace (enlace local), sin publicar.
+- [x] **PWA** (DC-01): `vite-plugin-pwa` en admin y app (manifest + service worker). Faltan iconos reales (los pone cada juego).
+- [x] Script `dev` con `concurrently` (estilo kontuan) + `dev:front` + `build`.
+- [ ] Linters/formatters: Pint (api), ESLint/Prettier (fronts), Pest — **pendiente** (se añade al empezar a escribir lógica).
+- **Hito:** ✅ `npm run dev` levanta api + admin + app; la app muestra un componente del motor (`MotorBadge`/`AdminLayout`) y consume `api/motor/ping` por el proxy.
 
 ### Fase 1 — Auth, usuarios y roles
 **Meta:** poder entrar al admin y al panel de usuario. Base transversal del resto.

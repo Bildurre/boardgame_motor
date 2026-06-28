@@ -1,0 +1,23 @@
+{
+  "name": "boardgame-motor",
+  "private": true,
+  "type": "module",
+  "workspaces": [
+    "packages/ui",
+    "packages/admin-kit",
+    "playground/admin",
+    "playground/app"
+  ],
+  "scripts": {
+    "dev": "concurrently -n app,admin,api -c blue,green,red \"npm run dev -w playground/app\" \"npm run dev -w playground/admin\" \"npm run dev:api\"",
+    "dev:front": "concurrently -n app,admin -c blue,green \"npm run dev -w playground/app\" \"npm run dev -w playground/admin\"",
+    "dev:api": "cd playground/api && php artisan serve",
+    "build": "npm run build -w playground/app && npm run build -w playground/admin"
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.0"
+  },
+  "engines": {
+    "node": "^20.19.0 || >=22.12.0"
+  }
+}

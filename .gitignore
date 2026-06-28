@@ -1,0 +1,27 @@
+# Dependencies
+node_modules/
+vendor/
+
+# Builds
+dist/
+playground/api/public/build/
+
+# Env
+.env
+.env.*
+!.env.example
+
+# Laravel runtime
+playground/api/storage/*.key
+playground/api/storage/framework/cache/data/*
+playground/api/storage/framework/sessions/*
+playground/api/storage/framework/views/*
+playground/api/storage/logs/*
+playground/api/bootstrap/cache/*.php
+playground/api/database/*.sqlite
+
+# Editor / OS
+.DS_Store
+*.log
+.vscode/
+.idea/

@@ -1,0 +1,44 @@
+import { fileURLToPath, URL } from 'node:url'
+import { defineConfig } from 'vite'
+import vue from '@vitejs/plugin-vue'
+import { VitePWA } from 'vite-plugin-pwa'
+
+// Web pública del playground (puerto 5173). PWA instalable (DC-01).
+export default defineConfig({
+  plugins: [
+    vue(),
+    VitePWA({
+      registerType: 'autoUpdate',
+      manifest: {
+        name: 'BGM Playground',
+        short_name: 'BGM',
+        description: 'Web pública de prueba del Boardgame Motor',
+        theme_color: '#6c5ce7',
+        background_color: '#0f1115',
+        display: 'standalone',
+        start_url: '/',
+        icons: [],
+      },
+    }),
+  ],
+  resolve: {
+    alias: { '@': fileURLToPath(new URL('./src', import.meta.url)) },
+  },
+  server: {
+    port: 5173,
+    proxy: {
+      // Evita CORS en dev: /api → la api Laravel del playground.
+      '/api': 'http://localhost:8000',
+    },
+  },
+  css: {
+    preprocessorOptions: {
+      scss: {
+        additionalData: '@use "tokens" as *;\n',
+        loadPaths: [
+          fileURLToPath(new URL('../../packages/ui/scss', import.meta.url)),
+        ],
+      },
+    },
+  },
+})

@@ -1,0 +1,40 @@
+<script setup lang="ts">
+// Componente de prueba de cableado: muestra que el front consume @bgm/ui.
+withDefaults(
+  defineProps<{
+    label?: string
+    version?: string
+  }>(),
+  { label: 'BGM', version: '' },
+)
+</script>
+
+<template>
+  <span class="bgm-badge">
+    <span class="bgm-badge__dot" />
+    {{ label }}<template v-if="version"> · v{{ version }}</template>
+  </span>
+</template>
+
+<style scoped lang="scss">
+// Tokens inyectados vía additionalData del vite de cada app.
+.bgm-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: $space-2;
+  padding: $space-1 $space-3;
+  border: 1px solid $color-border;
+  border-radius: $radius-pill;
+  background: $color-surface;
+  color: $color-text;
+  font-size: 0.85rem;
+  font-weight: 600;
+
+  &__dot {
+    width: 0.5rem;
+    height: 0.5rem;
+    border-radius: 50%;
+    background: $color-accent;
+  }
+}
+</style>
