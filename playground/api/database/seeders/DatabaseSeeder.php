@@ -3,23 +3,35 @@
 namespace Database\Seeders;
 
 use App\Models\User;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Hash;
+use Spatie\Permission\Models\Role;
 
 class DatabaseSeeder extends Seeder
 {
-    use WithoutModelEvents;
-
     /**
-     * Seed the application's database.
+     * Crea un usuario de prueba por cada rol del motor.
+     * Idempotente: se puede re-ejecutar sin duplicar.
      */
     public function run(): void
     {
-        // User::factory(10)->create();
+        // Asegura los roles (por si no se corrió motor:install).
+        foreach (['admin', 'editor', 'user'] as $role) {
+            Role::findOrCreate($role, 'web');
+        }
 
-        User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
-        ]);
+        $usuarios = [
+            ['admin', 'Admin', 'admin@bgm.test'],
+            ['editor', 'Editor', 'editor@bgm.test'],
+            ['user', 'Usuario', 'user@bgm.test'],
+        ];
+
+        foreach ($usuarios as [$role, $name, $email]) {
+            $user = User::firstOrCreate(
+                ['email' => $email],
+                ['name' => $name, 'password' => Hash::make('password')],
+            );
+            $user->syncRoles([$role]);
+        }
     }
 }
