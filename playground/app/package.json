@@ -10,7 +10,9 @@
   },
   "dependencies": {
     "@bgm/ui": "*",
-    "vue": "^3.5.38"
+    "pinia": "^3.0.0",
+    "vue": "^3.5.38",
+    "vue-router": "^5.0.0"
   },
   "devDependencies": {
     "@types/node": "^24.13.2",

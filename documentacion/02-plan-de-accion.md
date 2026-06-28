@@ -34,15 +34,16 @@
 - [ ] Linters/formatters: Pint (api), ESLint/Prettier (fronts), Pest — **pendiente** (se añade al empezar a escribir lógica).
 - **Hito:** ✅ `npm run dev` levanta api + admin + app; la app muestra un componente del motor (`MotorBadge`/`AdminLayout`) y consume `api/motor/ping` por el proxy.
 
-### Fase 1 — Auth, usuarios y roles
+### Fase 1 — Auth, usuarios y roles ✅
 **Meta:** poder entrar al admin y al panel de usuario. Base transversal del resto.
 > Depende de Fase 0. Plan: `funcionalidades/05-auth-usuarios-roles.md`.
 
-- [ ] Sanctum + login/logout/registro + `me`.
-- [ ] Roles admin/editor/user (Spatie), middleware de acceso al admin.
-- [ ] Panel de usuario "vacío" (datos de cuenta, configuración) + layout.
-- [ ] Stores Pinia de auth en admin y app.
-- **Hito:** login como admin entra al admin; login como user entra al panel de usuario; user no puede entrar al admin.
+- [x] Sanctum + login/logout/registro + `me` (en `bgm/core`).
+- [x] Roles admin/editor/user (Spatie) + middleware `motor.admin` + comando `motor:install`.
+- [x] Panel de usuario (datos de cuenta + cambio de contraseña) en la `app`.
+- [x] Stores Pinia de auth + cliente axios `createApi` (`@bgm/ui`) en admin y app; guards de router.
+- [ ] Verificación de email (DC-14) — **pendiente**: se hará al montar el correo (mailpit) en una fase posterior.
+- **Hito:** ✅ login como admin/editor entra al admin; `user` no (403/redirección); `user` entra a su panel de cuenta.
 
 ### Fase 2 — Comportamientos de modelo + Media + i18n
 **Meta:** los cimientos que todas las entidades usarán.
