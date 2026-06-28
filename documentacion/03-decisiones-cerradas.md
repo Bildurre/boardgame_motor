@@ -176,18 +176,23 @@ DC-15 — y backup — DC-16 — sin cambiar código). Esquema de despliegue al 
 **Por qué:** aislamiento por juego (un fallo no afecta a otros), simple de operar; el
 storage queda abierto para crecer a objetos cuando convenga.
 
-### DC-25 · Iconos: Lucide (`lucide-vue-next`), siempre
+### DC-25 · Iconos: Lucide (`@lucide/vue`), siempre
 **Decisión:** todos los frontends (admin y app) usan **Lucide** como única librería de
-iconos (`lucide-vue-next`), igual que kontuan. Peer dependency en `@bgm/ui` y
-`@bgm/admin-kit`; dependency en cada app.
-**Por qué:** consistencia visual y una sola librería; alineado con kontuan.
+iconos. Paquete **`@lucide/vue`** (el antiguo `lucide-vue-next` está deprecado). Peer
+dependency en `@bgm/ui` y `@bgm/admin-kit`; dependency en cada app.
+**Por qué:** consistencia visual, una sola librería; alineado con kontuan.
 
-### DC-26 · Mobile-first en todos los frontends
-**Decisión:** CSS **mobile-first** (estilos base para móvil, `@media (min-width: …)`
-para ampliar). Breakpoints en tokens: `$bp-sm 480` / `$bp-md 768` / `$bp-lg 1024` /
-`$bp-xl 1280`. El sidebar del admin es un **drawer con hamburguesa** en móvil y fijo
-en escritorio (≥ `$bp-md`).
-**Por qué:** la mayoría del uso (y la gestión sobre la marcha) será en móvil.
+### DC-26 · Mobile-first + 4 tiers responsivos
+**Decisión:** CSS **mobile-first** (base móvil, `@media (min-width: …)` para ampliar).
+**Nada debe superar el 100% del ancho de pantalla** (grids con `minmax(0,1fr)`,
+`min-width:0`, `overflow-x:hidden` de seguridad, contenedores con scroll propio).
+Cuatro tiers, con los breakpoints de los tokens:
+- **Móvil estrecho** (`< $bp-sm` 480): sidebar = drawer a **100% de ancho**.
+- **Móvil ancho / tablet vertical** (`$bp-sm`–`$bp-lg`): drawer de 280px.
+- **Tablet horizontal / desktop** (`≥ $bp-lg` 1024): sidebar **fijo** y **colapsable a
+  rail** de iconos (toggle persistido en localStorage).
+- **Wide** (`≥ $bp-xl` 1280): tier amplio.
+**Por qué:** la gestión será mucho en móvil; el rail da más espacio en escritorio.
 
 ### DC-24 · Migraciones: `datetimes()` en vez de `timestamps()`
 **Decisión:** todas las migraciones (motor y juegos) usan **`$table->datetimes()`** y

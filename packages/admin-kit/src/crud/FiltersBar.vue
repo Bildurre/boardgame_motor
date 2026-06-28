@@ -39,10 +39,11 @@ watch(
 <style scoped lang="scss">
 .filters {
   display: flex;
+  flex-wrap: wrap;
   gap: $space-3;
   margin-bottom: $space-4;
 
-  &__search { flex: 1; }
+  &__search { flex: 1; min-width: 0; }
   &__search, &__status {
     font: inherit;
     padding: 0.5rem 0.75rem;
