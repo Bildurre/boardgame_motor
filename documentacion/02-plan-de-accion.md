@@ -49,11 +49,12 @@
 **Meta:** los cimientos que todas las entidades usarán.
 > Plan: `funcionalidades/11-comportamientos-modelo.md`, `07-media-imagenes.md`, `04-i18n-urls-traducibles.md`.
 
-- [ ] Traits: published/draft, soft-delete + restore, filtros, color, coste.
-- [ ] Media: imágenes simples y multilingües, almacenamiento, URLs.
-- [ ] i18n: campos traducibles, **slugs traducibles que funcionan en admin y público**, resolución de locale en API, selector de locale de contenido en front.
-- [ ] CRUD scaffolding del admin-kit sobre estos traits (ResourceList/ResourceForm/FiltersBar).
-- **Hito:** en el playground, una entidad demo con CRUD completo en admin: traducible, con imagen, publicable, con soft-delete y filtros; su slug traducible resuelve en público.
+- [x] Traits: published/draft, soft-delete + restore, filtros. *(coste: cuando un juego lo pida.)* — **2a**
+- [ ] Media: imágenes simples y multilingües, almacenamiento, URLs. — **2b (pendiente)**
+- [x] i18n: campos traducibles, slugs traducibles (admin y público), resolución de locale en API, selector de locale de contenido en front (`TranslatableInput`). — **2a + 2c**
+- [x] CRUD scaffolding del admin-kit: `useResource`, `ResourceList`, `FiltersBar` + vistas de la entidad demo. *(`ResourceForm` dirigido por DSL llegará con el editor de bloques del CRM, DC-08.)* — **2c**
+- **Hito:** ✅ (salvo imagen, que es 2b) entidad demo `House` con CRUD completo en admin —
+  traducible es/eu/en, publicable, filtros, soft-delete + restaurar— **verificado en navegador headless**; slug traducible resuelve en público.
 
 ### Fase 3 — Render de componentes a PNG
 **Meta:** capturar el componente visual de una entidad a imagen, fiable y fácil de regenerar.
