@@ -11,7 +11,7 @@
   "scripts": {
     "dev": "concurrently -n app,admin,api -c blue,green,red \"npm run dev -w playground/app\" \"npm run dev -w playground/admin\" \"npm run dev:api\"",
     "dev:front": "concurrently -n app,admin -c blue,green \"npm run dev -w playground/app\" \"npm run dev -w playground/admin\"",
-    "dev:api": "cd playground/api && php artisan serve",
+    "dev:api": "cd playground/api && php artisan serve --port=8010",
     "build": "npm run build -w playground/app && npm run build -w playground/admin"
   },
   "devDependencies": {

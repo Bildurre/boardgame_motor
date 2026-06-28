@@ -4,6 +4,7 @@ import vue from '@vitejs/plugin-vue'
 import { VitePWA } from 'vite-plugin-pwa'
 
 // Panel de administración del playground (puerto 5174). PWA instalable (DC-01).
+// La URL de la API vive en .env (VITE_API_URL), patrón kontuan; sin proxy.
 export default defineConfig({
   plugins: [
     vue(),
@@ -24,10 +25,7 @@ export default defineConfig({
   resolve: {
     alias: { '@': fileURLToPath(new URL('./src', import.meta.url)) },
   },
-  server: {
-    port: 5174,
-    proxy: { '/api': 'http://localhost:8000' },
-  },
+  server: { port: 5174 },
   css: {
     preprocessorOptions: {
       scss: {

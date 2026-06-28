@@ -10,6 +10,10 @@ playground/api/public/build/
 .env
 .env.*
 !.env.example
+# Los .env de los frontends solo llevan VITE_API_URL (no secretos): se versionan,
+# como en kontuan. Overrides locales en .env.local (ignorado).
+!playground/app/.env
+!playground/admin/.env
 
 # Laravel runtime
 playground/api/storage/*.key

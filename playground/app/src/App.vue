@@ -9,12 +9,13 @@ interface Ping {
   locales: string[]
 }
 
+const apiUrl = import.meta.env.VITE_API_URL
 const ping = ref<Ping | null>(null)
 const error = ref<string | null>(null)
 
 onMounted(async () => {
   try {
-    const res = await fetch('/api/motor/ping')
+    const res = await fetch(`${apiUrl}/motor/ping`)
     ping.value = await res.json()
   } catch (e) {
     error.value = String(e)

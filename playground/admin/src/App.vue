@@ -9,10 +9,11 @@ interface Ping {
   locales: string[]
 }
 
+const apiUrl = import.meta.env.VITE_API_URL
 const ping = ref<Ping | null>(null)
 
 onMounted(async () => {
-  const res = await fetch('/api/motor/ping')
+  const res = await fetch(`${apiUrl}/motor/ping`)
   ping.value = await res.json()
 })
 </script>

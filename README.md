@@ -69,11 +69,20 @@ Arranca en paralelo (estilo kontuan, vía `concurrently`):
 |---|---|---|
 | `app`   | http://localhost:5173 | Web pública (Vite) |
 | `admin` | http://localhost:5174 | Panel admin (Vite) |
-| `api`   | http://localhost:8000 | Laravel (`php artisan serve`) |
+| `api`   | http://localhost:8010 | Laravel (`php artisan serve --port=8010`) |
 
-Las SPA llaman a la API por el proxy `/api` de Vite (sin CORS en dev).
-Comprobación rápida del cableado: http://localhost:5173/api/motor/ping debe
-devolver el JSON del motor.
+> La API usa el puerto **8010** (no el 8000 típico de Laravel) para no chocar con
+> otras webs que tengas levantadas. Si 8010 también te lo pisa otro proceso,
+> cámbialo en `package.json` (`dev:api`) **y** en el `proxy` de los dos
+> `vite.config.ts`.
+
+Las SPA llaman a la API leyendo su URL de `VITE_API_URL` (en el `.env` de cada
+front), patrón kontuan. Por defecto `http://localhost:8010/api`. Si necesitas otra
+URL/puerto, créate un `.env.local` en `playground/app` y `playground/admin` con tu
+`VITE_API_URL` (no se versiona).
+
+Comprobación rápida del cableado: http://localhost:8010/api/motor/ping debe
+devolver el JSON del motor; la web (5173) debe mostrar la versión y los locales.
 
 Otros scripts: `npm run dev:front` (solo app+admin) · `npm run build` (build de
 ambas SPA).
