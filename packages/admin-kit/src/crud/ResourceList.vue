@@ -13,6 +13,7 @@ const emit = defineEmits<{ page: [number] }>()
 
 <template>
   <div class="rlist">
+    <div class="rlist__scroll">
     <table class="rlist__table">
       <thead>
         <tr>
@@ -31,6 +32,7 @@ const emit = defineEmits<{ page: [number] }>()
         </tr>
       </tbody>
     </table>
+    </div>
 
     <div v-if="meta && meta.last_page > 1" class="rlist__pager">
       <button :disabled="meta.current_page <= 1" @click="emit('page', meta.current_page - 1)">‹</button>
@@ -42,6 +44,7 @@ const emit = defineEmits<{ page: [number] }>()
 
 <style scoped lang="scss">
 .rlist {
+  &__scroll { overflow-x: auto; }
   &__table {
     width: 100%;
     border-collapse: collapse;

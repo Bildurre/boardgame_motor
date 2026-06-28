@@ -176,6 +176,19 @@ DC-15 — y backup — DC-16 — sin cambiar código). Esquema de despliegue al 
 **Por qué:** aislamiento por juego (un fallo no afecta a otros), simple de operar; el
 storage queda abierto para crecer a objetos cuando convenga.
 
+### DC-25 · Iconos: Lucide (`lucide-vue-next`), siempre
+**Decisión:** todos los frontends (admin y app) usan **Lucide** como única librería de
+iconos (`lucide-vue-next`), igual que kontuan. Peer dependency en `@bgm/ui` y
+`@bgm/admin-kit`; dependency en cada app.
+**Por qué:** consistencia visual y una sola librería; alineado con kontuan.
+
+### DC-26 · Mobile-first en todos los frontends
+**Decisión:** CSS **mobile-first** (estilos base para móvil, `@media (min-width: …)`
+para ampliar). Breakpoints en tokens: `$bp-sm 480` / `$bp-md 768` / `$bp-lg 1024` /
+`$bp-xl 1280`. El sidebar del admin es un **drawer con hamburguesa** en móvil y fijo
+en escritorio (≥ `$bp-md`).
+**Por qué:** la mayoría del uso (y la gestión sobre la marcha) será en móvil.
+
 ### DC-24 · Migraciones: `datetimes()` en vez de `timestamps()`
 **Decisión:** todas las migraciones (motor y juegos) usan **`$table->datetimes()`** y
 **`$table->softDeletesDatetime()`** en lugar de `timestamps()`/`softDeletes()`.
@@ -218,3 +231,5 @@ incluido), con **`es`** por defecto. Configurable por juego en `config/motor.php
 | DC-22 | Infra | droplet DO por juego; storage configurable (disco / S3 opcional) |
 | DC-23 | Locales | es / eu / en (default es) |
 | DC-24 | Migraciones | `datetimes()`/`softDeletesDatetime()` (no TIMESTAMP, año 2038); código en inglés |
+| DC-25 | Iconos | Lucide (`lucide-vue-next`), siempre, en admin y app |
+| DC-26 | Mobile-first | CSS mobile-first + breakpoints en tokens; sidebar admin = drawer/hamburguesa |
