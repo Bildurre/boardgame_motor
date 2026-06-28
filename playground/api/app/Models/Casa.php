@@ -12,10 +12,11 @@ use Spatie\Sluggable\SlugOptions;
 use Spatie\Translatable\HasTranslations;
 
 /**
- * Entidad demo del playground. Ejercita las piezas del motor: campos
- * traducibles, slug traducible, estado publicado, filtros y soft-delete.
+ * Entidad demo del playground (una "casa" tipo Juego de Tronos). Ejercita las
+ * piezas del motor: campos traducibles, slug traducible, estado publicado,
+ * filtros y soft-delete. Cada juego real tendrá las suyas.
  */
-class Faction extends Model
+class Casa extends Model
 {
     use HasFilters;
     use HasPublishedState;
@@ -23,6 +24,8 @@ class Faction extends Model
     use HasTranslations;
     use ResolvesBySlug;
     use SoftDeletes;
+
+    protected $table = 'casas';
 
     protected $fillable = ['name', 'description', 'slug', 'color', 'is_published'];
 

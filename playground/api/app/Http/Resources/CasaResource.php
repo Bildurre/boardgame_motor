@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 /** Representación para el admin: todas las traducciones, para editar. */
-class FactionResource extends JsonResource
+class CasaResource extends JsonResource
 {
     public function toArray(Request $request): array
     {
