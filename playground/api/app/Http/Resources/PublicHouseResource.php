@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 /** Representación pública: strings ya localizados al locale activo. */
-class PublicCasaResource extends JsonResource
+class PublicHouseResource extends JsonResource
 {
     public function toArray(Request $request): array
     {

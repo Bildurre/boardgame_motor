@@ -176,6 +176,13 @@ DC-15 — y backup — DC-16 — sin cambiar código). Esquema de despliegue al 
 **Por qué:** aislamiento por juego (un fallo no afecta a otros), simple de operar; el
 storage queda abierto para crecer a objetos cuando convenga.
 
+### DC-24 · Migraciones: `datetimes()` en vez de `timestamps()`
+**Decisión:** todas las migraciones (motor y juegos) usan **`$table->datetimes()`** y
+**`$table->softDeletesDatetime()`** en lugar de `timestamps()`/`softDeletes()`.
+También código, modelos y nombres de fichero **en inglés**.
+**Por qué:** las columnas `TIMESTAMP` de MySQL están limitadas al año **2038**
+(enteros de 32 bits); `DATETIME` llega hasta el 9999. Soporte a largo plazo.
+
 ### DC-23 · Locales por defecto: es / eu / en
 **Decisión:** los locales de contenido del motor son **`es`, `eu`, `en`** (euskera
 incluido), con **`es`** por defecto. Configurable por juego en `config/motor.php`.
@@ -210,3 +217,4 @@ incluido), con **`es`** por defecto. Configurable por juego en `config/motor.php
 | DC-21 | Naming | marca BGM; `bgm/core`, `@bgm/ui`, `@bgm/admin-kit` |
 | DC-22 | Infra | droplet DO por juego; storage configurable (disco / S3 opcional) |
 | DC-23 | Locales | es / eu / en (default es) |
+| DC-24 | Migraciones | `datetimes()`/`softDeletesDatetime()` (no TIMESTAMP, año 2038); código en inglés |

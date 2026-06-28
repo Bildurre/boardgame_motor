@@ -1,7 +1,7 @@
 <?php
 
-use App\Http\Controllers\CasaController;
-use App\Http\Controllers\Public\CasaController as PublicCasaController;
+use App\Http\Controllers\HouseController;
+use App\Http\Controllers\Public\HouseController as PublicHouseController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -11,16 +11,16 @@ use Illuminate\Support\Facades\Route;
 */
 
 // --- Público (solo entidades publicadas) ---
-Route::get('casas', [PublicCasaController::class, 'index']);
-Route::get('casas/{slug}', [PublicCasaController::class, 'show']);
+Route::get('houses', [PublicHouseController::class, 'index']);
+Route::get('houses/{slug}', [PublicHouseController::class, 'show']);
 
 // --- Admin (admin/editor) ---
 Route::middleware(['auth:sanctum', 'motor.admin'])->prefix('admin')->group(function () {
-    Route::get('casas', [CasaController::class, 'index']);
-    Route::post('casas', [CasaController::class, 'store']);
-    Route::get('casas/{casa}', [CasaController::class, 'show']);
-    Route::put('casas/{casa}', [CasaController::class, 'update']);
-    Route::delete('casas/{casa}', [CasaController::class, 'destroy']);
-    Route::post('casas/{id}/restore', [CasaController::class, 'restore']);
-    Route::post('casas/{casa}/toggle-published', [CasaController::class, 'togglePublished']);
+    Route::get('houses', [HouseController::class, 'index']);
+    Route::post('houses', [HouseController::class, 'store']);
+    Route::get('houses/{house}', [HouseController::class, 'show']);
+    Route::put('houses/{house}', [HouseController::class, 'update']);
+    Route::delete('houses/{house}', [HouseController::class, 'destroy']);
+    Route::post('houses/{id}/restore', [HouseController::class, 'restore']);
+    Route::post('houses/{house}/toggle-published', [HouseController::class, 'togglePublished']);
 });

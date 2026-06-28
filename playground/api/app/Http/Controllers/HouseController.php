@@ -2,69 +2,69 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Resources\CasaResource;
-use App\Models\Casa;
+use App\Http\Resources\HouseResource;
+use App\Models\House;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
-/** CRUD de admin para Casa (entidad demo del playground). */
-class CasaController extends Controller
+/** CRUD de admin para House (entidad demo del playground). */
+class HouseController extends Controller
 {
     public function index(Request $request)
     {
-        $casas = Casa::query()
+        $houses = House::query()
             ->withTrashed()
             ->filter($request->only('search', 'status'))
             ->orderByDesc('id')
             ->paginate(15);
 
-        return CasaResource::collection($casas);
+        return HouseResource::collection($houses);
     }
 
     public function store(Request $request)
     {
         $data = $this->validateData($request);
-        $casa = new Casa();
-        $this->fill($casa, $data);
-        $casa->save();
+        $house = new House();
+        $this->fill($house, $data);
+        $house->save();
 
-        return (new CasaResource($casa))->response()->setStatusCode(201);
+        return (new HouseResource($house))->response()->setStatusCode(201);
     }
 
-    public function show(Casa $casa)
+    public function show(House $house)
     {
-        return new CasaResource($casa);
+        return new HouseResource($house);
     }
 
-    public function update(Request $request, Casa $casa)
+    public function update(Request $request, House $house)
     {
         $data = $this->validateData($request);
-        $this->fill($casa, $data);
-        $casa->save();
+        $this->fill($house, $data);
+        $house->save();
 
-        return new CasaResource($casa);
+        return new HouseResource($house);
     }
 
-    public function destroy(Casa $casa)
+    public function destroy(House $house)
     {
-        $casa->delete();
+        $house->delete();
 
         return response()->noContent();
     }
 
     public function restore(int $id)
     {
-        $casa = Casa::withTrashed()->findOrFail($id);
-        $casa->restore();
+        $house = House::withTrashed()->findOrFail($id);
+        $house->restore();
 
-        return new CasaResource($casa);
+        return new HouseResource($house);
     }
 
-    public function togglePublished(Casa $casa)
+    public function togglePublished(House $house)
     {
-        $casa->togglePublished();
+        $house->togglePublished();
 
-        return new CasaResource($casa);
+        return new HouseResource($house);
     }
 
     /** Valida los campos traducibles por locale. */
@@ -83,13 +83,13 @@ class CasaController extends Controller
         return Validator::make($request->all(), $rules)->validate();
     }
 
-    protected function fill(Casa $casa, array $data): void
+    protected function fill(House $house, array $data): void
     {
-        $casa->setTranslations('name', array_filter($data['name'] ?? []));
-        $casa->setTranslations('description', array_filter($data['description'] ?? []));
-        $casa->color = $data['color'] ?? null;
+        $house->setTranslations('name', array_filter($data['name'] ?? []));
+        $house->setTranslations('description', array_filter($data['description'] ?? []));
+        $house->color = $data['color'] ?? null;
         if (array_key_exists('is_published', $data)) {
-            $casa->is_published = (bool) $data['is_published'];
+            $house->is_published = (bool) $data['is_published'];
         }
     }
 }
