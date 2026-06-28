@@ -45,16 +45,16 @@
 - [ ] Verificación de email (DC-14) — **pendiente**: se hará al montar el correo (mailpit) en una fase posterior.
 - **Hito:** ✅ login como admin/editor entra al admin; `user` no (403/redirección); `user` entra a su panel de cuenta.
 
-### Fase 2 — Comportamientos de modelo + Media + i18n
+### Fase 2 — Comportamientos de modelo + Media + i18n ✅
 **Meta:** los cimientos que todas las entidades usarán.
 > Plan: `funcionalidades/11-comportamientos-modelo.md`, `07-media-imagenes.md`, `04-i18n-urls-traducibles.md`.
 
 - [x] Traits: published/draft, soft-delete + restore, filtros. *(coste: cuando un juego lo pida.)* — **2a**
-- [ ] Media: imágenes simples y multilingües, almacenamiento, URLs. — **2b (pendiente)**
+- [x] Media: imagen simple (Spatie MediaLibrary + `MotorPathGenerator` de rutas predecibles, `ImageUpload`). *(Imagen multilingüe: cuando el CRM/previews la pidan, doc 07.)* — **2b**
 - [x] i18n: campos traducibles, slugs traducibles (admin y público), resolución de locale en API, selector de locale de contenido en front (`TranslatableInput`). — **2a + 2c**
 - [x] CRUD scaffolding del admin-kit: `useResource`, `ResourceList`, `FiltersBar` + vistas de la entidad demo. *(`ResourceForm` dirigido por DSL llegará con el editor de bloques del CRM, DC-08.)* — **2c**
-- **Hito:** ✅ (salvo imagen, que es 2b) entidad demo `House` con CRUD completo en admin —
-  traducible es/eu/en, publicable, filtros, soft-delete + restaurar— **verificado en navegador headless**; slug traducible resuelve en público.
+- **Hito:** ✅ entidad demo `House` con CRUD completo en admin —
+  traducible es/eu/en, **con imagen**, publicable, filtros, soft-delete + restaurar— **verificado en navegador headless**; slug traducible resuelve en público.
 
 ### Fase 3 — Render de componentes a PNG
 **Meta:** capturar el componente visual de una entidad a imagen, fiable y fácil de regenerar.

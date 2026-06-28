@@ -13,6 +13,7 @@ const { items, meta, loading, list, remove, action } = useResource(api, '/admin/
 let filters = { search: '', status: '' }
 
 const columns = [
+  { key: 'image', label: '' },
   { key: 'name', label: 'Nombre' },
   { key: 'color', label: 'Color' },
   { key: 'status', label: 'Estado' },
@@ -63,6 +64,10 @@ onMounted(async () => {
     />
 
     <ResourceList :columns="columns" :items="items" :meta="meta" :loading="loading" @page="load">
+      <template #cell-image="{ item }">
+        <img v-if="item.image" :src="item.image" class="thumb" alt="" />
+        <span v-else class="thumb thumb--empty" />
+      </template>
       <template #cell-name="{ item }">{{ label(item.name) }}</template>
       <template #cell-color="{ item }">
         <span class="swatch" :style="{ background: item.color || 'transparent' }" />{{ item.color || '—' }}
@@ -88,6 +93,8 @@ onMounted(async () => {
 
 <style scoped lang="scss">
 .houses__top { display: flex; justify-content: flex-end; margin-bottom: $space-4; }
+.thumb { width: 32px; height: 32px; border-radius: 6px; object-fit: cover; border: 1px solid $color-border; display: inline-block; vertical-align: middle; }
+.thumb--empty { background: $color-surface; }
 .swatch { display: inline-block; width: 0.9rem; height: 0.9rem; border-radius: 3px; margin-right: $space-2; vertical-align: -1px; border: 1px solid $color-border; }
 .chip {
   display: inline-block; padding: 1px 8px; border-radius: $radius-pill; font-size: 0.75rem;

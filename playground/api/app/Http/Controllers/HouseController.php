@@ -27,6 +27,7 @@ class HouseController extends Controller
         $house = new House();
         $this->fill($house, $data);
         $house->save();
+        $house->setImageFromRequest($request);
 
         return (new HouseResource($house))->response()->setStatusCode(201);
     }
@@ -41,6 +42,7 @@ class HouseController extends Controller
         $data = $this->validateData($request);
         $this->fill($house, $data);
         $house->save();
+        $house->setImageFromRequest($request);
 
         return new HouseResource($house);
     }
@@ -67,13 +69,14 @@ class HouseController extends Controller
         return new HouseResource($house);
     }
 
-    /** Valida los campos traducibles por locale. */
+    /** Valida los campos traducibles por locale + la imagen opcional. */
     protected function validateData(Request $request): array
     {
         $default = config('motor.default_locale');
         $rules = [
             'color' => ['nullable', 'string', 'max:7'],
             'is_published' => ['boolean'],
+            'image' => ['nullable', 'image', 'max:4096'],
         ];
         foreach (array_keys(config('motor.locales', [])) as $locale) {
             $rules["name.$locale"] = [$locale === $default ? 'required' : 'nullable', 'string', 'max:255'];

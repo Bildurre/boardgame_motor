@@ -16,6 +16,7 @@ class HouseResource extends JsonResource
             'description' => $this->getTranslations('description'),
             'slug' => $this->getTranslations('slug'),
             'color' => $this->color,
+            'image' => $this->imageUrl(),
             'is_published' => $this->is_published,
             'deleted_at' => $this->deleted_at,
         ];

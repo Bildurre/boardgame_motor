@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { onMounted, reactive, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { TranslatableInput, BaseButton } from '@bgm/ui'
+import { TranslatableInput, ImageUpload, BaseButton } from '@bgm/ui'
 import { useResource } from '@bgm/admin-kit'
 import { api } from '@/lib/api'
 import { useLocalesStore } from '@/stores/locales'
@@ -9,7 +9,7 @@ import { useLocalesStore } from '@/stores/locales'
 const route = useRoute()
 const router = useRouter()
 const locales = useLocalesStore()
-const { find, create, update } = useResource(api, '/admin/houses')
+const { find, createForm, updateForm } = useResource(api, '/admin/houses')
 
 const id = route.params.id ? Number(route.params.id) : null
 const form = reactive<{
@@ -19,6 +19,8 @@ const form = reactive<{
   is_published: boolean
 }>({ name: {}, description: {}, color: '#888888', is_published: false })
 
+const image = ref<File | null>(null)
+const currentImage = ref<string | null>(null)
 const error = ref<string | null>(null)
 const saving = ref(false)
 
@@ -30,21 +32,26 @@ onMounted(async () => {
     form.description = h.description ?? {}
     form.color = h.color ?? '#888888'
     form.is_published = !!h.is_published
+    currentImage.value = h.image ?? null
   }
 })
+
+function toFormData(): FormData {
+  const fd = new FormData()
+  for (const [k, v] of Object.entries(form.name)) fd.append(`name[${k}]`, v ?? '')
+  for (const [k, v] of Object.entries(form.description)) fd.append(`description[${k}]`, v ?? '')
+  fd.append('color', form.color)
+  fd.append('is_published', form.is_published ? '1' : '0')
+  if (image.value) fd.append('image', image.value)
+  return fd
+}
 
 async function save() {
   error.value = null
   saving.value = true
-  const payload = {
-    name: form.name,
-    description: form.description,
-    color: form.color,
-    is_published: form.is_published,
-  }
   try {
-    if (id) await update(id, payload)
-    else await create(payload)
+    if (id) await updateForm(id, toFormData())
+    else await createForm(toFormData())
     router.push({ name: 'houses' })
   } catch (e: any) {
     error.value = e.response?.data?.message ?? 'No se pudo guardar.'
@@ -58,6 +65,7 @@ async function save() {
   <form class="hform" @submit.prevent="save">
     <TranslatableInput v-model="form.name" :locales="locales.locales" label="Nombre" />
     <TranslatableInput v-model="form.description" :locales="locales.locales" label="Descripción" type="textarea" />
+    <ImageUpload v-model="image" :current-url="currentImage" label="Emblema" />
 
     <div class="hform__row">
       <label>Color</label>

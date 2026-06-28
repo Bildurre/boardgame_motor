@@ -2,11 +2,13 @@
 
 namespace App\Models;
 
+use Bgm\Core\Media\Concerns\HasImage;
 use Bgm\Core\Support\Concerns\HasFilters;
 use Bgm\Core\Support\Concerns\HasPublishedState;
 use Bgm\Core\Support\Concerns\ResolvesBySlug;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Spatie\MediaLibrary\HasMedia;
 use Spatie\Sluggable\HasTranslatableSlug;
 use Spatie\Sluggable\SlugOptions;
 use Spatie\Translatable\HasTranslations;
@@ -16,9 +18,10 @@ use Spatie\Translatable\HasTranslations;
  * piezas del motor: campos traducibles, slug traducible, estado publicado,
  * filtros y soft-delete. Cada juego real tendrá las suyas.
  */
-class House extends Model
+class House extends Model implements HasMedia
 {
     use HasFilters;
+    use HasImage;
     use HasPublishedState;
     use HasTranslatableSlug;
     use HasTranslations;

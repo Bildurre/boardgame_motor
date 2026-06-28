@@ -40,11 +40,24 @@ export function useResource<T = any>(api: AxiosInstance, basePath: string) {
     await api.delete(`${basePath}/${id}`)
   }
 
+  /** Alta con multipart (FormData) — para subir ficheros. */
+  async function createForm(form: FormData): Promise<T> {
+    const { data } = await api.post(basePath, form)
+    return data.data
+  }
+
+  /** Edición con multipart. PHP no parsea multipart en PUT: se usa POST + _method. */
+  async function updateForm(id: number | string, form: FormData): Promise<T> {
+    form.append('_method', 'PUT')
+    const { data } = await api.post(`${basePath}/${id}`, form)
+    return data.data
+  }
+
   /** Acciones POST extra: /{id}/{verb} (toggle-published, restore, …). */
   async function action(id: number | string, verb: string): Promise<T> {
     const { data } = await api.post(`${basePath}/${id}/${verb}`)
     return data.data
   }
 
-  return { items, meta, loading, list, find, create, update, remove, action }
+  return { items, meta, loading, list, find, create, update, createForm, updateForm, remove, action }
 }

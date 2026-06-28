@@ -16,6 +16,7 @@ class PublicHouseResource extends JsonResource
             'description' => $this->getTranslation('description', app()->getLocale()),
             'slug' => $this->getTranslation('slug', app()->getLocale()),
             'color' => $this->color,
+            'image' => $this->imageUrl(),
         ];
     }
 }
