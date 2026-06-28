@@ -33,23 +33,29 @@ GitHub Packages + subtree-split del paquete Composer) llega en la Fase 7. Ver
 
 - PHP >= 8.2 · Composer 2.x
 - Node >= 20.19 o >= 22.12 · npm >= 10
-- SQLite (por defecto en el playground) o MySQL
+- MySQL >= 8 (el playground usa una base de datos `bgm`)
 
 ## Puesta en marcha
 
 ```bash
+# 0) Crear la base de datos (una vez)
+mysql -u root -p -e "CREATE DATABASE bgm CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;"
+
 # 1) Backend del playground
 cd playground/api
 composer install
-cp .env.example .env
+cp .env.example .env          # ajusta DB_USERNAME / DB_PASSWORD si hace falta
 php artisan key:generate
-touch database/database.sqlite
 php artisan migrate
 cd ../..
 
 # 2) Frontends + paquetes (desde la raíz, instala todos los workspaces)
 npm install
 ```
+
+> El `.env.example` ya apunta a MySQL (`DB_DATABASE=bgm`, `DB_HOST=127.0.0.1`,
+> `DB_USERNAME=root`, `DB_PASSWORD=` vacío). Cambia usuario/contraseña en tu `.env`
+> según tu MySQL local.
 
 ## Levantar todo con un solo comando
 
