@@ -1,0 +1,25 @@
+@use "tokens" as *;
+
+.toast {
+  display: flex;
+  align-items: center;
+  gap: $space-3;
+  padding: $space-3 $space-4;
+  border-radius: $radius-md;
+  border: 1px solid transparent;
+  box-shadow: $shadow-md;
+  font-size: $fs-14;
+
+  &--success { background: var(--toast-success-bg); color: $success; border-color: $success; }
+  &--warning { background: var(--toast-warning-bg); color: $warning; border-color: $warning; }
+  &--danger  { background: var(--toast-danger-bg);  color: $danger;  border-color: $danger; }
+  &--info    { background: var(--toast-info-bg);    color: $info;    border-color: $info; }
+
+  &__message { flex: 1; }
+  &__close {
+    display: flex; align-items: center; justify-content: center;
+    width: 24px; height: 24px; border: none; border-radius: $radius-sm;
+    background: transparent; color: currentColor; cursor: pointer; opacity: 0.7; flex-shrink: 0;
+    &:hover { opacity: 1; }
+  }
+}

@@ -13,7 +13,6 @@ class HouseController extends Controller
     public function index(Request $request)
     {
         $houses = House::query()
-            ->withTrashed()
             ->filter($request->only('search', 'status'))
             ->orderByDesc('id')
             ->paginate(15);

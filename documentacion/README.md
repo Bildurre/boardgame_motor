@@ -14,6 +14,7 @@ solo sus entidades.
 3. [Registro de decisiones (ADR)](03-decisiones-cerradas.md) — todas las cuestiones técnicas resueltas (DC-01 … DC-20).
 4. [Plan de acción](02-plan-de-accion.md) — fases, dependencias, hitos.
 5. [Planes por funcionalidad](funcionalidades/00-indice.md) — el "cómo" de cada pieza.
+6. [Guía de componentes](guia-de-componentes.md) — catálogo de `@bgm/ui` y `@bgm/admin-kit`: uso y finalidad. **Se mantiene al día.**
 
 ## Mapa rápido de los repos
 

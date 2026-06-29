@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { onMounted, reactive, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { TranslatableInput, ImageUpload, BaseButton } from '@bgm/ui'
+import { TranslatableInput, ImageUpload, BaseButton, useToast } from '@bgm/ui'
 import { useResource } from '@bgm/admin-kit'
 import { api } from '@/lib/api'
 import { useLocalesStore } from '@/stores/locales'
@@ -9,6 +9,7 @@ import { useLocalesStore } from '@/stores/locales'
 const route = useRoute()
 const router = useRouter()
 const locales = useLocalesStore()
+const toast = useToast()
 const { find, createForm, updateForm } = useResource(api, '/admin/houses')
 
 const id = route.params.id ? Number(route.params.id) : null
@@ -50,8 +51,13 @@ async function save() {
   error.value = null
   saving.value = true
   try {
-    if (id) await updateForm(id, toFormData())
-    else await createForm(toFormData())
+    if (id) {
+      await updateForm(id, toFormData())
+      toast.success('Casa actualizada correctamente.')
+    } else {
+      await createForm(toFormData())
+      toast.success('Casa creada correctamente.')
+    }
     router.push({ name: 'houses' })
   } catch (e: any) {
     error.value = e.response?.data?.message ?? 'No se pudo guardar.'

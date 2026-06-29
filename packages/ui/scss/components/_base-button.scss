@@ -28,3 +28,14 @@
     &:hover { border-color: $color-accent; }
   }
 }
+
+.bgm-button--danger {
+  background: $danger;
+  color: #fff;
+  &:hover { filter: brightness(0.92); }
+}
+.bgm-button--success {
+  background: $success;
+  color: #06281a;
+  &:hover { filter: brightness(0.95); }
+}

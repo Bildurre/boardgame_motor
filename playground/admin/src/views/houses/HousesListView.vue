@@ -1,18 +1,26 @@
 <script setup lang="ts">
-import { onMounted } from 'vue'
+import { onMounted, ref, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import { SquarePen, Trash2, Eye, EyeOff, RotateCcw } from '@lucide/vue'
 import { ResourceList, FiltersBar, useResource } from '@bgm/admin-kit'
-import { BaseButton, IconButton } from '@bgm/ui'
+import { BaseButton, BaseTabs, IconButton, useToast, useConfirm } from '@bgm/ui'
 import { api } from '@/lib/api'
 import { useLocalesStore } from '@/stores/locales'
 
 const router = useRouter()
 const locales = useLocalesStore()
+const toast = useToast()
+const { confirm } = useConfirm()
 const { items, meta, loading, list, remove, action } = useResource(api, '/admin/houses')
 
-let filters = { search: '', status: '' }
+const status = ref('published')
+let search = ''
 
+const tabs = [
+  { key: 'published', label: 'Publicadas' },
+  { key: 'draft', label: 'Borrador' },
+  { key: 'trashed', label: 'Papelera' },
+]
 const columns = [
   { key: 'image', label: '' },
   { key: 'name', label: 'Nombre' },
@@ -25,23 +33,34 @@ function label(obj: Record<string, string>) {
 }
 
 async function load(page = 1) {
-  await list({ ...filters, page })
+  await list({ search, status: status.value, page })
 }
-function onFilter(f: { search: string; status: string }) {
-  filters = f
+function onFilter(f: { search: string }) {
+  search = f.search
   load(1)
 }
+watch(status, () => load(1))
+
 async function togglePublish(item: any) {
   await action(item.id, 'toggle-published')
+  toast.success(item.is_published ? 'House despublicada' : 'House publicada')
   load(meta.value?.current_page ?? 1)
 }
 async function del(item: any) {
-  if (!confirm('¿Enviar a la papelera?')) return
+  const ok = await confirm({
+    title: 'Enviar a la papelera',
+    message: `¿Enviar "${label(item.name)}" a la papelera?`,
+    confirmLabel: 'Borrar',
+    variant: 'danger',
+  })
+  if (!ok) return
   await remove(item.id)
+  toast.success('House enviada a la papelera')
   load(meta.value?.current_page ?? 1)
 }
 async function restore(item: any) {
   await action(item.id, 'restore')
+  toast.success('House restaurada')
   load(meta.value?.current_page ?? 1)
 }
 
@@ -57,10 +76,8 @@ onMounted(async () => {
       <BaseButton @click="router.push({ name: 'house-new' })">Nueva house</BaseButton>
     </div>
 
-    <FiltersBar
-      :status-options="[{ value: 'published', label: 'Publicadas' }, { value: 'draft', label: 'Borrador' }]"
-      @change="onFilter"
-    />
+    <BaseTabs v-model="status" :tabs="tabs" />
+    <FiltersBar @change="onFilter" />
 
     <ResourceList :columns="columns" :items="items" :meta="meta" :loading="loading" @page="load">
       <template #cell-image="{ item }">

@@ -1,0 +1,34 @@
+@use "tokens" as *;
+
+.tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: $space-1;
+  border-bottom: 1px solid $border;
+  margin-bottom: $space-4;
+
+  &__tab {
+    display: inline-flex;
+    align-items: center;
+    gap: $space-2;
+    padding: $space-2 $space-3;
+    margin-bottom: -1px;
+    background: none;
+    border: none;
+    border-bottom: 2px solid transparent;
+    color: $text-2;
+    font: inherit;
+    cursor: pointer;
+
+    &:hover { color: $text-1; }
+    &--active { color: $accent-500; border-bottom-color: $accent-500; }
+  }
+  &__count {
+    font-size: $fs-12;
+    color: $text-3;
+    background: $surface-2;
+    border-radius: $radius-pill;
+    padding: 0 6px;
+  }
+  &__icon { flex-shrink: 0; }
+}

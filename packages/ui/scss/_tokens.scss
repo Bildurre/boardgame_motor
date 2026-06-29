@@ -80,3 +80,8 @@ $color-text-muted: $text-2;
 $color-accent: $accent-500;
 $color-accent-dark: $accent-600;
 $font-sans: $k-font-sans;
+
+// Sombras (CSS vars)
+$shadow-sm: var(--shadow-sm);
+$shadow-md: var(--shadow-md);
+$shadow-lg: var(--shadow-lg);

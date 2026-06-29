@@ -3,7 +3,7 @@ import { computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { LayoutDashboard, Home } from '@lucide/vue'
 import { AdminLayout } from '@bgm/admin-kit'
-import { BaseButton } from '@bgm/ui'
+import { BaseButton, ToastContainer, ConfirmDialog } from '@bgm/ui'
 import { useAuthStore } from '@/stores/auth'
 
 const route = useRoute()
@@ -32,4 +32,7 @@ async function logout() {
     <RouterView />
   </AdminLayout>
   <RouterView v-else />
+
+  <ToastContainer />
+  <ConfirmDialog />
 </template>
