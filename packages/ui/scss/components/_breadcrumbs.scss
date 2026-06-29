@@ -1,0 +1,31 @@
+@use "tokens" as *;
+
+.breadcrumbs {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  column-gap: 2px;
+  font-size: $fs-12;
+  color: $text-3;
+  margin-bottom: $space-4;
+}
+
+.breadcrumb-link {
+  color: $text-3;
+  text-decoration: none;
+  transition: color 0.15s ease;
+
+  &:hover {
+    color: $text-1;
+  }
+}
+
+.breadcrumb-current {
+  color: $text-1;
+  font-weight: $k-fw-medium;
+}
+
+.breadcrumb-separator {
+  color: $text-3;
+  flex-shrink: 0;
+}

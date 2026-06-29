@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { onMounted, ref, watch } from 'vue'
 import { useRouter } from 'vue-router'
-import { SquarePen, Trash2, Eye, EyeOff, RotateCcw } from '@lucide/vue'
+import { SquarePen, Trash2, Eye, EyeOff, RotateCcw, CircleCheck, FilePen, Trash } from '@lucide/vue'
 import { ResourceList, FiltersBar, useResource } from '@bgm/admin-kit'
 import { BaseButton, BaseTabs, IconButton, useToast, useConfirm } from '@bgm/ui'
 import { api } from '@/lib/api'
@@ -17,9 +17,9 @@ const status = ref('published')
 let search = ''
 
 const tabs = [
-  { key: 'published', label: 'Publicadas' },
-  { key: 'draft', label: 'Borrador' },
-  { key: 'trashed', label: 'Papelera' },
+  { key: 'published', label: 'Publicadas', icon: CircleCheck },
+  { key: 'draft', label: 'Borrador', icon: FilePen },
+  { key: 'trashed', label: 'Papelera', icon: Trash },
 ]
 const columns = [
   { key: 'image', label: '' },
@@ -29,7 +29,7 @@ const columns = [
 ]
 
 function label(obj: Record<string, string>) {
-  return obj?.[locales.defaultLocale] || Object.values(obj || {})[0] || '—'
+  return obj?.[locales.current] || obj?.[locales.defaultLocale] || Object.values(obj || {})[0] || '—'
 }
 
 async function load(page = 1) {

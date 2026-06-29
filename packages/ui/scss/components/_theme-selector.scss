@@ -1,0 +1,34 @@
+@use "tokens" as *;
+
+.theme-selector {
+  display: flex;
+  background: $surface-2;
+  border-radius: $radius-sm;
+  padding: 2px;
+  gap: 2px;
+}
+
+.theme-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 24px;
+  border: none;
+  border-radius: $radius-sm;
+  background: transparent;
+  cursor: pointer;
+  font-size: $fs-13;
+  color: $text-3;
+  transition: all 0.15s ease;
+
+  &:hover {
+    color: $text-1;
+  }
+
+  &.active {
+    background: $surface;
+    color: $text-1;
+    box-shadow: $shadow-sm;
+  }
+}

@@ -82,15 +82,18 @@ Los estilos se importan vía SCSS:
   (Publicadas / Borrador / Papelera) o cualquier conmutación de vista.
 - **Modelo:** `v-model` (string con la `key` de la pestaña activa).
 - **Props:** `tabs: { key: string; label: string; count?: number; icon?: Component }[]`.
+  El `icon` es opcional (componente de `@lucide/vue`); en pantallas estrechas las
+  tabs con icono se apilan (icono + etiqueta pequeña).
 - **Uso:**
 
 ```vue
 <script setup>
+import { CircleCheck, FilePen, Trash } from '@lucide/vue'
 const status = ref('published')
 const tabs = [
-  { key: 'published', label: 'Publicadas' },
-  { key: 'draft', label: 'Borrador' },
-  { key: 'trashed', label: 'Papelera' },
+  { key: 'published', label: 'Publicadas', icon: CircleCheck },
+  { key: 'draft', label: 'Borrador', icon: FilePen },
+  { key: 'trashed', label: 'Papelera', icon: Trash },
 ]
 </script>
 
@@ -179,6 +182,44 @@ const tabs = [
 <ImageUpload v-model="image" :current-url="currentImage" label="Emblema" />
 ```
 
+### ThemeSelector
+
+- **Finalidad:** conmutador de tema claro / oscuro / sistema. Aplica
+  `data-theme` al `<html>` y lo persiste en `localStorage`. Sin props: el estado
+  es global (composable `useTheme`). Va en las preferencias del layout.
+- **Uso:**
+
+```vue
+<ThemeSelector />
+```
+
+### LocaleSelector
+
+- **Finalidad:** selector de idioma de contenido (qué traducción mostrar / qué
+  locale enviar a la API). Controlado, sin `vue-i18n`: la lista de locales se
+  pasa por props (la sirve la API del motor).
+- **Modelo:** `v-model` (código de locale, p. ej. `'es'`).
+- **Props:** `locales: { code: string; name: string }[]`.
+- **Uso:**
+
+```vue
+<LocaleSelector v-model="current" :locales="locales" />
+```
+
+### AppBreadcrumbs
+
+- **Finalidad:** migas de pan. Cada ruta declara su rastro en
+  `meta.breadcrumbs` (`{ label, to? }[]`); se antepone una miga "home". Sin
+  `vue-i18n`. El `AdminLayout` ya la monta — normalmente no se usa suelta.
+- **Props:** `home?: { label, to } | null` (def. `{ label: 'Inicio', to: { name: 'dashboard' } }`; `null` la oculta).
+- **Uso (en la ruta):**
+
+```ts
+{ path: '/houses/new', name: 'house-new', meta: {
+  breadcrumbs: [{ label: 'Houses', to: { name: 'houses' } }, { label: 'Nueva house' }],
+} }
+```
+
 ---
 
 ## `@bgm/ui` — Composables y utilidades
@@ -196,6 +237,18 @@ const tabs = [
 const toast = useToast()
 toast.success('Casa creada correctamente.')
 toast.danger('No se pudo guardar.')
+```
+
+### useTheme()
+
+- **Finalidad:** estado global del tema (claro/oscuro/sistema). Lo usa
+  `ThemeSelector`, pero cualquier componente puede leer/forzar el tema.
+- **API:** `{ themeMode, setTheme }`. `themeMode: 'light' | 'dark' | 'system'`.
+- **Uso:**
+
+```ts
+const { themeMode, setTheme } = useTheme()
+setTheme('dark')
 ```
 
 ### useConfirm()
@@ -233,19 +286,35 @@ if (!ok) return
 
 ### AdminLayout
 
-- **Finalidad:** layout del panel de administración. Mobile-first: drawer a
-  pantalla completa en móvil (menú hamburguesa), sidebar colapsable a barra
-  estrecha en escritorio (estado recordado en `localStorage`). Todo el contenido
-  queda siempre dentro del layout.
-- **Props:** `title?: string` (título de la cabecera).
-- **Slots:** `nav` (enlaces del menú), `actions` (acciones de la cabecera),
-  por defecto (cuerpo de la página).
+- **Finalidad:** layout del panel — portado del `AppLayout` de kontuan (DC-28).
+  Mobile-first: drawer a pantalla completa en móvil (`< bp-md`, hamburguesa),
+  sidebar colapsable a barra de iconos en escritorio (estado en `localStorage`).
+  Integra las preferencias (ThemeSelector + LocaleSelector) en la cabecera del
+  sidebar, las migas de pan (`AppBreadcrumbs`) en el contenido y un pie de
+  usuario. El contenido es un _container_ (`container-name: content`), así los
+  componentes internos (tabs, listas) responden al ancho real, no al viewport.
+- **Props:** `title?`, `brand?` (def. `'BGM Admin'`), `locales?` (lista para el
+  selector), `locale?` (v-model:locale del idioma de contenido),
+  `homeCrumb?` (miga "home"; `null` la oculta).
+- **Slots:** `nav` (enlaces, usa la clase `nav-item` + `nav-label`),
+  `actions` (zona derecha del navbar), `user` (pie del sidebar; recibe
+  `{ collapsed }`), por defecto (cuerpo de la página).
 - **Uso:**
 
 ```vue
-<AdminLayout title="Casas">
+<AdminLayout
+  :title="title" brand="BGM Admin"
+  :locales="locales.locales" :locale="locales.current"
+  @update:locale="locales.setCurrent"
+>
   <template #nav>
-    <RouterLink :to="{ name: 'dashboard' }"><LayoutDashboard :size="18" /><span class="nav-label">Panel</span></RouterLink>
+    <RouterLink class="nav-item" :to="{ name: 'dashboard' }">
+      <LayoutDashboard class="nav-icon" :size="20" /><span class="nav-label">Dashboard</span>
+    </RouterLink>
+  </template>
+  <template #user="{ collapsed }">
+    <div class="who"><span class="who__avatar">A</span><span v-if="!collapsed" class="who__name">Admin</span></div>
+    <button v-if="!collapsed" class="who-logout" @click="logout"><LogOut :size="20" /></button>
   </template>
   <RouterView />
 </AdminLayout>

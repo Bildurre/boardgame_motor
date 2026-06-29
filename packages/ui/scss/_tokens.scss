@@ -58,6 +58,18 @@ $radius-lg: 14px;
 $radius-xl: 18px;
 $radius-pill: 999px;
 
+// Estados UI (hover, etc.)
+$ui-hover-bg: $surface-2;
+$ui-hover-bg-strong: $surface-3;
+
+// Tracking (letter-spacing)
+$k-track-wide: 0.02em;
+
+// Layout (igual que kontuan)
+$layout-sidebar-width: 280px;
+$layout-content-max: 1400px;
+$layout-page-padding: 24px;
+
 // Iconos (Lucide)
 $icon-stroke: 1.75;
 

@@ -35,13 +35,15 @@
 
   &__empty { color: $color-text-muted; text-align: center; padding: $space-6; }
 
-  // --- Tablet vertical: 2 columnas de tarjetas ---
-  @media (min-width: #{$bp-md}) {
+  // --- 2 columnas de tarjetas cuando el contenido es ancho ---
+  // Container queries: responden al ancho real del contenido (estilo kontuan),
+  // así el cambio coincide siempre con el espacio disponible, no con el viewport.
+  @container content (min-width: #{$bp-md}) {
     &__cards { grid-template-columns: 1fr 1fr; }
   }
 
-  // --- Desktop: tabla (coincide con el sidebar fijo, $bp-lg) ---
-  @media (min-width: #{$bp-lg}) {
+  // --- Tabla cuando el contenido tiene ancho de escritorio ---
+  @container content (min-width: #{$bp-lg}) {
     &__cards { display: none; }
     &__table-wrap { display: block; overflow-x: auto; }
 

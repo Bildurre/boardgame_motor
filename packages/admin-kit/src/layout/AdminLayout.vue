@@ -1,51 +1,149 @@
 <script setup lang="ts">
-import { ref } from 'vue'
-import { Menu, X, ChevronLeft, ChevronRight } from '@lucide/vue'
-import { MotorBadge } from '@bgm/ui'
+import { ref, onMounted, onUnmounted, watch } from 'vue'
+import { useRoute } from 'vue-router'
+import { ChevronLeft, ChevronRight, Menu, X } from '@lucide/vue'
+import {
+  MotorBadge,
+  ThemeSelector,
+  LocaleSelector,
+  AppBreadcrumbs,
+  type Crumb,
+} from '@bgm/ui'
 
-defineProps<{ title?: string }>()
+// Layout del panel — portado del AppLayout de kontuan (DC-28): sidebar
+// colapsable en escritorio, drawer a pantalla completa en móvil, preferencias
+// (tema + idioma) en la cabecera del sidebar y migas de pan en el contenido.
+interface Locale { code: string; name: string }
 
-const drawerOpen = ref(false)
-const collapsed = ref(localStorage.getItem('bgm_admin_collapsed') === '1')
+const props = withDefaults(
+  defineProps<{
+    title?: string
+    brand?: string
+    locales?: Locale[]
+    /** Locale de contenido (v-model:locale). */
+    locale?: string
+    /** Miga "home"; pasa null para ocultarla. */
+    homeCrumb?: Crumb | null
+  }>(),
+  {
+    title: '',
+    brand: 'BGM Admin',
+    locales: () => [],
+    locale: '',
+    homeCrumb: () => ({ label: 'Inicio', to: { name: 'dashboard' } }),
+  },
+)
 
-function toggleCollapsed() {
-  collapsed.value = !collapsed.value
-  localStorage.setItem('bgm_admin_collapsed', collapsed.value ? '1' : '0')
+const emit = defineEmits<{ 'update:locale': [code: string] }>()
+
+// Umbral móvil (igual que kontuan: MOBILE_BREAKPOINT = bp-md = 768).
+const MOBILE_BREAKPOINT = 768
+
+const route = useRoute()
+const sidebarCollapsed = ref(localStorage.getItem('bgm_admin_collapsed') === '1')
+const sidebarMobileOpen = ref(false)
+const isMobile = ref(false)
+
+function checkMobile() {
+  isMobile.value = window.innerWidth < MOBILE_BREAKPOINT
+  if (!isMobile.value) sidebarMobileOpen.value = false
+}
+
+onMounted(() => {
+  checkMobile()
+  window.addEventListener('resize', checkMobile)
+})
+onUnmounted(() => window.removeEventListener('resize', checkMobile))
+
+watch(
+  () => route.fullPath,
+  () => {
+    if (isMobile.value) sidebarMobileOpen.value = false
+  },
+)
+
+function toggleSidebar() {
+  sidebarCollapsed.value = !sidebarCollapsed.value
+  localStorage.setItem('bgm_admin_collapsed', sidebarCollapsed.value ? '1' : '0')
 }
 </script>
 
 <template>
-  <div class="admin-layout" :class="{ 'is-drawer-open': drawerOpen, 'is-collapsed': collapsed }">
-    <div class="admin-layout__overlay" @click="drawerOpen = false" />
+  <div class="app-layout" :class="{ 'sidebar-collapsed': sidebarCollapsed, 'is-mobile': isMobile }">
+    <div
+      v-if="isMobile && sidebarMobileOpen"
+      class="sidebar-overlay"
+      @click="sidebarMobileOpen = false"
+    />
 
-    <aside class="admin-layout__sidebar">
-      <div class="admin-layout__brand">
-        <MotorBadge label="BGM Admin" />
-        <button class="admin-layout__icon-btn admin-layout__close" type="button" aria-label="Cerrar menú" @click="drawerOpen = false">
-          <X :size="18" />
+    <aside class="sidebar" :class="{ 'sidebar--mobile-open': sidebarMobileOpen }">
+      <div
+        class="sidebar-header"
+        :class="{ 'sidebar-header--collapsed': sidebarCollapsed && !isMobile }"
+      >
+        <RouterLink
+          v-if="!sidebarCollapsed || isMobile"
+          :to="{ name: 'dashboard' }"
+          class="sidebar-logo-link"
+        >
+          <MotorBadge :label="brand" />
+        </RouterLink>
+        <button class="sidebar-toggle" type="button" @click="toggleSidebar">
+          <ChevronRight v-if="sidebarCollapsed" :size="16" />
+          <ChevronLeft v-else :size="16" />
         </button>
       </div>
 
-      <nav class="admin-layout__nav" @click="drawerOpen = false">
-        <slot name="nav" />
+      <nav class="sidebar-nav">
+        <div v-if="!sidebarCollapsed || isMobile" class="sidebar-preferences">
+          <ThemeSelector />
+          <LocaleSelector
+            v-if="locales.length"
+            :model-value="locale"
+            :locales="locales"
+            @update:model-value="(c: string) => emit('update:locale', c)"
+          />
+        </div>
+        <hr v-if="!sidebarCollapsed || isMobile" class="sidebar-divider" />
+
+        <div class="sidebar-items" @click="isMobile && (sidebarMobileOpen = false)">
+          <slot name="nav" />
+        </div>
       </nav>
 
-      <button class="admin-layout__icon-btn admin-layout__collapse" type="button" :aria-label="collapsed ? 'Expandir menú' : 'Colapsar menú'" @click="toggleCollapsed">
-        <component :is="collapsed ? ChevronRight : ChevronLeft" :size="18" />
-      </button>
+      <div
+        class="sidebar-user"
+        :class="{ 'sidebar-user--collapsed': sidebarCollapsed && !isMobile }"
+      >
+        <slot name="user" :collapsed="sidebarCollapsed && !isMobile" />
+      </div>
     </aside>
 
-    <main class="admin-layout__main">
-      <header class="admin-layout__header">
-        <button class="admin-layout__icon-btn admin-layout__burger" type="button" aria-label="Abrir menú" @click="drawerOpen = true">
-          <Menu :size="20" />
-        </button>
-        <h1>{{ title }}</h1>
-        <div class="admin-layout__actions"><slot name="actions" /></div>
+    <div class="main-wrapper">
+      <header class="navbar">
+        <div class="navbar-left">
+          <button
+            v-if="isMobile"
+            class="hamburger"
+            type="button"
+            @click="sidebarMobileOpen = !sidebarMobileOpen"
+          >
+            <X v-if="sidebarMobileOpen" :size="20" />
+            <Menu v-else :size="20" />
+          </button>
+          <span class="navbar-title">{{ title }}</span>
+        </div>
+        <div class="navbar-right">
+          <slot name="actions" />
+        </div>
       </header>
-      <div class="admin-layout__body">
-        <slot />
+
+      <div class="main-body">
+        <main class="main-content">
+          <AppBreadcrumbs :home="homeCrumb" />
+          <slot />
+        </main>
       </div>
-    </main>
+    </div>
   </div>
 </template>

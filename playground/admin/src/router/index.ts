@@ -6,9 +6,9 @@ const router = createRouter({
   routes: [
     { path: '/login', name: 'login', component: () => import('@/views/LoginView.vue'), meta: { guest: true } },
     { path: '/', name: 'dashboard', component: () => import('@/views/DashboardView.vue'), meta: { admin: true, title: 'Dashboard' } },
-    { path: '/houses', name: 'houses', component: () => import('@/views/houses/HousesListView.vue'), meta: { admin: true, title: 'Houses' } },
-    { path: '/houses/new', name: 'house-new', component: () => import('@/views/houses/HouseFormView.vue'), meta: { admin: true, title: 'Nueva house' } },
-    { path: '/houses/:id/edit', name: 'house-edit', component: () => import('@/views/houses/HouseFormView.vue'), meta: { admin: true, title: 'Editar house' } },
+    { path: '/houses', name: 'houses', component: () => import('@/views/houses/HousesListView.vue'), meta: { admin: true, title: 'Houses', breadcrumbs: [{ label: 'Houses' }] } },
+    { path: '/houses/new', name: 'house-new', component: () => import('@/views/houses/HouseFormView.vue'), meta: { admin: true, title: 'Nueva house', breadcrumbs: [{ label: 'Houses', to: { name: 'houses' } }, { label: 'Nueva house' }] } },
+    { path: '/houses/:id/edit', name: 'house-edit', component: () => import('@/views/houses/HouseFormView.vue'), meta: { admin: true, title: 'Editar house', breadcrumbs: [{ label: 'Houses', to: { name: 'houses' } }, { label: 'Editar house' }] } },
   ],
 })
 
