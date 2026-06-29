@@ -192,7 +192,12 @@ Cuatro tiers, con los breakpoints de los tokens:
 - **Tablet horizontal / desktop** (`≥ $bp-lg` 1024): sidebar **fijo** y **colapsable a
   rail** de iconos (toggle persistido en localStorage).
 - **Wide** (`≥ $bp-xl` 1280): tier amplio.
-**Por qué:** la gestión será mucho en móvil; el rail da más espacio en escritorio.
+
+**Listados (`ResourceList`)**: tarjetas mientras el menú es hamburguesa, tabla cuando
+es fijo — el cambio coincide en **`$bp-lg`**. Las tarjetas van a **1 columna** (`< $bp-md`)
+y **2 columnas** (`$bp-md`–`$bp-lg`) antes de pasar a tabla.
+**Por qué:** la gestión será mucho en móvil; el rail da más espacio en escritorio;
+y los breakpoints de menú y de listado deben coincidir para no dar saltos raros.
 
 ### DC-24 · Migraciones: `datetimes()` en vez de `timestamps()`
 **Decisión:** todas las migraciones (motor y juegos) usan **`$table->datetimes()`** y

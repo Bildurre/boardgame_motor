@@ -69,7 +69,7 @@ const emit = defineEmits<{ page: [number] }>()
 .rlist {
   // --- Tarjetas por defecto (mobile-first) ---
   &__table-wrap { display: none; }
-  &__cards { display: flex; flex-direction: column; gap: $space-3; }
+  &__cards { display: grid; grid-template-columns: 1fr; gap: $space-3; }
 
   &__card {
     border: 1px solid $color-border;
@@ -101,8 +101,13 @@ const emit = defineEmits<{ page: [number] }>()
 
   &__empty { color: $color-text-muted; text-align: center; padding: $space-6; }
 
-  // --- Tabla en pantallas anchas ---
+  // --- Tablet vertical: 2 columnas de tarjetas ---
   @media (min-width: #{$bp-md}) {
+    &__cards { grid-template-columns: 1fr 1fr; }
+  }
+
+  // --- Desktop: tabla (coincide con el sidebar fijo, $bp-lg) ---
+  @media (min-width: #{$bp-lg}) {
     &__cards { display: none; }
     &__table-wrap { display: block; overflow-x: auto; }
 
