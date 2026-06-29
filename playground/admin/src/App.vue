@@ -33,19 +33,3 @@ async function logout() {
   </AdminLayout>
   <RouterView v-else />
 </template>
-
-<style scoped lang="scss">
-.nav-item {
-  display: flex;
-  align-items: center;
-  gap: $space-3;
-  padding: $space-2 $space-3;
-  border-radius: $radius-md;
-  color: $color-text-muted;
-  text-decoration: none;
-  &:hover { color: $color-text; }
-  &.router-link-exact-active { color: $color-text; background: rgba(108, 92, 231, 0.15); }
-}
-.who { display: none; color: $color-text-muted; }
-@media (min-width: #{$bp-sm}) { .who { display: inline; } }
-</style>

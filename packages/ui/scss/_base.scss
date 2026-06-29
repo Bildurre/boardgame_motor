@@ -1,0 +1,33 @@
+@use "tokens" as *;
+// =========================================================
+// Reset + base
+// =========================================================
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html {
+  font-size: 100%;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  font-family: $k-font-sans;
+  font-size: $fs-14;
+  line-height: $k-lh-body;
+  color: $text-1;
+  background-color: $bg;
+  overflow-x: hidden;
+  max-width: 100vw;
+  min-height: 100vh;
+}
+
+#app { min-height: 100vh; max-width: 100%; }
+
+h1, h2, h3, h4 { font-weight: $k-fw-semibold; line-height: $k-lh-tight; }
+h1 { font-size: $fs-28; }
+h2 { font-size: $fs-24; }
+h3 { font-size: $fs-20; }
+
+a { color: $accent-500; text-decoration: none; &:hover { color: $accent-600; } }

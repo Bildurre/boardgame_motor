@@ -82,11 +82,11 @@ onMounted(async () => {
             <IconButton variant="info" title="Restaurar" @click="restore(item)"><RotateCcw :size="18" /></IconButton>
           </template>
           <template v-else>
-            <IconButton variant="accent" title="Editar" @click="router.push({ name: 'house-edit', params: { id: item.id } })">
+            <IconButton variant="success" title="Editar" @click="router.push({ name: 'house-edit', params: { id: item.id } })">
               <SquarePen :size="18" />
             </IconButton>
             <IconButton
-              :variant="item.is_published ? 'warning' : 'success'"
+              :variant="item.is_published ? 'warning' : 'info'"
               :title="item.is_published ? 'Despublicar' : 'Publicar'"
               @click="togglePublish(item)"
             >
@@ -99,17 +99,3 @@ onMounted(async () => {
     </ResourceList>
   </div>
 </template>
-
-<style scoped lang="scss">
-.houses__top { display: flex; justify-content: flex-end; margin-bottom: $space-4; }
-.row-actions { display: flex; gap: 2px; justify-content: flex-end; }
-.thumb { width: 32px; height: 32px; border-radius: 6px; object-fit: cover; border: 1px solid $color-border; display: inline-block; vertical-align: middle; }
-.thumb--empty { background: $color-surface; }
-.swatch { display: inline-block; width: 0.9rem; height: 0.9rem; border-radius: 3px; margin-right: $space-2; vertical-align: middle; border: 1px solid $color-border; }
-.chip {
-  display: inline-block; padding: 1px 8px; border-radius: $radius-pill; font-size: 0.75rem;
-  background: $color-surface; border: 1px solid $color-border; color: $color-text-muted;
-  &--pub { color: #4ade80; border-color: rgba(74, 222, 128, 0.4); }
-  &--trashed { color: #ff6b6b; border-color: rgba(255, 107, 107, 0.4); }
-}
-</style>

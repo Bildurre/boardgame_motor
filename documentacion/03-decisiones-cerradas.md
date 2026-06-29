@@ -176,6 +176,20 @@ DC-15 — y backup — DC-16 — sin cambiar código). Esquema de despliegue al 
 **Por qué:** aislamiento por juego (un fallo no afecta a otros), simple de operar; el
 storage queda abierto para crecer a objetos cuando convenga.
 
+### DC-27 · Estilos: SCSS global, nada de `<style>` en los `.vue`
+**Decisión:** los componentes `.vue` **no llevan bloque `<style>`**. Todo el SCSS vive
+en **ficheros globales** (`scss/components/_*.scss`, `scss/layouts/…`, `scss/views/…`)
+con clases **BEM**, importados una vez desde un `main.scss` por app. Exactamente como
+kontuan. Los paquetes del motor exponen su SCSS vía `exports: { "./scss/*": "./scss/*" }`.
+**Por qué:** elimina los atributos `data-v-…` (que añade `<style scoped>`), centraliza
+estilos y reutiliza tokens; es como está montado kontuan.
+
+### DC-28 · Componentes: mirar primero en kontuan
+**Decisión:** cada vez que necesitemos un componente (o un patrón de estilo/layout),
+**se busca primero en kontuan**. Si existe, se **copia y adapta**; si no, se crea nuevo.
+**Por qué:** kontuan ya tiene un design system maduro y probado; reutilizar acelera y
+da consistencia.
+
 ### DC-25 · Iconos: Lucide (`@lucide/vue`), siempre
 **Decisión:** todos los frontends (admin y app) usan **Lucide** como única librería de
 iconos. Paquete **`@lucide/vue`** (el antiguo `lucide-vue-next` está deprecado). Peer

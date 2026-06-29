@@ -1,0 +1,30 @@
+@use "tokens" as *;
+
+.bgm-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: $space-2;
+  padding: $space-2 $space-4;
+  border: 1px solid transparent;
+  border-radius: $radius-md;
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.15s ease, border-color 0.15s ease;
+
+  &--primary {
+    background: $color-accent;
+    color: #fff;
+
+    &:hover { background: $color-accent-dark; }
+  }
+
+  &--secondary {
+    background: transparent;
+    border-color: $color-border;
+    color: $color-text;
+
+    &:hover { border-color: $color-accent; }
+  }
+}

@@ -1,0 +1,19 @@
+@use "tokens" as *;
+
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: $space-3;
+  margin-bottom: $space-4;
+
+  &__search { flex: 1; min-width: 0; }
+  &__search, &__status {
+    font: inherit;
+    padding: 0.5rem 0.75rem;
+    background: $color-surface;
+    border: 1px solid $color-border;
+    border-radius: $radius-md;
+    color: $color-text;
+    &:focus { outline: none; border-color: $color-accent; }
+  }
+}

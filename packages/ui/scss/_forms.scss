@@ -1,0 +1,33 @@
+@use "tokens" as *;
+// =========================================================
+// Inputs y formularios genéricos
+// =========================================================
+
+.form { display: flex; flex-direction: column; gap: $space-4; }
+.form-actions { margin-top: $space-2; display: flex; gap: $space-3; }
+
+.field { display: flex; flex-direction: column; gap: $space-1; }
+.field__label, .field label { font-size: $fs-13; color: $text-2; }
+
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="search"],
+input[type="number"],
+select,
+textarea {
+  font: inherit;
+  width: 100%;
+  padding: 10px 12px;
+  background: $surface;
+  border: 1px solid $border;
+  border-radius: $radius-md;
+  color: $text-1;
+  &:hover { border-color: $border-strong; }
+  &:focus { outline: none; border-color: $accent-500; }
+}
+textarea { resize: vertical; }
+input[type="color"] { width: 44px; height: 36px; padding: 2px; cursor: pointer; }
+
+.error { color: $danger; margin: 0; }
+.ok { color: $success; margin: 0; }
