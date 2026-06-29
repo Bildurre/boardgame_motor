@@ -1,8 +1,9 @@
 <script setup lang="ts">
 import { onMounted } from 'vue'
 import { useRouter } from 'vue-router'
+import { SquarePen, Trash2, Eye, EyeOff, RotateCcw } from '@lucide/vue'
 import { ResourceList, FiltersBar, useResource } from '@bgm/admin-kit'
-import { BaseButton } from '@bgm/ui'
+import { BaseButton, IconButton } from '@bgm/ui'
 import { api } from '@/lib/api'
 import { useLocalesStore } from '@/stores/locales'
 
@@ -26,12 +27,10 @@ function label(obj: Record<string, string>) {
 async function load(page = 1) {
   await list({ ...filters, page })
 }
-
 function onFilter(f: { search: string; status: string }) {
   filters = f
   load(1)
 }
-
 async function togglePublish(item: any) {
   await action(item.id, 'toggle-published')
   load(meta.value?.current_page ?? 1)
@@ -78,14 +77,24 @@ onMounted(async () => {
         <span v-else class="chip">Borrador</span>
       </template>
       <template #actions="{ item }">
-        <template v-if="item.deleted_at">
-          <button class="act" @click="restore(item)">Restaurar</button>
-        </template>
-        <template v-else>
-          <button class="act" @click="router.push({ name: 'house-edit', params: { id: item.id } })">Editar</button>
-          <button class="act" @click="togglePublish(item)">{{ item.is_published ? 'Despublicar' : 'Publicar' }}</button>
-          <button class="act act--danger" @click="del(item)">Borrar</button>
-        </template>
+        <div class="row-actions">
+          <template v-if="item.deleted_at">
+            <IconButton variant="info" title="Restaurar" @click="restore(item)"><RotateCcw :size="18" /></IconButton>
+          </template>
+          <template v-else>
+            <IconButton variant="accent" title="Editar" @click="router.push({ name: 'house-edit', params: { id: item.id } })">
+              <SquarePen :size="18" />
+            </IconButton>
+            <IconButton
+              :variant="item.is_published ? 'warning' : 'success'"
+              :title="item.is_published ? 'Despublicar' : 'Publicar'"
+              @click="togglePublish(item)"
+            >
+              <component :is="item.is_published ? EyeOff : Eye" :size="18" />
+            </IconButton>
+            <IconButton variant="danger" title="Borrar" @click="del(item)"><Trash2 :size="18" /></IconButton>
+          </template>
+        </div>
       </template>
     </ResourceList>
   </div>
@@ -93,19 +102,14 @@ onMounted(async () => {
 
 <style scoped lang="scss">
 .houses__top { display: flex; justify-content: flex-end; margin-bottom: $space-4; }
+.row-actions { display: flex; gap: 2px; justify-content: flex-end; }
 .thumb { width: 32px; height: 32px; border-radius: 6px; object-fit: cover; border: 1px solid $color-border; display: inline-block; vertical-align: middle; }
 .thumb--empty { background: $color-surface; }
-.swatch { display: inline-block; width: 0.9rem; height: 0.9rem; border-radius: 3px; margin-right: $space-2; vertical-align: -1px; border: 1px solid $color-border; }
+.swatch { display: inline-block; width: 0.9rem; height: 0.9rem; border-radius: 3px; margin-right: $space-2; vertical-align: middle; border: 1px solid $color-border; }
 .chip {
   display: inline-block; padding: 1px 8px; border-radius: $radius-pill; font-size: 0.75rem;
   background: $color-surface; border: 1px solid $color-border; color: $color-text-muted;
   &--pub { color: #4ade80; border-color: rgba(74, 222, 128, 0.4); }
   &--trashed { color: #ff6b6b; border-color: rgba(255, 107, 107, 0.4); }
-}
-.act {
-  font: inherit; font-size: 0.85rem; background: none; border: none; cursor: pointer;
-  color: $color-text-muted; padding: 0 $space-2;
-  &:hover { color: $color-text; }
-  &--danger:hover { color: #ff6b6b; }
 }
 </style>

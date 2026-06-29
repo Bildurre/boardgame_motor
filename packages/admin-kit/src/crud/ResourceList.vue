@@ -48,8 +48,14 @@ const emit = defineEmits<{ page: [number] }>()
   &__table {
     width: 100%;
     border-collapse: collapse;
-    th, td { text-align: left; padding: $space-3; border-bottom: 1px solid $color-border; }
-    th { font-size: 0.8rem; color: $color-text-muted; font-weight: 600; }
+    font-size: 0.78rem; // estrecho: letra reducida
+    th, td { text-align: left; padding: $space-2; border-bottom: 1px solid $color-border; }
+    th { color: $color-text-muted; font-weight: 600; }
+
+    @media (min-width: #{$bp-sm}) {
+      font-size: 0.95rem;
+      th, td { padding: $space-3; }
+    }
   }
   &__actions, &__actions-h { text-align: right; white-space: nowrap; }
   &__empty { color: $color-text-muted; text-align: center; padding: $space-6; }
