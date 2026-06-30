@@ -326,40 +326,60 @@ if (!ok) return
 </AdminLayout>
 ```
 
-### ResourceList
+### Index de entidades (patrón sin tablas) — `FilterBar` + `BaseTabs` + `BaseGrid` + `EntityCard`
 
-- **Finalidad:** listado responsive de un recurso. En pantallas anchas (≥ bp-lg)
-  pinta una tabla; por debajo, tarjetas (1 columna en móvil, 2 en bp-md). Incluye
-  estados de carga/vacío y paginación.
-- **Props:** `columns: { key: string; label: string }[]`, `items: any[]`,
-  `meta?` (paginación de Laravel), `loading?: boolean`, y los textos
-  traducibles `loadingText?` / `emptyText?`.
-- **Emite:** `page` (número de página solicitada).
-- **Slots dinámicos:** `cell-<key>` por columna (recibe `{ item }`), y
-  `actions` (recibe `{ item }`) para los botones de fila.
-- **Uso:**
+**DC-30: los index NUNCA usan tablas.** Siempre **grid de tarjetas**. El orden es
+**filtros → tabs → grid**. Componentes (mezcla kontuan + CDL):
+
+#### FilterBar
+
+- **Finalidad:** barra de búsqueda estilo kontuan (caja con icono de lupa). Va
+  **por encima de las tabs**. Slot por defecto para filtros extra a la derecha.
+- **Modelo:** `v-model` (texto de búsqueda). **Props:** `placeholder?`.
+
+#### BaseGrid
+
+- **Finalidad:** grid responsive de tarjetas (portado de kontuan). Responde al
+  ancho del _container_ `content`, no al viewport.
+- **Props:** `cols?` (número u objeto `{ base, sm, md, lg }`),
+  `gap?: 'sm'|'md'|'lg'`, `preset?` (`cards` = 1→2→3, `cards-wide`,
+  `cards-narrow`, `cards-full`, `halves`, `thirds`).
+
+#### EntityCard
+
+- **Finalidad:** tarjeta de entidad. Mezcla kontuan (contenedor con borde/sombra,
+  hover, slots) y CDL (cabecera título + acciones con divisoria, contenido con
+  `badges` y `meta`). Franja `media` opcional arriba (emblema/imagen).
+- **Props:** `title`, `clickable?`, `muted?`. **Emite:** `view` (si `clickable`).
+- **Slots:** `media`, `actions`, `badges`, `meta`, por defecto.
+
+#### EmptyState
+
+- **Finalidad:** estado vacío de un listado. **Props:** `title`, `description?`.
+  **Slots:** `icon`, `action`.
+
+- **Uso (la vista compone todo):**
 
 ```vue
-<ResourceList :columns="columns" :items="items" :meta="meta" :loading="loading" @page="load">
-  <template #cell-name="{ item }">{{ label(item.name) }}</template>
-  <template #actions="{ item }">
-    <IconButton variant="success" title="Editar" @click="edit(item)"><SquarePen :size="18" /></IconButton>
-  </template>
-</ResourceList>
+<FilterBar v-model="search" :placeholder="t('common.search')" />
+<BaseTabs v-model="status" :tabs="tabs" />
+
+<EmptyState v-if="!loading && !items.length" :title="t('common.empty')" />
+<BaseGrid v-else preset="cards" gap="md">
+  <EntityCard v-for="item in items" :key="item.id" :title="tr(item.name)" :muted="!!item.deleted_at">
+    <template #media><div class="house-emblem" :style="{ '--c': item.color }">…</div></template>
+    <template #actions><IconButton variant="success" @click="edit(item)"><SquarePen :size="18" /></IconButton></template>
+    <template #badges><span class="chip chip--pub">{{ t('houses.state.published') }}</span></template>
+    <template #meta><span><span class="swatch" :style="{ background: item.color }" />{{ item.color }}</span></template>
+  </EntityCard>
+</BaseGrid>
 ```
 
-### FiltersBar
+### ResourceList _(legacy)_ y FiltersBar _(legacy)_
 
-- **Finalidad:** barra de filtros del listado (búsqueda con _debounce_ y, de
-  forma opcional, un selector de estado). Emite los cambios ya consolidados.
-- **Props:** `statusOptions?: { value: string; label: string }[]`,
-  `searchPlaceholder?: string` (def. `Buscar…`).
-- **Emite:** `change` con `{ search, status }` (250 ms de debounce).
-- **Uso:** (con tabs para el estado, la barra se usa solo para la búsqueda)
-
-```vue
-<FiltersBar @change="onFilter" />
-```
+`ResourceList` (tabla + tarjetas) y `FiltersBar` (select de estado) quedan
+**obsoletos** por DC-30 (sin tablas). Se mantienen exportados de momento por
+compatibilidad, pero los index nuevos usan el patrón de arriba.
 
 ---
 

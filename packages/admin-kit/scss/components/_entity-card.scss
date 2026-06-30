@@ -1,0 +1,85 @@
+@use "tokens" as *;
+
+// Tarjeta de entidad: mezcla kontuan (contenedor + hover) y CDL (cabecera con
+// acciones + divisoria, contenido con badges/meta).
+.entity-card {
+  display: flex;
+  flex-direction: column;
+  background: $surface;
+  border: 1px solid $border;
+  border-radius: $radius-lg;
+  box-shadow: $shadow-sm;
+  overflow: hidden;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+  min-width: 0;
+
+  &--clickable {
+    cursor: pointer;
+    &:hover { border-color: $border-strong; box-shadow: $shadow-md; }
+  }
+  &--muted { opacity: 0.65; }
+
+  // Franja superior opcional (emblema/imagen).
+  &__media {
+    position: relative;
+    aspect-ratio: 16 / 9;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    background: $surface-2;
+
+    img { width: 100%; height: 100%; object-fit: cover; }
+  }
+
+  // Cabecera: título + acciones, con divisoria (CDL).
+  &__header {
+    display: flex;
+    align-items: center;
+    gap: $space-2;
+    padding: $space-3 $space-4;
+    border-bottom: 1px solid $border;
+    min-width: 0;
+  }
+
+  &__title {
+    flex: 1;
+    margin: 0;
+    font-size: $fs-16;
+    font-weight: $k-fw-semibold;
+    color: $text-1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    min-width: 0;
+  }
+
+  &__actions {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    flex-shrink: 0;
+  }
+
+  &__content {
+    display: flex;
+    flex-direction: column;
+    gap: $space-2;
+    padding: $space-3 $space-4;
+  }
+
+  &__badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: $space-1;
+  }
+
+  &__meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: $space-3;
+    font-size: $fs-13;
+    color: $text-3;
+  }
+}

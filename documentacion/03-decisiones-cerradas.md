@@ -210,6 +210,17 @@ reutilizable. Ver `documentacion/guia-de-componentes.md` (sección i18n).
 **Pendiente:** al cambiar de idioma estando en un detalle, el `:slug` se conserva (la
 URL resuelve igual); localizar también el slug en caliente queda como mejora (DC-11).
 
+### DC-30 · Index de entidades: grid de tarjetas, nunca tablas
+**Decisión:** las vistas de listado (index) **no usan tablas**: siempre **grid de
+tarjetas**. Orden de la vista: **filtros → tabs → grid**. Componentes en
+`@bgm/admin-kit`, copiados/mezclados de kontuan y de Choque de Leyendas (DC-28):
+`FilterBar` (búsqueda con lupa, estilo kontuan), `BaseGrid` (grid responsive por
+`@container`), `EntityCard` (estructura kontuan + zonas `badges`/`meta` de CDL +
+franja `media`), `EmptyState`. `ResourceList`/`FiltersBar` (tabla + select) quedan
+obsoletos.
+**Por qué:** consistencia visual con los juegos (cartas), mejor en móvil, y encaja
+con el modo "carta" del render a PNG (Fase 3).
+
 ### DC-26 · Mobile-first + 4 tiers responsivos
 **Decisión:** CSS **mobile-first** (base móvil, `@media (min-width: …)` para ampliar).
 **Nada debe superar el 100% del ancho de pantalla** (grids con `minmax(0,1fr)`,

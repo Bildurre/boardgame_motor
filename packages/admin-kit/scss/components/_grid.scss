@@ -1,0 +1,31 @@
+@use "tokens" as *;
+
+// Grid responsive (portado de kontuan). Columnas por breakpoint del contenedor
+// `content` para que coincida con el ancho real disponible.
+.grid {
+  display: grid;
+  grid-template-columns: 1fr;
+
+  &--gap-sm { gap: $space-3; }
+  &--gap-md { gap: $space-4; }
+  &--gap-lg { gap: $space-5; }
+
+  @for $i from 1 through 6 {
+    &--base-#{$i} { grid-template-columns: repeat(#{$i}, 1fr); }
+  }
+  @for $i from 1 through 6 {
+    &--sm-#{$i} {
+      @container content (min-width: #{$bp-sm}) { grid-template-columns: repeat(#{$i}, 1fr); }
+    }
+  }
+  @for $i from 1 through 6 {
+    &--md-#{$i} {
+      @container content (min-width: #{$bp-md}) { grid-template-columns: repeat(#{$i}, 1fr); }
+    }
+  }
+  @for $i from 1 through 6 {
+    &--lg-#{$i} {
+      @container content (min-width: #{$bp-lg}) { grid-template-columns: repeat(#{$i}, 1fr); }
+    }
+  }
+}

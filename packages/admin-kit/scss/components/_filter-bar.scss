@@ -1,0 +1,53 @@
+@use "tokens" as *;
+
+// Barra de filtros estilo kontuan (búsqueda con icono). Va por encima de las tabs.
+.filter-bar {
+  display: flex;
+  align-items: center;
+  gap: $space-3;
+  flex-wrap: wrap;
+  margin-bottom: $space-4;
+
+  &__search {
+    position: relative;
+    flex: 1;
+    min-width: 200px;
+  }
+
+  &__search-icon {
+    position: absolute;
+    left: $space-3;
+    top: 50%;
+    transform: translateY(-50%);
+    color: $text-3;
+    pointer-events: none;
+  }
+
+  &__search-input {
+    width: 100%;
+    height: 40px;
+    padding: 0 $space-3 0 36px;
+    background: $surface-2;
+    color: $text-1;
+    border: 1px solid $border;
+    border-radius: $radius-md;
+    font-family: $k-font-sans;
+    font-size: $fs-14;
+    transition: border-color 0.15s, box-shadow 0.15s;
+
+    &::placeholder { color: $text-3; }
+    &:hover:not(:focus) { border-color: $border-strong; }
+    &:focus {
+      outline: none;
+      border-color: $accent-500;
+      box-shadow: 0 0 0 3px color-mix(in srgb, $accent-500 25%, transparent);
+    }
+  }
+
+  &__extra {
+    display: flex;
+    align-items: center;
+    gap: $space-2;
+    flex-shrink: 0;
+  }
+}
