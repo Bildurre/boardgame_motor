@@ -1,0 +1,75 @@
+{
+  "routes": { "houses": "etxeak", "new": "berria", "edit": "editatu", "login": "sarrera" },
+  "breadcrumbs": {
+    "home": "Hasiera",
+    "houses": "Etxeak",
+    "houseNew": "Etxe berria",
+    "houseEdit": "Etxea editatu"
+  },
+  "nav": { "dashboard": "Panela", "houses": "Etxeak" },
+  "common": {
+    "save": "Gorde",
+    "saving": "Gordetzen…",
+    "cancel": "Utzi",
+    "search": "Bilatu…",
+    "loading": "Kargatzen…",
+    "empty": "Emaitzarik ez.",
+    "all": "Guztiak",
+    "logout": "Irten"
+  },
+  "login": {
+    "title": "Panelerako sarrera",
+    "email": "Email",
+    "password": "Pasahitza",
+    "submit": "Sartu",
+    "submitting": "Sartzen…",
+    "denied": "Kontu honek ez du panelerako sarbiderik.",
+    "noAccess": "Kontu honek ezin du administrazio panelera sartu.",
+    "failed": "Ezin izan da saioa hasi."
+  },
+  "dashboard": {
+    "title": "Panela",
+    "connectedAs": "{name} gisa konektatuta ({roles}).",
+    "motor": "{name} motorra v{version} · hizkuntzak {locales}"
+  },
+  "houses": {
+    "title": "Etxeak",
+    "new": "Etxe berria",
+    "edit": "Etxea editatu",
+    "newButton": "Etxe berria",
+    "tabs": { "published": "Argitaratuak", "draft": "Zirriborroa", "trashed": "Zakarrontzia" },
+    "cols": { "name": "Izena", "color": "Kolorea", "status": "Egoera" },
+    "state": { "published": "Argitaratua", "draft": "Zirriborroa", "trashed": "Zakarrontzia" },
+    "fields": {
+      "name": "Izena",
+      "description": "Deskribapena",
+      "image": "Ikurra",
+      "color": "Kolorea",
+      "published": "Argitaratua",
+      "imageEmpty": "Irudirik ez",
+      "imageChoose": "Aukeratu irudia",
+      "imageClear": "Kendu"
+    },
+    "actions": {
+      "edit": "Editatu",
+      "publish": "Argitaratu",
+      "unpublish": "Ezkutatu",
+      "delete": "Ezabatu",
+      "restore": "Berreskuratu"
+    },
+    "confirmDelete": {
+      "title": "Zakarrontzira bidali",
+      "message": "\"{name}\" zakarrontzira bidali?",
+      "confirm": "Ezabatu"
+    },
+    "toast": {
+      "created": "Etxea ondo sortu da.",
+      "updated": "Etxea ondo eguneratu da.",
+      "published": "Etxea argitaratua",
+      "unpublished": "Etxea ezkutatua",
+      "deleted": "Etxea zakarrontzira bidali da",
+      "restored": "Etxea berreskuratua",
+      "saveError": "Ezin izan da gorde."
+    }
+  }
+}

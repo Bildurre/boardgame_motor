@@ -1,12 +1,17 @@
 <script setup lang="ts">
 interface Column { key: string; label: string }
 
-defineProps<{
-  columns: Column[]
-  items: any[]
-  meta?: Record<string, any> | null
-  loading?: boolean
-}>()
+withDefaults(
+  defineProps<{
+    columns: Column[]
+    items: any[]
+    meta?: Record<string, any> | null
+    loading?: boolean
+    loadingText?: string
+    emptyText?: string
+  }>(),
+  { loadingText: 'Cargando…', emptyText: 'Sin resultados.' },
+)
 
 const emit = defineEmits<{ page: [number] }>()
 </script>
@@ -23,8 +28,8 @@ const emit = defineEmits<{ page: [number] }>()
           </tr>
         </thead>
         <tbody>
-          <tr v-if="loading"><td :colspan="columns.length + 1" class="rlist__empty">Cargando…</td></tr>
-          <tr v-else-if="!items.length"><td :colspan="columns.length + 1" class="rlist__empty">Sin resultados.</td></tr>
+          <tr v-if="loading"><td :colspan="columns.length + 1" class="rlist__empty">{{ loadingText }}</td></tr>
+          <tr v-else-if="!items.length"><td :colspan="columns.length + 1" class="rlist__empty">{{ emptyText }}</td></tr>
           <tr v-for="item in items" :key="item.id">
             <td v-for="col in columns" :key="col.key">
               <slot :name="`cell-${col.key}`" :item="item">{{ item[col.key] }}</slot>
@@ -37,8 +42,8 @@ const emit = defineEmits<{ page: [number] }>()
 
     <!-- Tarjetas (teléfono, < bp-md) -->
     <div class="rlist__cards">
-      <p v-if="loading" class="rlist__empty">Cargando…</p>
-      <p v-else-if="!items.length" class="rlist__empty">Sin resultados.</p>
+      <p v-if="loading" class="rlist__empty">{{ loadingText }}</p>
+      <p v-else-if="!items.length" class="rlist__empty">{{ emptyText }}</p>
       <div v-for="item in items" :key="item.id" class="rlist__card">
         <div class="rlist__card-fields">
           <div

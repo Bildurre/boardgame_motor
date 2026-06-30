@@ -196,6 +196,20 @@ iconos. Paquete **`@lucide/vue`** (el antiguo `lucide-vue-next` está deprecado)
 dependency en `@bgm/ui` y `@bgm/admin-kit`; dependency en cada app.
 **Por qué:** consistencia visual, una sola librería; alineado con kontuan.
 
+### DC-29 · i18n de la app + rutas y slugs traducibles (patrón kontuan)
+**Decisión:** un **único idioma** por sesión gobierna UI (`vue-i18n`), **rutas** y
+contenido. Las rutas tienen **segmentos de path traducidos** por locale
+(`/casas/:slug/editar` ↔ `/houses/:slug/edit`) vía `createLocalizedRoutes` + `alias`
++ `onLocaleChange` (patrón kontuan). Las rutas de detalle usan **slug** (no id); el
+slug es traducible (uno por locale) y el backend resuelve por slug en cualquier locale
+(`ResolvesBySlug::whereSlug`). Toda cadena visible vive en `i18n/locales/*.json`;
+los componentes del motor (`@bgm/ui`, `@bgm/admin-kit`) no llevan i18n: exponen sus
+textos como props y la app los traduce.
+**Por qué:** SEO y UX multilingües reales; el motor se mantiene agnóstico de idioma y
+reutilizable. Ver `documentacion/guia-de-componentes.md` (sección i18n).
+**Pendiente:** al cambiar de idioma estando en un detalle, el `:slug` se conserva (la
+URL resuelve igual); localizar también el slug en caliente queda como mejora (DC-11).
+
 ### DC-26 · Mobile-first + 4 tiers responsivos
 **Decisión:** CSS **mobile-first** (base móvil, `@media (min-width: …)` para ampliar).
 **Nada debe superar el 100% del ancho de pantalla** (grids con `minmax(0,1fr)`,

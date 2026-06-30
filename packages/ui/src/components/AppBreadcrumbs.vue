@@ -13,18 +13,23 @@ export interface Crumb {
 const props = withDefaults(
   defineProps<{
     home?: Crumb | null
+    /**
+     * Migas ya resueltas/traducidas. Si se pasan, mandan sobre
+     * `route.meta.breadcrumbs` (útil para i18n desde la app).
+     */
+    crumbs?: Crumb[] | null
   }>(),
-  { home: () => ({ label: 'Inicio', to: { name: 'dashboard' } }) },
+  { home: () => ({ label: 'Inicio', to: { name: 'dashboard' } }), crumbs: null },
 )
 
 const route = useRoute()
 
 const items = computed<Crumb[]>(() => {
-  const crumbs = (route.meta.breadcrumbs as Crumb[] | undefined) ?? []
-  if (!crumbs.length) return []
+  const source = props.crumbs ?? (route.meta.breadcrumbs as Crumb[] | undefined) ?? []
+  if (!source.length) return []
   const head = props.home ? [props.home] : []
   // La última miga nunca es navegable (es la página actual).
-  return [...head, ...crumbs].map((c, i, arr) =>
+  return [...head, ...source].map((c, i, arr) =>
     i === arr.length - 1 ? { label: c.label } : c,
   )
 })

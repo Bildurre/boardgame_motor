@@ -1,0 +1,75 @@
+{
+  "routes": { "houses": "casas", "new": "nueva", "edit": "editar", "login": "acceso" },
+  "breadcrumbs": {
+    "home": "Inicio",
+    "houses": "Casas",
+    "houseNew": "Nueva casa",
+    "houseEdit": "Editar casa"
+  },
+  "nav": { "dashboard": "Panel", "houses": "Casas" },
+  "common": {
+    "save": "Guardar",
+    "saving": "Guardando…",
+    "cancel": "Cancelar",
+    "search": "Buscar…",
+    "loading": "Cargando…",
+    "empty": "Sin resultados.",
+    "all": "Todos",
+    "logout": "Salir"
+  },
+  "login": {
+    "title": "Acceso al panel",
+    "email": "Email",
+    "password": "Contraseña",
+    "submit": "Entrar",
+    "submitting": "Entrando…",
+    "denied": "Esta cuenta no tiene acceso al panel.",
+    "noAccess": "Esta cuenta no tiene acceso al panel de administración.",
+    "failed": "No se pudo iniciar sesión."
+  },
+  "dashboard": {
+    "title": "Panel",
+    "connectedAs": "Conectado como {name} ({roles}).",
+    "motor": "Motor {name} v{version} · locales {locales}"
+  },
+  "houses": {
+    "title": "Casas",
+    "new": "Nueva casa",
+    "edit": "Editar casa",
+    "newButton": "Nueva casa",
+    "tabs": { "published": "Publicadas", "draft": "Borrador", "trashed": "Papelera" },
+    "cols": { "name": "Nombre", "color": "Color", "status": "Estado" },
+    "state": { "published": "Publicada", "draft": "Borrador", "trashed": "Papelera" },
+    "fields": {
+      "name": "Nombre",
+      "description": "Descripción",
+      "image": "Emblema",
+      "color": "Color",
+      "published": "Publicada",
+      "imageEmpty": "Sin imagen",
+      "imageChoose": "Elegir imagen",
+      "imageClear": "Quitar"
+    },
+    "actions": {
+      "edit": "Editar",
+      "publish": "Publicar",
+      "unpublish": "Despublicar",
+      "delete": "Borrar",
+      "restore": "Restaurar"
+    },
+    "confirmDelete": {
+      "title": "Enviar a la papelera",
+      "message": "¿Enviar \"{name}\" a la papelera?",
+      "confirm": "Borrar"
+    },
+    "toast": {
+      "created": "Casa creada correctamente.",
+      "updated": "Casa actualizada correctamente.",
+      "published": "Casa publicada",
+      "unpublished": "Casa despublicada",
+      "deleted": "Casa enviada a la papelera",
+      "restored": "Casa restaurada",
+      "saveError": "No se pudo guardar."
+    }
+  }
+}

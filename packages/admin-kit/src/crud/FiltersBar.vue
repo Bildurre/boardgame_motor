@@ -7,8 +7,9 @@ const props = withDefaults(
   defineProps<{
     statusOptions?: Option[]
     searchPlaceholder?: string
+    allLabel?: string
   }>(),
-  { searchPlaceholder: 'Buscar…' },
+  { searchPlaceholder: 'Buscar…', allLabel: 'Todos' },
 )
 
 const emit = defineEmits<{ change: [{ search: string; status: string }] }>()
@@ -30,7 +31,7 @@ watch(
   <div class="filters">
     <input v-model="state.search" class="filters__search" :placeholder="searchPlaceholder" />
     <select v-if="statusOptions" v-model="state.status" class="filters__status">
-      <option value="">Todos</option>
+      <option value="">{{ allLabel }}</option>
       <option v-for="o in statusOptions" :key="o.value" :value="o.value">{{ o.label }}</option>
     </select>
   </div>

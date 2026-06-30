@@ -11,10 +11,11 @@
   "dependencies": {
     "@bgm/admin-kit": "*",
     "@bgm/ui": "*",
+    "@lucide/vue": "^1.0.0",
     "pinia": "^3.0.0",
     "vue": "^3.5.38",
-    "vue-router": "^5.0.0",
-    "@lucide/vue": "^1.0.0"
+    "vue-i18n": "^11.4.6",
+    "vue-router": "^5.0.0"
   },
   "devDependencies": {
     "@types/node": "^24.13.2",

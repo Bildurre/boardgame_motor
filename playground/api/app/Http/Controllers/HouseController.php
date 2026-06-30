@@ -31,13 +31,16 @@ class HouseController extends Controller
         return (new HouseResource($house))->response()->setStatusCode(201);
     }
 
-    public function show(House $house)
+    public function show(string $slug)
     {
+        $house = House::whereSlug($slug)->firstOrFail();
+
         return new HouseResource($house);
     }
 
-    public function update(Request $request, House $house)
+    public function update(Request $request, string $slug)
     {
+        $house = House::whereSlug($slug)->firstOrFail();
         $data = $this->validateData($request);
         $this->fill($house, $data);
         $house->save();
@@ -46,8 +49,9 @@ class HouseController extends Controller
         return new HouseResource($house);
     }
 
-    public function destroy(House $house)
+    public function destroy(string $slug)
     {
+        $house = House::whereSlug($slug)->firstOrFail();
         $house->delete();
 
         return response()->noContent();
@@ -61,8 +65,9 @@ class HouseController extends Controller
         return new HouseResource($house);
     }
 
-    public function togglePublished(House $house)
+    public function togglePublished(string $slug)
     {
+        $house = House::whereSlug($slug)->firstOrFail();
         $house->togglePublished();
 
         return new HouseResource($house);

@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { onMounted, reactive, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
+import { useI18n } from 'vue-i18n'
 import { TranslatableInput, ImageUpload, BaseButton, useToast } from '@bgm/ui'
 import { useResource } from '@bgm/admin-kit'
 import { api } from '@/lib/api'
@@ -8,11 +9,13 @@ import { useLocalesStore } from '@/stores/locales'
 
 const route = useRoute()
 const router = useRouter()
+const { t } = useI18n()
 const locales = useLocalesStore()
 const toast = useToast()
 const { find, createForm, updateForm } = useResource(api, '/admin/houses')
 
-const id = route.params.id ? Number(route.params.id) : null
+// La ruta de edición usa el slug del locale activo (no el id).
+const slug = (route.params.slug as string) || null
 const form = reactive<{
   name: Record<string, string>
   description: Record<string, string>
@@ -27,8 +30,8 @@ const saving = ref(false)
 
 onMounted(async () => {
   await locales.load()
-  if (id) {
-    const h: any = await find(id)
+  if (slug) {
+    const h: any = await find(slug)
     form.name = h.name ?? {}
     form.description = h.description ?? {}
     form.color = h.color ?? '#888888'
@@ -51,16 +54,16 @@ async function save() {
   error.value = null
   saving.value = true
   try {
-    if (id) {
-      await updateForm(id, toFormData())
-      toast.success('Casa actualizada correctamente.')
+    if (slug) {
+      await updateForm(slug, toFormData())
+      toast.success(t('houses.toast.updated'))
     } else {
       await createForm(toFormData())
-      toast.success('Casa creada correctamente.')
+      toast.success(t('houses.toast.created'))
     }
     router.push({ name: 'houses' })
   } catch (e: any) {
-    error.value = e.response?.data?.message ?? 'No se pudo guardar.'
+    error.value = e.response?.data?.message ?? t('houses.toast.saveError')
   } finally {
     saving.value = false
   }
@@ -69,22 +72,29 @@ async function save() {
 
 <template>
   <form class="hform" @submit.prevent="save">
-    <TranslatableInput v-model="form.name" :locales="locales.locales" label="Nombre" />
-    <TranslatableInput v-model="form.description" :locales="locales.locales" label="Descripción" type="textarea" />
-    <ImageUpload v-model="image" :current-url="currentImage" label="Emblema" />
+    <TranslatableInput v-model="form.name" :locales="locales.locales" :label="t('houses.fields.name')" />
+    <TranslatableInput v-model="form.description" :locales="locales.locales" :label="t('houses.fields.description')" type="textarea" />
+    <ImageUpload
+      v-model="image"
+      :current-url="currentImage"
+      :label="t('houses.fields.image')"
+      :empty-text="t('houses.fields.imageEmpty')"
+      :choose-text="t('houses.fields.imageChoose')"
+      :clear-text="t('houses.fields.imageClear')"
+    />
 
     <div class="hform__row">
-      <label>Color</label>
+      <label>{{ t('houses.fields.color') }}</label>
       <input v-model="form.color" type="color" />
     </div>
 
-    <label class="hform__check"><input v-model="form.is_published" type="checkbox" /> Publicada</label>
+    <label class="hform__check"><input v-model="form.is_published" type="checkbox" /> {{ t('houses.fields.published') }}</label>
 
     <p v-if="error" class="error">{{ error }}</p>
 
     <div class="hform__actions">
-      <BaseButton type="submit">{{ saving ? 'Guardando…' : 'Guardar' }}</BaseButton>
-      <BaseButton variant="secondary" type="button" @click="router.push({ name: 'houses' })">Cancelar</BaseButton>
+      <BaseButton type="submit">{{ saving ? t('common.saving') : t('common.save') }}</BaseButton>
+      <BaseButton variant="secondary" type="button" @click="router.push({ name: 'houses' })">{{ t('common.cancel') }}</BaseButton>
     </div>
   </form>
 </template>

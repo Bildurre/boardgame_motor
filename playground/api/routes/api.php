@@ -18,9 +18,9 @@ Route::get('houses/{slug}', [PublicHouseController::class, 'show']);
 Route::middleware(['auth:sanctum', 'motor.admin'])->prefix('admin')->group(function () {
     Route::get('houses', [HouseController::class, 'index']);
     Route::post('houses', [HouseController::class, 'store']);
-    Route::get('houses/{house}', [HouseController::class, 'show']);
-    Route::put('houses/{house}', [HouseController::class, 'update']);
-    Route::delete('houses/{house}', [HouseController::class, 'destroy']);
+    Route::get('houses/{slug}', [HouseController::class, 'show']);
+    Route::put('houses/{slug}', [HouseController::class, 'update']);
+    Route::delete('houses/{slug}', [HouseController::class, 'destroy']);
     Route::post('houses/{id}/restore', [HouseController::class, 'restore']);
-    Route::post('houses/{house}/toggle-published', [HouseController::class, 'togglePublished']);
+    Route::post('houses/{slug}/toggle-published', [HouseController::class, 'togglePublished']);
 });

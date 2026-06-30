@@ -1,16 +1,33 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
+import { createLocalizedRoutes } from './i18n-paths'
+import i18n from '@/i18n'
+
+function currentLocale(): string {
+  return (i18n.global.locale as unknown as { value: string }).value || 'es'
+}
 
 const router = createRouter({
   history: createWebHistory(),
-  routes: [
-    { path: '/login', name: 'login', component: () => import('@/views/LoginView.vue'), meta: { guest: true } },
-    { path: '/', name: 'dashboard', component: () => import('@/views/DashboardView.vue'), meta: { admin: true, title: 'Dashboard' } },
-    { path: '/houses', name: 'houses', component: () => import('@/views/houses/HousesListView.vue'), meta: { admin: true, title: 'Houses', breadcrumbs: [{ label: 'Houses' }] } },
-    { path: '/houses/new', name: 'house-new', component: () => import('@/views/houses/HouseFormView.vue'), meta: { admin: true, title: 'Nueva house', breadcrumbs: [{ label: 'Houses', to: { name: 'houses' } }, { label: 'Nueva house' }] } },
-    { path: '/houses/:id/edit', name: 'house-edit', component: () => import('@/views/houses/HouseFormView.vue'), meta: { admin: true, title: 'Editar house', breadcrumbs: [{ label: 'Houses', to: { name: 'houses' } }, { label: 'Editar house' }] } },
-  ],
+  routes: createLocalizedRoutes(currentLocale()),
 })
+
+/**
+ * Al cambiar de idioma: reconstruye las rutas con los segmentos traducidos y
+ * redirige a la misma ruta (por nombre) para que la URL pase al nuevo idioma.
+ */
+export function onLocaleChange(newLocale: string) {
+  const from = router.currentRoute.value
+
+  for (const route of router.getRoutes()) {
+    if (route.name && router.hasRoute(route.name)) router.removeRoute(route.name)
+  }
+  for (const route of createLocalizedRoutes(newLocale)) router.addRoute(route)
+
+  if (from.name) {
+    router.replace({ name: from.name, params: from.params, query: from.query })
+  }
+}
 
 router.beforeEach(async (to) => {
   const auth = useAuthStore()

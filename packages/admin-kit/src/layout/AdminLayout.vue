@@ -24,6 +24,8 @@ const props = withDefaults(
     locale?: string
     /** Miga "home"; pasa null para ocultarla. */
     homeCrumb?: Crumb | null
+    /** Migas ya traducidas (i18n desde la app). */
+    breadcrumbs?: Crumb[] | null
   }>(),
   {
     title: '',
@@ -31,6 +33,7 @@ const props = withDefaults(
     locales: () => [],
     locale: '',
     homeCrumb: () => ({ label: 'Inicio', to: { name: 'dashboard' } }),
+    breadcrumbs: null,
   },
 )
 
@@ -140,7 +143,7 @@ function toggleSidebar() {
 
       <div class="main-body">
         <main class="main-content">
-          <AppBreadcrumbs :home="homeCrumb" />
+          <AppBreadcrumbs :home="homeCrumb" :crumbs="breadcrumbs" />
           <slot />
         </main>
       </div>

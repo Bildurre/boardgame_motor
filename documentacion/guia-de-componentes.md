@@ -175,11 +175,13 @@ const tabs = [
   (o `null`) para enviar por `FormData`; muestra la imagen actual si se le pasa
   `current-url`.
 - **Modelo:** `v-model` (`File | null`).
-- **Props:** `currentUrl?: string | null` (imagen ya guardada), `label?: string`.
+- **Props:** `currentUrl?` (imagen ya guardada), `label?`, y los textos internos
+  traducibles `emptyText?` / `chooseText?` / `clearText?`.
 - **Uso:**
 
 ```vue
-<ImageUpload v-model="image" :current-url="currentImage" label="Emblema" />
+<ImageUpload v-model="image" :current-url="currentImage" :label="t('houses.fields.image')"
+  :empty-text="t('houses.fields.imageEmpty')" :choose-text="t('houses.fields.imageChoose')" />
 ```
 
 ### ThemeSelector
@@ -195,15 +197,18 @@ const tabs = [
 
 ### LocaleSelector
 
-- **Finalidad:** selector de idioma de contenido (qué traducción mostrar / qué
-  locale enviar a la API). Controlado, sin `vue-i18n`: la lista de locales se
-  pasa por props (la sirve la API del motor).
+- **Finalidad:** selector del idioma de la app. En el admin el idioma es único y
+  controla TODO: la UI (`vue-i18n`), las rutas (segmentos de path traducidos) y
+  el contenido (locale enviado a la API). Controlado: la lista de locales se pasa
+  por props (la sirve la API del motor); el handler de cambio orquesta i18n +
+  router + API (ver el store `locales`).
 - **Modelo:** `v-model` (código de locale, p. ej. `'es'`).
 - **Props:** `locales: { code: string; name: string }[]`.
 - **Uso:**
 
 ```vue
-<LocaleSelector v-model="current" :locales="locales" />
+<LocaleSelector :model-value="locales.current" :locales="locales.locales"
+  @update:model-value="locales.setCurrent" />
 ```
 
 ### AppBreadcrumbs
@@ -294,8 +299,9 @@ if (!ok) return
   usuario. El contenido es un _container_ (`container-name: content`), así los
   componentes internos (tabs, listas) responden al ancho real, no al viewport.
 - **Props:** `title?`, `brand?` (def. `'BGM Admin'`), `locales?` (lista para el
-  selector), `locale?` (v-model:locale del idioma de contenido),
-  `homeCrumb?` (miga "home"; `null` la oculta).
+  selector), `locale?` (v-model:locale del idioma de la app),
+  `homeCrumb?` (miga "home"; `null` la oculta), `breadcrumbs?` (migas ya
+  traducidas que la app calcula con `t()`).
 - **Slots:** `nav` (enlaces, usa la clase `nav-item` + `nav-label`),
   `actions` (zona derecha del navbar), `user` (pie del sidebar; recibe
   `{ collapsed }`), por defecto (cuerpo de la página).
@@ -326,7 +332,8 @@ if (!ok) return
   pinta una tabla; por debajo, tarjetas (1 columna en móvil, 2 en bp-md). Incluye
   estados de carga/vacío y paginación.
 - **Props:** `columns: { key: string; label: string }[]`, `items: any[]`,
-  `meta?` (paginación de Laravel), `loading?: boolean`.
+  `meta?` (paginación de Laravel), `loading?: boolean`, y los textos
+  traducibles `loadingText?` / `emptyText?`.
 - **Emite:** `page` (número de página solicitada).
 - **Slots dinámicos:** `cell-<key>` por columna (recibe `{ item }`), y
   `actions` (recibe `{ item }`) para los botones de fila.
@@ -384,6 +391,32 @@ await remove(item.id)
 ```
 
 ---
+
+## i18n y rutas traducibles (patrón kontuan)
+
+El idioma de la app es **único** y lo gobierna el store `locales`
+(`setCurrent(code)`): cambia a la vez la UI (`vue-i18n`), las rutas y el
+contenido (locale a la API). Piezas:
+
+- **`src/i18n/`** — `vue-i18n` + `locales/{es,eu,en}.json`. Cada fichero tiene
+  una sección `routes` con los **segmentos de path traducidos**
+  (`houses`→`casas`, `new`→`nueva`, `edit`→`editar`) y todas las cadenas de UI.
+- **`src/router/i18n-paths.ts`** — `createLocalizedRoutes(locale)` construye las
+  rutas con el segmento del locale actual como `path` y los de los demás locales
+  como `alias`, de modo que una URL en cualquier idioma resuelve al mismo
+  `name`. Las rutas de detalle usan `:slug`.
+- **`src/router/index.ts`** — al cambiar de idioma, `onLocaleChange(locale)`
+  reconstruye las rutas y hace `router.replace` a la misma ruta por nombre, así
+  la URL pasa al nuevo idioma (`/casas/casa-stark/editar` → `/houses/casa-stark/edit`).
+- **Slugs**, no ids: el listado enlaza con el slug del locale activo
+  (`{ name: 'house-edit', params: { slug } }`). El backend resuelve por slug en
+  cualquier locale (`ResolvesBySlug::whereSlug`), así que la URL siempre carga.
+- **Breadcrumbs / título**: cada ruta declara `meta.titleKey` y
+  `meta.breadcrumbs: [{ key, to? }]` (claves i18n); `App.vue` los traduce con
+  `t()` y se los pasa al `AdminLayout`.
+
+Para añadir una entidad nueva: añade sus segmentos a `routes` en los tres JSON,
+su bloque de cadenas, y sus rutas en `i18n-paths.ts` con `:slug` + `alias`.
 
 ## Patrón de montaje raíz (App.vue)
 

@@ -6,8 +6,11 @@ const props = withDefaults(
     modelValue: File | null
     currentUrl?: string | null
     label?: string
+    emptyText?: string
+    chooseText?: string
+    clearText?: string
   }>(),
-  { currentUrl: null, label: '' },
+  { currentUrl: null, label: '', emptyText: 'Sin imagen', chooseText: 'Elegir imagen', clearText: 'Quitar' },
 )
 
 const emit = defineEmits<{ 'update:modelValue': [File | null] }>()
@@ -33,14 +36,14 @@ function clear() {
     <div class="img-up__body">
       <div class="img-up__preview">
         <img v-if="preview" :src="preview" alt="" />
-        <span v-else class="img-up__ph">Sin imagen</span>
+        <span v-else class="img-up__ph">{{ emptyText }}</span>
       </div>
       <div class="img-up__actions">
         <label class="img-up__btn">
-          Elegir imagen
+          {{ chooseText }}
           <input type="file" accept="image/*" hidden @change="onChange" />
         </label>
-        <button v-if="modelValue || currentUrl" type="button" class="img-up__clear" @click="clear">Quitar</button>
+        <button v-if="modelValue || currentUrl" type="button" class="img-up__clear" @click="clear">{{ clearText }}</button>
       </div>
     </div>
   </div>
