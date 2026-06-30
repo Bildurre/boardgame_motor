@@ -221,6 +221,17 @@ obsoletos.
 **Por qué:** consistencia visual con los juegos (cartas), mejor en móvil, y encaja
 con el modo "carta" del render a PNG (Fase 3).
 
+### DC-31 · Altas y ediciones en modal (patrón kontuan), no rutas
+**Decisión:** los formularios de **crear/editar** entidades son **modales** que se
+abren desde el listado (y más adelante desde el "single"), no páginas con ruta
+propia. Componente base `EditModal` en `@bgm/ui` (BaseModal + pie Cancelar/Guardar,
+agnóstico de i18n). Cada entidad tiene su `XFormModal` (`modelValue` + `mode` +
+`targetSlug`) que carga por slug al abrir en edición y emite `saved`. Se eliminan
+las rutas `*/nueva` y `*/:slug/editar`.
+**Por qué:** es el patrón de kontuan; menos navegación, edición en contexto sobre
+el propio listado. El detalle ("single") sí será ruta y desde ahí también se
+editará en modal.
+
 ### DC-26 · Mobile-first + 4 tiers responsivos
 **Decisión:** CSS **mobile-first** (base móvil, `@media (min-width: …)` para ampliar).
 **Nada debe superar el 100% del ancho de pantalla** (grids con `minmax(0,1fr)`,

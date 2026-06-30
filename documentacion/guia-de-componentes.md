@@ -119,6 +119,31 @@ const tabs = [
 </BaseModal>
 ```
 
+### EditModal
+
+- **Finalidad:** modal de formulario (portado de kontuan): `BaseModal` + pie con
+  Cancelar/Guardar. Las altas y ediciones de entidades son **modales** (no rutas),
+  abiertas desde el listado. Agnóstico de i18n: las etiquetas van por props.
+- **Props:** `modelValue` (v-model abierto/cerrado), `title`, `size?`, `loading?`,
+  `submitLabel?` / `cancelLabel?`, `submitVariant?`.
+- **Emite:** `update:modelValue`, `submit`. **Slot** por defecto = cuerpo del form.
+- **Uso (un FormModal por entidad envuelve EditModal):**
+
+```vue
+<EditModal
+  :model-value="open" :title="title" :loading="saving"
+  :submit-label="t('common.save')" :cancel-label="t('common.cancel')"
+  @update:model-value="(v) => emit('update:modelValue', v)" @submit="submit"
+>
+  <TranslatableInput v-model="form.name" :locales="locales.locales" :label="t('houses.fields.name')" />
+  …
+</EditModal>
+```
+
+El `FormModal` de cada entidad (p. ej. `HouseFormModal` en el playground) recibe
+`modelValue` + `mode: 'create'|'edit'` + `targetSlug`, carga por slug al abrir en
+edición, y emite `saved` para que el listado recargue. Patrón kontuan exacto.
+
 ### ConfirmDialog
 
 - **Finalidad:** diálogo de confirmación global que **sustituye al `confirm()`

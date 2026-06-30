@@ -1,14 +1,13 @@
 <script setup lang="ts">
 import { computed, onMounted, ref, watch } from 'vue'
-import { useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { SquarePen, Trash2, Eye, EyeOff, RotateCcw, CircleCheck, FilePen, Trash } from '@lucide/vue'
 import { BaseGrid, EntityCard, FilterBar, EmptyState, useResource } from '@bgm/admin-kit'
 import { BaseButton, BaseTabs, IconButton, useToast, useConfirm } from '@bgm/ui'
 import { api } from '@/lib/api'
 import { useLocalesStore } from '@/stores/locales'
+import HouseFormModal from '@/components/houses/HouseFormModal.vue'
 
-const router = useRouter()
 const { t } = useI18n()
 const locales = useLocalesStore()
 const toast = useToast()
@@ -44,8 +43,23 @@ watch(search, () => {
   timer = setTimeout(() => load(1), 250)
 })
 
+// --- Modal de creación / edición (patrón kontuan) ---
+const formOpen = ref(false)
+const formMode = ref<'create' | 'edit'>('create')
+const formSlug = ref<string | null>(null)
+
+function openCreate() {
+  formMode.value = 'create'
+  formSlug.value = null
+  formOpen.value = true
+}
 function editHouse(item: any) {
-  router.push({ name: 'house-edit', params: { slug: slugFor(item) } })
+  formMode.value = 'edit'
+  formSlug.value = slugFor(item)
+  formOpen.value = true
+}
+function onSaved() {
+  load(meta.value?.current_page ?? 1)
 }
 async function togglePublish(item: any) {
   await action(slugFor(item), 'toggle-published')
@@ -79,7 +93,7 @@ onMounted(async () => {
 <template>
   <div class="houses">
     <div class="houses__top">
-      <BaseButton @click="router.push({ name: 'house-new' })">{{ t('houses.newButton') }}</BaseButton>
+      <BaseButton @click="openCreate">{{ t('houses.newButton') }}</BaseButton>
     </div>
 
     <!-- Filtros por encima de las tabs (estilo kontuan) -->
@@ -130,5 +144,7 @@ onMounted(async () => {
         </template>
       </EntityCard>
     </BaseGrid>
+
+    <HouseFormModal v-model="formOpen" :mode="formMode" :target-slug="formSlug" @saved="onSaved" />
   </div>
 </template>

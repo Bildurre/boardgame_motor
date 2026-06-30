@@ -46,27 +46,6 @@ export function createLocalizedRoutes(locale: string): RouteRecordRaw[] {
       alias: buildAliases((t) => `/${t.houses}`, locale),
       meta: { admin: true, titleKey: 'houses.title', breadcrumbs: [{ key: 'houses' }] },
     },
-    {
-      path: `/${p.houses}/${p.new}`,
-      name: 'house-new',
-      component: () => import('@/views/houses/HouseFormView.vue'),
-      alias: buildAliases((t) => `/${t.houses}/${t.new}`, locale),
-      meta: {
-        admin: true,
-        titleKey: 'houses.new',
-        breadcrumbs: [{ key: 'houses', to: 'houses' }, { key: 'houseNew' }],
-      },
-    },
-    {
-      path: `/${p.houses}/:slug/${p.edit}`,
-      name: 'house-edit',
-      component: () => import('@/views/houses/HouseFormView.vue'),
-      alias: buildAliases((t) => `/${t.houses}/:slug/${t.edit}`, locale),
-      meta: {
-        admin: true,
-        titleKey: 'houses.edit',
-        breadcrumbs: [{ key: 'houses', to: 'houses' }, { key: 'houseEdit' }],
-      },
-    },
+    // Las altas/ediciones de House son modales (patrón kontuan), no rutas.
   ]
 }

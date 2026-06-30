@@ -1,21 +1,30 @@
 <script setup lang="ts">
-import { onMounted, reactive, ref } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
+import { reactive, ref, watch, computed } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { TranslatableInput, ImageUpload, BaseButton, useToast } from '@bgm/ui'
+import { EditModal, TranslatableInput, ImageUpload, useToast } from '@bgm/ui'
 import { useResource } from '@bgm/admin-kit'
 import { api } from '@/lib/api'
 import { useLocalesStore } from '@/stores/locales'
 
-const route = useRoute()
-const router = useRouter()
+// Formulario de House en modal (patrón kontuan): se abre desde el listado.
+const props = defineProps<{
+  modelValue: boolean
+  mode: 'create' | 'edit'
+  targetSlug?: string | null
+}>()
+
+const emit = defineEmits<{ 'update:modelValue': [boolean]; saved: [] }>()
+
 const { t } = useI18n()
-const locales = useLocalesStore()
 const toast = useToast()
+const locales = useLocalesStore()
 const { find, createForm, updateForm } = useResource(api, '/admin/houses')
 
-// La ruta de edición usa el slug del locale activo (no el id).
-const slug = (route.params.slug as string) || null
+const saving = ref(false)
+const error = ref<string | null>(null)
+const image = ref<File | null>(null)
+const currentImage = ref<string | null>(null)
+
 const form = reactive<{
   name: Record<string, string>
   description: Record<string, string>
@@ -23,22 +32,40 @@ const form = reactive<{
   is_published: boolean
 }>({ name: {}, description: {}, color: '#888888', is_published: false })
 
-const image = ref<File | null>(null)
-const currentImage = ref<string | null>(null)
-const error = ref<string | null>(null)
-const saving = ref(false)
+const title = computed(() => (props.mode === 'create' ? t('houses.new') : t('houses.edit')))
 
-onMounted(async () => {
-  await locales.load()
-  if (slug) {
-    const h: any = await find(slug)
-    form.name = h.name ?? {}
-    form.description = h.description ?? {}
-    form.color = h.color ?? '#888888'
-    form.is_published = !!h.is_published
-    currentImage.value = h.image ?? null
-  }
-})
+function reset() {
+  form.name = {}
+  form.description = {}
+  form.color = '#888888'
+  form.is_published = false
+  image.value = null
+  currentImage.value = null
+  error.value = null
+}
+
+// Al abrir: en edición carga la casa por slug; en alta limpia.
+watch(
+  () => props.modelValue,
+  async (open) => {
+    if (!open) return
+    reset()
+    await locales.load()
+    if (props.mode === 'edit' && props.targetSlug) {
+      try {
+        const h: any = await find(props.targetSlug)
+        form.name = h.name ?? {}
+        form.description = h.description ?? {}
+        form.color = h.color ?? '#888888'
+        form.is_published = !!h.is_published
+        currentImage.value = h.image ?? null
+      } catch {
+        toast.danger(t('houses.toast.saveError'))
+        emit('update:modelValue', false)
+      }
+    }
+  },
+)
 
 function toFormData(): FormData {
   const fd = new FormData()
@@ -50,18 +77,19 @@ function toFormData(): FormData {
   return fd
 }
 
-async function save() {
+async function submit() {
   error.value = null
   saving.value = true
   try {
-    if (slug) {
-      await updateForm(slug, toFormData())
+    if (props.mode === 'edit' && props.targetSlug) {
+      await updateForm(props.targetSlug, toFormData())
       toast.success(t('houses.toast.updated'))
     } else {
       await createForm(toFormData())
       toast.success(t('houses.toast.created'))
     }
-    router.push({ name: 'houses' })
+    emit('saved')
+    emit('update:modelValue', false)
   } catch (e: any) {
     error.value = e.response?.data?.message ?? t('houses.toast.saveError')
   } finally {
@@ -71,7 +99,15 @@ async function save() {
 </script>
 
 <template>
-  <form class="hform" @submit.prevent="save">
+  <EditModal
+    :model-value="modelValue"
+    :title="title"
+    :loading="saving"
+    :submit-label="t('common.save')"
+    :cancel-label="t('common.cancel')"
+    @update:model-value="(v: boolean) => emit('update:modelValue', v)"
+    @submit="submit"
+  >
     <TranslatableInput v-model="form.name" :locales="locales.locales" :label="t('houses.fields.name')" />
     <TranslatableInput v-model="form.description" :locales="locales.locales" :label="t('houses.fields.description')" type="textarea" />
     <ImageUpload
@@ -91,10 +127,5 @@ async function save() {
     <label class="hform__check"><input v-model="form.is_published" type="checkbox" /> {{ t('houses.fields.published') }}</label>
 
     <p v-if="error" class="error">{{ error }}</p>
-
-    <div class="hform__actions">
-      <BaseButton type="submit">{{ saving ? t('common.saving') : t('common.save') }}</BaseButton>
-      <BaseButton variant="secondary" type="button" @click="router.push({ name: 'houses' })">{{ t('common.cancel') }}</BaseButton>
-    </div>
-  </form>
+  </EditModal>
 </template>

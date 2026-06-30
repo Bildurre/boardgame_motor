@@ -1,0 +1,11 @@
+@use "tokens" as *;
+
+.edit-modal {
+  &__form { display: contents; }
+
+  &__body {
+    display: flex;
+    flex-direction: column;
+    gap: $space-4;
+  }
+}
