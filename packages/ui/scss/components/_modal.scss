@@ -17,8 +17,9 @@
   border-radius: $radius-lg;
   box-shadow: $shadow-lg;
   width: 100%;
-  max-height: 90vh;
-  overflow: auto;
+  // Nunca ocupa toda la pantalla; si el contenido no cabe, hace scroll el body.
+  max-height: 88vh;
+  overflow: hidden;
   display: flex;
   flex-direction: column;
 
@@ -27,18 +28,37 @@
   &--lg { max-width: 820px; }
 
   &__header {
+    flex-shrink: 0;
     display: flex; align-items: center; justify-content: space-between; gap: $space-3;
-    padding: $space-4 $space-5; border-bottom: 1px solid $border;
+    padding: $space-4 $space-5;
+    border-bottom: 1px solid $border;
+    background: $surface-2; // cabecera con fondo
+    border-radius: $radius-lg $radius-lg 0 0;
   }
   &__title { margin: 0; font-size: $fs-18; }
+
+  // Botón de cerrar: funciona como action-button; en hover se tiñe de rojo.
   &__close {
     display: inline-flex; align-items: center; justify-content: center;
     width: 32px; height: 32px; border: none; background: none; color: $text-2;
     cursor: pointer; border-radius: $radius-sm;
-    &:hover { background: $surface-2; color: $text-1; }
+    transition: background-color 0.15s ease, color 0.15s ease;
+    &:hover {
+      color: $danger;
+      background: color-mix(in srgb, #{$danger} 15%, transparent);
+    }
   }
-  &__body { padding: $space-5; }
+
+  // El cuerpo es la única zona que scrollea (cabecera y pie quedan fijos).
+  &__body {
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow-y: auto;
+    padding: $space-5;
+  }
+
   &__footer {
+    flex-shrink: 0;
     display: flex; justify-content: flex-end; gap: $space-3;
     padding: $space-4 $space-5; border-top: 1px solid $border; background: $surface-2;
   }

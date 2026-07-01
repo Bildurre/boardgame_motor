@@ -104,7 +104,10 @@ const tabs = [
 
 - **Finalidad:** ventana modal base (overlay + diálogo) con cierre por overlay,
   botón X y tecla `Escape`. Bloquea el scroll del body mientras está abierta.
-  Es la base de `ConfirmDialog` y de cualquier formulario/aviso emergente.
+  Es la base de `ConfirmDialog`/`EditModal` y de cualquier formulario emergente.
+- **Comportamiento:** cabecera con fondo, la X se tiñe de rojo en hover, y el
+  modal nunca supera el 88% del alto; si el contenido no cabe, **scrollea solo el
+  `.modal__body`** (cabecera y pie quedan fijos).
 - **Modelo:** `v-model` (boolean abierto/cerrado).
 - **Props:** `title?: string`, `size?: 'sm' | 'md' | 'lg'` (def. `md`).
 - **Slots:** por defecto (cuerpo), `header` (sustituye al título), `footer`.
@@ -200,14 +203,28 @@ color. Úsalos siempre en formularios (en modal o donde sea).
 <BaseCheckbox v-model="form.is_published" :label="t('houses.fields.published')" />
 ```
 
+### RichTextInput (WYSIWYG)
+
+- **Finalidad:** editor de texto enriquecido basado en **TipTap** (DC-09). Barra
+  con negrita, cursiva, tachado, título (H2), listas y deshacer/rehacer. `v-model`
+  = **HTML**. Se usa dentro de `TranslatableInput type="wysiwyg"` (carga diferida:
+  TipTap solo se descarga si hay algún campo wysiwyg).
+- **Props:** `modelValue` (HTML), `placeholder?`, `disabled?`.
+- **Uso directo (no traducible):**
+
+```vue
+<RichTextInput v-model="html" />
+```
+
 ### TranslatableInput
 
 - **Finalidad:** campo de texto/textarea multi-idioma (portado de kontuan). Usa
   el estilo `.form-field` y un **selector desplegable** de locale con contador de
   rellenados (p. ej. `ES 1/3`). Edita un objeto `{ es, eu, en }`.
 - **Modelo:** `v-model` (`Record<string, string>`).
-- **Props:** `locales: { code, name }[]`, `label?`, `type?: 'text' | 'textarea'`
-  (def. `text`), `placeholder?`, `rows?`, `required?`.
+- **Props:** `locales: { code, name }[]`, `label?`,
+  `type?: 'text' | 'textarea' | 'wysiwyg'` (def. `text`; `wysiwyg` usa
+  `RichTextInput`/TipTap), `placeholder?`, `rows?`, `required?`.
 - **Uso:**
 
 ```vue

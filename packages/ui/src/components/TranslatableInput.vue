@@ -1,6 +1,10 @@
 <script setup lang="ts">
-import { ref, computed, onMounted, onBeforeUnmount } from 'vue'
+import { ref, computed, onMounted, onBeforeUnmount, defineAsyncComponent } from 'vue'
 import { ChevronDown } from '@lucide/vue'
+
+// Editor WYSIWYG cargado en diferido: TipTap solo se descarga si algún campo
+// traducible usa type="wysiwyg".
+const RichTextInput = defineAsyncComponent(() => import('./RichTextInput.vue'))
 
 // Campo traducible (portado de kontuan): usa el estilo `.form-field` y un
 // selector desplegable de locale con contador de rellenados.
@@ -11,7 +15,7 @@ const props = withDefaults(
     modelValue?: Record<string, string>
     locales: Locale[]
     label?: string
-    type?: 'text' | 'textarea'
+    type?: 'text' | 'textarea' | 'wysiwyg'
     placeholder?: string
     rows?: number
     required?: boolean
@@ -79,8 +83,15 @@ onBeforeUnmount(() => document.removeEventListener('click', onClickOutside))
       </div>
     </div>
 
+    <RichTextInput
+      v-if="type === 'wysiwyg'"
+      :key="active"
+      :model-value="currentValue"
+      :placeholder="placeholder"
+      @update:model-value="update"
+    />
     <textarea
-      v-if="type === 'textarea'"
+      v-else-if="type === 'textarea'"
       :id="`${inputId}-${active}`"
       :value="currentValue"
       :placeholder="placeholder"

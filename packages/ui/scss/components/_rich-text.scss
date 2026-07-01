@@ -1,0 +1,78 @@
+@use "tokens" as *;
+
+// Editor WYSIWYG (TipTap). Enmarcado como los demás campos de formulario.
+.rich-text {
+  border: 1px solid $input-border;
+  border-radius: $input-radius;
+  background: $input-bg;
+  overflow: hidden;
+  transition: border-color 0.15s, box-shadow 0.15s;
+
+  &:focus-within {
+    border-color: $input-border-focus;
+    box-shadow: $input-focus-ring;
+  }
+
+  &--disabled { opacity: $disabled-opacity; pointer-events: none; }
+
+  &__toolbar {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 2px;
+    padding: $space-1;
+    border-bottom: 1px solid $border;
+    background: $surface-2;
+  }
+
+  &__tool {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+    border: none;
+    border-radius: $radius-sm;
+    background: transparent;
+    color: $text-2;
+    cursor: pointer;
+    transition: background-color 0.15s, color 0.15s;
+
+    &:hover:not(:disabled) { background: $ui-hover-bg; color: $text-1; }
+    &--active { background: $accent-100; color: $accent-600; }
+    &:disabled { opacity: 0.5; cursor: not-allowed; }
+  }
+
+  &__sep {
+    width: 1px;
+    height: 20px;
+    background: $border;
+    margin: 0 $space-1;
+  }
+
+  &__content {
+    .ProseMirror {
+      min-height: 120px;
+      padding: $input-padding-y $input-padding-x;
+      color: $input-text;
+      font-size: $fs-14;
+      line-height: $k-lh-body;
+      outline: none;
+
+      > * + * { margin-top: 0.6em; }
+      h2 { font-size: $fs-18; font-weight: $k-fw-semibold; }
+      ul, ol { padding-left: 1.4em; }
+      ul { list-style: disc; }
+      ol { list-style: decimal; }
+      a { color: $accent-500; text-decoration: underline; }
+
+      p.is-editor-empty:first-child::before {
+        content: attr(data-placeholder);
+        color: $input-placeholder;
+        float: left;
+        height: 0;
+        pointer-events: none;
+      }
+    }
+  }
+}

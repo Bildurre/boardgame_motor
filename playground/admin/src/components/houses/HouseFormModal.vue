@@ -109,7 +109,7 @@ async function submit() {
     @submit="submit"
   >
     <TranslatableInput v-model="form.name" :locales="locales.locales" :label="t('houses.fields.name')" />
-    <TranslatableInput v-model="form.description" :locales="locales.locales" :label="t('houses.fields.description')" type="textarea" />
+    <TranslatableInput v-model="form.description" :locales="locales.locales" :label="t('houses.fields.description')" type="wysiwyg" />
     <ImageUpload
       v-model="image"
       :current-url="currentImage"
