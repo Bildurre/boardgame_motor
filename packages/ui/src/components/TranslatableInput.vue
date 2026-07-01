@@ -1,59 +1,100 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, computed, onMounted, onBeforeUnmount } from 'vue'
+import { ChevronDown } from '@lucide/vue'
 
+// Campo traducible (portado de kontuan): usa el estilo `.form-field` y un
+// selector desplegable de locale con contador de rellenados.
 interface Locale { code: string; name: string }
 
 const props = withDefaults(
   defineProps<{
-    modelValue: Record<string, string>
+    modelValue?: Record<string, string>
     locales: Locale[]
     label?: string
     type?: 'text' | 'textarea'
     placeholder?: string
+    rows?: number
+    required?: boolean
+    id?: string
   }>(),
-  { type: 'text', label: '', placeholder: '' },
+  { modelValue: () => ({}), type: 'text', rows: 4, required: false },
 )
 
 const emit = defineEmits<{ 'update:modelValue': [Record<string, string>] }>()
 
-const active = ref(props.locales[0]?.code ?? 'es')
+const codes = computed(() => props.locales.map((l) => l.code))
+const active = ref(codes.value[0] ?? 'es')
+const open = ref(false)
+const dropdownRef = ref<HTMLElement>()
+const inputId = props.id || `translatable-${Math.random().toString(36).slice(2, 9)}`
 
+const currentValue = computed(() => props.modelValue?.[active.value] || '')
+const filledCount = computed(() => codes.value.filter((c) => !!props.modelValue?.[c]).length)
+const hasContent = (code: string) => !!props.modelValue?.[code]
+
+function selectLocale(code: string) {
+  active.value = code
+  open.value = false
+}
 function update(value: string) {
   emit('update:modelValue', { ...props.modelValue, [active.value]: value })
 }
+function onClickOutside(e: MouseEvent) {
+  if (dropdownRef.value && !dropdownRef.value.contains(e.target as Node)) open.value = false
+}
+onMounted(() => document.addEventListener('click', onClickOutside))
+onBeforeUnmount(() => document.removeEventListener('click', onClickOutside))
 </script>
 
 <template>
-  <div class="t-input">
-    <div class="t-input__head">
-      <label v-if="label" class="t-input__label">{{ label }}</label>
-      <div class="t-input__tabs">
-        <button
-          v-for="loc in locales"
-          :key="loc.code"
-          type="button"
-          class="t-input__tab"
-          :class="{ 'is-active': active === loc.code }"
-          @click="active = loc.code"
-        >
-          {{ loc.code }}
+  <div class="form-field">
+    <div class="translatable-header">
+      <label v-if="label" :for="`${inputId}-${active}`" class="form-field__label">
+        {{ label }}<span v-if="required" class="form-field__required">*</span>
+      </label>
+      <div ref="dropdownRef" class="translatable-selector">
+        <button type="button" class="translatable-trigger" @click="open = !open">
+          <span class="translatable-trigger__code">{{ active.toUpperCase() }}</span>
+          <span class="translatable-trigger__count">{{ filledCount }}/{{ codes.length }}</span>
+          <ChevronDown class="translatable-trigger__chevron" :size="12" />
         </button>
+        <Transition name="dropdown">
+          <div v-if="open" class="translatable-dropdown">
+            <button
+              v-for="loc in locales"
+              :key="loc.code"
+              type="button"
+              :class="['translatable-option', {
+                'translatable-option--active': loc.code === active,
+                'translatable-option--empty': !hasContent(loc.code),
+              }]"
+              @click="selectLocale(loc.code)"
+            >
+              <span class="translatable-option__code">{{ loc.code.toUpperCase() }}</span>
+              <span class="translatable-option__label">{{ loc.name }}</span>
+              <span v-if="hasContent(loc.code)" class="translatable-option__filled" />
+            </button>
+          </div>
+        </Transition>
       </div>
     </div>
 
     <textarea
       v-if="type === 'textarea'"
-      class="t-input__field"
-      rows="3"
+      :id="`${inputId}-${active}`"
+      :value="currentValue"
       :placeholder="placeholder"
-      :value="modelValue[active] ?? ''"
+      :rows="rows"
+      class="form-field__textarea"
       @input="update(($event.target as HTMLTextAreaElement).value)"
     />
     <input
       v-else
-      class="t-input__field"
+      :id="`${inputId}-${active}`"
+      type="text"
+      :value="currentValue"
       :placeholder="placeholder"
-      :value="modelValue[active] ?? ''"
+      class="form-field__input"
       @input="update(($event.target as HTMLInputElement).value)"
     />
   </div>

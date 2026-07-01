@@ -1,0 +1,85 @@
+@use "tokens" as *;
+
+// Estilo compartido de los elementos de formulario (portado de kontuan):
+// BaseInput, BaseTextarea, BaseSelect y TranslatableInput.
+.form-field {
+  display: flex;
+  flex-direction: column;
+  gap: $space-1;
+  min-width: 0;
+
+  &__label {
+    font-size: $fs-13;
+    font-weight: $k-fw-medium;
+    color: $text-2;
+  }
+
+  &__required { color: $danger; }
+
+  &__input,
+  &__textarea,
+  &__select {
+    width: 100%;
+    background-color: $input-bg;
+    color: $input-text;
+    border: 1px solid $input-border;
+    border-radius: $input-radius;
+    font-family: $k-font-sans;
+    font-size: $fs-14;
+    transition: border-color 0.15s, box-shadow 0.15s;
+
+    &::placeholder { color: $input-placeholder; }
+    &:hover:not(:disabled):not(:focus) { border-color: $input-border-hover; }
+    &:focus {
+      outline: none;
+      border-color: $input-border-focus;
+      box-shadow: $input-focus-ring;
+    }
+    &:disabled { opacity: $disabled-opacity; cursor: not-allowed; }
+  }
+
+  &__input {
+    height: $input-height;
+    padding: 0 $input-padding-x;
+  }
+
+  &__textarea {
+    padding: $input-padding-y $input-padding-x;
+    line-height: $k-lh-body;
+    resize: vertical;
+  }
+
+  &__select-wrapper {
+    position: relative;
+    &::after {
+      content: '';
+      position: absolute;
+      right: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 0;
+      height: 0;
+      border-left: 5px solid transparent;
+      border-right: 5px solid transparent;
+      border-top: 5px solid $text-3;
+      pointer-events: none;
+    }
+  }
+
+  &__select {
+    height: $input-height;
+    padding: 0 ($input-padding-x + 16px) 0 $input-padding-x;
+    appearance: none;
+    cursor: pointer;
+  }
+
+  &--error &__input,
+  &--error &__textarea,
+  &--error &__select {
+    border-color: $danger;
+    &:focus { box-shadow: 0 0 0 3px color-mix(in srgb, #{$danger} 20%, transparent); }
+  }
+
+  &__error { font-size: $fs-12; color: $danger; }
+  &__hint { font-size: $fs-12; color: $text-3; }
+}

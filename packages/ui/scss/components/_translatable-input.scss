@@ -1,45 +1,73 @@
 @use "tokens" as *;
 
-.t-input {
+// Cabecera y selector de locale del TranslatableInput (portado de kontuan).
+// El input/textarea en sí usa las clases `.form-field__*`.
+.translatable-header {
   display: flex;
-  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+
+  .form-field__label { margin-bottom: 0; }
+}
+
+.translatable-selector { position: relative; }
+
+.translatable-trigger {
+  display: flex;
+  align-items: center;
+  gap: $space-1;
+  background: $surface-2;
+  border: 1px solid $border;
+  border-radius: $radius-sm;
+  padding: 1px $space-2;
+  cursor: pointer;
+  transition: all 0.15s;
+
+  &:hover { background: $surface-3; border-color: $border-strong; }
+
+  &__code {
+    font-size: $fs-11;
+    font-weight: $k-fw-bold;
+    color: $text-1;
+    letter-spacing: $k-track-wide;
+  }
+  &__count { font-size: $fs-11; color: $text-3; font-variant-numeric: tabular-nums; }
+  &__chevron { color: $text-3; flex-shrink: 0; }
+}
+
+.translatable-dropdown {
+  position: absolute;
+  top: calc(100% + 4px);
+  right: 0;
+  background: $surface;
+  border: 1px solid $border;
+  border-radius: $radius-md;
+  box-shadow: $shadow-md;
+  min-width: 160px;
+  padding: 4px;
+  z-index: 100;
+}
+
+.translatable-option {
+  display: flex;
+  align-items: center;
   gap: $space-2;
+  width: 100%;
+  padding: $space-1 $space-3;
+  border: none;
+  border-radius: $radius-sm;
+  background: transparent;
+  font-size: $fs-13;
+  color: $text-2;
+  cursor: pointer;
+  text-align: left;
+  transition: all 0.1s;
 
-  &__head {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: $space-2;
-  }
+  &:hover { background: $ui-hover-bg; color: $text-1; }
+  &--active { color: $accent-600; font-weight: $k-fw-semibold; }
+  &--empty:not(&--active) { color: $text-3; }
 
-  &__label { font-size: 0.85rem; color: $color-text-muted; }
-
-  &__tabs { display: flex; gap: 2px; }
-
-  &__tab {
-    font: inherit;
-    font-size: 0.72rem;
-    text-transform: uppercase;
-    padding: 2px 6px;
-    border: 1px solid $color-border;
-    border-radius: $radius-sm;
-    background: transparent;
-    color: $color-text-muted;
-    cursor: pointer;
-
-    &.is-active { color: #fff; background: $color-accent; border-color: $color-accent; }
-  }
-
-  &__field {
-    font: inherit;
-    width: 100%;
-    padding: 0.55rem 0.75rem;
-    background: $color-bg;
-    border: 1px solid $color-border;
-    border-radius: $radius-md;
-    color: $color-text;
-    resize: vertical;
-
-    &:focus { outline: none; border-color: $color-accent; }
-  }
+  &__code { font-weight: $k-fw-bold; font-size: $fs-12; min-width: 24px; }
+  &__label { flex: 1; }
+  &__filled { width: 6px; height: 6px; border-radius: 50%; background: $success; flex-shrink: 0; }
 }

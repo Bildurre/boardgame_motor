@@ -1,0 +1,42 @@
+@use "tokens" as *;
+
+// Checkbox (portado de kontuan).
+.checkbox {
+  display: inline-flex;
+  align-items: center;
+  gap: $space-2;
+  cursor: pointer;
+
+  &--disabled { opacity: $disabled-opacity; cursor: not-allowed; pointer-events: none; }
+
+  &__input {
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+
+    &:focus-visible + .checkbox__box { box-shadow: $focus-ring; }
+    &:checked + .checkbox__box {
+      background-color: $accent-500;
+      border-color: $accent-500;
+      color: #fff;
+    }
+  }
+
+  &__box {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 18px;
+    height: 18px;
+    border: 1.5px solid $border-strong;
+    border-radius: $radius-sm;
+    background-color: $surface;
+    transition: background-color 0.15s, border-color 0.15s;
+    flex-shrink: 0;
+  }
+
+  &__icon { width: 14px; height: 14px; }
+
+  &__label { font-size: $fs-14; color: $text-1; user-select: none; }
+}

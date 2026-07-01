@@ -38,7 +38,7 @@ $k-fw-bold: 700;
 $k-lh-tight: 1.15;
 $k-lh-ui: 1.35;
 $k-lh-body: 1.55;
-$fs-12: 12px; $fs-13: 13px; $fs-14: 14px; $fs-16: 16px; $fs-18: 18px; $fs-20: 20px; $fs-24: 24px; $fs-28: 28px;
+$fs-11: 11px; $fs-12: 12px; $fs-13: 13px; $fs-14: 14px; $fs-16: 16px; $fs-18: 18px; $fs-20: 20px; $fs-24: 24px; $fs-28: 28px;
 
 // Espaciado (px, como kontuan)
 $space-0: 0;
@@ -97,3 +97,18 @@ $font-sans: $k-font-sans;
 $shadow-sm: var(--shadow-sm);
 $shadow-md: var(--shadow-md);
 $shadow-lg: var(--shadow-lg);
+
+// Formularios (elementos estilo kontuan)
+$focus-ring: 0 0 0 3px color-mix(in srgb, #{$accent-500} 25%, transparent);
+$disabled-opacity: 0.45;
+$input-height: 40px;
+$input-padding-x: 12px;
+$input-padding-y: 10px;
+$input-radius: $radius-md;
+$input-bg: $surface-2;
+$input-text: $text-1;
+$input-placeholder: $text-3;
+$input-border: $border;
+$input-border-hover: $border-strong;
+$input-border-focus: $accent-500;
+$input-focus-ring: $focus-ring;

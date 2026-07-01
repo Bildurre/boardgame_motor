@@ -178,14 +178,36 @@ edición, y emite `saved` para que el listado recargue. Patrón kontuan exacto.
 <ToastContainer />
 ```
 
+### Elementos de formulario (portados de kontuan)
+
+Comparten el estilo `.form-field` (label, error, hint) salvo el checkbox y el
+color. Úsalos siempre en formularios (en modal o donde sea).
+
+- **BaseInput** — input de texto. Props: `modelValue` (v-model), `label?`,
+  `type?` (`text|email|password|number|tel|url|search|date|datetime-local`),
+  `placeholder?`, `error?`, `hint?`, `required?`, `disabled?`.
+- **BaseTextarea** — igual que BaseInput con `rows?`.
+- **BaseSelect** — `options: { value, label }[]`, `placeholder?`, resto igual.
+- **BaseCheckbox** — `modelValue` (boolean), `label?` (o slot).
+- **PaletteColorPicker** — selector de color. `modelValue` (v-model, **hex**;
+  a diferencia de kontuan que guarda la clave de paleta, aquí emite el hex),
+  `label?`, `allowCustom?` (swatch con selector nativo, por defecto `true`).
+
+```vue
+<BaseInput v-model="form.email" :label="t('login.email')" type="email" required :error="errors.email" />
+<BaseSelect v-model="form.role" :label="t('users.role')" :options="roleOptions" />
+<PaletteColorPicker v-model="form.color" :label="t('houses.fields.color')" />
+<BaseCheckbox v-model="form.is_published" :label="t('houses.fields.published')" />
+```
+
 ### TranslatableInput
 
-- **Finalidad:** campo de texto/textarea multi-idioma. Muestra pestañas por
-  locale y edita un objeto `{ es: '', eu: '', en: '' }`. Para los campos
-  traducibles de las entidades (nombre, descripción…).
+- **Finalidad:** campo de texto/textarea multi-idioma (portado de kontuan). Usa
+  el estilo `.form-field` y un **selector desplegable** de locale con contador de
+  rellenados (p. ej. `ES 1/3`). Edita un objeto `{ es, eu, en }`.
 - **Modelo:** `v-model` (`Record<string, string>`).
-- **Props:** `locales: { code: string; name: string }[]`, `label?: string`,
-  `type?: 'text' | 'textarea'` (def. `text`), `placeholder?: string`.
+- **Props:** `locales: { code, name }[]`, `label?`, `type?: 'text' | 'textarea'`
+  (def. `text`), `placeholder?`, `rows?`, `required?`.
 - **Uso:**
 
 ```vue

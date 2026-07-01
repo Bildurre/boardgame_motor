@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { reactive, ref, watch, computed } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { EditModal, TranslatableInput, ImageUpload, useToast } from '@bgm/ui'
+import { EditModal, TranslatableInput, ImageUpload, PaletteColorPicker, BaseCheckbox, useToast } from '@bgm/ui'
 import { useResource } from '@bgm/admin-kit'
 import { api } from '@/lib/api'
 import { useLocalesStore } from '@/stores/locales'
@@ -119,12 +119,9 @@ async function submit() {
       :clear-text="t('houses.fields.imageClear')"
     />
 
-    <div class="hform__row">
-      <label>{{ t('houses.fields.color') }}</label>
-      <input v-model="form.color" type="color" />
-    </div>
+    <PaletteColorPicker v-model="form.color" :label="t('houses.fields.color')" />
 
-    <label class="hform__check"><input v-model="form.is_published" type="checkbox" /> {{ t('houses.fields.published') }}</label>
+    <BaseCheckbox v-model="form.is_published" :label="t('houses.fields.published')" />
 
     <p v-if="error" class="error">{{ error }}</p>
   </EditModal>
