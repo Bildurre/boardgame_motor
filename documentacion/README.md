@@ -15,6 +15,7 @@ solo sus entidades.
 4. [Plan de acción](02-plan-de-accion.md) — fases, dependencias, hitos.
 5. [Planes por funcionalidad](funcionalidades/00-indice.md) — el "cómo" de cada pieza.
 6. [Guía de componentes](guia-de-componentes.md) — catálogo de `@bgm/ui` y `@bgm/admin-kit`: uso y finalidad. **Se mantiene al día.**
+7. [Cómo montar una web nueva](guia-como-montar-una-web.md) — crear un juego, añadir modelos (y qué traits usar), iconos y vistas. **Se mantiene al día.**
 
 ## Mapa rápido de los repos
 
