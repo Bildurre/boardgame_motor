@@ -46,9 +46,8 @@
       "image": "Emblema",
       "color": "Color",
       "published": "Publicada",
-      "imageEmpty": "Sin imagen",
-      "imageChoose": "Elegir imagen",
-      "imageClear": "Quitar"
+      "imageDrag": "Arrastra una imagen o haz clic",
+      "imageHint": "Máx. 4 MB"
     },
     "actions": {
       "edit": "Editar",

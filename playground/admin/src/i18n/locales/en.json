@@ -46,9 +46,8 @@
       "image": "Emblem",
       "color": "Color",
       "published": "Published",
-      "imageEmpty": "No image",
-      "imageChoose": "Choose image",
-      "imageClear": "Remove"
+      "imageDrag": "Drag an image or click",
+      "imageHint": "Max 4 MB"
     },
     "actions": {
       "edit": "Edit",

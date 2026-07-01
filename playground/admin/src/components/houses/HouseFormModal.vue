@@ -114,9 +114,8 @@ async function submit() {
       v-model="image"
       :current-url="currentImage"
       :label="t('houses.fields.image')"
-      :empty-text="t('houses.fields.imageEmpty')"
-      :choose-text="t('houses.fields.imageChoose')"
-      :clear-text="t('houses.fields.imageClear')"
+      :drag-text="t('houses.fields.imageDrag')"
+      :hint-text="t('houses.fields.imageHint')"
     />
 
     <PaletteColorPicker v-model="form.color" :label="t('houses.fields.color')" />

@@ -218,17 +218,18 @@ color. Úsalos siempre en formularios (en modal o donde sea).
 
 ### ImageUpload
 
-- **Finalidad:** subida de una imagen con previsualización. Devuelve un `File`
-  (o `null`) para enviar por `FormData`; muestra la imagen actual si se le pasa
+- **Finalidad:** subida de imagen con **arrastrar-y-soltar o clic** (portado de
+  kontuan): zona _dropzone_ con previsualización y botón de quitar. Devuelve un
+  `File` (o `null`) para enviar por `FormData`; muestra la imagen actual con
   `current-url`.
-- **Modelo:** `v-model` (`File | null`).
-- **Props:** `currentUrl?` (imagen ya guardada), `label?`, y los textos internos
-  traducibles `emptyText?` / `chooseText?` / `clearText?`.
+- **Modelo:** `v-model` (`File | null`). **Emite:** `remove`.
+- **Props:** `currentUrl?`, `label?`, `accept?` (def. `image/*`), `maxSize?`
+  (MB, def. 4), `error?`, y los textos traducibles `dragText?` / `hintText?`.
 - **Uso:**
 
 ```vue
 <ImageUpload v-model="image" :current-url="currentImage" :label="t('houses.fields.image')"
-  :empty-text="t('houses.fields.imageEmpty')" :choose-text="t('houses.fields.imageChoose')" />
+  :drag-text="t('houses.fields.imageDrag')" :hint-text="t('houses.fields.imageHint')" />
 ```
 
 ### ThemeSelector

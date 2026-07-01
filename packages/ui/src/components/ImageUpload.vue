@@ -1,50 +1,116 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue'
+import { Trash2 } from '@lucide/vue'
 
+// Subida de imagen con arrastrar-y-soltar o clic (portado de kontuan).
+// Agnóstico de i18n: los textos van por props.
 const props = withDefaults(
   defineProps<{
     modelValue: File | null
     currentUrl?: string | null
     label?: string
-    emptyText?: string
-    chooseText?: string
-    clearText?: string
+    accept?: string
+    maxSize?: number // MB
+    error?: string
+    dragText?: string
+    hintText?: string
   }>(),
-  { currentUrl: null, label: '', emptyText: 'Sin imagen', chooseText: 'Elegir imagen', clearText: 'Quitar' },
+  {
+    currentUrl: null,
+    label: '',
+    accept: 'image/*',
+    maxSize: 4,
+    dragText: 'Arrastra una imagen o haz clic',
+    hintText: '',
+  },
 )
 
-const emit = defineEmits<{ 'update:modelValue': [File | null] }>()
+const emit = defineEmits<{ 'update:modelValue': [File | null]; remove: [] }>()
 
-const localUrl = ref<string | null>(null)
-const preview = computed(() => localUrl.value || props.currentUrl || null)
+const isDragging = ref(false)
+const previewUrl = ref<string | null>(null)
+const removed = ref(false)
+const fileInputRef = ref<HTMLInputElement>()
 
-function onChange(event: Event) {
-  const file = (event.target as HTMLInputElement).files?.[0] ?? null
+const displayUrl = computed(() => (removed.value ? null : previewUrl.value || props.currentUrl))
+
+function handleFile(file: File) {
+  if (file.size > props.maxSize * 1024 * 1024) return
+  if (!file.type.startsWith('image/')) return
+  removed.value = false
+  if (previewUrl.value) URL.revokeObjectURL(previewUrl.value)
+  previewUrl.value = URL.createObjectURL(file)
   emit('update:modelValue', file)
-  localUrl.value = file ? URL.createObjectURL(file) : null
+}
+
+function onFileChange(event: Event) {
+  const input = event.target as HTMLInputElement
+  if (input.files?.[0]) handleFile(input.files[0])
+  if (input) input.value = ''
+}
+
+function onDrop(event: DragEvent) {
+  isDragging.value = false
+  if (event.dataTransfer?.files?.[0]) handleFile(event.dataTransfer.files[0])
 }
 
 function clear() {
+  if (previewUrl.value) {
+    URL.revokeObjectURL(previewUrl.value)
+    previewUrl.value = null
+  }
+  removed.value = true
   emit('update:modelValue', null)
-  localUrl.value = null
+  emit('remove')
+}
+
+function openDialog() {
+  fileInputRef.value?.click()
 }
 </script>
 
 <template>
-  <div class="img-up">
-    <label v-if="label" class="img-up__label">{{ label }}</label>
-    <div class="img-up__body">
-      <div class="img-up__preview">
-        <img v-if="preview" :src="preview" alt="" />
-        <span v-else class="img-up__ph">{{ emptyText }}</span>
-      </div>
-      <div class="img-up__actions">
-        <label class="img-up__btn">
-          {{ chooseText }}
-          <input type="file" accept="image/*" hidden @change="onChange" />
-        </label>
-        <button v-if="modelValue || currentUrl" type="button" class="img-up__clear" @click="clear">{{ clearText }}</button>
-      </div>
+  <div class="image-upload">
+    <label v-if="label" class="image-upload__label">{{ label }}</label>
+    <div
+      class="image-upload__zone"
+      :class="{
+        'image-upload__zone--dragging': isDragging,
+        'image-upload__zone--error': error,
+        'image-upload__zone--has-image': displayUrl,
+      }"
+      @dragover.prevent="isDragging = true"
+      @dragleave="isDragging = false"
+      @drop.prevent="onDrop"
+      @click="!displayUrl && openDialog()"
+    >
+      <input
+        ref="fileInputRef"
+        type="file"
+        :accept="accept"
+        class="image-upload__input"
+        @change="onFileChange"
+      />
+
+      <template v-if="displayUrl">
+        <img :src="displayUrl" class="image-upload__preview" alt="" />
+        <button class="image-upload__remove" type="button" @click.stop="clear">
+          <Trash2 :size="16" />
+        </button>
+      </template>
+
+      <template v-else>
+        <div class="image-upload__placeholder">
+          <svg class="image-upload__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <rect x="3" y="3" width="18" height="18" rx="3" />
+            <circle cx="8.5" cy="8.5" r="1.5" />
+            <path d="m21 15-5-5L5 21" />
+          </svg>
+          <span class="image-upload__text">{{ dragText }}</span>
+          <span v-if="hintText" class="image-upload__hint">{{ hintText }}</span>
+        </div>
+      </template>
     </div>
+    <p v-if="error" class="image-upload__error">{{ error }}</p>
   </div>
 </template>

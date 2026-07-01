@@ -1,39 +1,85 @@
 @use "tokens" as *;
 
-.img-up {
+// Zona de subida con arrastrar-y-soltar (portado de kontuan).
+.image-upload {
   display: flex;
   flex-direction: column;
-  gap: $space-2;
+  gap: $space-1;
 
-  &__label { font-size: 0.85rem; color: $color-text-muted; }
-  &__body { display: flex; gap: $space-4; align-items: center; }
+  &__label {
+    font-size: $fs-13;
+    font-weight: $k-fw-medium;
+    color: $text-2;
+  }
+
+  &__input { display: none; }
+
+  &__zone {
+    position: relative;
+    display: flex;
+    align-self: flex-start;
+    align-items: center;
+    justify-content: center;
+    width: 160px;
+    height: 160px;
+    border: 2px dashed $border;
+    border-radius: $radius-md;
+    cursor: pointer;
+    overflow: hidden;
+    transition: border-color 0.15s, background-color 0.15s;
+
+    &:hover:not(.image-upload__zone--has-image) {
+      border-color: $border-strong;
+      background-color: $surface-2;
+    }
+    &--dragging {
+      border-color: $accent-500;
+      background-color: color-mix(in srgb, $accent-500 8%, transparent);
+    }
+    &--has-image { border-style: solid; cursor: default; }
+    &--error { border-color: $danger; }
+  }
 
   &__preview {
-    width: 72px;
-    height: 72px;
-    border: 1px solid $color-border;
-    border-radius: $radius-md;
-    background: $color-bg;
-    display: grid;
-    place-items: center;
-    overflow: hidden;
-    img { width: 100%; height: 100%; object-fit: cover; }
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    padding: $space-2;
   }
-  &__ph { font-size: 0.7rem; color: $color-text-muted; }
 
-  &__actions { display: flex; flex-direction: column; gap: $space-2; align-items: flex-start; }
-  &__btn {
-    font-size: 0.85rem;
-    padding: 0.4rem 0.75rem;
-    border: 1px solid $color-border;
-    border-radius: $radius-md;
-    color: $color-text;
+  &__remove {
+    position: absolute;
+    top: $space-1;
+    right: $space-1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    border: none;
+    border-radius: $radius-sm;
+    background-color: color-mix(in srgb, $surface 70%, transparent);
+    color: $text-1;
     cursor: pointer;
-    &:hover { border-color: $color-accent; }
+    transition: background-color 0.15s, color 0.15s;
+
+    &:hover {
+      color: $danger;
+      background-color: color-mix(in srgb, $danger 12%, $surface);
+    }
   }
-  &__clear {
-    font: inherit; font-size: 0.8rem; background: none; border: none;
-    color: $color-text-muted; cursor: pointer; padding: 0;
-    &:hover { color: #ff6b6b; }
+
+  &__placeholder {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: $space-1;
+    padding: $space-3;
+    text-align: center;
   }
+
+  &__icon { width: 32px; height: 32px; color: $text-3; }
+  &__text { font-size: $fs-12; color: $text-2; }
+  &__hint { font-size: $fs-12; color: $text-3; }
+  &__error { font-size: $fs-12; color: $danger; }
 }

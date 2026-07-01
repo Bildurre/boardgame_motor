@@ -46,9 +46,8 @@
       "image": "Ikurra",
       "color": "Kolorea",
       "published": "Argitaratua",
-      "imageEmpty": "Irudirik ez",
-      "imageChoose": "Aukeratu irudia",
-      "imageClear": "Kendu"
+      "imageDrag": "Arrastatu irudi bat edo egin klik",
+      "imageHint": "Geh. 4 MB"
     },
     "actions": {
       "edit": "Editatu",
