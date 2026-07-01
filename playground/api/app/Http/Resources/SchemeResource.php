@@ -5,20 +5,25 @@ namespace App\Http\Resources;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-/** Representación para el admin: todas las traducciones, para editar. */
-class HouseResource extends JsonResource
+/** Representación de admin para Scheme (argucia): traducciones completas. */
+class SchemeResource extends JsonResource
 {
     public function toArray(Request $request): array
     {
         return [
             'id' => $this->id,
-            'name' => $this->getTranslations('name'),
+            'title' => $this->getTranslations('title'),
             'description' => $this->getTranslations('description'),
             'slug' => $this->getTranslations('slug'),
-            'color' => $this->color,
+            'cost' => $this->cost,
             'image' => $this->imageUrl(),
             'is_published' => $this->is_published,
-            'schemes' => SchemeResource::collection($this->whenLoaded('schemes')),
+            'house_id' => $this->house_id,
+            'house' => $this->whenLoaded('house', fn () => [
+                'id' => $this->house->id,
+                'name' => $this->house->getTranslations('name'),
+                'slug' => $this->house->getTranslations('slug'),
+            ]),
             'deleted_at' => $this->deleted_at,
         ];
     }

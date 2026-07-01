@@ -20,6 +20,18 @@ class HouseController extends Controller
         return HouseResource::collection($houses);
     }
 
+    /** Lista ligera (id + nombre traducible) para selectores. */
+    public function options()
+    {
+        return response()->json([
+            'data' => House::orderByDesc('id')->get()->map(fn (House $h) => [
+                'id' => $h->id,
+                'name' => $h->getTranslations('name'),
+                'slug' => $h->getTranslations('slug'),
+            ]),
+        ]);
+    }
+
     public function store(Request $request)
     {
         $data = $this->validateData($request);
@@ -33,7 +45,9 @@ class HouseController extends Controller
 
     public function show(string $slug)
     {
-        $house = House::whereSlug($slug)->firstOrFail();
+        $house = House::with(['schemes' => fn ($q) => $q->orderByDesc('id')])
+            ->whereSlug($slug)
+            ->firstOrFail();
 
         return new HouseResource($house);
     }

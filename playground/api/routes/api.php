@@ -1,7 +1,9 @@
 <?php
 
+use App\Http\Controllers\CharacterController;
 use App\Http\Controllers\HouseController;
 use App\Http\Controllers\Public\HouseController as PublicHouseController;
+use App\Http\Controllers\SchemeController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -16,6 +18,8 @@ Route::get('houses/{slug}', [PublicHouseController::class, 'show']);
 
 // --- Admin (admin/editor) ---
 Route::middleware(['auth:sanctum', 'motor.admin'])->prefix('admin')->group(function () {
+    // Houses
+    Route::get('houses/options', [HouseController::class, 'options']); // antes de {slug}
     Route::get('houses', [HouseController::class, 'index']);
     Route::post('houses', [HouseController::class, 'store']);
     Route::get('houses/{slug}', [HouseController::class, 'show']);
@@ -24,4 +28,24 @@ Route::middleware(['auth:sanctum', 'motor.admin'])->prefix('admin')->group(funct
     Route::post('houses/{id}/restore', [HouseController::class, 'restore']);
     Route::delete('houses/{id}/force', [HouseController::class, 'forceDestroy']);
     Route::post('houses/{slug}/toggle-published', [HouseController::class, 'togglePublished']);
+
+    // Schemes (argucias)
+    Route::get('schemes', [SchemeController::class, 'index']);
+    Route::post('schemes', [SchemeController::class, 'store']);
+    Route::get('schemes/{slug}', [SchemeController::class, 'show']);
+    Route::put('schemes/{slug}', [SchemeController::class, 'update']);
+    Route::delete('schemes/{slug}', [SchemeController::class, 'destroy']);
+    Route::post('schemes/{id}/restore', [SchemeController::class, 'restore']);
+    Route::delete('schemes/{id}/force', [SchemeController::class, 'forceDestroy']);
+    Route::post('schemes/{slug}/toggle-published', [SchemeController::class, 'togglePublished']);
+
+    // Characters (personajes)
+    Route::get('characters', [CharacterController::class, 'index']);
+    Route::post('characters', [CharacterController::class, 'store']);
+    Route::get('characters/{slug}', [CharacterController::class, 'show']);
+    Route::put('characters/{slug}', [CharacterController::class, 'update']);
+    Route::delete('characters/{slug}', [CharacterController::class, 'destroy']);
+    Route::post('characters/{id}/restore', [CharacterController::class, 'restore']);
+    Route::delete('characters/{id}/force', [CharacterController::class, 'forceDestroy']);
+    Route::post('characters/{slug}/toggle-published', [CharacterController::class, 'togglePublished']);
 });
