@@ -44,6 +44,11 @@ function openCreate() {
 
 async function save() {
   clearErrors()
+  // Validación mínima en cliente (evita el 422 y marca los campos).
+  if (!form.name.trim()) errors.name = t('common.required')
+  if (!form.image) errors.image = t('common.required')
+  if (errors.name || errors.image) return
+
   saving.value = true
   try {
     const fd = new FormData()
@@ -109,8 +114,11 @@ async function del(icon: any) {
         v-model="form.image"
         :label="t('icons.imageLabel')"
         accept=".svg,.png,.jpg,.jpeg,.webp"
+        :max-size="2"
         :drag-text="t('houses.fields.imageDrag')"
         :hint-text="t('icons.imageHint')"
+        :too-large-text="t('common.fileTooLarge')"
+        :invalid-type-text="t('common.fileType')"
         :error="errors.image"
       />
     </EditModal>

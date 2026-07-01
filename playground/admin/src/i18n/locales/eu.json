@@ -1,5 +1,11 @@
 {
-  "routes": { "houses": "etxeak", "new": "berria", "edit": "editatu", "login": "sarrera", "icons": "ikonoak" },
+  "routes": {
+    "houses": "etxeak",
+    "new": "berria",
+    "edit": "editatu",
+    "login": "sarrera",
+    "icons": "ikonoak"
+  },
   "breadcrumbs": {
     "home": "Hasiera",
     "houses": "Etxeak",
@@ -7,15 +13,26 @@
     "houseEdit": "Etxea editatu",
     "icons": "Ikonoak"
   },
-  "nav": { "dashboard": "Panela", "houses": "Etxeak", "icons": "Ikonoak" },
+  "nav": {
+    "dashboard": "Panela",
+    "houses": "Etxeak",
+    "icons": "Ikonoak"
+  },
   "icons": {
     "title": "Ikonoak",
     "new": "Ikono berria",
     "nameLabel": "Izena",
     "imageLabel": "Irudia (SVG/PNG)",
     "imageHint": "SVG edo PNG · Geh. 2 MB",
-    "confirmDelete": { "title": "Ezabatu ikonoa", "message": "\"{name}\" ezabatu?" },
-    "toast": { "created": "Ikonoa sortua", "deleted": "Ikonoa ezabatua", "saveError": "Ezin izan da gorde." }
+    "confirmDelete": {
+      "title": "Ezabatu ikonoa",
+      "message": "\"{name}\" ezabatu?"
+    },
+    "toast": {
+      "created": "Ikonoa sortua",
+      "deleted": "Ikonoa ezabatua",
+      "saveError": "Ezin izan da gorde."
+    }
   },
   "common": {
     "save": "Gorde",
@@ -25,7 +42,10 @@
     "loading": "Kargatzen…",
     "empty": "Emaitzarik ez.",
     "all": "Guztiak",
-    "logout": "Irten"
+    "logout": "Irten",
+    "required": "Eremu hau beharrezkoa da.",
+    "fileTooLarge": "Fitxategia handiegia da.",
+    "fileType": "Fitxategi-formatu baliogabea."
   },
   "login": {
     "title": "Panelerako sarrera",
@@ -47,9 +67,21 @@
     "new": "Etxe berria",
     "edit": "Etxea editatu",
     "newButton": "Etxe berria",
-    "tabs": { "published": "Argitaratuak", "draft": "Zirriborroa", "trashed": "Zakarrontzia" },
-    "cols": { "name": "Izena", "color": "Kolorea", "status": "Egoera" },
-    "state": { "published": "Argitaratua", "draft": "Zirriborroa", "trashed": "Zakarrontzia" },
+    "tabs": {
+      "published": "Argitaratuak",
+      "draft": "Zirriborroa",
+      "trashed": "Zakarrontzia"
+    },
+    "cols": {
+      "name": "Izena",
+      "color": "Kolorea",
+      "status": "Egoera"
+    },
+    "state": {
+      "published": "Argitaratua",
+      "draft": "Zirriborroa",
+      "trashed": "Zakarrontzia"
+    },
     "fields": {
       "name": "Izena",
       "description": "Deskribapena",
@@ -64,7 +96,8 @@
       "publish": "Argitaratu",
       "unpublish": "Ezkutatu",
       "delete": "Ezabatu",
-      "restore": "Berreskuratu"
+      "restore": "Berreskuratu",
+      "forceDelete": "Behin betiko ezabatu"
     },
     "confirmDelete": {
       "title": "Zakarrontzira bidali",
@@ -78,7 +111,12 @@
       "unpublished": "Etxea ezkutatua",
       "deleted": "Etxea zakarrontzira bidali da",
       "restored": "Etxea berreskuratua",
-      "saveError": "Ezin izan da gorde."
+      "saveError": "Ezin izan da gorde.",
+      "forceDeleted": "Etxea behin betiko ezabatua"
+    },
+    "confirmForceDelete": {
+      "title": "Behin betiko ezabatu",
+      "message": "\"{name}\" behin betiko ezabatu? Ezin da desegin."
     }
   }
 }

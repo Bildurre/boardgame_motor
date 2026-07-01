@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, onMounted, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { SquarePen, Trash2, Eye, EyeOff, RotateCcw, CircleCheck, FilePen, Trash } from '@lucide/vue'
+import { SquarePen, Trash2, Eye, EyeOff, RotateCcw, CircleCheck, FilePen, Trash, FlameKindling } from '@lucide/vue'
 import { BaseGrid, EntityCard, FilterBar, EmptyState, useResource } from '@bgm/admin-kit'
 import { BaseButton, BaseTabs, IconButton, useToast, useConfirm } from '@bgm/ui'
 import { api } from '@/lib/api'
@@ -83,6 +83,18 @@ async function restore(item: any) {
   toast.success(t('houses.toast.restored'))
   load(meta.value?.current_page ?? 1)
 }
+async function forceDelete(item: any) {
+  const ok = await confirm({
+    title: t('houses.confirmForceDelete.title'),
+    message: t('houses.confirmForceDelete.message', { name: tr(item.name) }),
+    confirmLabel: t('houses.actions.forceDelete'),
+    variant: 'danger',
+  })
+  if (!ok) return
+  await api.delete(`/admin/houses/${item.id}/force`)
+  toast.success(t('houses.toast.forceDeleted'))
+  load(meta.value?.current_page ?? 1)
+}
 
 onMounted(async () => {
   await locales.load()
@@ -119,6 +131,7 @@ onMounted(async () => {
         <template #actions>
           <template v-if="item.deleted_at">
             <IconButton variant="info" :title="t('houses.actions.restore')" @click="restore(item)"><RotateCcw :size="18" /></IconButton>
+            <IconButton variant="danger" :title="t('houses.actions.forceDelete')" @click="forceDelete(item)"><FlameKindling :size="18" /></IconButton>
           </template>
           <template v-else>
             <IconButton variant="success" :title="t('houses.actions.edit')" @click="editHouse(item)"><SquarePen :size="18" /></IconButton>

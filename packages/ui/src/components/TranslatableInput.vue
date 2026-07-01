@@ -19,6 +19,7 @@ const props = withDefaults(
     placeholder?: string
     rows?: number
     required?: boolean
+    error?: string
     id?: string
     /** Iconos del juego para el selector del editor (solo type="wysiwyg"). */
     icons?: { name: string; url: string }[]
@@ -53,7 +54,7 @@ onBeforeUnmount(() => document.removeEventListener('click', onClickOutside))
 </script>
 
 <template>
-  <div class="form-field">
+  <div class="form-field" :class="{ 'form-field--error': error }">
     <div class="translatable-header">
       <label v-if="label" :for="`${inputId}-${active}`" class="form-field__label">
         {{ label }}<span v-if="required" class="form-field__required">*</span>
@@ -111,5 +112,7 @@ onBeforeUnmount(() => document.removeEventListener('click', onClickOutside))
       class="form-field__input"
       @input="update(($event.target as HTMLInputElement).value)"
     />
+
+    <p v-if="error" class="form-field__error">{{ error }}</p>
   </div>
 </template>

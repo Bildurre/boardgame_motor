@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted, onBeforeUnmount, watch } from 'vue'
+import { onMounted, onBeforeUnmount, watch, ref } from 'vue'
 import { X } from '@lucide/vue'
 
 const props = withDefaults(
@@ -9,6 +9,16 @@ const props = withDefaults(
 const emit = defineEmits<{ 'update:modelValue': [boolean] }>()
 
 function close() { emit('update:modelValue', false) }
+
+// Cierre por overlay robusto: solo si el pointer bajó Y subió sobre el propio
+// overlay. Evita el bug de que, al pulsar un botón interno que se desmonta
+// (quitar imagen, borrar contenido…), el click se re-dirija al overlay y cierre.
+const downOnOverlay = ref(false)
+function onOverlayDown(e: MouseEvent) { downOnOverlay.value = e.target === e.currentTarget }
+function onOverlayClick(e: MouseEvent) {
+  if (downOnOverlay.value && e.target === e.currentTarget) close()
+  downOnOverlay.value = false
+}
 function onKeydown(e: KeyboardEvent) { if (e.key === 'Escape' && props.modelValue) close() }
 
 onMounted(() => window.addEventListener('keydown', onKeydown))
@@ -21,7 +31,7 @@ watch(() => props.modelValue, (open) => {
 <template>
   <Teleport to="body">
     <Transition name="modal">
-      <div v-if="modelValue" class="modal-overlay" @click.self="close">
+      <div v-if="modelValue" class="modal-overlay" @mousedown="onOverlayDown" @click="onOverlayClick">
         <div class="modal" :class="`modal--${props.size}`" role="dialog" aria-modal="true">
           <div v-if="title || $slots.header" class="modal__header">
             <slot name="header"><h3 class="modal__title">{{ title }}</h3></slot>

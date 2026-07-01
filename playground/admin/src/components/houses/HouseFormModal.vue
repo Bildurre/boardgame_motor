@@ -4,6 +4,7 @@ import { useI18n } from 'vue-i18n'
 import { EditModal, TranslatableInput, ImageUpload, PaletteColorPicker, BaseCheckbox, useToast } from '@bgm/ui'
 import { useResource } from '@bgm/admin-kit'
 import { api } from '@/lib/api'
+import { fieldErrors } from '@/lib/apiError'
 import { useLocalesStore } from '@/stores/locales'
 import { useIconsStore } from '@/stores/icons'
 
@@ -25,6 +26,18 @@ const { find, createForm, updateForm } = useResource(api, '/admin/houses')
 const saving = ref(false)
 const image = ref<File | null>(null)
 const currentImage = ref<string | null>(null)
+const errors = reactive<Record<string, string>>({})
+
+function clearErrors() {
+  for (const k of Object.keys(errors)) delete errors[k]
+}
+// Traduce cualquier error del backend con clave name.<locale> al campo 'name'.
+function mapServerErrors(e: any) {
+  const f = fieldErrors(e)
+  for (const [k, v] of Object.entries(f)) {
+    if (k === 'name' || k.startsWith('name.')) errors.name = v
+  }
+}
 
 const form = reactive<{
   name: Record<string, string>
@@ -46,7 +59,11 @@ function reset() {
   form.is_published = false
   image.value = null
   currentImage.value = null
+  clearErrors()
 }
+
+// ¿Tiene el nombre algún valor en cualquier idioma?
+const hasName = () => Object.values(form.name).some((v) => v && v.trim() !== '')
 
 // Al abrir: en edición carga la casa por slug; en alta limpia.
 watch(
@@ -83,6 +100,12 @@ function toFormData(): FormData {
 }
 
 async function submit() {
+  clearErrors()
+  // Validación mínima en cliente: evita un 422 innecesario y marca el campo.
+  if (!hasName()) {
+    errors.name = t('common.required')
+    return
+  }
   saving.value = true
   try {
     if (props.mode === 'edit' && props.targetSlug) {
@@ -94,8 +117,9 @@ async function submit() {
     }
     emit('saved')
     emit('update:modelValue', false)
-  } catch {
-    // Aviso genérico por toast; nunca el volcado del servidor.
+  } catch (e) {
+    // Errores de validación por campo + aviso genérico. Nunca el volcado crudo.
+    mapServerErrors(e)
     toast.danger(t('houses.toast.saveError'))
   } finally {
     saving.value = false
@@ -113,7 +137,7 @@ async function submit() {
     @update:model-value="(v: boolean) => emit('update:modelValue', v)"
     @submit="submit"
   >
-    <TranslatableInput v-model="form.name" :locales="locales.locales" :label="t('houses.fields.name')" />
+    <TranslatableInput v-model="form.name" :locales="locales.locales" :label="t('houses.fields.name')" required :error="errors.name" />
     <TranslatableInput v-model="form.description" :locales="locales.locales" :label="t('houses.fields.description')" type="wysiwyg" :icons="iconList" />
     <ImageUpload
       v-model="image"
@@ -121,6 +145,8 @@ async function submit() {
       :label="t('houses.fields.image')"
       :drag-text="t('houses.fields.imageDrag')"
       :hint-text="t('houses.fields.imageHint')"
+      :too-large-text="t('common.fileTooLarge')"
+      :invalid-type-text="t('common.fileType')"
     />
 
     <PaletteColorPicker v-model="form.color" :label="t('houses.fields.color')" />

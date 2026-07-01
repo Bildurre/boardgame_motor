@@ -1,5 +1,11 @@
 {
-  "routes": { "houses": "houses", "new": "new", "edit": "edit", "login": "login", "icons": "icons" },
+  "routes": {
+    "houses": "houses",
+    "new": "new",
+    "edit": "edit",
+    "login": "login",
+    "icons": "icons"
+  },
   "breadcrumbs": {
     "home": "Home",
     "houses": "Houses",
@@ -7,15 +13,26 @@
     "houseEdit": "Edit house",
     "icons": "Icons"
   },
-  "nav": { "dashboard": "Dashboard", "houses": "Houses", "icons": "Icons" },
+  "nav": {
+    "dashboard": "Dashboard",
+    "houses": "Houses",
+    "icons": "Icons"
+  },
   "icons": {
     "title": "Icons",
     "new": "New icon",
     "nameLabel": "Name",
     "imageLabel": "Image (SVG/PNG)",
     "imageHint": "SVG or PNG · Max 2 MB",
-    "confirmDelete": { "title": "Delete icon", "message": "Delete \"{name}\"?" },
-    "toast": { "created": "Icon created", "deleted": "Icon deleted", "saveError": "Could not save." }
+    "confirmDelete": {
+      "title": "Delete icon",
+      "message": "Delete \"{name}\"?"
+    },
+    "toast": {
+      "created": "Icon created",
+      "deleted": "Icon deleted",
+      "saveError": "Could not save."
+    }
   },
   "common": {
     "save": "Save",
@@ -25,7 +42,10 @@
     "loading": "Loading…",
     "empty": "No results.",
     "all": "All",
-    "logout": "Log out"
+    "logout": "Log out",
+    "required": "This field is required.",
+    "fileTooLarge": "The file is too large.",
+    "fileType": "Invalid file format."
   },
   "login": {
     "title": "Panel access",
@@ -47,9 +67,21 @@
     "new": "New house",
     "edit": "Edit house",
     "newButton": "New house",
-    "tabs": { "published": "Published", "draft": "Draft", "trashed": "Trash" },
-    "cols": { "name": "Name", "color": "Color", "status": "Status" },
-    "state": { "published": "Published", "draft": "Draft", "trashed": "Trash" },
+    "tabs": {
+      "published": "Published",
+      "draft": "Draft",
+      "trashed": "Trash"
+    },
+    "cols": {
+      "name": "Name",
+      "color": "Color",
+      "status": "Status"
+    },
+    "state": {
+      "published": "Published",
+      "draft": "Draft",
+      "trashed": "Trash"
+    },
     "fields": {
       "name": "Name",
       "description": "Description",
@@ -64,7 +96,8 @@
       "publish": "Publish",
       "unpublish": "Unpublish",
       "delete": "Delete",
-      "restore": "Restore"
+      "restore": "Restore",
+      "forceDelete": "Delete permanently"
     },
     "confirmDelete": {
       "title": "Move to trash",
@@ -78,7 +111,12 @@
       "unpublished": "House unpublished",
       "deleted": "House moved to trash",
       "restored": "House restored",
-      "saveError": "Could not save."
+      "saveError": "Could not save.",
+      "forceDeleted": "House permanently deleted"
+    },
+    "confirmForceDelete": {
+      "title": "Delete permanently",
+      "message": "Permanently delete \"{name}\"? This cannot be undone."
     }
   }
 }

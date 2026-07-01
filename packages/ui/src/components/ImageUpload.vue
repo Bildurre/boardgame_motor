@@ -14,6 +14,8 @@ const props = withDefaults(
     error?: string
     dragText?: string
     hintText?: string
+    tooLargeText?: string
+    invalidTypeText?: string
   }>(),
   {
     currentUrl: null,
@@ -22,6 +24,8 @@ const props = withDefaults(
     maxSize: 4,
     dragText: 'Arrastra una imagen o haz clic',
     hintText: '',
+    tooLargeText: 'El archivo es demasiado grande.',
+    invalidTypeText: 'Formato de archivo no válido.',
   },
 )
 
@@ -30,13 +34,24 @@ const emit = defineEmits<{ 'update:modelValue': [File | null]; remove: [] }>()
 const isDragging = ref(false)
 const previewUrl = ref<string | null>(null)
 const removed = ref(false)
+const localError = ref<string | null>(null)
 const fileInputRef = ref<HTMLInputElement>()
 
 const displayUrl = computed(() => (removed.value ? null : previewUrl.value || props.currentUrl))
+// El error externo (validación del servidor) manda sobre el interno.
+const shownError = computed(() => props.error || localError.value)
 
 function handleFile(file: File) {
-  if (file.size > props.maxSize * 1024 * 1024) return
-  if (!file.type.startsWith('image/')) return
+  // Validación en cliente: tamaño y tipo, con feedback (no se ignora en silencio).
+  if (file.size > props.maxSize * 1024 * 1024) {
+    localError.value = props.tooLargeText
+    return
+  }
+  if (!file.type.startsWith('image/')) {
+    localError.value = props.invalidTypeText
+    return
+  }
+  localError.value = null
   removed.value = false
   if (previewUrl.value) URL.revokeObjectURL(previewUrl.value)
   previewUrl.value = URL.createObjectURL(file)
@@ -60,6 +75,7 @@ function clear() {
     previewUrl.value = null
   }
   removed.value = true
+  localError.value = null
   emit('update:modelValue', null)
   emit('remove')
 }
@@ -76,7 +92,7 @@ function openDialog() {
       class="image-upload__zone"
       :class="{
         'image-upload__zone--dragging': isDragging,
-        'image-upload__zone--error': error,
+        'image-upload__zone--error': shownError,
         'image-upload__zone--has-image': displayUrl,
       }"
       @dragover.prevent="isDragging = true"
@@ -111,6 +127,6 @@ function openDialog() {
         </div>
       </template>
     </div>
-    <p v-if="error" class="image-upload__error">{{ error }}</p>
+    <p v-if="shownError" class="image-upload__error">{{ shownError }}</p>
   </div>
 </template>

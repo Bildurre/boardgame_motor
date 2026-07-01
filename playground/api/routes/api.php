@@ -22,5 +22,6 @@ Route::middleware(['auth:sanctum', 'motor.admin'])->prefix('admin')->group(funct
     Route::put('houses/{slug}', [HouseController::class, 'update']);
     Route::delete('houses/{slug}', [HouseController::class, 'destroy']);
     Route::post('houses/{id}/restore', [HouseController::class, 'restore']);
+    Route::delete('houses/{id}/force', [HouseController::class, 'forceDestroy']);
     Route::post('houses/{slug}/toggle-published', [HouseController::class, 'togglePublished']);
 });

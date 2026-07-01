@@ -65,6 +65,16 @@ class HouseController extends Controller
         return new HouseResource($house);
     }
 
+    /** Borrado definitivo (desde la papelera): elimina la fila y su imagen. */
+    public function forceDestroy(int $id)
+    {
+        $house = House::withTrashed()->findOrFail($id);
+        $house->clearMediaCollection('image');
+        $house->forceDelete();
+
+        return response()->noContent();
+    }
+
     public function togglePublished(string $slug)
     {
         $house = House::whereSlug($slug)->firstOrFail();

@@ -1,5 +1,11 @@
 {
-  "routes": { "houses": "casas", "new": "nueva", "edit": "editar", "login": "acceso", "icons": "iconos" },
+  "routes": {
+    "houses": "casas",
+    "new": "nueva",
+    "edit": "editar",
+    "login": "acceso",
+    "icons": "iconos"
+  },
   "breadcrumbs": {
     "home": "Inicio",
     "houses": "Casas",
@@ -7,15 +13,26 @@
     "houseEdit": "Editar casa",
     "icons": "Iconos"
   },
-  "nav": { "dashboard": "Panel", "houses": "Casas", "icons": "Iconos" },
+  "nav": {
+    "dashboard": "Panel",
+    "houses": "Casas",
+    "icons": "Iconos"
+  },
   "icons": {
     "title": "Iconos",
     "new": "Nuevo icono",
     "nameLabel": "Nombre",
     "imageLabel": "Imagen (SVG/PNG)",
     "imageHint": "SVG o PNG · Máx. 2 MB",
-    "confirmDelete": { "title": "Borrar icono", "message": "¿Borrar \"{name}\"?" },
-    "toast": { "created": "Icono creado", "deleted": "Icono borrado", "saveError": "No se pudo guardar." }
+    "confirmDelete": {
+      "title": "Borrar icono",
+      "message": "¿Borrar \"{name}\"?"
+    },
+    "toast": {
+      "created": "Icono creado",
+      "deleted": "Icono borrado",
+      "saveError": "No se pudo guardar."
+    }
   },
   "common": {
     "save": "Guardar",
@@ -25,7 +42,10 @@
     "loading": "Cargando…",
     "empty": "Sin resultados.",
     "all": "Todos",
-    "logout": "Salir"
+    "logout": "Salir",
+    "required": "Este campo es obligatorio.",
+    "fileTooLarge": "El archivo es demasiado grande.",
+    "fileType": "Formato de archivo no válido."
   },
   "login": {
     "title": "Acceso al panel",
@@ -47,9 +67,21 @@
     "new": "Nueva casa",
     "edit": "Editar casa",
     "newButton": "Nueva casa",
-    "tabs": { "published": "Publicadas", "draft": "Borrador", "trashed": "Papelera" },
-    "cols": { "name": "Nombre", "color": "Color", "status": "Estado" },
-    "state": { "published": "Publicada", "draft": "Borrador", "trashed": "Papelera" },
+    "tabs": {
+      "published": "Publicadas",
+      "draft": "Borrador",
+      "trashed": "Papelera"
+    },
+    "cols": {
+      "name": "Nombre",
+      "color": "Color",
+      "status": "Estado"
+    },
+    "state": {
+      "published": "Publicada",
+      "draft": "Borrador",
+      "trashed": "Papelera"
+    },
     "fields": {
       "name": "Nombre",
       "description": "Descripción",
@@ -64,7 +96,8 @@
       "publish": "Publicar",
       "unpublish": "Despublicar",
       "delete": "Borrar",
-      "restore": "Restaurar"
+      "restore": "Restaurar",
+      "forceDelete": "Borrar definitivamente"
     },
     "confirmDelete": {
       "title": "Enviar a la papelera",
@@ -78,7 +111,12 @@
       "unpublished": "Casa despublicada",
       "deleted": "Casa enviada a la papelera",
       "restored": "Casa restaurada",
-      "saveError": "No se pudo guardar."
+      "saveError": "No se pudo guardar.",
+      "forceDeleted": "Casa borrada definitivamente"
+    },
+    "confirmForceDelete": {
+      "title": "Borrar definitivamente",
+      "message": "¿Borrar \"{name}\" para siempre? Esta acción no se puede deshacer."
     }
   }
 }
