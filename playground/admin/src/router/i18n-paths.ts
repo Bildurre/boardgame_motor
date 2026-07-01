@@ -46,7 +46,42 @@ export function createLocalizedRoutes(locale: string): RouteRecordRaw[] {
       alias: buildAliases((t) => `/${t.houses}`, locale),
       meta: { admin: true, titleKey: 'houses.title', breadcrumbs: [{ key: 'houses' }] },
     },
-    // Las altas/ediciones de House son modales (patrón kontuan), no rutas.
+    // Las altas/ediciones son modales (patrón kontuan). El detalle sí es ruta.
+    {
+      path: `/${p.houses}/:slug`,
+      name: 'house-single',
+      component: () => import('@/views/houses/HouseSingleView.vue'),
+      alias: buildAliases((t) => `/${t.houses}/:slug`, locale),
+      meta: { admin: true, titleKey: 'houses.title', breadcrumbs: [{ key: 'houses', to: 'houses' }] },
+    },
+    {
+      path: `/${p.schemes}`,
+      name: 'schemes',
+      component: () => import('@/views/schemes/SchemesListView.vue'),
+      alias: buildAliases((t) => `/${t.schemes}`, locale),
+      meta: { admin: true, titleKey: 'schemes.title', breadcrumbs: [{ key: 'schemes' }] },
+    },
+    {
+      path: `/${p.schemes}/:slug`,
+      name: 'scheme-single',
+      component: () => import('@/views/schemes/SchemeSingleView.vue'),
+      alias: buildAliases((t) => `/${t.schemes}/:slug`, locale),
+      meta: { admin: true, titleKey: 'schemes.title', breadcrumbs: [{ key: 'schemes', to: 'schemes' }] },
+    },
+    {
+      path: `/${p.characters}`,
+      name: 'characters',
+      component: () => import('@/views/characters/CharactersListView.vue'),
+      alias: buildAliases((t) => `/${t.characters}`, locale),
+      meta: { admin: true, titleKey: 'characters.title', breadcrumbs: [{ key: 'characters' }] },
+    },
+    {
+      path: `/${p.characters}/:slug`,
+      name: 'character-single',
+      component: () => import('@/views/characters/CharacterSingleView.vue'),
+      alias: buildAliases((t) => `/${t.characters}/:slug`, locale),
+      meta: { admin: true, titleKey: 'characters.title', breadcrumbs: [{ key: 'characters', to: 'characters' }] },
+    },
     {
       path: `/${p.icons}`,
       name: 'icons',

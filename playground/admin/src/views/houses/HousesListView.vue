@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed, onMounted, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
+import { useRouter } from 'vue-router'
 import { SquarePen, Trash2, Eye, EyeOff, RotateCcw, CircleCheck, FilePen, Trash, FlameKindling } from '@lucide/vue'
 import { BaseGrid, EntityCard, FilterBar, EmptyState, useResource } from '@bgm/admin-kit'
 import { BaseButton, BaseTabs, IconButton, useToast, useConfirm } from '@bgm/ui'
@@ -9,6 +10,7 @@ import { useLocalesStore } from '@/stores/locales'
 import HouseFormModal from '@/components/houses/HouseFormModal.vue'
 
 const { t } = useI18n()
+const router = useRouter()
 const locales = useLocalesStore()
 const toast = useToast()
 const { confirm } = useConfirm()
@@ -57,6 +59,9 @@ function editHouse(item: any) {
   formMode.value = 'edit'
   formSlug.value = slugFor(item)
   formOpen.value = true
+}
+function goSingle(item: any) {
+  router.push({ name: 'house-single', params: { slug: slugFor(item) } })
 }
 function onSaved() {
   load(meta.value?.current_page ?? 1)
@@ -120,6 +125,8 @@ onMounted(async () => {
         :key="item.id"
         :title="tr(item.name)"
         :muted="!!item.deleted_at"
+        clickable
+        @view="goSingle(item)"
       >
         <template #media>
           <div class="house-emblem" :style="{ '--c': item.color || 'transparent' }">

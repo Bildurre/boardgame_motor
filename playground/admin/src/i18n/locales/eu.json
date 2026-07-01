@@ -4,19 +4,25 @@
     "new": "berria",
     "edit": "editatu",
     "login": "sarrera",
-    "icons": "ikonoak"
+    "icons": "ikonoak",
+    "schemes": "argaziak",
+    "characters": "pertsonaiak"
   },
   "breadcrumbs": {
     "home": "Hasiera",
     "houses": "Etxeak",
     "houseNew": "Etxe berria",
     "houseEdit": "Etxea editatu",
-    "icons": "Ikonoak"
+    "icons": "Ikonoak",
+    "schemes": "Argaziak",
+    "characters": "Pertsonaiak"
   },
   "nav": {
     "dashboard": "Panela",
     "houses": "Etxeak",
-    "icons": "Ikonoak"
+    "icons": "Ikonoak",
+    "schemes": "Argaziak",
+    "characters": "Pertsonaiak"
   },
   "icons": {
     "title": "Ikonoak",
@@ -117,6 +123,108 @@
     "confirmForceDelete": {
       "title": "Behin betiko ezabatu",
       "message": "\"{name}\" behin betiko ezabatu? Ezin da desegin."
+    }
+  },
+  "schemes": {
+    "title": "Argaziak",
+    "new": "Argazi berria",
+    "edit": "Argazia editatu",
+    "newButton": "Argazi berria",
+    "single": "Argazia",
+    "tabs": {
+      "published": "Argitaratuak",
+      "draft": "Zirriborroa",
+      "trashed": "Zakarrontzia"
+    },
+    "cols": {
+      "title": "Izenburua",
+      "house": "Etxea",
+      "cost": "Kostua",
+      "status": "Egoera"
+    },
+    "state": {
+      "published": "Argitaratua",
+      "draft": "Zirriborroa",
+      "trashed": "Zakarrontzia"
+    },
+    "fields": {
+      "title": "Izenburua",
+      "description": "Efektua",
+      "house": "Etxea",
+      "cost": "Kostua",
+      "image": "Irudia",
+      "published": "Argitaratua"
+    },
+    "confirmDelete": {
+      "title": "Zakarrontzira bidali",
+      "message": "\"{name}\" zakarrontzira bidali?"
+    },
+    "confirmForceDelete": {
+      "title": "Behin betiko ezabatu",
+      "message": "\"{name}\" behin betiko ezabatu? Ezin da desegin."
+    },
+    "toast": {
+      "created": "Argazia sortua",
+      "updated": "Argazia eguneratua",
+      "published": "Argazia argitaratua",
+      "unpublished": "Argazia ezkutatua",
+      "deleted": "Argazia zakarrontzira bidali da",
+      "restored": "Argazia berreskuratua",
+      "forceDeleted": "Argazia behin betiko ezabatua",
+      "saveError": "Ezin izan da gorde."
+    }
+  },
+  "characters": {
+    "title": "Pertsonaiak",
+    "new": "Pertsonaia berria",
+    "edit": "Pertsonaia editatu",
+    "newButton": "Pertsonaia berria",
+    "single": "Pertsonaia",
+    "tabs": {
+      "published": "Argitaratuak",
+      "draft": "Zirriborroa",
+      "trashed": "Zakarrontzia"
+    },
+    "cols": {
+      "name": "Izena",
+      "cost": "Kostua",
+      "status": "Egoera"
+    },
+    "state": {
+      "published": "Argitaratua",
+      "draft": "Zirriborroa",
+      "trashed": "Zakarrontzia"
+    },
+    "fields": {
+      "name": "Izena",
+      "description": "Deskribapena",
+      "ability": "Trebetasuna",
+      "image": "Irudia",
+      "published": "Argitaratua",
+      "cost": "Kostua",
+      "defense": "Defentsa",
+      "power": "Boterea",
+      "prestige": "Ospea",
+      "intrigue": "Azpikeria",
+      "money": "Dirua"
+    },
+    "confirmDelete": {
+      "title": "Zakarrontzira bidali",
+      "message": "\"{name}\" zakarrontzira bidali?"
+    },
+    "confirmForceDelete": {
+      "title": "Behin betiko ezabatu",
+      "message": "\"{name}\" behin betiko ezabatu? Ezin da desegin."
+    },
+    "toast": {
+      "created": "Pertsonaia sortua",
+      "updated": "Pertsonaia eguneratua",
+      "published": "Pertsonaia argitaratua",
+      "unpublished": "Pertsonaia ezkutatua",
+      "deleted": "Pertsonaia zakarrontzira bidali da",
+      "restored": "Pertsonaia berreskuratua",
+      "forceDeleted": "Pertsonaia behin betiko ezabatua",
+      "saveError": "Ezin izan da gorde."
     }
   }
 }

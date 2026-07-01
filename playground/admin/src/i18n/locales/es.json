@@ -4,19 +4,25 @@
     "new": "nueva",
     "edit": "editar",
     "login": "acceso",
-    "icons": "iconos"
+    "icons": "iconos",
+    "schemes": "argucias",
+    "characters": "personajes"
   },
   "breadcrumbs": {
     "home": "Inicio",
     "houses": "Casas",
     "houseNew": "Nueva casa",
     "houseEdit": "Editar casa",
-    "icons": "Iconos"
+    "icons": "Iconos",
+    "schemes": "Argucias",
+    "characters": "Personajes"
   },
   "nav": {
     "dashboard": "Panel",
     "houses": "Casas",
-    "icons": "Iconos"
+    "icons": "Iconos",
+    "schemes": "Argucias",
+    "characters": "Personajes"
   },
   "icons": {
     "title": "Iconos",
@@ -117,6 +123,108 @@
     "confirmForceDelete": {
       "title": "Borrar definitivamente",
       "message": "¿Borrar \"{name}\" para siempre? Esta acción no se puede deshacer."
+    }
+  },
+  "schemes": {
+    "title": "Argucias",
+    "new": "Nueva argucia",
+    "edit": "Editar argucia",
+    "newButton": "Nueva argucia",
+    "single": "Argucia",
+    "tabs": {
+      "published": "Publicadas",
+      "draft": "Borrador",
+      "trashed": "Papelera"
+    },
+    "cols": {
+      "title": "Título",
+      "house": "Casa",
+      "cost": "Coste",
+      "status": "Estado"
+    },
+    "state": {
+      "published": "Publicada",
+      "draft": "Borrador",
+      "trashed": "Papelera"
+    },
+    "fields": {
+      "title": "Título",
+      "description": "Efecto",
+      "house": "Casa",
+      "cost": "Coste",
+      "image": "Imagen",
+      "published": "Publicada"
+    },
+    "confirmDelete": {
+      "title": "Enviar a la papelera",
+      "message": "¿Enviar \"{name}\" a la papelera?"
+    },
+    "confirmForceDelete": {
+      "title": "Borrar definitivamente",
+      "message": "¿Borrar \"{name}\" para siempre? Esta acción no se puede deshacer."
+    },
+    "toast": {
+      "created": "Argucia creada",
+      "updated": "Argucia actualizada",
+      "published": "Argucia publicada",
+      "unpublished": "Argucia despublicada",
+      "deleted": "Argucia enviada a la papelera",
+      "restored": "Argucia restaurada",
+      "forceDeleted": "Argucia borrada definitivamente",
+      "saveError": "No se pudo guardar."
+    }
+  },
+  "characters": {
+    "title": "Personajes",
+    "new": "Nuevo personaje",
+    "edit": "Editar personaje",
+    "newButton": "Nuevo personaje",
+    "single": "Personaje",
+    "tabs": {
+      "published": "Publicados",
+      "draft": "Borrador",
+      "trashed": "Papelera"
+    },
+    "cols": {
+      "name": "Nombre",
+      "cost": "Coste",
+      "status": "Estado"
+    },
+    "state": {
+      "published": "Publicado",
+      "draft": "Borrador",
+      "trashed": "Papelera"
+    },
+    "fields": {
+      "name": "Nombre",
+      "description": "Descripción",
+      "ability": "Habilidad",
+      "image": "Imagen",
+      "published": "Publicado",
+      "cost": "Coste",
+      "defense": "Defensa",
+      "power": "Poder",
+      "prestige": "Prestigio",
+      "intrigue": "Intriga",
+      "money": "Dinero"
+    },
+    "confirmDelete": {
+      "title": "Enviar a la papelera",
+      "message": "¿Enviar \"{name}\" a la papelera?"
+    },
+    "confirmForceDelete": {
+      "title": "Borrar definitivamente",
+      "message": "¿Borrar \"{name}\" para siempre? Esta acción no se puede deshacer."
+    },
+    "toast": {
+      "created": "Personaje creado",
+      "updated": "Personaje actualizado",
+      "published": "Personaje publicado",
+      "unpublished": "Personaje despublicado",
+      "deleted": "Personaje enviado a la papelera",
+      "restored": "Personaje restaurado",
+      "forceDeleted": "Personaje borrado definitivamente",
+      "saveError": "No se pudo guardar."
     }
   }
 }

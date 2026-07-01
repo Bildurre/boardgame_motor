@@ -4,19 +4,25 @@
     "new": "new",
     "edit": "edit",
     "login": "login",
-    "icons": "icons"
+    "icons": "icons",
+    "schemes": "schemes",
+    "characters": "characters"
   },
   "breadcrumbs": {
     "home": "Home",
     "houses": "Houses",
     "houseNew": "New house",
     "houseEdit": "Edit house",
-    "icons": "Icons"
+    "icons": "Icons",
+    "schemes": "Schemes",
+    "characters": "Characters"
   },
   "nav": {
     "dashboard": "Dashboard",
     "houses": "Houses",
-    "icons": "Icons"
+    "icons": "Icons",
+    "schemes": "Schemes",
+    "characters": "Characters"
   },
   "icons": {
     "title": "Icons",
@@ -117,6 +123,108 @@
     "confirmForceDelete": {
       "title": "Delete permanently",
       "message": "Permanently delete \"{name}\"? This cannot be undone."
+    }
+  },
+  "schemes": {
+    "title": "Schemes",
+    "new": "New scheme",
+    "edit": "Edit scheme",
+    "newButton": "New scheme",
+    "single": "Scheme",
+    "tabs": {
+      "published": "Published",
+      "draft": "Draft",
+      "trashed": "Trash"
+    },
+    "cols": {
+      "title": "Title",
+      "house": "House",
+      "cost": "Cost",
+      "status": "Status"
+    },
+    "state": {
+      "published": "Published",
+      "draft": "Draft",
+      "trashed": "Trash"
+    },
+    "fields": {
+      "title": "Title",
+      "description": "Effect",
+      "house": "House",
+      "cost": "Cost",
+      "image": "Image",
+      "published": "Published"
+    },
+    "confirmDelete": {
+      "title": "Move to trash",
+      "message": "Move \"{name}\" to the trash?"
+    },
+    "confirmForceDelete": {
+      "title": "Delete permanently",
+      "message": "Permanently delete \"{name}\"? This cannot be undone."
+    },
+    "toast": {
+      "created": "Scheme created",
+      "updated": "Scheme updated",
+      "published": "Scheme published",
+      "unpublished": "Scheme unpublished",
+      "deleted": "Scheme moved to trash",
+      "restored": "Scheme restored",
+      "forceDeleted": "Scheme permanently deleted",
+      "saveError": "Could not save."
+    }
+  },
+  "characters": {
+    "title": "Characters",
+    "new": "New character",
+    "edit": "Edit character",
+    "newButton": "New character",
+    "single": "Character",
+    "tabs": {
+      "published": "Published",
+      "draft": "Draft",
+      "trashed": "Trash"
+    },
+    "cols": {
+      "name": "Name",
+      "cost": "Cost",
+      "status": "Status"
+    },
+    "state": {
+      "published": "Published",
+      "draft": "Draft",
+      "trashed": "Trash"
+    },
+    "fields": {
+      "name": "Name",
+      "description": "Description",
+      "ability": "Ability",
+      "image": "Image",
+      "published": "Published",
+      "cost": "Cost",
+      "defense": "Defense",
+      "power": "Power",
+      "prestige": "Prestige",
+      "intrigue": "Intrigue",
+      "money": "Money"
+    },
+    "confirmDelete": {
+      "title": "Move to trash",
+      "message": "Move \"{name}\" to the trash?"
+    },
+    "confirmForceDelete": {
+      "title": "Delete permanently",
+      "message": "Permanently delete \"{name}\"? This cannot be undone."
+    },
+    "toast": {
+      "created": "Character created",
+      "updated": "Character updated",
+      "published": "Character published",
+      "unpublished": "Character unpublished",
+      "deleted": "Character moved to trash",
+      "restored": "Character restored",
+      "forceDeleted": "Character permanently deleted",
+      "saveError": "Could not save."
     }
   }
 }
