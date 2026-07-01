@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { reactive, ref, watch, computed } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { EditModal, TranslatableInput, ImageUpload, BaseInput, BaseSelect, BaseCheckbox, useToast } from '@bgm/ui'
+import { EditModal, TranslatableInput, ImageUpload, NumericInput, BaseSelect, BaseCheckbox, useToast } from '@bgm/ui'
 import { useResource } from '@bgm/admin-kit'
 import { api } from '@/lib/api'
 import { fieldErrors } from '@/lib/apiError'
@@ -111,7 +111,7 @@ async function submit() {
     <BaseSelect v-model="form.house_id" :label="t('schemes.fields.house')" :options="houseOptions" :placeholder="t('schemes.fields.house')" required :error="errors.house_id" />
     <TranslatableInput v-model="form.title" :locales="locales.locales" :label="t('schemes.fields.title')" required :error="errors.title" />
     <TranslatableInput v-model="form.description" :locales="locales.locales" :label="t('schemes.fields.description')" type="wysiwyg" :icons="iconList" />
-    <BaseInput v-model.number="form.cost" type="number" :label="t('schemes.fields.cost')" :error="errors.cost" />
+    <NumericInput v-model="form.cost" :min="0" :label="t('schemes.fields.cost')" :error="errors.cost" />
     <ImageUpload
       v-model="image"
       :current-url="currentImage"

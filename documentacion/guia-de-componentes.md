@@ -192,6 +192,10 @@ color. Úsalos siempre en formularios (en modal o donde sea).
 - **BaseTextarea** — igual que BaseInput con `rows?`.
 - **BaseSelect** — `options: { value, label }[]`, `placeholder?`, resto igual.
 - **BaseCheckbox** — `modelValue` (boolean), `label?` (o slot).
+- **NumericInput** — campo numérico con botones −/+ (portado de kontuan). Por
+  defecto **solo enteros ≥ 0** (`integer` def. `true`, `min` def. `0`); para
+  decimales `:integer="false"`. Props: `modelValue`, `label?`, `min?`, `max?`,
+  `step?`, `error?`, `hint?`, `required?`, `disabled?`.
 - **PaletteColorPicker** — selector de color. `modelValue` (v-model, **hex**;
   a diferencia de kontuan que guarda la clave de paleta, aquí emite el hex),
   `label?`, `allowCustom?` (swatch con selector nativo, por defecto `true`).

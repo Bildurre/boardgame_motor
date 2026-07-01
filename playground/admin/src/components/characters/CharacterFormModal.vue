@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { reactive, ref, watch, computed } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { EditModal, TranslatableInput, ImageUpload, BaseInput, BaseCheckbox, useToast } from '@bgm/ui'
+import { EditModal, TranslatableInput, ImageUpload, NumericInput, BaseCheckbox, useToast } from '@bgm/ui'
 import { useResource } from '@bgm/admin-kit'
 import { api } from '@/lib/api'
 import { fieldErrors } from '@/lib/apiError'
@@ -108,10 +108,10 @@ async function submit() {
     <TranslatableInput v-model="form.ability" :locales="locales.locales" :label="t('characters.fields.ability')" type="wysiwyg" :icons="iconList" />
 
     <div class="stats-grid">
-      <BaseInput v-model.number="form.power" type="number" :label="t('characters.fields.power')" />
-      <BaseInput v-model.number="form.prestige" type="number" :label="t('characters.fields.prestige')" />
-      <BaseInput v-model.number="form.intrigue" type="number" :label="t('characters.fields.intrigue')" />
-      <BaseInput v-model.number="form.money" type="number" :label="t('characters.fields.money')" />
+      <NumericInput v-model="form.power" :min="0" :label="t('characters.fields.power')" />
+      <NumericInput v-model="form.prestige" :min="0" :label="t('characters.fields.prestige')" />
+      <NumericInput v-model="form.intrigue" :min="0" :label="t('characters.fields.intrigue')" />
+      <NumericInput v-model="form.money" :min="0" :label="t('characters.fields.money')" />
     </div>
     <p class="stats-derived">
       <span>{{ t('characters.fields.cost') }}: <strong>{{ cost }}</strong></span>
