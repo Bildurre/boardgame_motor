@@ -1,12 +1,22 @@
 {
-  "routes": { "houses": "casas", "new": "nueva", "edit": "editar", "login": "acceso" },
+  "routes": { "houses": "casas", "new": "nueva", "edit": "editar", "login": "acceso", "icons": "iconos" },
   "breadcrumbs": {
     "home": "Inicio",
     "houses": "Casas",
     "houseNew": "Nueva casa",
-    "houseEdit": "Editar casa"
+    "houseEdit": "Editar casa",
+    "icons": "Iconos"
   },
-  "nav": { "dashboard": "Panel", "houses": "Casas" },
+  "nav": { "dashboard": "Panel", "houses": "Casas", "icons": "Iconos" },
+  "icons": {
+    "title": "Iconos",
+    "new": "Nuevo icono",
+    "nameLabel": "Nombre",
+    "imageLabel": "Imagen (SVG/PNG)",
+    "imageHint": "SVG o PNG · Máx. 2 MB",
+    "confirmDelete": { "title": "Borrar icono", "message": "¿Borrar \"{name}\"?" },
+    "toast": { "created": "Icono creado", "deleted": "Icono borrado", "saveError": "No se pudo guardar." }
+  },
   "common": {
     "save": "Guardar",
     "saving": "Guardando…",

@@ -1,12 +1,22 @@
 {
-  "routes": { "houses": "houses", "new": "new", "edit": "edit", "login": "login" },
+  "routes": { "houses": "houses", "new": "new", "edit": "edit", "login": "login", "icons": "icons" },
   "breadcrumbs": {
     "home": "Home",
     "houses": "Houses",
     "houseNew": "New house",
-    "houseEdit": "Edit house"
+    "houseEdit": "Edit house",
+    "icons": "Icons"
   },
-  "nav": { "dashboard": "Dashboard", "houses": "Houses" },
+  "nav": { "dashboard": "Dashboard", "houses": "Houses", "icons": "Icons" },
+  "icons": {
+    "title": "Icons",
+    "new": "New icon",
+    "nameLabel": "Name",
+    "imageLabel": "Image (SVG/PNG)",
+    "imageHint": "SVG or PNG · Max 2 MB",
+    "confirmDelete": { "title": "Delete icon", "message": "Delete \"{name}\"?" },
+    "toast": { "created": "Icon created", "deleted": "Icon deleted", "saveError": "Could not save." }
+  },
   "common": {
     "save": "Save",
     "saving": "Saving…",

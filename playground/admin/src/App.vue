@@ -2,7 +2,7 @@
 import { computed, onMounted, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
-import { LayoutDashboard, Home, LogOut } from '@lucide/vue'
+import { LayoutDashboard, Home, Shapes, LogOut } from '@lucide/vue'
 import { AdminLayout } from '@bgm/admin-kit'
 import { ToastContainer, ConfirmDialog, type Crumb } from '@bgm/ui'
 import { useAuthStore } from '@/stores/auth'
@@ -54,6 +54,9 @@ async function logout() {
       </RouterLink>
       <RouterLink class="nav-item" :to="{ name: 'houses' }">
         <Home class="nav-icon" :size="20" /><span class="nav-label">{{ t('nav.houses') }}</span>
+      </RouterLink>
+      <RouterLink class="nav-item" :to="{ name: 'icons' }">
+        <Shapes class="nav-icon" :size="20" /><span class="nav-label">{{ t('nav.icons') }}</span>
       </RouterLink>
     </template>
 

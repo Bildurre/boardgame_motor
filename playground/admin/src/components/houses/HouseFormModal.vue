@@ -5,6 +5,7 @@ import { EditModal, TranslatableInput, ImageUpload, PaletteColorPicker, BaseChec
 import { useResource } from '@bgm/admin-kit'
 import { api } from '@/lib/api'
 import { useLocalesStore } from '@/stores/locales'
+import { useIconsStore } from '@/stores/icons'
 
 // Formulario de House en modal (patrón kontuan): se abre desde el listado.
 const props = defineProps<{
@@ -18,6 +19,7 @@ const emit = defineEmits<{ 'update:modelValue': [boolean]; saved: [] }>()
 const { t } = useI18n()
 const toast = useToast()
 const locales = useLocalesStore()
+const icons = useIconsStore()
 const { find, createForm, updateForm } = useResource(api, '/admin/houses')
 
 const saving = ref(false)
@@ -33,6 +35,10 @@ const form = reactive<{
 }>({ name: {}, description: {}, color: '#888888', is_published: false })
 
 const title = computed(() => (props.mode === 'create' ? t('houses.new') : t('houses.edit')))
+// Iconos con URL para el selector del editor.
+const iconList = computed(() =>
+  icons.icons.filter((i) => i.url).map((i) => ({ name: i.name, url: i.url as string })),
+)
 
 function reset() {
   form.name = {}
@@ -51,6 +57,7 @@ watch(
     if (!open) return
     reset()
     await locales.load()
+    await icons.load()
     if (props.mode === 'edit' && props.targetSlug) {
       try {
         const h: any = await find(props.targetSlug)
@@ -109,7 +116,7 @@ async function submit() {
     @submit="submit"
   >
     <TranslatableInput v-model="form.name" :locales="locales.locales" :label="t('houses.fields.name')" />
-    <TranslatableInput v-model="form.description" :locales="locales.locales" :label="t('houses.fields.description')" type="wysiwyg" />
+    <TranslatableInput v-model="form.description" :locales="locales.locales" :label="t('houses.fields.description')" type="wysiwyg" :icons="iconList" />
     <ImageUpload
       v-model="image"
       :current-url="currentImage"

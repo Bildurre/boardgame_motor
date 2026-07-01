@@ -1,0 +1,110 @@
+<script setup lang="ts">
+import { onMounted, reactive, ref } from 'vue'
+import { useI18n } from 'vue-i18n'
+import { Trash2 } from '@lucide/vue'
+import { BaseGrid, EntityCard, EmptyState } from '@bgm/admin-kit'
+import { BaseButton, IconButton, EditModal, BaseInput, ImageUpload, useToast, useConfirm } from '@bgm/ui'
+import { api } from '@/lib/api'
+import { useIconsStore } from '@/stores/icons'
+
+const { t } = useI18n()
+const store = useIconsStore()
+const toast = useToast()
+const { confirm } = useConfirm()
+
+const loading = ref(false)
+
+async function reload() {
+  loading.value = true
+  try {
+    await store.load(true)
+  } finally {
+    loading.value = false
+  }
+}
+onMounted(reload)
+
+// --- Modal de alta ---
+const open = ref(false)
+const saving = ref(false)
+const error = ref<string | null>(null)
+const form = reactive<{ name: string; image: File | null }>({ name: '', image: null })
+
+function openCreate() {
+  form.name = ''
+  form.image = null
+  error.value = null
+  open.value = true
+}
+
+async function save() {
+  error.value = null
+  saving.value = true
+  try {
+    const fd = new FormData()
+    fd.append('name', form.name)
+    if (form.image) fd.append('image', form.image)
+    await api.post('/admin/icons', fd)
+    toast.success(t('icons.toast.created'))
+    open.value = false
+    await reload()
+  } catch (e: any) {
+    error.value = e.response?.data?.message ?? t('icons.toast.saveError')
+  } finally {
+    saving.value = false
+  }
+}
+
+async function del(icon: any) {
+  const ok = await confirm({
+    title: t('icons.confirmDelete.title'),
+    message: t('icons.confirmDelete.message', { name: icon.name }),
+    confirmLabel: t('houses.actions.delete'),
+    variant: 'danger',
+  })
+  if (!ok) return
+  await api.delete(`/admin/icons/${icon.id}`)
+  toast.success(t('icons.toast.deleted'))
+  await reload()
+}
+</script>
+
+<template>
+  <div class="icons">
+    <div class="houses__top">
+      <BaseButton @click="openCreate">{{ t('icons.new') }}</BaseButton>
+    </div>
+
+    <EmptyState v-if="!loading && !store.icons.length" :title="t('common.empty')" />
+
+    <BaseGrid v-else preset="cards-full" gap="md">
+      <EntityCard v-for="icon in store.icons" :key="icon.id" :title="icon.name">
+        <template #media>
+          <div class="icon-tile"><img v-if="icon.url" :src="icon.url" :alt="icon.name" /></div>
+        </template>
+        <template #actions>
+          <IconButton variant="danger" :title="t('houses.actions.delete')" @click="del(icon)"><Trash2 :size="18" /></IconButton>
+        </template>
+      </EntityCard>
+    </BaseGrid>
+
+    <EditModal
+      v-model="open"
+      :title="t('icons.new')"
+      :loading="saving"
+      :submit-label="t('common.save')"
+      :cancel-label="t('common.cancel')"
+      @submit="save"
+    >
+      <BaseInput v-model="form.name" :label="t('icons.nameLabel')" required />
+      <ImageUpload
+        v-model="form.image"
+        :label="t('icons.imageLabel')"
+        accept=".svg,.png,.jpg,.jpeg,.webp"
+        :drag-text="t('houses.fields.imageDrag')"
+        :hint-text="t('icons.imageHint')"
+      />
+      <p v-if="error" class="error">{{ error }}</p>
+    </EditModal>
+  </div>
+</template>

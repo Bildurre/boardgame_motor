@@ -232,6 +232,19 @@ las rutas `*/nueva` y `*/:slug/editar`.
 el propio listado. El detalle ("single") sí será ruta y desde ahí también se
 editará en modal.
 
+### DC-32 · WYSIWYG con TipTap y biblioteca de iconos del juego
+**Decisión:** el editor de texto enriquecido es **TipTap** (`RichTextInput` en
+`@bgm/ui`, carga diferida). Para los símbolos del juego (dados, recursos…), el
+motor ofrece una **biblioteca de iconos** (como en CDL): modelo `Icon` en
+`bgm/core` (nombre + slug + imagen SVG/PNG por MediaLibrary), migración cargada
+por el `MotorServiceProvider`, endpoints `GET /api/icons` (listado para el
+selector) y `POST`/`DELETE /api/admin/icons` (gestión). El editor recibe la lista
+por prop y **inserta cada icono en línea** como `<img class="rt-icon">`. No se
+suben imágenes arbitrarias en el texto: solo iconos del set preparado.
+**Por qué:** contenido de juego consistente (mismos símbolos reutilizables) y
+gestionable por cada juego sin tocar el motor. La primera feature del motor con
+modelo + migración propios (no en el playground), por ser building block común.
+
 ### DC-26 · Mobile-first + 4 tiers responsivos
 **Decisión:** CSS **mobile-first** (base móvil, `@media (min-width: …)` para ampliar).
 **Nada debe superar el 100% del ancho de pantalla** (grids con `minmax(0,1fr)`,

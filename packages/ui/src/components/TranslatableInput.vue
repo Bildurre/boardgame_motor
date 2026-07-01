@@ -20,8 +20,10 @@ const props = withDefaults(
     rows?: number
     required?: boolean
     id?: string
+    /** Iconos del juego para el selector del editor (solo type="wysiwyg"). */
+    icons?: { name: string; url: string }[]
   }>(),
-  { modelValue: () => ({}), type: 'text', rows: 4, required: false },
+  { modelValue: () => ({}), type: 'text', rows: 4, required: false, icons: () => [] },
 )
 
 const emit = defineEmits<{ 'update:modelValue': [Record<string, string>] }>()
@@ -88,6 +90,7 @@ onBeforeUnmount(() => document.removeEventListener('click', onClickOutside))
       :key="active"
       :model-value="currentValue"
       :placeholder="placeholder"
+      :icons="icons"
       @update:model-value="update"
     />
     <textarea

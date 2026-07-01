@@ -47,5 +47,12 @@ export function createLocalizedRoutes(locale: string): RouteRecordRaw[] {
       meta: { admin: true, titleKey: 'houses.title', breadcrumbs: [{ key: 'houses' }] },
     },
     // Las altas/ediciones de House son modales (patrón kontuan), no rutas.
+    {
+      path: `/${p.icons}`,
+      name: 'icons',
+      component: () => import('@/views/icons/IconsListView.vue'),
+      alias: buildAliases((t) => `/${t.icons}`, locale),
+      meta: { admin: true, titleKey: 'icons.title', breadcrumbs: [{ key: 'icons' }] },
+    },
   ]
 }

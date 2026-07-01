@@ -206,14 +206,17 @@ color. Úsalos siempre en formularios (en modal o donde sea).
 ### RichTextInput (WYSIWYG)
 
 - **Finalidad:** editor de texto enriquecido basado en **TipTap** (DC-09). Barra
-  con negrita, cursiva, tachado, título (H2), listas y deshacer/rehacer. `v-model`
-  = **HTML**. Se usa dentro de `TranslatableInput type="wysiwyg"` (carga diferida:
-  TipTap solo se descarga si hay algún campo wysiwyg).
-- **Props:** `modelValue` (HTML), `placeholder?`, `disabled?`.
+  con negrita, cursiva, tachado, título (H2), listas, deshacer/rehacer y, si se
+  pasan `icons`, un **selector de iconos del juego** (como en CDL) que los inserta
+  en línea como `<img class="rt-icon">`. `v-model` = **HTML**. Se usa dentro de
+  `TranslatableInput type="wysiwyg"` (carga diferida: TipTap solo se descarga si
+  hay algún campo wysiwyg).
+- **Props:** `modelValue` (HTML), `placeholder?`, `disabled?`,
+  `icons?: { name, url }[]` (biblioteca de iconos; la sirve el motor en `GET /icons`).
 - **Uso directo (no traducible):**
 
 ```vue
-<RichTextInput v-model="html" />
+<RichTextInput v-model="html" :icons="icons" />
 ```
 
 ### TranslatableInput
@@ -224,7 +227,8 @@ color. Úsalos siempre en formularios (en modal o donde sea).
 - **Modelo:** `v-model` (`Record<string, string>`).
 - **Props:** `locales: { code, name }[]`, `label?`,
   `type?: 'text' | 'textarea' | 'wysiwyg'` (def. `text`; `wysiwyg` usa
-  `RichTextInput`/TipTap), `placeholder?`, `rows?`, `required?`.
+  `RichTextInput`/TipTap), `placeholder?`, `rows?`, `required?`,
+  `icons?: { name, url }[]` (solo wysiwyg; se pasan al selector de iconos).
 - **Uso:**
 
 ```vue

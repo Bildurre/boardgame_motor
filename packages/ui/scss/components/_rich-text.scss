@@ -50,6 +50,44 @@
     margin: 0 $space-1;
   }
 
+  // Selector de iconos del juego.
+  &__picker { position: relative; display: inline-flex; }
+
+  &__icons {
+    position: absolute;
+    top: calc(100% + 4px);
+    left: 0;
+    z-index: 100;
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 2px;
+    max-width: 220px;
+    max-height: 200px;
+    overflow-y: auto;
+    padding: $space-1;
+    background: $surface;
+    border: 1px solid $border;
+    border-radius: $radius-md;
+    box-shadow: $shadow-md;
+  }
+
+  &__icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    padding: 4px;
+    border: none;
+    border-radius: $radius-sm;
+    background: transparent;
+    cursor: pointer;
+    transition: background-color 0.15s;
+
+    &:hover { background: $ui-hover-bg; }
+    img { width: 100%; height: 100%; object-fit: contain; }
+  }
+
   &__content {
     .ProseMirror {
       min-height: 120px;
@@ -65,6 +103,15 @@
       ul { list-style: disc; }
       ol { list-style: decimal; }
       a { color: $accent-500; text-decoration: underline; }
+
+      // Iconos insertados: en línea con el texto.
+      img.rt-icon {
+        display: inline-block;
+        width: 1.25em;
+        height: 1.25em;
+        vertical-align: -0.25em;
+        margin: 0 1px;
+      }
 
       p.is-editor-empty:first-child::before {
         content: attr(data-placeholder);

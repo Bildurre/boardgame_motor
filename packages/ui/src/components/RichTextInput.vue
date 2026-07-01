@@ -1,18 +1,23 @@
 <script setup lang="ts">
-import { watch, onBeforeUnmount } from 'vue'
+import { ref, watch, onBeforeUnmount, onMounted } from 'vue'
 import { useEditor, EditorContent } from '@tiptap/vue-3'
 import StarterKit from '@tiptap/starter-kit'
-import { Bold, Italic, Strikethrough, Heading2, List, ListOrdered, Undo2, Redo2 } from '@lucide/vue'
+import Image from '@tiptap/extension-image'
+import { Bold, Italic, Strikethrough, Heading2, List, ListOrdered, Undo2, Redo2, Smile } from '@lucide/vue'
 
 // Editor de texto enriquecido (WYSIWYG) basado en TipTap (DC-09).
-// v-model = HTML. Agnóstico de i18n.
+// v-model = HTML. Agnóstico de i18n. Si se pasan `icons`, muestra un selector
+// para insertar iconos del juego (como en CDL): se insertan como <img.rt-icon>.
+export interface RichIcon { name: string; url: string }
+
 const props = withDefaults(
   defineProps<{
     modelValue?: string
     placeholder?: string
     disabled?: boolean
+    icons?: RichIcon[]
   }>(),
-  { modelValue: '', disabled: false },
+  { modelValue: '', disabled: false, icons: () => [] },
 )
 
 const emit = defineEmits<{ 'update:modelValue': [value: string] }>()
@@ -20,14 +25,17 @@ const emit = defineEmits<{ 'update:modelValue': [value: string] }>()
 const editor = useEditor({
   content: props.modelValue,
   editable: !props.disabled,
-  extensions: [StarterKit],
+  extensions: [
+    StarterKit,
+    // Los iconos son la única imagen que se inserta: en línea y con clase fija.
+    Image.configure({ inline: true, HTMLAttributes: { class: 'rt-icon' } }),
+  ],
   onUpdate: ({ editor }) => {
     const html = editor.isEmpty ? '' : editor.getHTML()
     emit('update:modelValue', html)
   },
 })
 
-// Sincroniza cuando el valor cambia por fuera (p. ej. al cambiar de idioma).
 watch(
   () => props.modelValue,
   (value) => {
@@ -39,8 +47,6 @@ watch(
 )
 watch(() => props.disabled, (d) => editor.value?.setEditable(!d))
 
-onBeforeUnmount(() => editor.value?.destroy())
-
 const tools = [
   { key: 'bold', icon: Bold, title: 'Negrita', run: () => editor.value?.chain().focus().toggleBold().run(), active: () => editor.value?.isActive('bold') },
   { key: 'italic', icon: Italic, title: 'Cursiva', run: () => editor.value?.chain().focus().toggleItalic().run(), active: () => editor.value?.isActive('italic') },
@@ -49,6 +55,23 @@ const tools = [
   { key: 'ul', icon: List, title: 'Lista', run: () => editor.value?.chain().focus().toggleBulletList().run(), active: () => editor.value?.isActive('bulletList') },
   { key: 'ol', icon: ListOrdered, title: 'Lista numerada', run: () => editor.value?.chain().focus().toggleOrderedList().run(), active: () => editor.value?.isActive('orderedList') },
 ]
+
+// --- Selector de iconos ---
+const pickerOpen = ref(false)
+const pickerRef = ref<HTMLElement>()
+
+function insertIcon(icon: RichIcon) {
+  editor.value?.chain().focus().setImage({ src: icon.url, alt: icon.name, title: icon.name }).run()
+  pickerOpen.value = false
+}
+function onClickOutside(e: MouseEvent) {
+  if (pickerRef.value && !pickerRef.value.contains(e.target as Node)) pickerOpen.value = false
+}
+onMounted(() => document.addEventListener('click', onClickOutside))
+onBeforeUnmount(() => {
+  document.removeEventListener('click', onClickOutside)
+  editor.value?.destroy()
+})
 </script>
 
 <template>
@@ -73,6 +96,35 @@ const tools = [
       <button type="button" class="rich-text__tool" title="Rehacer" :disabled="disabled" @click="editor?.chain().focus().redo().run()">
         <Redo2 :size="16" />
       </button>
+
+      <!-- Selector de iconos del juego -->
+      <template v-if="icons.length">
+        <span class="rich-text__sep" />
+        <div ref="pickerRef" class="rich-text__picker">
+          <button
+            type="button"
+            class="rich-text__tool"
+            :class="{ 'rich-text__tool--active': pickerOpen }"
+            title="Insertar icono"
+            :disabled="disabled"
+            @click="pickerOpen = !pickerOpen"
+          >
+            <Smile :size="16" />
+          </button>
+          <div v-if="pickerOpen" class="rich-text__icons">
+            <button
+              v-for="icon in icons"
+              :key="icon.url"
+              type="button"
+              class="rich-text__icon"
+              :title="icon.name"
+              @click="insertIcon(icon)"
+            >
+              <img :src="icon.url" :alt="icon.name" />
+            </button>
+          </div>
+        </div>
+      </template>
     </div>
     <EditorContent class="rich-text__content" :editor="editor" />
   </div>
