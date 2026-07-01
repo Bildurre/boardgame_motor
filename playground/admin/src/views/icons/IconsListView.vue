@@ -5,6 +5,7 @@ import { Trash2 } from '@lucide/vue'
 import { BaseGrid, EntityCard, EmptyState } from '@bgm/admin-kit'
 import { BaseButton, IconButton, EditModal, BaseInput, ImageUpload, useToast, useConfirm } from '@bgm/ui'
 import { api } from '@/lib/api'
+import { fieldErrors } from '@/lib/apiError'
 import { useIconsStore } from '@/stores/icons'
 
 const { t } = useI18n()
@@ -27,18 +28,22 @@ onMounted(reload)
 // --- Modal de alta ---
 const open = ref(false)
 const saving = ref(false)
-const error = ref<string | null>(null)
+const errors = reactive<Record<string, string>>({})
 const form = reactive<{ name: string; image: File | null }>({ name: '', image: null })
+
+function clearErrors() {
+  for (const k of Object.keys(errors)) delete errors[k]
+}
 
 function openCreate() {
   form.name = ''
   form.image = null
-  error.value = null
+  clearErrors()
   open.value = true
 }
 
 async function save() {
-  error.value = null
+  clearErrors()
   saving.value = true
   try {
     const fd = new FormData()
@@ -49,7 +54,10 @@ async function save() {
     open.value = false
     await reload()
   } catch (e: any) {
-    error.value = e.response?.data?.message ?? t('icons.toast.saveError')
+    // Errores de validación por campo (traducidos) + aviso genérico. Nunca se
+    // muestra el mensaje crudo del servidor.
+    Object.assign(errors, fieldErrors(e))
+    toast.danger(t('icons.toast.saveError'))
   } finally {
     saving.value = false
   }
@@ -96,15 +104,15 @@ async function del(icon: any) {
       :cancel-label="t('common.cancel')"
       @submit="save"
     >
-      <BaseInput v-model="form.name" :label="t('icons.nameLabel')" required />
+      <BaseInput v-model="form.name" :label="t('icons.nameLabel')" required :error="errors.name" />
       <ImageUpload
         v-model="form.image"
         :label="t('icons.imageLabel')"
         accept=".svg,.png,.jpg,.jpeg,.webp"
         :drag-text="t('houses.fields.imageDrag')"
         :hint-text="t('icons.imageHint')"
+        :error="errors.image"
       />
-      <p v-if="error" class="error">{{ error }}</p>
     </EditModal>
   </div>
 </template>

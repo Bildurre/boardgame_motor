@@ -50,6 +50,25 @@
     margin: 0 $space-1;
   }
 
+  // El toggle de HTML se ancla a la derecha de la barra.
+  &__tool--source { margin-left: auto; }
+
+  // Modo HTML: edición directa del código.
+  &__source {
+    display: block;
+    width: 100%;
+    min-height: 160px;
+    padding: $input-padding-y $input-padding-x;
+    border: none;
+    background: $surface;
+    color: $text-1;
+    font-family: $k-font-mono;
+    font-size: $fs-13;
+    line-height: 1.5;
+    resize: vertical;
+    outline: none;
+  }
+
   // Selector de iconos del juego.
   &__picker { position: relative; display: inline-flex; }
 

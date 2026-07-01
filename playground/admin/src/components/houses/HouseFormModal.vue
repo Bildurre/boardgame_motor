@@ -23,7 +23,6 @@ const icons = useIconsStore()
 const { find, createForm, updateForm } = useResource(api, '/admin/houses')
 
 const saving = ref(false)
-const error = ref<string | null>(null)
 const image = ref<File | null>(null)
 const currentImage = ref<string | null>(null)
 
@@ -47,7 +46,6 @@ function reset() {
   form.is_published = false
   image.value = null
   currentImage.value = null
-  error.value = null
 }
 
 // Al abrir: en edición carga la casa por slug; en alta limpia.
@@ -85,7 +83,6 @@ function toFormData(): FormData {
 }
 
 async function submit() {
-  error.value = null
   saving.value = true
   try {
     if (props.mode === 'edit' && props.targetSlug) {
@@ -97,8 +94,9 @@ async function submit() {
     }
     emit('saved')
     emit('update:modelValue', false)
-  } catch (e: any) {
-    error.value = e.response?.data?.message ?? t('houses.toast.saveError')
+  } catch {
+    // Aviso genérico por toast; nunca el volcado del servidor.
+    toast.danger(t('houses.toast.saveError'))
   } finally {
     saving.value = false
   }
@@ -128,7 +126,5 @@ async function submit() {
     <PaletteColorPicker v-model="form.color" :label="t('houses.fields.color')" />
 
     <BaseCheckbox v-model="form.is_published" :label="t('houses.fields.published')" />
-
-    <p v-if="error" class="error">{{ error }}</p>
   </EditModal>
 </template>

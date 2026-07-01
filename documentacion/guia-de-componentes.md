@@ -206,9 +206,10 @@ color. Úsalos siempre en formularios (en modal o donde sea).
 ### RichTextInput (WYSIWYG)
 
 - **Finalidad:** editor de texto enriquecido basado en **TipTap** (DC-09). Barra
-  con negrita, cursiva, tachado, título (H2), listas, deshacer/rehacer y, si se
-  pasan `icons`, un **selector de iconos del juego** (como en CDL) que los inserta
-  en línea como `<img class="rt-icon">`. `v-model` = **HTML**. Se usa dentro de
+  con negrita, cursiva, tachado, título (H2), listas, deshacer/rehacer, un
+  **toggle visual/HTML** (`<>`, editar el código directamente) y, si se pasan
+  `icons`, un **selector de iconos del juego** (como en CDL) que los inserta en
+  línea como `<img class="rt-icon">`. `v-model` = **HTML**. Se usa dentro de
   `TranslatableInput type="wysiwyg"` (carga diferida: TipTap solo se descarga si
   hay algún campo wysiwyg).
 - **Props:** `modelValue` (HTML), `placeholder?`, `disabled?`,
@@ -525,3 +526,20 @@ app, junto al layout/router:
 
 A partir de ahí, cualquier vista llama a `useToast()` / `useConfirm()` sin
 volver a montar nada.
+
+## Errores y validación (convención)
+
+Los formularios **nunca muestran el mensaje crudo del servidor** (SQL, trazas,
+`validation.required`…). Patrón:
+
+- **422 (validación):** se pintan los errores **por campo** (prop `:error` de
+  `BaseInput`/`ImageUpload`), ya traducidos por el backend, más un **toast
+  genérico**. Helper `fieldErrors(e)` en `playground/admin/src/lib/apiError.ts`
+  extrae `{ campo: mensaje }` de `response.data.errors`.
+- **Cualquier otro error:** solo un **toast genérico** ("No se pudo guardar."),
+  sin exponer el detalle.
+
+Backend: las validaciones se traducen con `playground/api/lang/{es,eu,en}/
+validation.php` (con `attributes` para nombres de campo). El locale lo fija el
+`SetLocale` del motor desde `?locale`; **por eso las rutas del motor van en el
+grupo `api`** (`Route::prefix('api')->middleware('api')`), o no se localizarían.
