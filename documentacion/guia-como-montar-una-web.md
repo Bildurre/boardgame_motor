@@ -1,8 +1,10 @@
 # Guía: cómo montar una web nueva (juego) sobre el motor
 
 Guía práctica y **paso a paso** para crear un juego nuevo con BoardGame Motor
-(BGM) y para añadirle entidades (modelos), iconos y vistas. El ejemplo de
-referencia es la entidad **House** del `playground`: cópiala y adáptala.
+(BGM) y para añadirle entidades (modelos), iconos y vistas. Ejemplos de
+referencia en el `playground` (cópialos y adáptalos): **House** (CRUD básico),
+**Scheme** (argucia — relación `belongsTo` + single + modo carta) y **Character**
+(personaje — campos calculados + single + modo carta).
 
 > Mantenimiento: **esta guía se actualiza cada vez que cambia el flujo de alta de
 > un juego, los traits del motor o el scaffolding de vistas.** Va de la mano de
@@ -123,6 +125,43 @@ class House extends Model implements HasMedia
 | `Spatie\Sluggable\HasTranslatableSlug` | Slug **por idioma** (con `getSlugOptions()`). |
 | `Illuminate\Database\Eloquent\SoftDeletes` | Papelera (restaurar / borrar definitivo). |
 
+#### Relaciones (ejemplo: Scheme pertenece a House)
+
+Eloquent normal. Columna FK en la migración
+(`$table->foreignId('house_id')->constrained('houses')->cascadeOnDelete();`) y las
+relaciones en ambos modelos:
+
+```php
+// Scheme.php
+public function house(): BelongsTo { return $this->belongsTo(House::class); }
+// House.php
+public function schemes(): HasMany { return $this->hasMany(Scheme::class); }
+```
+
+- En el listado, **eager-load** la relación para la tarjeta: `Scheme::with('house')->filter(...)`.
+- Para el **selector** del formulario (elegir la casa), expón una lista ligera:
+  un endpoint `GET /admin/houses/options` (id + nombre) y un store en el front.
+- El **single** del "padre" puede listar sus hijos: `House::with('schemes')` en
+  `show()` + `SchemeResource::collection($this->whenLoaded('schemes'))` en el resource.
+
+#### Campos calculados (ejemplo: Character.coste/defensa)
+
+Cuando un campo se deriva de otros, **no lo recibas del cliente**: recalcúlalo en
+el modelo. Coste = suma de estadísticas (se persiste); defensa = coste (accessor,
+sin columna):
+
+```php
+protected static function booted(): void {
+    static::saving(fn (Character $c) =>
+        $c->cost = (int) $c->power + $c->prestige + $c->intrigue + $c->money);
+}
+public function getDefenseAttribute(): int { return (int) $this->cost; }
+```
+
+El controlador valida solo las estadísticas (no `cost`); el resource expone
+`defense => $this->defense`. En el front, muestra el valor calculado de solo
+lectura (recalculado en vivo con un `computed`).
+
 ### 2.3 Controlador (admin)
 
 - `index`: `Model::query()->filter($request->only('search','status'))->orderByDesc('id')->paginate(15)`.
@@ -209,15 +248,19 @@ modelo (tabs, columnas, campos, acciones, toasts, confirmaciones):
 
 ### 4.2 Ruta localizada (`admin/src/router/i18n-paths.ts`)
 
-Una ruta de listado por entidad; el `path` usa el segmento del locale actual y
-`alias` los de los demás (para que la URL resuelva en cualquier idioma). El
-detalle usa `:slug`. Las altas/ediciones **no** son rutas (son modales).
+Dos rutas por entidad: **listado** y **detalle** (`:slug`). El `path` usa el
+segmento del locale actual y `alias` los de los demás (para que resuelva en
+cualquier idioma). Las **altas/ediciones no son rutas** (son modales).
 
 ```ts
 { path: `/${p.houses}`, name: 'houses',
   component: () => import('@/views/houses/HousesListView.vue'),
   alias: buildAliases((t) => `/${t.houses}`, locale),
-  meta: { admin: true, titleKey: 'houses.title', breadcrumbs: [{ key: 'houses' }] } }
+  meta: { admin: true, titleKey: 'houses.title', breadcrumbs: [{ key: 'houses' }] } },
+{ path: `/${p.houses}/:slug`, name: 'house-single',
+  component: () => import('@/views/houses/HouseSingleView.vue'),
+  alias: buildAliases((t) => `/${t.houses}/:slug`, locale),
+  meta: { admin: true, titleKey: 'houses.title', breadcrumbs: [{ key: 'houses', to: 'houses' }] } }
 ```
 
 ### 4.3 Enlace en el menú (`admin/src/App.vue`)
@@ -278,7 +321,23 @@ componentes): `BaseInput`, `BaseTextarea`, `BaseSelect`, `BaseCheckbox`,
 Envío con `FormData` (para la imagen); en edición, `updateForm` añade
 `_method=PUT`.
 
-### 4.6 Validación en cliente + errores
+### 4.6 Detalle (single) + "modo carta"
+
+Para entidades con vista de detalle (ejemplos: `Scheme`, `Character`, `House`):
+
+- **`XSingleView.vue`** (`admin/src/views/<modelo>/`): carga por slug con
+  `useResource().find(route.params.slug)`; barra con **volver** + **Editar** (abre
+  el `XFormModal` en modo `edit` y recarga en `@saved`); muestra el preview y la
+  info. Las tarjetas del listado enlazan aquí (`EntityCard clickable @view`).
+- **`XCard.vue`** (`admin/src/components/<modelo>/`): la **composición "modo
+  carta"** por atributos, de tamaño fijo (`.play-card`), **lista para renderizar a
+  PNG** (Fase 3). Recibe `item` + `locale` y resuelve las traducciones dentro.
+- Contenido enriquecido (descripción WYSIWYG): renderízalo con `v-html` dentro de
+  un `.rich-content` (aplica el estilo de los iconos en línea `.rt-icon`).
+- Un single "padre" puede listar sus hijos (p. ej. House lista sus argucias) con
+  un `BaseGrid` de `EntityCard` que enlazan al single del hijo.
+
+### 4.7 Validación en cliente + errores
 
 - Comprueba en cliente lo requerido **antes** de enviar (buena UX y evita 422
   innecesarios); marca los campos con `:error`.
@@ -286,7 +345,7 @@ Envío con `FormData` (para la imagen); en edición, `updateForm` añade
   `fieldErrors(e)` (`admin/src/lib/apiError.ts`) para pintar errores por campo
   (422, ya traducidos) + un **toast genérico**.
 
-### 4.7 Estilos (DC-27)
+### 4.8 Estilos (DC-27)
 
 Nada de `<style>` en los `.vue`. Crea `admin/src/assets/scss/views/_<modelo>.scss`
 con clases BEM y decláralo en `views/_index.scss`.
@@ -296,20 +355,23 @@ con clases BEM y decláralo en `views/_index.scss`.
 ## 5. Checklist para una entidad nueva
 
 Backend:
-- [ ] Migración (json traducibles, `is_published`, `datetimes()`/`softDeletesDatetime()`).
+- [ ] Migración (json traducibles, `is_published`, `datetimes()`/`softDeletesDatetime()`; FK si hay relación).
 - [ ] Modelo con los traits que necesite (`HasFilters`, `HasPublishedState`, `HasImage`, `ResolvesBySlug`, `HasTranslations`, `HasTranslatableSlug`, `SoftDeletes`).
 - [ ] `$fillable`, `$translatable`, `$searchable`, `casts`, `getSlugOptions`.
+- [ ] Relaciones (`belongsTo`/`hasMany`) y, si aplica, endpoint `options` para selectores.
+- [ ] Campos calculados en `saving()`/accessor (no recibidos del cliente).
 - [ ] Controlador (index con `filter`, CRUD por slug, restore/force por id, toggle).
-- [ ] Resource.
+- [ ] Resource (incluye relaciones con `whenLoaded`).
 - [ ] Rutas admin (+ públicas si aplica).
 - [ ] `php artisan migrate`.
 
 Frontend admin:
 - [ ] i18n en los 3 locales (routes, breadcrumbs, nav, sección del modelo).
-- [ ] Ruta localizada en `i18n-paths.ts`.
+- [ ] Rutas localizadas en `i18n-paths.ts` (listado + single `:slug`).
 - [ ] Enlace en `App.vue`.
-- [ ] `XListView.vue` (FilterBar + BaseTabs + BaseGrid + EntityCard + EmptyState).
-- [ ] `XFormModal.vue` (EditModal + campos).
+- [ ] `XListView.vue` (FilterBar + BaseTabs + BaseGrid + EntityCard + EmptyState; tarjetas clicables → single).
+- [ ] `XFormModal.vue` (EditModal + campos; selectores/relaciones y campos calculados si aplica).
+- [ ] `XSingleView.vue` + `XCard.vue` (detalle + modo carta) si la entidad tiene single.
 - [ ] Validación cliente + `fieldErrors` + toast genérico.
 - [ ] SCSS de la vista en `views/_<modelo>.scss`.
 
