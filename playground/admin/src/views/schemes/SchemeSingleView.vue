@@ -5,7 +5,9 @@ import { useRoute, useRouter } from 'vue-router'
 import { ArrowLeft, SquarePen } from '@lucide/vue'
 import { useResource } from '@bgm/admin-kit'
 import { BaseButton } from '@bgm/ui'
+import { PdfManager } from '@bgm/admin-kit'
 import { api } from '@/lib/api'
+import { usePdfLabels } from '@/lib/pdfLabels'
 import PreviewPanel from '@/components/previews/PreviewPanel.vue'
 import { useLocalesStore } from '@/stores/locales'
 import { type Scheme, SchemeCard } from '@playground/shared'
@@ -16,6 +18,7 @@ const route = useRoute()
 const router = useRouter()
 const locales = useLocalesStore()
 const { find } = useResource<Scheme>(api, '/admin/schemes')
+const pdfLabels = usePdfLabels()
 
 const item = ref<Scheme | null>(null)
 const loading = ref(true)
@@ -75,6 +78,14 @@ onMounted(async () => {
     </div>
 
     <PreviewPanel v-if="item" :id="item.id" entity="scheme" />
+
+    <PdfManager
+      v-if="item"
+      :api="api"
+      type="scheme-card"
+      :source-id="item.id"
+      :labels="pdfLabels"
+    />
 
     <SchemeFormModal v-model="formOpen" mode="edit" :target-slug="slug" @saved="onSaved" />
   </div>

@@ -86,7 +86,7 @@ it('regenerar reutiliza el registro y borra el fichero anterior', function () {
 it('expande copias y pagina según la capacidad del layout', function () {
     $character = makeCharacter(['is_published' => true]);
 
-    // character-card = 1 carta x4 copias -> 1 página (capacidad card = 4).
+    // character-card = la carta x1 -> 1 página.
     $pdf = app(PdfService::class)->generate('character-card', $character, 'es', sync: true)->refresh();
     expect(pdfPageCount(Storage::disk('public')->get($pdf->path)))->toBe(1);
 
@@ -153,6 +153,16 @@ it('el admin genera un export global y uno individual', function () {
         'type' => 'character-card',
         'locale' => 'es',
     ])->assertUnprocessable();
+});
+
+it('la argucia tiene su carta individual en PDF (x1)', function () {
+    $house = makeHouseWithSchemes(1);
+    $scheme = $house->schemes()->first();
+
+    $pdf = app(PdfService::class)->generate('scheme-card', $scheme, 'es', sync: true)->refresh();
+
+    expect($pdf->status)->toBe(GeneratedPdf::STATUS_READY)
+        ->and(pdfPageCount(Storage::disk('public')->get($pdf->path)))->toBe(1);
 });
 
 it('regenera, borra y descarga desde la API', function () {

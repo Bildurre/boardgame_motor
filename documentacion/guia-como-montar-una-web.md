@@ -440,13 +440,15 @@ y declara: quién es la entidad dueña (`sourceModel()`) y qué ítems van dentr
 2. **Colección global** — sin dueña (`sourceModel()` devuelve `null`). Ej.:
    todas las cartas de personaje (`CharactersExport`).
 
-3. **Individual** — el PDF de UNA entidad, normalmente con copias para llenar
-   la hoja. Ej. reponer una carta concreta (`CharacterCardExport`):
+3. **Individual** — el PDF de UNA entidad (`CharacterCardExport`,
+   `SchemeCardExport`). En este playground las cartas van **x1**; otro juego
+   puede subir `copies` (p. ej. `copies: 4` = hoja A4 completa con el layout
+   `card`):
 
    ```php
    public function items(?Model $source, string $locale): array
    {
-       return [PrintableItem::preview($source, copies: 4)]; // 4 = hoja completa
+       return [PrintableItem::preview($source)]; // x1 (copies: N para más)
    }
    ```
 

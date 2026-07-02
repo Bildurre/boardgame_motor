@@ -7,6 +7,7 @@ use App\Models\Scheme;
 use App\Pdf\CharacterCardExport;
 use App\Pdf\CharactersExport;
 use App\Pdf\HouseSchemesExport;
+use App\Pdf\SchemeCardExport;
 use Bgm\Core\Support\Facades\Pdfs;
 use Bgm\Core\Support\Facades\Previews;
 use Illuminate\Support\ServiceProvider;
@@ -35,5 +36,6 @@ class AppServiceProvider extends ServiceProvider
         Pdfs::register('house-schemes', HouseSchemesExport::class);   // colección por casa
         Pdfs::register('characters', CharactersExport::class);        // colección global
         Pdfs::register('character-card', CharacterCardExport::class); // carta individual
+        Pdfs::register('scheme-card', SchemeCardExport::class);           // argucia individual
     }
 }
