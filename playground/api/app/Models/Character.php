@@ -3,6 +3,8 @@
 namespace App\Models;
 
 use Bgm\Core\Media\Concerns\HasImage;
+use Bgm\Core\Previews\Concerns\HasPreviewImage;
+use Bgm\Core\Previews\PreviewableContract;
 use Bgm\Core\Support\Concerns\HasFilters;
 use Bgm\Core\Support\Concerns\HasPublishedState;
 use Bgm\Core\Support\Concerns\ResolvesBySlug;
@@ -18,10 +20,11 @@ use Spatie\Translatable\HasTranslations;
  * poder+prestigio+intriga+dinero (se recalcula al guardar). La defensa es
  * derivada (= coste), no se almacena.
  */
-class Character extends Model implements HasMedia
+class Character extends Model implements HasMedia, PreviewableContract
 {
     use HasFilters;
     use HasImage;
+    use HasPreviewImage;
     use HasPublishedState;
     use HasTranslatableSlug;
     use HasTranslations;
@@ -61,6 +64,38 @@ class Character extends Model implements HasMedia
     public function getDefenseAttribute(): int
     {
         return (int) $this->cost;
+    }
+
+    // --- Render a PNG (doc 01) ---
+
+    /** Tamaño del componente carta en px CSS (proporción 88x126 mm). */
+    public function previewSize(): array
+    {
+        return ['width' => 350, 'height' => 500];
+    }
+
+    /** Cambios que invalidan la preview (declarativo; is_published no). */
+    public function previewTriggerFields(): array
+    {
+        return ['name', 'description', 'ability', 'power', 'prestige', 'intrigue', 'money'];
+    }
+
+    /** Payload que consume el componente CharacterCard en /_render. */
+    public function renderData(string $locale): array
+    {
+        return [
+            'id' => $this->id,
+            'name' => $this->getTranslations('name'),
+            'description' => $this->getTranslations('description'),
+            'ability' => $this->getTranslations('ability'),
+            'cost' => $this->cost,
+            'power' => $this->power,
+            'prestige' => $this->prestige,
+            'intrigue' => $this->intrigue,
+            'money' => $this->money,
+            'defense' => $this->defense,
+            'image' => $this->imageUrl(),
+        ];
     }
 
     public function getSlugOptions(): SlugOptions

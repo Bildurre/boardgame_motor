@@ -13,6 +13,7 @@
     "@bgm/admin-kit": "*",
     "@bgm/ui": "*",
     "@lucide/vue": "^1.0.0",
+    "@playground/shared": "*",
     "pinia": "^3.0.0",
     "vue": "^3.5.38",
     "vue-i18n": "^11.4.6",

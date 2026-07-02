@@ -3,6 +3,8 @@
 namespace App\Models;
 
 use Bgm\Core\Media\Concerns\HasImage;
+use Bgm\Core\Previews\Concerns\HasPreviewImage;
+use Bgm\Core\Previews\PreviewableContract;
 use Bgm\Core\Support\Concerns\HasFilters;
 use Bgm\Core\Support\Concerns\HasPublishedState;
 use Bgm\Core\Support\Concerns\ResolvesBySlug;
@@ -17,10 +19,11 @@ use Spatie\Translatable\HasTranslations;
 /**
  * Argucia: carta jugable que pertenece a una House.
  */
-class Scheme extends Model implements HasMedia
+class Scheme extends Model implements HasMedia, PreviewableContract
 {
     use HasFilters;
     use HasImage;
+    use HasPreviewImage;
     use HasPublishedState;
     use HasTranslatableSlug;
     use HasTranslations;
@@ -43,6 +46,30 @@ class Scheme extends Model implements HasMedia
     public function house(): BelongsTo
     {
         return $this->belongsTo(House::class);
+    }
+
+    // --- Render a PNG (doc 01) ---
+
+    public function previewSize(): array
+    {
+        return ['width' => 350, 'height' => 500];
+    }
+
+    public function previewTriggerFields(): array
+    {
+        return ['title', 'description', 'cost', 'house_id'];
+    }
+
+    /** Payload que consume el componente SchemeCard en /_render. */
+    public function renderData(string $locale): array
+    {
+        return [
+            'id' => $this->id,
+            'title' => $this->getTranslations('title'),
+            'description' => $this->getTranslations('description'),
+            'cost' => $this->cost,
+            'image' => $this->imageUrl(),
+        ];
     }
 
     public function getSlugOptions(): SlugOptions

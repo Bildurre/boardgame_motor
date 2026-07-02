@@ -17,7 +17,7 @@ import { useEditorLabels } from '@/lib/editorLabels'
 import { useLocalesStore } from '@/stores/locales'
 import { useIconsStore } from '@/stores/icons'
 import { useHousesStore } from '@/stores/houses'
-import type { Scheme } from '@/types/entities'
+import type { Scheme } from '@playground/shared'
 
 const props = defineProps<{
   modelValue: boolean

@@ -1,9 +1,12 @@
 <script setup lang="ts">
-import type { Scheme } from '@/types/entities'
-// Composición "modo carta" de una argucia, lista para renderizar a PNG (Fase 3).
+import type { Scheme } from '../types'
+
+// Composición "modo carta" de una argucia: web + captura a PNG (D8).
 const props = defineProps<{ item: Scheme; locale: string }>()
-function tr(obj: Record<string, string>) {
-  return obj?.[props.locale] || Object.values(obj || {})[0] || ''
+
+function tr(obj: Record<string, string> | null | undefined) {
+  if (!obj) return ''
+  return obj[props.locale] || Object.values(obj)[0] || ''
 }
 </script>
 

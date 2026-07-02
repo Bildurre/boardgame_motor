@@ -1,0 +1,94 @@
+@use "tokens" as *;
+
+// Carta jugable (composición lista para PNG, D8). Compartida admin/app.
+.play-card {
+  width: 260px;
+  border-radius: $radius-lg;
+  overflow: hidden;
+  background: $surface;
+  border: 1px solid $border;
+  box-shadow: $shadow-md;
+  display: flex;
+  flex-direction: column;
+
+  &__art {
+    position: relative;
+    aspect-ratio: 3 / 2;
+    background: $surface-2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    img { width: 100%; height: 100%; object-fit: cover; }
+  }
+
+  &__cost, &__defense {
+    position: absolute;
+    top: $space-2;
+    width: 34px;
+    height: 34px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    font-weight: $k-fw-bold;
+    color: #fff;
+  }
+  &__cost { left: $space-2; background: $accent-600; }
+  &__defense { right: $space-2; background: $info; }
+
+  &__mono {
+    font-size: 3rem;
+    font-weight: $k-fw-bold;
+    color: color-mix(in srgb, var(--c, #{$text-2}) 70%, $text-1);
+  }
+
+  &--house .play-card__art {
+    background: color-mix(in srgb, var(--c, transparent) 25%, $surface-2);
+  }
+
+  &__body {
+    padding: $space-3 $space-4 $space-4;
+    display: flex;
+    flex-direction: column;
+    gap: $space-2;
+  }
+
+  &__title { margin: 0; font-size: $fs-18; font-weight: $k-fw-semibold; }
+  &__text, &__desc { font-size: $fs-13; color: $text-2; line-height: 1.4; }
+
+  &__stats {
+    display: flex;
+    gap: $space-2;
+    margin-top: $space-1;
+
+    .stat {
+      flex: 1;
+      text-align: center;
+      padding: $space-1 0;
+      border-radius: $radius-sm;
+      font-weight: $k-fw-bold;
+      font-variant-numeric: tabular-nums;
+      color: #fff;
+    }
+    .stat--power { background: #c0392b; }
+    .stat--prestige { background: #8e44ad; }
+    .stat--intrigue { background: #2c3e50; }
+    .stat--money { background: #d4a017; }
+  }
+}
+
+// Escenario de captura (/_render): la carta ocupa exactamente el viewport,
+// sin sombra ni fondo de página, para que el PNG salga a medida.
+.render-stage {
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+
+  .play-card {
+    width: 100%;
+    height: 100%;
+    box-shadow: none;
+    border-radius: $radius-lg;
+  }
+}

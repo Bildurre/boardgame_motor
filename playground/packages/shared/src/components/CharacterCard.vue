@@ -1,11 +1,13 @@
 <script setup lang="ts">
-import { useI18n } from 'vue-i18n'
-import type { Character } from '@/types/entities'
-// Composición "modo carta" de un personaje, lista para renderizar a PNG (Fase 3).
+import type { Character } from '../types'
+
+// Composición "modo carta" de un personaje: se muestra en la web y se captura
+// a PNG (fuente única, D8). Agnóstica de i18n: recibe el locale por prop.
 const props = defineProps<{ item: Character; locale: string }>()
-const { t } = useI18n()
-function tr(obj: Record<string, string>) {
-  return obj?.[props.locale] || Object.values(obj || {})[0] || ''
+
+function tr(obj: Record<string, string> | null | undefined) {
+  if (!obj) return ''
+  return obj[props.locale] || Object.values(obj)[0] || ''
 }
 </script>
 
@@ -15,9 +17,7 @@ function tr(obj: Record<string, string>) {
     <div class="play-card__art">
       <img v-if="item.image" :src="item.image" alt="" />
       <span class="play-card__cost">{{ item.cost }}</span>
-      <span class="play-card__defense" :title="t('characters.fields.defense')">{{
-        item.defense
-      }}</span>
+      <span class="play-card__defense">{{ item.defense }}</span>
     </div>
     <div class="play-card__body">
       <h3 class="play-card__title">{{ tr(item.name) }}</h3>

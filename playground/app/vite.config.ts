@@ -36,6 +36,7 @@ export default defineConfig({
         additionalData: '@use "tokens" as *;\n',
         loadPaths: [
           fileURLToPath(new URL('../../packages/ui/scss', import.meta.url)),
+          fileURLToPath(new URL('../packages/shared/scss', import.meta.url)),
           fileURLToPath(new URL('./src/assets/scss', import.meta.url)),
         ],
       },

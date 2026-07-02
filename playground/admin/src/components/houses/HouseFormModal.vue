@@ -15,7 +15,7 @@ import { fieldErrors } from '@/lib/apiError'
 import { useEditorLabels } from '@/lib/editorLabels'
 import { useLocalesStore } from '@/stores/locales'
 import { useIconsStore } from '@/stores/icons'
-import type { House } from '@/types/entities'
+import type { House } from '@playground/shared'
 
 // Formulario de House en modal (patrón kontuan): se abre desde el listado.
 const props = defineProps<{

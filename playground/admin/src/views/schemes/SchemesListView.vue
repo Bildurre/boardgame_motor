@@ -4,7 +4,7 @@ import { SquarePen, Trash2, Eye, EyeOff, RotateCcw, FlameKindling } from '@lucid
 import { BaseGrid, EntityCard, FilterBar, EmptyState } from '@bgm/admin-kit'
 import { BaseButton, BaseTabs, IconButton } from '@bgm/ui'
 import { useEntityList } from '@/composables/useEntityList'
-import type { Scheme } from '@/types/entities'
+import type { Scheme } from '@playground/shared'
 import SchemeFormModal from '@/components/schemes/SchemeFormModal.vue'
 
 const {

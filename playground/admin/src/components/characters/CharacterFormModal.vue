@@ -15,7 +15,7 @@ import { fieldErrors } from '@/lib/apiError'
 import { useEditorLabels } from '@/lib/editorLabels'
 import { useLocalesStore } from '@/stores/locales'
 import { useIconsStore } from '@/stores/icons'
-import type { Character } from '@/types/entities'
+import type { Character } from '@playground/shared'
 
 const props = defineProps<{
   modelValue: boolean

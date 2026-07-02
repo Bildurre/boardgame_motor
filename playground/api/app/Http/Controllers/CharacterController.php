@@ -27,6 +27,10 @@ class CharacterController extends Controller
         $this->fill($character, $data);
         $character->save();
         $character->setImageFromRequest($request);
+        if ($request->hasFile('image')) {
+            // La imagen vive en MediaLibrary (no es columna): invalida a mano.
+            $character->regeneratePreviews();
+        }
 
         return (new CharacterResource($character))->response()->setStatusCode(201);
     }
@@ -45,6 +49,10 @@ class CharacterController extends Controller
         $this->fill($character, $data);
         $character->save();
         $character->setImageFromRequest($request);
+        if ($request->hasFile('image')) {
+            // La imagen vive en MediaLibrary (no es columna): invalida a mano.
+            $character->regeneratePreviews();
+        }
 
         return new CharacterResource($character);
     }

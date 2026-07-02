@@ -29,6 +29,13 @@ const router = createRouter({
       component: () => import('@/views/account/SecurityView.vue'),
       meta: { auth: true },
     },
+    // Captura a PNG (doc 01): sin navegación ni layout, solo el componente.
+    {
+      path: '/_render/:entity/:id',
+      name: 'render',
+      component: () => import('@/views/RenderView.vue'),
+      meta: { bare: true },
+    },
     // URLs desconocidas: a la home (evita la página en blanco).
     {
       path: '/:pathMatch(.*)*',

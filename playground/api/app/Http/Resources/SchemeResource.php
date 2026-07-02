@@ -17,6 +17,7 @@ class SchemeResource extends JsonResource
             'slug' => $this->getTranslations('slug'),
             'cost' => $this->cost,
             'image' => $this->imageUrl(),
+            'previews' => $this->previewUrls(),
             'is_published' => $this->is_published,
             'house_id' => $this->house_id,
             'house' => $this->whenLoaded('house', fn () => [

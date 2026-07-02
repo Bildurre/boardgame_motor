@@ -28,6 +28,10 @@ class SchemeController extends Controller
         $this->fill($scheme, $data);
         $scheme->save();
         $scheme->setImageFromRequest($request);
+        if ($request->hasFile('image')) {
+            // La imagen vive en MediaLibrary (no es columna): invalida a mano.
+            $scheme->regeneratePreviews();
+        }
 
         return (new SchemeResource($scheme->load('house')))->response()->setStatusCode(201);
     }
@@ -46,6 +50,10 @@ class SchemeController extends Controller
         $this->fill($scheme, $data);
         $scheme->save();
         $scheme->setImageFromRequest($request);
+        if ($request->hasFile('image')) {
+            // La imagen vive en MediaLibrary (no es columna): invalida a mano.
+            $scheme->regeneratePreviews();
+        }
 
         return new SchemeResource($scheme->load('house'));
     }

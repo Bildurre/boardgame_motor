@@ -6,9 +6,9 @@ import { ArrowLeft, SquarePen } from '@lucide/vue'
 import { useResource } from '@bgm/admin-kit'
 import { BaseButton } from '@bgm/ui'
 import { api } from '@/lib/api'
+import PreviewPanel from '@/components/previews/PreviewPanel.vue'
 import { useLocalesStore } from '@/stores/locales'
-import type { Character } from '@/types/entities'
-import CharacterCard from '@/components/characters/CharacterCard.vue'
+import { type Character, CharacterCard } from '@playground/shared'
 import CharacterFormModal from '@/components/characters/CharacterFormModal.vue'
 
 const { t } = useI18n()
@@ -77,6 +77,8 @@ onMounted(async () => {
         <div v-if="tr(item.description)" class="rich-content" v-html="tr(item.description)" />
       </div>
     </div>
+
+    <PreviewPanel v-if="item" :id="item.id" entity="character" />
 
     <CharacterFormModal v-model="formOpen" mode="edit" :target-slug="slug" @saved="onSaved" />
   </div>

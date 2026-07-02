@@ -217,5 +217,12 @@
     "redo": "Berregin",
     "insertIcon": "Ikonoa txertatu",
     "editHtml": "HTML editatu"
+  },
+  "previews": {
+    "title": "Sortutako PNGak",
+    "empty": "Oraindik ez dago PNGrik.",
+    "regenerate": "PNGak birsortu",
+    "refresh": "Eguneratu",
+    "queued": "Birsortzea ilaran; freskatu segundo batzuk barru."
   }
 }

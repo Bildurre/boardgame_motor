@@ -217,5 +217,12 @@
     "redo": "Redo",
     "insertIcon": "Insert icon",
     "editHtml": "Edit HTML"
+  },
+  "previews": {
+    "title": "Generated PNGs",
+    "empty": "No PNGs generated yet.",
+    "regenerate": "Regenerate PNGs",
+    "refresh": "Refresh",
+    "queued": "Regeneration queued; refresh in a few seconds."
   }
 }

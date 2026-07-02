@@ -23,6 +23,7 @@ class CharacterResource extends JsonResource
             'money' => $this->money,
             'defense' => $this->defense,          // derivada (= coste)
             'image' => $this->imageUrl(),
+            'previews' => $this->previewUrls(),
             'is_published' => $this->is_published,
             'deleted_at' => $this->deleted_at,
         ];

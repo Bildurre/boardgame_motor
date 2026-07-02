@@ -6,9 +6,9 @@ import { ArrowLeft, SquarePen } from '@lucide/vue'
 import { useResource } from '@bgm/admin-kit'
 import { BaseButton } from '@bgm/ui'
 import { api } from '@/lib/api'
+import PreviewPanel from '@/components/previews/PreviewPanel.vue'
 import { useLocalesStore } from '@/stores/locales'
-import type { Scheme } from '@/types/entities'
-import SchemeCard from '@/components/schemes/SchemeCard.vue'
+import { type Scheme, SchemeCard } from '@playground/shared'
 import SchemeFormModal from '@/components/schemes/SchemeFormModal.vue'
 
 const { t } = useI18n()
@@ -73,6 +73,8 @@ onMounted(async () => {
         <div class="rich-content" v-html="tr(item.description)" />
       </div>
     </div>
+
+    <PreviewPanel v-if="item" :id="item.id" entity="scheme" />
 
     <SchemeFormModal v-model="formOpen" mode="edit" :target-slug="slug" @saved="onSaved" />
   </div>

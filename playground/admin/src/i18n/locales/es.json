@@ -217,5 +217,12 @@
     "redo": "Rehacer",
     "insertIcon": "Insertar icono",
     "editHtml": "Editar HTML"
+  },
+  "previews": {
+    "title": "PNG generados",
+    "empty": "Aún no hay PNG generados.",
+    "regenerate": "Regenerar PNG",
+    "refresh": "Actualizar",
+    "queued": "Regeneración encolada; refresca en unos segundos."
   }
 }

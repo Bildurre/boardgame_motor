@@ -7,7 +7,7 @@ import { useResource, BaseGrid, EntityCard, EmptyState } from '@bgm/admin-kit'
 import { BaseButton } from '@bgm/ui'
 import { api } from '@/lib/api'
 import { useLocalesStore } from '@/stores/locales'
-import type { House, Scheme } from '@/types/entities'
+import type { House, Scheme } from '@playground/shared'
 import HouseFormModal from '@/components/houses/HouseFormModal.vue'
 
 const { t } = useI18n()

@@ -6,7 +6,7 @@ import { useResource } from '@bgm/admin-kit'
 import { useConfirm, useToast } from '@bgm/ui'
 import { api } from '@/lib/api'
 import { useLocalesStore } from '@/stores/locales'
-import type { EntityBase, Translations } from '@/types/entities'
+import type { EntityBase, Translations } from '@playground/shared'
 
 export interface EntityListOptions<T> {
   /** Ruta base de la API de admin (p. ej. '/admin/houses'). */

@@ -5,6 +5,7 @@
   "workspaces": [
     "packages/ui",
     "packages/admin-kit",
+    "playground/packages/shared",
     "playground/admin",
     "playground/app"
   ],

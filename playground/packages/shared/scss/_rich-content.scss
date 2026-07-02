@@ -1,0 +1,17 @@
+@use "tokens" as *;
+
+// Contenido enriquecido renderizado (v-html): iconos en línea.
+.rich-content {
+  img.rt-icon {
+    display: inline-block;
+    width: 1.25em;
+    height: 1.25em;
+    vertical-align: -0.25em;
+    margin: 0 1px;
+  }
+  h2 { font-size: $fs-18; font-weight: $k-fw-semibold; margin: 0.4em 0; }
+  ul, ol { padding-left: 1.4em; }
+  ul { list-style: disc; }
+  ol { list-style: decimal; }
+  p { margin: 0 0 0.4em; }
+}
