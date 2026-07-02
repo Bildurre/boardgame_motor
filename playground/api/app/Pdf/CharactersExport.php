@@ -9,13 +9,20 @@ use Illuminate\Database\Eloquent\Model;
 
 /**
  * Colección global: todas las cartas de personaje publicadas, recortables.
- * Sin entidad dueña (sourceModel null).
+ * Sin entidad dueña (sourceModel null). Se imprimen al DOBLE de una carta
+ * Magic (layout card-big); las argucias siguen en el 'card' estándar.
  */
 class CharactersExport extends PdfExport
 {
     public function sourceModel(): ?string
     {
         return null;
+    }
+
+    /** El tamaño de impresión se elige por export, no por entidad. */
+    public function layout(): string
+    {
+        return 'card-big';
     }
 
     public function items(?Model $source, string $locale): array

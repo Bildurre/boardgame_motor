@@ -155,11 +155,18 @@ POST   /api/v1/pdf-collection/generate    # → PDF temporal
   facade `Pdfs`, espejo del PreviewRegistry): el conjunto registrado es el
   **catálogo** del juego, y la sección PDF del admin lo pinta sola (endpoint
   `GET /admin/pdfs/exports`; los exports por entidad listan sus dueñas con
-  `sources()`). Playground: `characters` y `schemes` (globales) y
-  `house-schemes` (un PDF por casa con sus argucias). Guía §6.
+  `sources()`). Playground: `characters`, `schemes` y `house-tokens` (globales)
+  y `house-schemes` (un PDF por casa con sus argucias). Guía §6.
 - El layout `card` por defecto es **tamaño Magic (63×88 mm, 9 por A4)**; cada
-  juego ajusta el tamaño de sus cartas en `motor.pdf.layouts` y mantiene la
-  proporción en `previewSize()`.
+  juego declara sus presets con **`Pdfs::layout('clave', [...])`** en su
+  AppServiceProvider (o publicando la config) y **cada export elige el suyo
+  con `layout()`**: en el playground los personajes se imprimen al doble
+  (`card-big`, 126×176 apaisado, 2/A4) mientras las argucias siguen en Magic.
+  La proporción de `previewSize()` (px) acompaña a la del layout (mm).
+- Un export no está limitado a cartas: `house-tokens` imprime **9 tokens
+  redondos de 40 mm por casa** (`PrintableItem::preview($house, copies: 9)`,
+  layout `token-40`, 24/A4). Para ello House es previewable y su componente
+  de render es el token (`HouseToken`).
 - `PdfService::generate()` reutiliza el registro de (type, source, locale) y
   versiona el fichero (URL nueva, borra el anterior): regenerar = volver a llamar.
 - Las previews que falten se generan **en el momento** al componer (sin pasos

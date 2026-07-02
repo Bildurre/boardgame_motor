@@ -3,5 +3,6 @@
 // (fuente única del render a PNG, D8) y sus tipos.
 
 export { default as CharacterCard } from './components/CharacterCard.vue'
+export { default as HouseToken } from './components/HouseToken.vue'
 export { default as SchemeCard } from './components/SchemeCard.vue'
 export * from './types'

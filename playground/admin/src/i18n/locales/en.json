@@ -265,7 +265,8 @@
     "types": {
       "characters": "All characters",
       "schemes": "All schemes",
-      "houseSchemes": "Per house (its schemes)"
+      "houseSchemes": "Per house (its schemes)",
+      "houseTokens": "House tokens (x9)"
     }
   }
 }

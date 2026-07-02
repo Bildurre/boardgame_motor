@@ -15,6 +15,7 @@ const typeLabels = computed<Record<string, string>>(() => ({
   characters: t('pdfs.types.characters'),
   schemes: t('pdfs.types.schemes'),
   'house-schemes': t('pdfs.types.houseSchemes'),
+  'house-tokens': t('pdfs.types.houseTokens'),
 }))
 </script>
 

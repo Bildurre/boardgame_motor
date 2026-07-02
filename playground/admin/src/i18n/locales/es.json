@@ -265,7 +265,8 @@
     "types": {
       "characters": "Todos los personajes",
       "schemes": "Todas las argucias",
-      "houseSchemes": "Por casa (sus argucias)"
+      "houseSchemes": "Por casa (sus argucias)",
+      "houseTokens": "Tokens de casas (x9)"
     }
   }
 }

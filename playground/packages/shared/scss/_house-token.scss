@@ -1,0 +1,66 @@
+@use "tokens" as *;
+
+// Token redondo de casa (preview de House y export de PDF house-tokens).
+// El recorte es circular: el borde grueso marca la línea de corte.
+.house-token {
+  --c: #{$accent-600};
+
+  position: relative;
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4%;
+  background: radial-gradient(
+    circle,
+    color-mix(in srgb, var(--c) 14%, #fff) 55%,
+    color-mix(in srgb, var(--c) 34%, #fff) 100%
+  );
+  border: 6px solid var(--c);
+
+  &__art {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  &__initial {
+    font-size: 80px;
+    line-height: 1;
+    font-weight: $k-fw-bold;
+    color: color-mix(in srgb, var(--c) 80%, #000);
+  }
+
+  &__name {
+    position: relative;
+    max-width: 70%;
+    text-align: center;
+    font-size: 18px;
+    line-height: 1.1;
+    font-weight: $k-fw-semibold;
+    color: color-mix(in srgb, var(--c) 60%, #000);
+  }
+
+  &__art + &__name {
+    background: rgb(255 255 255 / 82%);
+    border-radius: $radius-sm;
+    padding: 2px 8px;
+  }
+}
+
+// En el escenario de captura ocupa el viewport entero (PNG a medida). Las
+// esquinas fuera del círculo deben salir blancas (papel), no del tema oscuro.
+.render-stage:has(.house-token) {
+  background: #fff;
+}
+
+.render-stage .house-token {
+  width: 100vw;
+  height: 100vh;
+}

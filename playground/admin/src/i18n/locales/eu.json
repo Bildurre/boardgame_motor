@@ -265,7 +265,8 @@
     "types": {
       "characters": "Pertsonaia guztiak",
       "schemes": "Argucia guztiak",
-      "houseSchemes": "Etxeka (bere argukiak)"
+      "houseSchemes": "Etxeka (bere argukiak)",
+      "houseTokens": "Etxeen fitxak (x9)"
     }
   }
 }

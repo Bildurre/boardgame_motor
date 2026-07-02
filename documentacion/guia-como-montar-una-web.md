@@ -456,7 +456,29 @@ primeras):
    todas las cartas de personaje (`CharactersExport`) o todas las argucias
    (`SchemesExport`).
 
-3. **Individual / con copias** — nada lo impide: un export con
+3. **Otro tipo de piezas (tokens, contadores, losetas…)** — un export es
+   contenido + layout, así que no está limitado a cartas. Ej. del playground:
+   un PDF con **9 tokens redondos de 2 cm de radio por cada casa**
+   (`HouseTokensExport`): la entidad se hace renderizable con su componente
+   (aquí `HouseToken`, un círculo de 40×40 mm) y el export repite cada una:
+
+   ```php
+   class HouseTokensExport extends PdfExport
+   {
+       public function sourceModel(): ?string { return null; } // global
+
+       public function items(?Model $source, string $locale): array
+       {
+           return House::query()->published()->get()
+               ->map(fn (House $h) => PrintableItem::preview($h, copies: 9))
+               ->all();
+       }
+
+       public function layout(): string { return 'token-40'; } // preset propio (§6.3)
+   }
+   ```
+
+4. **Individual / con copias** — nada lo impide: un export con
    `PrintableItem::preview($source, copies: N)` imprime una entidad repetida.
    Este playground no usa cartas individuales; cada juego decide su catálogo.
 
@@ -467,9 +489,10 @@ PNG del render, doc 01, **generándolo al vuelo si falta**) o
 Registro en `AppServiceProvider::boot` (la clave es el `type` de la API):
 
 ```php
-Pdfs::register('characters', CharactersExport::class);      // todos los personajes
-Pdfs::register('schemes', SchemesExport::class);            // todas las argucias
+Pdfs::register('characters', CharactersExport::class);      // todos los personajes (card-big)
+Pdfs::register('schemes', SchemesExport::class);            // todas las argucias (card)
 Pdfs::register('house-schemes', HouseSchemesExport::class); // un PDF por casa
+Pdfs::register('house-tokens', HouseTokensExport::class);   // 9 tokens por casa (token-40)
 ```
 
 ### 6.2 Plantillas (vistas del PDF)
@@ -484,19 +507,38 @@ Pdfs::register('house-schemes', HouseSchemesExport::class); // un PDF por casa
   (huecos ya expandidos y paginados) y `$layout`. El resto del pipeline
   (cola, versionado, regeneración, gestor del admin) sigue siendo del motor.
 
-### 6.3 Layouts de impresión: el tamaño de las cartas (DC-07)
+### 6.3 Layouts de impresión: el tamaño de cada pieza (DC-07)
 
-Los presets viven en `config/motor.php` → `motor.pdf.layouts` (publicable): papel,
-orientación, **tamaño de pieza en mm**, margen, separación y marcas de corte.
-El motor calcula columnas/filas/capacidad del papel. Por defecto `card` es
-**tamaño Magic (63×88 mm, 9 por A4)** y `counter` 25×25; **cada juego ajusta el
-tamaño de sus cartas** publicando la config (`php artisan vendor:publish
---tag=motor-config`) y editando/añadiendo presets (p. ej. `tarot`,
-`token-grande`). El export elige el suyo con `layout()` y la API admite `layout`
-para forzar otro puntual.
+Un layout es un preset con papel, orientación, **tamaño de pieza en mm**,
+margen, separación y marcas de corte; el motor calcula columnas/filas/capacidad
+del papel. Por defecto `card` es **tamaño Magic (63×88 mm, 9 por A4)** y
+`counter` 25×25. El juego declara los suyos en el `boot` de su
+`AppServiceProvider`, junto a los exports (basta con las claves que cambian):
+
+```php
+Pdfs::layout('card-big', [ // doble Magic: 2 por A4 apaisado
+    'orientation' => 'landscape',
+    'item_width' => 126, 'item_height' => 176,
+]);
+Pdfs::layout('token-40', ['item_width' => 40, 'item_height' => 40]);
+```
+
+(Alternativa equivalente: publicar la config con `php artisan vendor:publish
+--tag=motor-config` y editar `motor.pdf.layouts`; útil si ya la publicas por
+otros motivos.)
+
+**El tamaño se elige por export, no por entidad**: cada export devuelve su
+preset en `layout()`. Así, en el playground las argucias mantienen la carta
+Magic (`SchemesExport` usa `card`) mientras los personajes se imprimen al doble
+(`CharactersExport::layout()` devuelve `card-big`) y los tokens de casa usan
+`token-40`. La API admite `layout` para forzar otro puntual.
 
 > Mantén la **proporción** de `previewSize()` (px, doc 01) acorde al layout
-> (mm) para que la imagen no se deforme: p. ej. Magic 63:88 → 315×440 px.
+> (mm) para que la imagen no se deforme. Regla práctica del playground:
+> **5 px CSS por mm** (Magic 63×88 → 315×440 px; token 40×40 → 200×200 px),
+> que con `previews.scale = 2` da ~250 ppp de impresión. Si imprimes una pieza
+> mucho más grande (p. ej. `card-big`), sube `previewSize()` o
+> `motor.previews.scale` para no perder nitidez.
 
 ### 6.4 Gestión desde el admin y API
 

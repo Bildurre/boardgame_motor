@@ -100,6 +100,30 @@ it('expande copias y pagina según la capacidad del layout', function () {
         ->and($pdf->expires_at)->not->toBeNull();
 });
 
+it('imprime otro tipo de pieza: 9 tokens de 40 mm por casa (layout token-40)', function () {
+    makeHouseWithSchemes(0);
+    makeHouseWithSchemes(0);
+    makeHouseWithSchemes(0);
+
+    $pdf = app(PdfService::class)->generate('house-tokens', null, 'es', sync: true)->refresh();
+
+    // 3 casas x 9 tokens = 27 huecos; token-40 mete 24 por A4 -> 2 páginas.
+    expect($pdf->status)->toBe(GeneratedPdf::STATUS_READY)
+        ->and($pdf->url())->toContain('pdfs/house-tokens/global/')
+        ->and(pdfPageCount(Storage::disk('public')->get($pdf->path)))->toBe(2);
+});
+
+it('cada export imprime a su tamaño: personajes al doble (card-big)', function () {
+    makeCharacter(['is_published' => true]);
+    makeCharacter(['is_published' => true]);
+    makeCharacter(['is_published' => true]);
+
+    $pdf = app(PdfService::class)->generate('characters', null, 'es', sync: true)->refresh();
+
+    // card-big (126x176, A4 apaisado): 2 por página -> 3 cartas = 2 páginas.
+    expect(pdfPageCount(Storage::disk('public')->get($pdf->path)))->toBe(2);
+});
+
 it('marca el PDF como failed si no hay ítems', function () {
     $house = makeHouseWithSchemes(0);
 
@@ -162,14 +186,18 @@ it('el catálogo de exports lista los tipos con sus entidades dueñas', function
 
     $this->actingAs(motorUser('admin'))->getJson('/api/admin/pdfs/exports')
         ->assertOk()
-        ->assertJsonCount(3, 'data')
+        ->assertJsonCount(4, 'data')
         ->assertJsonPath('data.0.type', 'characters')
         ->assertJsonPath('data.0.global', true)
+        ->assertJsonPath('data.0.layout', 'card-big')
         ->assertJsonPath('data.0.sources', [])
         ->assertJsonPath('data.2.type', 'house-schemes')
         ->assertJsonPath('data.2.global', false)
         ->assertJsonPath('data.2.sources.0.id', $house->id)
-        ->assertJsonPath('data.2.sources.0.label', 'Casa Stark');
+        ->assertJsonPath('data.2.sources.0.label', 'Casa Stark')
+        ->assertJsonPath('data.3.type', 'house-tokens')
+        ->assertJsonPath('data.3.global', true)
+        ->assertJsonPath('data.3.layout', 'token-40');
 });
 
 it('regenera, borra y descarga desde la API', function () {
