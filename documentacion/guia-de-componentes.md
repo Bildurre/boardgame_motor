@@ -477,8 +477,13 @@ vive en el composable `useEntityList` (ver la guía de montar una web, §4.4).
   /api/admin/previews/...` del motor. Todas las acciones destructivas piden
   confirmación (ConfirmDialog) y avisan con toast (mensajes del servidor, ya
   traducidos).
-- **Props:** `api: AxiosInstance` (el cliente del admin) y
-  `labels?: Partial<PreviewManagerLabels>` (textos, DC-29; defaults en castellano).
+- **Props:** `api: AxiosInstance` (el cliente del admin),
+  `labels?: Partial<PreviewManagerLabels>` (textos, DC-29; defaults en castellano)
+  y `typeLabels?: Record<string, string>` (nombre traducido de cada tipo del
+  registro, p. ej. `{ character: t('characters.title') }`; fallback: nombre del
+  modelo). Cada entidad del listado va **plegada**: la cabecera muestra el
+  nombre + chips de estado por locale (verde = generado, ámbar = falta) y las
+  imágenes solo se cargan al desplegarla.
 - **Uso** (ver `playground/admin/src/views/previews/PreviewsView.vue`):
 
 ```vue

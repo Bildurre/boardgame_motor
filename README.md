@@ -102,7 +102,9 @@ ambas SPA) · `npm run lint` / `lint:fix` / `format` (ESLint + Prettier) ·
 El PNG de cada entidad se captura desde la ruta `/_render` de la `app` con
 Chromium headless (Browsershot). Por defecto usa el Chromium que descarga
 `puppeteer` (`npm install` en `playground/api`); si prefieres el del sistema,
-fija `MOTOR_CHROME_PATH` en el `.env`. Gestión en lote:
+fija `MOTOR_CHROME_PATH` en el `.env`. Si ves *"Could not find chrome"*:
+`cd playground/api && npx puppeteer browsers install chrome`. Gestión desde el
+admin (sección **Imágenes**) o en lote:
 `php artisan preview:manage status|generate|regenerate|delete|clean`.
 Detalles en `documentacion/funcionalidades/01-render-png.md` y en la guía
 de montar una web (§5).

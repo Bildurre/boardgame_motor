@@ -17,6 +17,8 @@ export interface EntityListOptions<T> {
   singleRoute: string
   /** Campo "nombre" del ítem, para los mensajes de confirmación. */
   nameOf: (item: T) => Translations
+  /** Clave del PreviewRegistry si la entidad es renderizable a PNG. */
+  previewKey?: string
 }
 
 /**
@@ -160,6 +162,17 @@ export function useEntityList<T extends EntityBase>(options: EntityListOptions<T
     }
   }
 
+  /** Encola la regeneración de los PNG del ítem (solo con previewKey). */
+  async function regeneratePreview(item: T) {
+    if (!options.previewKey) return
+    try {
+      const { data } = await api.post(`/admin/previews/${options.previewKey}/${item.id}/regenerate`)
+      toast.success(data.message ?? t('previews.queued'))
+    } catch {
+      toast.danger(t('common.errors.action'))
+    }
+  }
+
   async function init() {
     await locales.load()
     await load()
@@ -189,5 +202,6 @@ export function useEntityList<T extends EntityBase>(options: EntityListOptions<T
     del,
     restore,
     forceDelete,
+    regeneratePreview,
   }
 }

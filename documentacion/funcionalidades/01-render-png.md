@@ -146,4 +146,8 @@ actual, pero **declarativa**: la entidad lista qué campos disparan regeneració
   lo mismo por CLI.
 - Apagado global con `MOTOR_PREVIEWS=false` (tests, entornos sin Chromium).
 - Chromium: por defecto el que descarga `puppeteer` (dependencia npm de la api
-  del juego); en el droplet se fija `MOTOR_CHROME_PATH` (DC-22).
+  del juego); en el droplet se fija `MOTOR_CHROME_PATH` (DC-22). El renderer usa
+  el **headless moderno** (`newHeadless()`): sin él, Browsershot pide el binario
+  `chrome-headless-shell`, que puppeteer no descarga por defecto (error
+  "Could not find chrome-headless-shell"). Si falta el chrome de puppeteer:
+  `cd api && npx puppeteer browsers install chrome`.

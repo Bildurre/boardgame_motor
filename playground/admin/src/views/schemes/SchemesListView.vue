@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { onMounted } from 'vue'
-import { SquarePen, Trash2, Eye, EyeOff, RotateCcw, FlameKindling } from '@lucide/vue'
+import { Camera, SquarePen, Trash2, Eye, EyeOff, RotateCcw, FlameKindling } from '@lucide/vue'
 import { BaseGrid, EntityCard, FilterBar, EmptyState } from '@bgm/admin-kit'
 import { BaseButton, BaseTabs, IconButton } from '@bgm/ui'
 import { useEntityList } from '@/composables/useEntityList'
@@ -27,10 +27,12 @@ const {
   del,
   restore,
   forceDelete,
+  regeneratePreview,
 } = useEntityList<Scheme>({
   resource: '/admin/schemes',
   ns: 'schemes',
   singleRoute: 'scheme-single',
+  previewKey: 'scheme',
   nameOf: (item) => item.title,
 })
 
@@ -89,6 +91,12 @@ onMounted(init)
             >
               <component :is="item.is_published ? EyeOff : Eye" :size="18" />
             </IconButton>
+            <IconButton
+              variant="info"
+              :title="t('previews.regenerate')"
+              @click="regeneratePreview(item)"
+              ><Camera :size="18"
+            /></IconButton>
             <IconButton variant="danger" :title="t('common.actions.delete')" @click="del(item)"
               ><Trash2 :size="18"
             /></IconButton>

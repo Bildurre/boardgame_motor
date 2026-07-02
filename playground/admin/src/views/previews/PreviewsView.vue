@@ -8,6 +8,12 @@ import { api } from '@/lib/api'
 // aquí solo se le pasan la API y los textos traducidos (DC-29).
 const { t } = useI18n()
 
+// Nombre traducido de cada tipo renderizable (clave del PreviewRegistry).
+const typeLabels = computed<Record<string, string>>(() => ({
+  character: t('characters.title'),
+  scheme: t('schemes.title'),
+}))
+
 const labels = computed<PreviewManagerLabels>(() => ({
   refresh: t('previewsManager.refresh'),
   generate: t('previewsManager.generate'),
@@ -33,6 +39,6 @@ const labels = computed<PreviewManagerLabels>(() => ({
 
 <template>
   <div class="previews-view">
-    <PreviewManager :api="api" :labels="labels" />
+    <PreviewManager :api="api" :labels="labels" :type-labels="typeLabels" />
   </div>
 </template>

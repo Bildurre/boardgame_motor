@@ -92,7 +92,42 @@
     gap: $space-3;
   }
 
-  &__label { font-weight: $k-fw-semibold; }
+  &__toggle {
+    display: flex;
+    align-items: center;
+    gap: $space-2;
+    background: none;
+    border: 0;
+    color: $text-1;
+    cursor: pointer;
+    padding: 0;
+    min-width: 0;
+  }
+
+  &__label {
+    font-weight: $k-fw-semibold;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  &__chips {
+    display: flex;
+    gap: $space-1;
+    margin-left: auto;
+  }
+
+  &__chip {
+    font-size: $fs-12;
+    font-weight: $k-fw-semibold;
+    padding: 1px $space-2;
+    border-radius: $radius-sm;
+    border: 1px solid $border;
+    color: $text-3;
+
+    &.is-ok { color: $success; border-color: color-mix(in srgb, $success 45%, transparent); }
+    &.is-missing { color: $warning; border-color: color-mix(in srgb, $warning 45%, transparent); }
+  }
 
   &__buttons { display: flex; gap: $space-1; }
 

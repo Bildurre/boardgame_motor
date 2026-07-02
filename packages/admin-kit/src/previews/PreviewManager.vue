@@ -57,8 +57,10 @@ const props = withDefaults(
   defineProps<{
     api: AxiosInstance
     labels?: Partial<PreviewManagerLabels>
+    /** Nombre traducido de cada tipo (clave del registro => etiqueta). */
+    typeLabels?: Record<string, string>
   }>(),
-  { labels: () => ({}) },
+  { labels: () => ({}), typeLabels: () => ({}) },
 )
 
 const L = reactive({ ...defaultLabels, ...props.labels }) as PreviewManagerLabels
@@ -84,10 +86,21 @@ const types = ref<TypeStatus[]>([])
 const loading = ref(true)
 const busy = ref(false)
 
-// Estado de expansión + items por tipo.
+/** Etiqueta traducida del tipo (fallback: nombre del modelo). */
+function typeName(type: TypeStatus): string {
+  return props.typeLabels[type.key] ?? type.model
+}
+
+// Estado de expansión + items por tipo. Cada ítem también es plegable: cerrado
+// muestra solo nombre + estado por locale; abierto, las imágenes.
 const open = reactive<Record<string, boolean>>({})
+const openItems = reactive<Record<string, boolean>>({})
 const items = reactive<Record<string, PreviewItem[]>>({})
 const pages = reactive<Record<string, { current: number; last: number }>>({})
+
+function toggleItem(key: string, id: number) {
+  openItems[`${key}:${id}`] = !openItems[`${key}:${id}`]
+}
 
 async function loadStatus() {
   loading.value = true
@@ -143,7 +156,7 @@ function generateType(type: TypeStatus) {
 
 async function regenerateType(type: TypeStatus) {
   const ok = await confirm({
-    message: L.confirmRegenerateAll.replace('{type}', type.model),
+    message: L.confirmRegenerateAll.replace('{type}', typeName(type)),
     confirmLabel: L.confirm,
     cancelLabel: L.cancel,
     variant: 'primary',
@@ -154,7 +167,7 @@ async function regenerateType(type: TypeStatus) {
 
 async function deleteType(type: TypeStatus) {
   const ok = await confirm({
-    message: L.confirmDeleteAll.replace('{type}', type.model),
+    message: L.confirmDeleteAll.replace('{type}', typeName(type)),
     confirmLabel: L.deleteAll,
     cancelLabel: L.cancel,
     variant: 'danger',
@@ -217,7 +230,7 @@ defineExpose({ refreshAll })
       <header class="preview-manager__head">
         <button type="button" class="preview-manager__toggle" @click="toggle(type.key)">
           <component :is="open[type.key] ? ChevronDown : ChevronRight" :size="18" />
-          <h2>{{ type.model }}</h2>
+          <h2>{{ typeName(type) }}</h2>
         </button>
 
         <div class="preview-manager__stats">
@@ -252,7 +265,28 @@ defineExpose({ refreshAll })
 
         <article v-for="item in items[type.key]" :key="item.id" class="preview-item">
           <div class="preview-item__head">
-            <span class="preview-item__label">{{ item.label }}</span>
+            <button
+              type="button"
+              class="preview-item__toggle"
+              @click="toggleItem(type.key, item.id)"
+            >
+              <component
+                :is="openItems[`${type.key}:${item.id}`] ? ChevronDown : ChevronRight"
+                :size="16"
+              />
+              <span class="preview-item__label">{{ item.label }}</span>
+            </button>
+
+            <!-- Estado por locale de un vistazo, sin cargar las imágenes -->
+            <span class="preview-item__chips">
+              <span
+                v-for="(url, locale) in item.previews"
+                :key="locale"
+                :class="['preview-item__chip', url ? 'is-ok' : 'is-missing']"
+                >{{ String(locale).toUpperCase() }}</span
+              >
+            </span>
+
             <span class="preview-item__buttons">
               <IconButton
                 variant="info"
@@ -265,7 +299,7 @@ defineExpose({ refreshAll })
               /></IconButton>
             </span>
           </div>
-          <div class="preview-item__locales">
+          <div v-if="openItems[`${type.key}:${item.id}`]" class="preview-item__locales">
             <figure
               v-for="(url, locale) in item.previews"
               :key="locale"
