@@ -8,7 +8,10 @@ const RichTextInput = defineAsyncComponent(() => import('./RichTextInput.vue'))
 
 // Campo traducible (portado de kontuan): usa el estilo `.form-field` y un
 // selector desplegable de locale con contador de rellenados.
-interface Locale { code: string; name: string }
+interface Locale {
+  code: string
+  name: string
+}
 
 const props = withDefaults(
   defineProps<{
@@ -71,10 +74,13 @@ onBeforeUnmount(() => document.removeEventListener('click', onClickOutside))
               v-for="loc in locales"
               :key="loc.code"
               type="button"
-              :class="['translatable-option', {
-                'translatable-option--active': loc.code === active,
-                'translatable-option--empty': !hasContent(loc.code),
-              }]"
+              :class="[
+                'translatable-option',
+                {
+                  'translatable-option--active': loc.code === active,
+                  'translatable-option--empty': !hasContent(loc.code),
+                },
+              ]"
               @click="selectLocale(loc.code)"
             >
               <span class="translatable-option__code">{{ loc.code.toUpperCase() }}</span>

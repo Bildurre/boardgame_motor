@@ -1,5 +1,8 @@
 <script setup lang="ts">
-interface Column { key: string; label: string }
+interface Column {
+  key: string
+  label: string
+}
 
 withDefaults(
   defineProps<{
@@ -28,8 +31,12 @@ const emit = defineEmits<{ page: [number] }>()
           </tr>
         </thead>
         <tbody>
-          <tr v-if="loading"><td :colspan="columns.length + 1" class="rlist__empty">{{ loadingText }}</td></tr>
-          <tr v-else-if="!items.length"><td :colspan="columns.length + 1" class="rlist__empty">{{ emptyText }}</td></tr>
+          <tr v-if="loading">
+            <td :colspan="columns.length + 1" class="rlist__empty">{{ loadingText }}</td>
+          </tr>
+          <tr v-else-if="!items.length">
+            <td :colspan="columns.length + 1" class="rlist__empty">{{ emptyText }}</td>
+          </tr>
           <tr v-for="item in items" :key="item.id">
             <td v-for="col in columns" :key="col.key">
               <slot :name="`cell-${col.key}`" :item="item">{{ item[col.key] }}</slot>
@@ -63,9 +70,16 @@ const emit = defineEmits<{ page: [number] }>()
     </div>
 
     <div v-if="meta && meta.last_page > 1" class="rlist__pager">
-      <button :disabled="meta.current_page <= 1" @click="emit('page', meta.current_page - 1)">‹</button>
+      <button :disabled="meta.current_page <= 1" @click="emit('page', meta.current_page - 1)">
+        ‹
+      </button>
       <span>{{ meta.current_page }} / {{ meta.last_page }}</span>
-      <button :disabled="meta.current_page >= meta.last_page" @click="emit('page', meta.current_page + 1)">›</button>
+      <button
+        :disabled="meta.current_page >= meta.last_page"
+        @click="emit('page', meta.current_page + 1)"
+      >
+        ›
+      </button>
     </div>
   </div>
 </template>

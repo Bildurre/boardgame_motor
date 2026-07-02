@@ -4,7 +4,12 @@ import { MotorBadge, BaseButton } from '@bgm/ui'
 import { api } from '@/lib/api'
 import { useAuthStore } from '@/stores/auth'
 
-interface Ping { name: string; version: string; default_locale: string; locales: string[] }
+interface Ping {
+  name: string
+  version: string
+  default_locale: string
+  locales: string[]
+}
 
 const auth = useAuthStore()
 const ping = ref<Ping | null>(null)
@@ -24,19 +29,30 @@ onMounted(async () => {
   <main class="home">
     <MotorBadge label="BGM" :version="ping?.version ?? ''" />
     <h1>Playground · Web pública</h1>
-    <p v-if="auth.user">Hola, <strong>{{ auth.user.name }}</strong>.</p>
+    <p v-if="auth.user">
+      Hola, <strong>{{ auth.user.name }}</strong
+      >.
+    </p>
 
-    <section class="card" v-if="ping">
+    <section v-if="ping" class="card">
       <h2>{{ ping.name }}</h2>
       <ul>
-        <li>Versión del motor: <strong>{{ ping.version }}</strong></li>
-        <li>Locale por defecto: <strong>{{ ping.default_locale }}</strong></li>
-        <li>Locales: <strong>{{ ping.locales.join(', ') }}</strong></li>
+        <li>
+          Versión del motor: <strong>{{ ping.version }}</strong>
+        </li>
+        <li>
+          Locale por defecto: <strong>{{ ping.default_locale }}</strong>
+        </li>
+        <li>
+          Locales: <strong>{{ ping.locales.join(', ') }}</strong>
+        </li>
       </ul>
     </section>
     <p v-else-if="error" class="error">No conecta con la API: {{ error }}</p>
 
-    <RouterLink v-if="!auth.isAuthenticated" to="/login"><BaseButton>Entrar</BaseButton></RouterLink>
+    <RouterLink v-if="!auth.isAuthenticated" to="/login"
+      ><BaseButton>Entrar</BaseButton></RouterLink
+    >
     <RouterLink v-else to="/cuenta"><BaseButton>Ir a mi cuenta</BaseButton></RouterLink>
   </main>
 </template>

@@ -18,7 +18,10 @@ const isAdminArea = computed(() => route.meta.admin === true)
 const title = computed(() => (route.meta.titleKey ? t(route.meta.titleKey as string) : ''))
 const initial = computed(() => auth.user?.name?.charAt(0)?.toUpperCase() ?? '?')
 
-const homeCrumb = computed<Crumb>(() => ({ label: t('breadcrumbs.home'), to: { name: 'dashboard' } }))
+const homeCrumb = computed<Crumb>(() => ({
+  label: t('breadcrumbs.home'),
+  to: { name: 'dashboard' },
+}))
 const crumbs = computed<Crumb[]>(() => {
   const list = (route.meta.breadcrumbs as { key: string; to?: string }[] | undefined) ?? []
   return list.map((c) => ({
@@ -28,8 +31,16 @@ const crumbs = computed<Crumb[]>(() => {
 })
 
 // Carga los locales cuando entramos al área de admin (para el selector).
-watch(isAdminArea, (inAdmin) => { if (inAdmin) locales.load() }, { immediate: true })
-onMounted(() => { if (isAdminArea.value) locales.load() })
+watch(
+  isAdminArea,
+  (inAdmin) => {
+    if (inAdmin) locales.load()
+  },
+  { immediate: true },
+)
+onMounted(() => {
+  if (isAdminArea.value) locales.load()
+})
 
 async function logout() {
   await auth.logout()
@@ -50,16 +61,22 @@ async function logout() {
   >
     <template #nav>
       <RouterLink class="nav-item" :to="{ name: 'dashboard' }">
-        <LayoutDashboard class="nav-icon" :size="20" /><span class="nav-label">{{ t('nav.dashboard') }}</span>
+        <LayoutDashboard class="nav-icon" :size="20" /><span class="nav-label">{{
+          t('nav.dashboard')
+        }}</span>
       </RouterLink>
       <RouterLink class="nav-item" :to="{ name: 'houses' }">
         <Home class="nav-icon" :size="20" /><span class="nav-label">{{ t('nav.houses') }}</span>
       </RouterLink>
       <RouterLink class="nav-item" :to="{ name: 'schemes' }">
-        <ScrollText class="nav-icon" :size="20" /><span class="nav-label">{{ t('nav.schemes') }}</span>
+        <ScrollText class="nav-icon" :size="20" /><span class="nav-label">{{
+          t('nav.schemes')
+        }}</span>
       </RouterLink>
       <RouterLink class="nav-item" :to="{ name: 'characters' }">
-        <Swords class="nav-icon" :size="20" /><span class="nav-label">{{ t('nav.characters') }}</span>
+        <Swords class="nav-icon" :size="20" /><span class="nav-label">{{
+          t('nav.characters')
+        }}</span>
       </RouterLink>
       <RouterLink class="nav-item" :to="{ name: 'icons' }">
         <Shapes class="nav-icon" :size="20" /><span class="nav-label">{{ t('nav.icons') }}</span>
@@ -71,7 +88,13 @@ async function logout() {
         <span class="who__avatar">{{ initial }}</span>
         <span v-if="!collapsed" class="who__name">{{ auth.user?.name }}</span>
       </div>
-      <button v-if="!collapsed" class="who-logout" type="button" :title="t('common.logout')" @click="logout">
+      <button
+        v-if="!collapsed"
+        class="who-logout"
+        type="button"
+        :title="t('common.logout')"
+        @click="logout"
+      >
         <LogOut :size="20" />
       </button>
     </template>

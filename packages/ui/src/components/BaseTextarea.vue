@@ -15,7 +15,10 @@ const props = withDefaults(
   { modelValue: '', rows: 4, disabled: false, required: false },
 )
 
-const emit = defineEmits<{ 'update:modelValue': [value: string]; keydown: [event: KeyboardEvent] }>()
+const emit = defineEmits<{
+  'update:modelValue': [value: string]
+  keydown: [event: KeyboardEvent]
+}>()
 
 const textareaId = props.id || `textarea-${Math.random().toString(36).slice(2, 9)}`
 </script>

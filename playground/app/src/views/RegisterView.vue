@@ -50,7 +50,12 @@ async function submit() {
       </div>
       <div class="field">
         <label>Repite la contraseña</label>
-        <input v-model="passwordConfirmation" type="password" required autocomplete="new-password" />
+        <input
+          v-model="passwordConfirmation"
+          type="password"
+          required
+          autocomplete="new-password"
+        />
       </div>
       <p v-if="error" class="error">{{ error }}</p>
       <BaseButton type="submit">{{ loading ? 'Creando…' : 'Crear cuenta' }}</BaseButton>

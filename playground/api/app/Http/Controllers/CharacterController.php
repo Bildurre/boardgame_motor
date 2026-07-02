@@ -23,7 +23,7 @@ class CharacterController extends Controller
     public function store(Request $request)
     {
         $data = $this->validateData($request);
-        $character = new Character();
+        $character = new Character;
         $this->fill($character, $data);
         $character->save();
         $character->setImageFromRequest($request);

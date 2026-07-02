@@ -29,9 +29,7 @@ const items = computed<Crumb[]>(() => {
   if (!source.length) return []
   const head = props.home ? [props.home] : []
   // La última miga nunca es navegable (es la página actual).
-  return [...head, ...source].map((c, i, arr) =>
-    i === arr.length - 1 ? { label: c.label } : c,
-  )
+  return [...head, ...source].map((c, i, arr) => (i === arr.length - 1 ? { label: c.label } : c))
 })
 </script>
 

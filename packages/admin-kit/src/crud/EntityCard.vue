@@ -31,7 +31,9 @@ defineSlots<{
 
     <div class="entity-card__header">
       <h3 class="entity-card__title">{{ title }}</h3>
-      <div v-if="$slots.actions" class="entity-card__actions" @click.stop><slot name="actions" /></div>
+      <div v-if="$slots.actions" class="entity-card__actions" @click.stop>
+        <slot name="actions" />
+      </div>
     </div>
 
     <div v-if="$slots.badges || $slots.meta || $slots.default" class="entity-card__content">

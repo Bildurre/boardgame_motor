@@ -5,7 +5,16 @@ const props = withDefaults(
     modelValue?: string | number | null
     label?: string
     placeholder?: string
-    type?: 'text' | 'email' | 'password' | 'number' | 'tel' | 'url' | 'search' | 'date' | 'datetime-local'
+    type?:
+      | 'text'
+      | 'email'
+      | 'password'
+      | 'number'
+      | 'tel'
+      | 'url'
+      | 'search'
+      | 'date'
+      | 'datetime-local'
     error?: string
     hint?: string
     disabled?: boolean

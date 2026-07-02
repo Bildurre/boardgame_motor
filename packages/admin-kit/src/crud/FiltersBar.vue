@@ -1,7 +1,10 @@
 <script setup lang="ts">
 import { reactive, watch } from 'vue'
 
-interface Option { value: string; label: string }
+interface Option {
+  value: string
+  label: string
+}
 
 const props = withDefaults(
   defineProps<{

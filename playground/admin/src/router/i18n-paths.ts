@@ -52,7 +52,11 @@ export function createLocalizedRoutes(locale: string): RouteRecordRaw[] {
       name: 'house-single',
       component: () => import('@/views/houses/HouseSingleView.vue'),
       alias: buildAliases((t) => `/${t.houses}/:slug`, locale),
-      meta: { admin: true, titleKey: 'houses.title', breadcrumbs: [{ key: 'houses', to: 'houses' }] },
+      meta: {
+        admin: true,
+        titleKey: 'houses.title',
+        breadcrumbs: [{ key: 'houses', to: 'houses' }],
+      },
     },
     {
       path: `/${p.schemes}`,
@@ -66,7 +70,11 @@ export function createLocalizedRoutes(locale: string): RouteRecordRaw[] {
       name: 'scheme-single',
       component: () => import('@/views/schemes/SchemeSingleView.vue'),
       alias: buildAliases((t) => `/${t.schemes}/:slug`, locale),
-      meta: { admin: true, titleKey: 'schemes.title', breadcrumbs: [{ key: 'schemes', to: 'schemes' }] },
+      meta: {
+        admin: true,
+        titleKey: 'schemes.title',
+        breadcrumbs: [{ key: 'schemes', to: 'schemes' }],
+      },
     },
     {
       path: `/${p.characters}`,
@@ -80,7 +88,11 @@ export function createLocalizedRoutes(locale: string): RouteRecordRaw[] {
       name: 'character-single',
       component: () => import('@/views/characters/CharacterSingleView.vue'),
       alias: buildAliases((t) => `/${t.characters}/:slug`, locale),
-      meta: { admin: true, titleKey: 'characters.title', breadcrumbs: [{ key: 'characters', to: 'characters' }] },
+      meta: {
+        admin: true,
+        titleKey: 'characters.title',
+        breadcrumbs: [{ key: 'characters', to: 'characters' }],
+      },
     },
     {
       path: `/${p.icons}`,

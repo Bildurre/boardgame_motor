@@ -4,7 +4,10 @@ import { api } from '@/lib/api'
 import i18n, { LOCALE_KEY } from '@/i18n'
 import { onLocaleChange } from '@/router'
 
-export interface Locale { code: string; name: string }
+export interface Locale {
+  code: string
+  name: string
+}
 
 // Idioma único de la app: UI (vue-i18n) + rutas (segmentos traducidos) +
 // contenido (locale enviado a la API). El selector llama a setCurrent().

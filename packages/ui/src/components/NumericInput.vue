@@ -26,8 +26,12 @@ const emit = defineEmits<{ 'update:modelValue': [value: number] }>()
 
 const inputId = props.id || `num-${Math.random().toString(36).slice(2, 9)}`
 const numericValue = computed(() => props.modelValue ?? props.min ?? 0)
-const canDecrement = computed(() => !props.disabled && (props.min === undefined || numericValue.value > props.min))
-const canIncrement = computed(() => !props.disabled && (props.max === undefined || numericValue.value < props.max))
+const canDecrement = computed(
+  () => !props.disabled && (props.min === undefined || numericValue.value > props.min),
+)
+const canIncrement = computed(
+  () => !props.disabled && (props.max === undefined || numericValue.value < props.max),
+)
 
 function clamp(value: number): number {
   let v = props.integer ? Math.trunc(value) : value
@@ -39,9 +43,15 @@ function clamp(value: number): number {
 function onInput(event: Event) {
   const el = event.target as HTMLInputElement
   const raw = el.value
-  if (raw === '') { emit('update:modelValue', props.min ?? 0); return }
+  if (raw === '') {
+    emit('update:modelValue', props.min ?? 0)
+    return
+  }
   const parsed = Number(raw)
-  if (isNaN(parsed)) { el.value = String(numericValue.value); return }
+  if (isNaN(parsed)) {
+    el.value = String(numericValue.value)
+    return
+  }
   const next = clamp(parsed)
   emit('update:modelValue', next)
   // Fuerza el campo a mostrar el valor saneado aunque el modelo no cambie
@@ -54,8 +64,12 @@ function onBlur(event: Event) {
   emit('update:modelValue', next)
   el.value = String(next)
 }
-function decrement() { if (canDecrement.value) emit('update:modelValue', clamp(numericValue.value - props.step)) }
-function increment() { if (canIncrement.value) emit('update:modelValue', clamp(numericValue.value + props.step)) }
+function decrement() {
+  if (canDecrement.value) emit('update:modelValue', clamp(numericValue.value - props.step))
+}
+function increment() {
+  if (canIncrement.value) emit('update:modelValue', clamp(numericValue.value + props.step))
+}
 </script>
 
 <template>
@@ -64,7 +78,13 @@ function increment() { if (canIncrement.value) emit('update:modelValue', clamp(n
       {{ label }}<span v-if="required" class="form-field__required">*</span>
     </label>
     <div class="numeric-input" :class="{ 'numeric-input--disabled': disabled }">
-      <button type="button" class="numeric-input__btn" :disabled="!canDecrement" tabindex="-1" @click="decrement">
+      <button
+        type="button"
+        class="numeric-input__btn"
+        :disabled="!canDecrement"
+        tabindex="-1"
+        @click="decrement"
+      >
         <Minus :size="14" />
       </button>
       <input
@@ -79,7 +99,13 @@ function increment() { if (canIncrement.value) emit('update:modelValue', clamp(n
         @input="onInput"
         @blur="onBlur"
       />
-      <button type="button" class="numeric-input__btn" :disabled="!canIncrement" tabindex="-1" @click="increment">
+      <button
+        type="button"
+        class="numeric-input__btn"
+        :disabled="!canIncrement"
+        tabindex="-1"
+        @click="increment"
+      >
         <Plus :size="14" />
       </button>
     </div>

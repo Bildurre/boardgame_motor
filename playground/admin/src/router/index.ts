@@ -32,7 +32,11 @@ export function onLocaleChange(newLocale: string) {
 router.beforeEach(async (to) => {
   const auth = useAuthStore()
   if (auth.token && !auth.user) {
-    try { await auth.fetchMe() } catch { /* token inválido */ }
+    try {
+      await auth.fetchMe()
+    } catch {
+      /* token inválido */
+    }
   }
   if (to.meta.admin) {
     if (!auth.isAuthenticated) return { name: 'login' }

@@ -24,7 +24,7 @@ class SchemeController extends Controller
     public function store(Request $request)
     {
         $data = $this->validateData($request);
-        $scheme = new Scheme();
+        $scheme = new Scheme;
         $this->fill($scheme, $data);
         $scheme->save();
         $scheme->setImageFromRequest($request);

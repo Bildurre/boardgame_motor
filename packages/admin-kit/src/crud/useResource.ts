@@ -59,5 +59,17 @@ export function useResource<T = any>(api: AxiosInstance, basePath: string) {
     return data.data
   }
 
-  return { items, meta, loading, list, find, create, update, createForm, updateForm, remove, action }
+  return {
+    items,
+    meta,
+    loading,
+    list,
+    find,
+    create,
+    update,
+    createForm,
+    updateForm,
+    remove,
+    action,
+  }
 }

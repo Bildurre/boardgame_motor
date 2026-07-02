@@ -1,7 +1,14 @@
 <script setup lang="ts">
 import { reactive, ref, watch, computed } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { EditModal, TranslatableInput, ImageUpload, PaletteColorPicker, BaseCheckbox, useToast } from '@bgm/ui'
+import {
+  EditModal,
+  TranslatableInput,
+  ImageUpload,
+  PaletteColorPicker,
+  BaseCheckbox,
+  useToast,
+} from '@bgm/ui'
 import { useResource } from '@bgm/admin-kit'
 import { api } from '@/lib/api'
 import { fieldErrors } from '@/lib/apiError'
@@ -137,8 +144,20 @@ async function submit() {
     @update:model-value="(v: boolean) => emit('update:modelValue', v)"
     @submit="submit"
   >
-    <TranslatableInput v-model="form.name" :locales="locales.locales" :label="t('houses.fields.name')" required :error="errors.name" />
-    <TranslatableInput v-model="form.description" :locales="locales.locales" :label="t('houses.fields.description')" type="wysiwyg" :icons="iconList" />
+    <TranslatableInput
+      v-model="form.name"
+      :locales="locales.locales"
+      :label="t('houses.fields.name')"
+      required
+      :error="errors.name"
+    />
+    <TranslatableInput
+      v-model="form.description"
+      :locales="locales.locales"
+      :label="t('houses.fields.description')"
+      type="wysiwyg"
+      :icons="iconList"
+    />
     <ImageUpload
       v-model="image"
       :current-url="currentImage"

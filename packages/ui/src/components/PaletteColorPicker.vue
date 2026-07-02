@@ -38,7 +38,9 @@ const isCustom = computed(() => !!props.modelValue && !isPreset.value)
 const customHex = ref(isCustom.value ? (props.modelValue as string) : '#FF7A00')
 watch(
   () => props.modelValue,
-  (v) => { if (v && !PALETTE.some((c) => norm(c.hex) === norm(v))) customHex.value = v },
+  (v) => {
+    if (v && !PALETTE.some((c) => norm(c.hex) === norm(v))) customHex.value = v
+  },
 )
 
 function onCustomInput(event: Event) {
@@ -62,7 +64,11 @@ function onCustomInput(event: Event) {
         :title="opt.name"
         @click="emit('update:modelValue', opt.hex)"
       >
-        <Check v-if="norm(modelValue) === norm(opt.hex)" class="palette-color-picker__swatch-check" :size="14" />
+        <Check
+          v-if="norm(modelValue) === norm(opt.hex)"
+          class="palette-color-picker__swatch-check"
+          :size="14"
+        />
       </button>
 
       <label
@@ -74,7 +80,12 @@ function onCustomInput(event: Event) {
         }"
         :style="isCustom ? { '--swatch-color': customHex } : undefined"
       >
-        <input type="color" class="palette-color-picker__swatch-input" :value="customHex" @input="onCustomInput" />
+        <input
+          type="color"
+          class="palette-color-picker__swatch-input"
+          :value="customHex"
+          @input="onCustomInput"
+        />
         <Check v-if="isCustom" class="palette-color-picker__swatch-check" :size="14" />
         <Pipette v-else class="palette-color-picker__swatch-pipette" :size="14" />
       </label>

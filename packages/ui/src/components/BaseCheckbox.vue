@@ -30,6 +30,8 @@ const checkboxId = props.id || `checkbox-${Math.random().toString(36).slice(2, 9
     <span class="checkbox__box">
       <Check v-if="modelValue" class="checkbox__icon" :size="14" />
     </span>
-    <span v-if="$slots.default || label" class="checkbox__label"><slot>{{ label }}</slot></span>
+    <span v-if="$slots.default || label" class="checkbox__label"
+      ><slot>{{ label }}</slot></span
+    >
   </label>
 </template>

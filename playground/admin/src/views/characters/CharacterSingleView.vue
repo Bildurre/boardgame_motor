@@ -27,18 +27,33 @@ const slug = computed(() => route.params.slug as string)
 
 async function load() {
   loading.value = true
-  try { item.value = await find(slug.value) } catch { item.value = null } finally { loading.value = false }
+  try {
+    item.value = await find(slug.value)
+  } catch {
+    item.value = null
+  } finally {
+    loading.value = false
+  }
 }
-async function onSaved() { await load() }
+async function onSaved() {
+  await load()
+}
 
-onMounted(async () => { await locales.load(); await load() })
+onMounted(async () => {
+  await locales.load()
+  await load()
+})
 </script>
 
 <template>
-  <div class="single" v-if="item">
+  <div v-if="item" class="single">
     <div class="single__bar">
-      <BaseButton variant="secondary" @click="router.push({ name: 'characters' })"><ArrowLeft :size="16" /> {{ t('characters.title') }}</BaseButton>
-      <BaseButton variant="success" @click="formOpen = true"><SquarePen :size="16" /> {{ t('houses.actions.edit') }}</BaseButton>
+      <BaseButton variant="secondary" @click="router.push({ name: 'characters' })"
+        ><ArrowLeft :size="16" /> {{ t('characters.title') }}</BaseButton
+      >
+      <BaseButton variant="success" @click="formOpen = true"
+        ><SquarePen :size="16" /> {{ t('houses.actions.edit') }}</BaseButton
+      >
     </div>
 
     <div class="single__layout">
@@ -48,9 +63,11 @@ onMounted(async () => { await locales.load(); await load() })
       <div class="single__info">
         <h1>{{ tr(item.name) }}</h1>
         <p class="single__meta">
-          {{ t('characters.fields.cost') }}: {{ item.cost }} · {{ t('characters.fields.defense') }}: {{ item.defense }}
-          · {{ t('characters.fields.power') }} {{ item.power }} / {{ t('characters.fields.prestige') }} {{ item.prestige }}
-          / {{ t('characters.fields.intrigue') }} {{ item.intrigue }} / {{ t('characters.fields.money') }} {{ item.money }}
+          {{ t('characters.fields.cost') }}: {{ item.cost }} · {{ t('characters.fields.defense') }}:
+          {{ item.defense }} · {{ t('characters.fields.power') }} {{ item.power }} /
+          {{ t('characters.fields.prestige') }} {{ item.prestige }} /
+          {{ t('characters.fields.intrigue') }} {{ item.intrigue }} /
+          {{ t('characters.fields.money') }} {{ item.money }}
         </p>
         <div v-if="tr(item.ability)" class="rich-content" v-html="tr(item.ability)" />
         <div v-if="tr(item.description)" class="rich-content" v-html="tr(item.description)" />

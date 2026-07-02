@@ -29,9 +29,16 @@ async function save() {
   <main class="auth">
     <h1>Cambiar contraseña</h1>
     <form class="form" @submit.prevent="save">
-      <div class="field"><label>Contraseña actual</label><input v-model="currentPassword" type="password" required /></div>
-      <div class="field"><label>Nueva contraseña</label><input v-model="password" type="password" required /></div>
-      <div class="field"><label>Repite la nueva</label><input v-model="passwordConfirmation" type="password" required /></div>
+      <div class="field">
+        <label>Contraseña actual</label><input v-model="currentPassword" type="password" required />
+      </div>
+      <div class="field">
+        <label>Nueva contraseña</label><input v-model="password" type="password" required />
+      </div>
+      <div class="field">
+        <label>Repite la nueva</label
+        ><input v-model="passwordConfirmation" type="password" required />
+      </div>
       <p v-if="message" class="ok">{{ message }}</p>
       <p v-if="error" class="error">{{ error }}</p>
       <BaseButton type="submit">Actualizar</BaseButton>

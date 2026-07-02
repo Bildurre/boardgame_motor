@@ -117,7 +117,13 @@ function openDialog() {
 
       <template v-else>
         <div class="image-upload__placeholder">
-          <svg class="image-upload__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <svg
+            class="image-upload__icon"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.5"
+          >
             <rect x="3" y="3" width="18" height="18" rx="3" />
             <circle cx="8.5" cy="8.5" r="1.5" />
             <path d="m21 15-5-5L5 21" />

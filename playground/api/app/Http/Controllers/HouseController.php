@@ -35,7 +35,7 @@ class HouseController extends Controller
     public function store(Request $request)
     {
         $data = $this->validateData($request);
-        $house = new House();
+        $house = new House;
         $this->fill($house, $data);
         $house->save();
         $house->setImageFromRequest($request);

@@ -9,13 +9,27 @@
     "playground/app"
   ],
   "scripts": {
-    "dev": "concurrently -n app,admin,api -c blue,green,red \"npm run dev -w playground/app\" \"npm run dev -w playground/admin\" \"npm run dev:api\"",
+    "dev": "concurrently -n app,admin,api,queue -c blue,green,red,yellow \"npm run dev -w playground/app\" \"npm run dev -w playground/admin\" \"npm run dev:api\" \"npm run dev:queue\"",
     "dev:front": "concurrently -n app,admin -c blue,green \"npm run dev -w playground/app\" \"npm run dev -w playground/admin\"",
     "dev:api": "cd playground/api && php artisan serve --port=8010",
-    "build": "npm run build -w playground/app && npm run build -w playground/admin"
+    "dev:queue": "cd playground/api && php artisan queue:listen --tries=1",
+    "build": "npm run build -w playground/app && npm run build -w playground/admin",
+    "type-check": "npm run type-check -w playground/app && npm run type-check -w playground/admin",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "format": "prettier --write \"packages/*/src/**/*.{ts,vue}\" \"playground/admin/src/**/*.{ts,vue}\" \"playground/app/src/**/*.{ts,vue}\"",
+    "lint:php": "cd playground/api && ./vendor/bin/pint --test && ./vendor/bin/pint --test --config ../../packages/core/pint.json ../../packages/core",
+    "fix:php": "cd playground/api && ./vendor/bin/pint && ./vendor/bin/pint --config ../../packages/core/pint.json ../../packages/core",
+    "test:api": "cd playground/api && php artisan test"
   },
   "devDependencies": {
-    "concurrently": "^9.1.0"
+    "@eslint/js": "^10.0.1",
+    "@vue/eslint-config-prettier": "^10.2.0",
+    "@vue/eslint-config-typescript": "^14.9.0",
+    "concurrently": "^9.1.0",
+    "eslint": "^10.6.0",
+    "eslint-plugin-vue": "^10.9.2",
+    "prettier": "^3.9.4"
   },
   "engines": {
     "node": "^20.19.0 || >=22.12.0"

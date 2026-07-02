@@ -2,18 +2,15 @@
 import { ref, onMounted, onUnmounted, watch } from 'vue'
 import { useRoute } from 'vue-router'
 import { ChevronLeft, ChevronRight, Menu, X } from '@lucide/vue'
-import {
-  MotorBadge,
-  ThemeSelector,
-  LocaleSelector,
-  AppBreadcrumbs,
-  type Crumb,
-} from '@bgm/ui'
+import { MotorBadge, ThemeSelector, LocaleSelector, AppBreadcrumbs, type Crumb } from '@bgm/ui'
 
 // Layout del panel — portado del AppLayout de kontuan (DC-28): sidebar
 // colapsable en escritorio, drawer a pantalla completa en móvil, preferencias
 // (tema + idioma) en la cabecera del sidebar y migas de pan en el contenido.
-interface Locale { code: string; name: string }
+interface Locale {
+  code: string
+  name: string
+}
 
 const props = withDefaults(
   defineProps<{

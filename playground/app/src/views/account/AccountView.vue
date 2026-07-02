@@ -31,7 +31,9 @@ async function save() {
 <template>
   <main class="auth">
     <h1>Mi cuenta</h1>
-    <p class="roles" v-if="auth.user">Rol: <strong>{{ auth.user.roles.join(', ') }}</strong></p>
+    <p v-if="auth.user" class="roles">
+      Rol: <strong>{{ auth.user.roles.join(', ') }}</strong>
+    </p>
 
     <form class="form" @submit.prevent="save">
       <div class="field"><label>Nombre</label><input v-model="name" type="text" required /></div>

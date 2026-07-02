@@ -40,7 +40,9 @@ const selectId = props.id || `select-${Math.random().toString(36).slice(2, 9)}`
         @change="emit('update:modelValue', ($event.target as HTMLSelectElement).value)"
       >
         <option v-if="placeholder" value="" disabled>{{ placeholder }}</option>
-        <option v-for="option in options" :key="option.value" :value="option.value">{{ option.label }}</option>
+        <option v-for="option in options" :key="option.value" :value="option.value">
+          {{ option.label }}
+        </option>
       </select>
     </div>
     <p v-if="error" class="form-field__error">{{ error }}</p>

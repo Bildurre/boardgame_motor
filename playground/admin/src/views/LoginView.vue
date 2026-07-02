@@ -39,10 +39,18 @@ async function submit() {
       <MotorBadge label="BGM Admin" />
       <h1>{{ t('login.title') }}</h1>
       <form class="form" @submit.prevent="submit">
-        <div class="field"><label>{{ t('login.email') }}</label><input v-model="email" type="email" required autocomplete="email" /></div>
-        <div class="field"><label>{{ t('login.password') }}</label><input v-model="password" type="password" required autocomplete="current-password" /></div>
+        <div class="field">
+          <label>{{ t('login.email') }}</label
+          ><input v-model="email" type="email" required autocomplete="email" />
+        </div>
+        <div class="field">
+          <label>{{ t('login.password') }}</label
+          ><input v-model="password" type="password" required autocomplete="current-password" />
+        </div>
         <p v-if="error" class="error">{{ error }}</p>
-        <BaseButton type="submit">{{ loading ? t('login.submitting') : t('login.submit') }}</BaseButton>
+        <BaseButton type="submit">{{
+          loading ? t('login.submitting') : t('login.submit')
+        }}</BaseButton>
       </form>
     </div>
   </main>

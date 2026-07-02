@@ -27,18 +27,33 @@ const slug = computed(() => route.params.slug as string)
 
 async function load() {
   loading.value = true
-  try { item.value = await find(slug.value) } catch { item.value = null } finally { loading.value = false }
+  try {
+    item.value = await find(slug.value)
+  } catch {
+    item.value = null
+  } finally {
+    loading.value = false
+  }
 }
-async function onSaved() { await load() }
+async function onSaved() {
+  await load()
+}
 
-onMounted(async () => { await locales.load(); await load() })
+onMounted(async () => {
+  await locales.load()
+  await load()
+})
 </script>
 
 <template>
-  <div class="single" v-if="item">
+  <div v-if="item" class="single">
     <div class="single__bar">
-      <BaseButton variant="secondary" @click="router.push({ name: 'schemes' })"><ArrowLeft :size="16" /> {{ t('schemes.title') }}</BaseButton>
-      <BaseButton variant="success" @click="formOpen = true"><SquarePen :size="16" /> {{ t('houses.actions.edit') }}</BaseButton>
+      <BaseButton variant="secondary" @click="router.push({ name: 'schemes' })"
+        ><ArrowLeft :size="16" /> {{ t('schemes.title') }}</BaseButton
+      >
+      <BaseButton variant="success" @click="formOpen = true"
+        ><SquarePen :size="16" /> {{ t('houses.actions.edit') }}</BaseButton
+      >
     </div>
 
     <div class="single__layout">
@@ -47,7 +62,10 @@ onMounted(async () => { await locales.load(); await load() })
       </div>
       <div class="single__info">
         <h1>{{ tr(item.title) }}</h1>
-        <p class="single__meta">{{ t('schemes.fields.house') }}: {{ tr(item.house?.name) }} · {{ t('schemes.fields.cost') }}: {{ item.cost }}</p>
+        <p class="single__meta">
+          {{ t('schemes.fields.house') }}: {{ tr(item.house?.name) }} ·
+          {{ t('schemes.fields.cost') }}: {{ item.cost }}
+        </p>
         <div class="rich-content" v-html="tr(item.description)" />
       </div>
     </div>

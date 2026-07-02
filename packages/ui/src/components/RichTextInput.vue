@@ -3,13 +3,27 @@ import { ref, watch, onBeforeUnmount, onMounted } from 'vue'
 import { useEditor, EditorContent } from '@tiptap/vue-3'
 import StarterKit from '@tiptap/starter-kit'
 import Image from '@tiptap/extension-image'
-import { Bold, Italic, Strikethrough, Heading2, List, ListOrdered, Undo2, Redo2, Smile, Code } from '@lucide/vue'
+import {
+  Bold,
+  Italic,
+  Strikethrough,
+  Heading2,
+  List,
+  ListOrdered,
+  Undo2,
+  Redo2,
+  Smile,
+  Code,
+} from '@lucide/vue'
 
 // Editor de texto enriquecido (WYSIWYG) basado en TipTap (DC-09).
 // v-model = HTML. Agnóstico de i18n. Si se pasan `icons`, muestra un selector
 // para insertar iconos del juego (como en CDL): se insertan como <img.rt-icon>.
 // Incluye un toggle para editar en modo visual o directamente el HTML.
-export interface RichIcon { name: string; url: string }
+export interface RichIcon {
+  name: string
+  url: string
+}
 
 const props = withDefaults(
   defineProps<{
@@ -46,15 +60,54 @@ watch(
     }
   },
 )
-watch(() => props.disabled, (d) => editor.value?.setEditable(!d))
+watch(
+  () => props.disabled,
+  (d) => editor.value?.setEditable(!d),
+)
 
 const tools = [
-  { key: 'bold', icon: Bold, title: 'Negrita', run: () => editor.value?.chain().focus().toggleBold().run(), active: () => editor.value?.isActive('bold') },
-  { key: 'italic', icon: Italic, title: 'Cursiva', run: () => editor.value?.chain().focus().toggleItalic().run(), active: () => editor.value?.isActive('italic') },
-  { key: 'strike', icon: Strikethrough, title: 'Tachado', run: () => editor.value?.chain().focus().toggleStrike().run(), active: () => editor.value?.isActive('strike') },
-  { key: 'h2', icon: Heading2, title: 'Título', run: () => editor.value?.chain().focus().toggleHeading({ level: 2 }).run(), active: () => editor.value?.isActive('heading', { level: 2 }) },
-  { key: 'ul', icon: List, title: 'Lista', run: () => editor.value?.chain().focus().toggleBulletList().run(), active: () => editor.value?.isActive('bulletList') },
-  { key: 'ol', icon: ListOrdered, title: 'Lista numerada', run: () => editor.value?.chain().focus().toggleOrderedList().run(), active: () => editor.value?.isActive('orderedList') },
+  {
+    key: 'bold',
+    icon: Bold,
+    title: 'Negrita',
+    run: () => editor.value?.chain().focus().toggleBold().run(),
+    active: () => editor.value?.isActive('bold'),
+  },
+  {
+    key: 'italic',
+    icon: Italic,
+    title: 'Cursiva',
+    run: () => editor.value?.chain().focus().toggleItalic().run(),
+    active: () => editor.value?.isActive('italic'),
+  },
+  {
+    key: 'strike',
+    icon: Strikethrough,
+    title: 'Tachado',
+    run: () => editor.value?.chain().focus().toggleStrike().run(),
+    active: () => editor.value?.isActive('strike'),
+  },
+  {
+    key: 'h2',
+    icon: Heading2,
+    title: 'Título',
+    run: () => editor.value?.chain().focus().toggleHeading({ level: 2 }).run(),
+    active: () => editor.value?.isActive('heading', { level: 2 }),
+  },
+  {
+    key: 'ul',
+    icon: List,
+    title: 'Lista',
+    run: () => editor.value?.chain().focus().toggleBulletList().run(),
+    active: () => editor.value?.isActive('bulletList'),
+  },
+  {
+    key: 'ol',
+    icon: ListOrdered,
+    title: 'Lista numerada',
+    run: () => editor.value?.chain().focus().toggleOrderedList().run(),
+    active: () => editor.value?.isActive('orderedList'),
+  },
 ]
 
 // --- Selector de iconos ---
@@ -113,10 +166,22 @@ function onSourceInput(value: string) {
           <component :is="tool.icon" :size="16" />
         </button>
         <span class="rich-text__sep" />
-        <button type="button" class="rich-text__tool" title="Deshacer" :disabled="disabled" @click="editor?.chain().focus().undo().run()">
+        <button
+          type="button"
+          class="rich-text__tool"
+          title="Deshacer"
+          :disabled="disabled"
+          @click="editor?.chain().focus().undo().run()"
+        >
           <Undo2 :size="16" />
         </button>
-        <button type="button" class="rich-text__tool" title="Rehacer" :disabled="disabled" @click="editor?.chain().focus().redo().run()">
+        <button
+          type="button"
+          class="rich-text__tool"
+          title="Rehacer"
+          :disabled="disabled"
+          @click="editor?.chain().focus().redo().run()"
+        >
           <Redo2 :size="16" />
         </button>
 

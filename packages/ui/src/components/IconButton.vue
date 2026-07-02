@@ -12,7 +12,13 @@ withDefaults(
 </script>
 
 <template>
-  <button :type="type" class="icon-btn" :class="`icon-btn--${variant}`" :title="title" :aria-label="title">
+  <button
+    :type="type"
+    class="icon-btn"
+    :class="`icon-btn--${variant}`"
+    :title="title"
+    :aria-label="title"
+  >
     <slot />
   </button>
 </template>

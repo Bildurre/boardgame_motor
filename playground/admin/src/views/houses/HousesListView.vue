@@ -2,7 +2,17 @@
 import { computed, onMounted, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
-import { SquarePen, Trash2, Eye, EyeOff, RotateCcw, CircleCheck, FilePen, Trash, FlameKindling } from '@lucide/vue'
+import {
+  SquarePen,
+  Trash2,
+  Eye,
+  EyeOff,
+  RotateCcw,
+  CircleCheck,
+  FilePen,
+  Trash,
+  FlameKindling,
+} from '@lucide/vue'
 import { BaseGrid, EntityCard, FilterBar, EmptyState, useResource } from '@bgm/admin-kit'
 import { BaseButton, BaseTabs, IconButton, useToast, useConfirm } from '@bgm/ui'
 import { api } from '@/lib/api'
@@ -27,7 +37,9 @@ const tabs = computed(() => [
 
 // Valor traducible en el locale activo (con fallbacks).
 function tr(obj: Record<string, string>) {
-  return obj?.[locales.current] || obj?.[locales.defaultLocale] || Object.values(obj || {})[0] || '—'
+  return (
+    obj?.[locales.current] || obj?.[locales.defaultLocale] || Object.values(obj || {})[0] || '—'
+  )
 }
 // Slug del locale activo (para construir la URL de edición).
 function slugFor(item: any): string {
@@ -137,30 +149,51 @@ onMounted(async () => {
 
         <template #actions>
           <template v-if="item.deleted_at">
-            <IconButton variant="info" :title="t('houses.actions.restore')" @click="restore(item)"><RotateCcw :size="18" /></IconButton>
-            <IconButton variant="danger" :title="t('houses.actions.forceDelete')" @click="forceDelete(item)"><FlameKindling :size="18" /></IconButton>
+            <IconButton variant="info" :title="t('houses.actions.restore')" @click="restore(item)"
+              ><RotateCcw :size="18"
+            /></IconButton>
+            <IconButton
+              variant="danger"
+              :title="t('houses.actions.forceDelete')"
+              @click="forceDelete(item)"
+              ><FlameKindling :size="18"
+            /></IconButton>
           </template>
           <template v-else>
-            <IconButton variant="success" :title="t('houses.actions.edit')" @click="editHouse(item)"><SquarePen :size="18" /></IconButton>
+            <IconButton variant="success" :title="t('houses.actions.edit')" @click="editHouse(item)"
+              ><SquarePen :size="18"
+            /></IconButton>
             <IconButton
               :variant="item.is_published ? 'warning' : 'info'"
-              :title="item.is_published ? t('houses.actions.unpublish') : t('houses.actions.publish')"
+              :title="
+                item.is_published ? t('houses.actions.unpublish') : t('houses.actions.publish')
+              "
               @click="togglePublish(item)"
             >
               <component :is="item.is_published ? EyeOff : Eye" :size="18" />
             </IconButton>
-            <IconButton variant="danger" :title="t('houses.actions.delete')" @click="del(item)"><Trash2 :size="18" /></IconButton>
+            <IconButton variant="danger" :title="t('houses.actions.delete')" @click="del(item)"
+              ><Trash2 :size="18"
+            /></IconButton>
           </template>
         </template>
 
         <template #badges>
-          <span v-if="item.deleted_at" class="chip chip--trashed">{{ t('houses.state.trashed') }}</span>
-          <span v-else-if="item.is_published" class="chip chip--pub">{{ t('houses.state.published') }}</span>
+          <span v-if="item.deleted_at" class="chip chip--trashed">{{
+            t('houses.state.trashed')
+          }}</span>
+          <span v-else-if="item.is_published" class="chip chip--pub">{{
+            t('houses.state.published')
+          }}</span>
           <span v-else class="chip">{{ t('houses.state.draft') }}</span>
         </template>
 
         <template #meta>
-          <span><span class="swatch" :style="{ background: item.color || 'transparent' }" />{{ item.color || '—' }}</span>
+          <span
+            ><span class="swatch" :style="{ background: item.color || 'transparent' }" />{{
+              item.color || '—'
+            }}</span
+          >
         </template>
       </EntityCard>
     </BaseGrid>

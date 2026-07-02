@@ -5,10 +5,30 @@ const router = createRouter({
   history: createWebHistory(),
   routes: [
     { path: '/', name: 'home', component: () => import('@/views/HomeView.vue') },
-    { path: '/login', name: 'login', component: () => import('@/views/LoginView.vue'), meta: { guest: true } },
-    { path: '/registro', name: 'register', component: () => import('@/views/RegisterView.vue'), meta: { guest: true } },
-    { path: '/cuenta', name: 'account', component: () => import('@/views/account/AccountView.vue'), meta: { auth: true } },
-    { path: '/cuenta/seguridad', name: 'security', component: () => import('@/views/account/SecurityView.vue'), meta: { auth: true } },
+    {
+      path: '/login',
+      name: 'login',
+      component: () => import('@/views/LoginView.vue'),
+      meta: { guest: true },
+    },
+    {
+      path: '/registro',
+      name: 'register',
+      component: () => import('@/views/RegisterView.vue'),
+      meta: { guest: true },
+    },
+    {
+      path: '/cuenta',
+      name: 'account',
+      component: () => import('@/views/account/AccountView.vue'),
+      meta: { auth: true },
+    },
+    {
+      path: '/cuenta/seguridad',
+      name: 'security',
+      component: () => import('@/views/account/SecurityView.vue'),
+      meta: { auth: true },
+    },
   ],
 })
 

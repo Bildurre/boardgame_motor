@@ -13,12 +13,18 @@ function tr(obj: Record<string, string>) {
     <div class="play-card__art">
       <img v-if="item.image" :src="item.image" alt="" />
       <span class="play-card__cost">{{ item.cost }}</span>
-      <span class="play-card__defense" :title="t('characters.fields.defense')">{{ item.defense }}</span>
+      <span class="play-card__defense" :title="t('characters.fields.defense')">{{
+        item.defense
+      }}</span>
     </div>
     <div class="play-card__body">
       <h3 class="play-card__title">{{ tr(item.name) }}</h3>
       <div v-if="tr(item.ability)" class="play-card__text rich-content" v-html="tr(item.ability)" />
-      <div v-if="tr(item.description)" class="play-card__desc rich-content" v-html="tr(item.description)" />
+      <div
+        v-if="tr(item.description)"
+        class="play-card__desc rich-content"
+        v-html="tr(item.description)"
+      />
       <div class="play-card__stats">
         <span class="stat stat--power">{{ item.power }}</span>
         <span class="stat stat--prestige">{{ item.prestige }}</span>

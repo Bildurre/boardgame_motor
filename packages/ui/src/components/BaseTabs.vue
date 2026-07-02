@@ -1,7 +1,12 @@
 <script setup lang="ts">
 import type { Component } from 'vue'
 
-interface Tab { key: string; label: string; count?: number; icon?: Component }
+interface Tab {
+  key: string
+  label: string
+  count?: number
+  icon?: Component
+}
 
 defineProps<{ tabs: Tab[]; modelValue: string }>()
 defineEmits<{ 'update:modelValue': [string] }>()
@@ -17,7 +22,7 @@ defineEmits<{ 'update:modelValue': [string] }>()
       :class="{ 'tabs__tab--active': modelValue === tab.key, 'tabs__tab--has-icon': !!tab.icon }"
       @click="$emit('update:modelValue', tab.key)"
     >
-      <component v-if="tab.icon" :is="tab.icon" class="tabs__icon" :size="16" />
+      <component :is="tab.icon" v-if="tab.icon" class="tabs__icon" :size="16" />
       <span class="tabs__label">{{ tab.label }}</span>
       <span v-if="tab.count !== undefined" class="tabs__count">{{ tab.count }}</span>
     </button>

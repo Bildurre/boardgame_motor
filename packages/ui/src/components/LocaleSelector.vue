@@ -2,7 +2,10 @@
 import { ref, onMounted, onBeforeUnmount } from 'vue'
 import { ChevronDown } from '@lucide/vue'
 
-interface Locale { code: string; name: string }
+interface Locale {
+  code: string
+  name: string
+}
 
 // Selector de idioma de contenido. Controlado por v-model (código de locale).
 // Adaptado de kontuan pero sin vue-i18n: la lista de locales se pasa por props

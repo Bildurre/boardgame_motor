@@ -3,7 +3,15 @@ import { onMounted, reactive, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { Trash2 } from '@lucide/vue'
 import { BaseGrid, EntityCard, EmptyState } from '@bgm/admin-kit'
-import { BaseButton, IconButton, EditModal, BaseInput, ImageUpload, useToast, useConfirm } from '@bgm/ui'
+import {
+  BaseButton,
+  IconButton,
+  EditModal,
+  BaseInput,
+  ImageUpload,
+  useToast,
+  useConfirm,
+} from '@bgm/ui'
 import { api } from '@/lib/api'
 import { fieldErrors } from '@/lib/apiError'
 import { useIconsStore } from '@/stores/icons'
@@ -96,7 +104,9 @@ async function del(icon: any) {
           <div class="icon-tile"><img v-if="icon.url" :src="icon.url" :alt="icon.name" /></div>
         </template>
         <template #actions>
-          <IconButton variant="danger" :title="t('houses.actions.delete')" @click="del(icon)"><Trash2 :size="18" /></IconButton>
+          <IconButton variant="danger" :title="t('houses.actions.delete')" @click="del(icon)"
+            ><Trash2 :size="18"
+          /></IconButton>
         </template>
       </EntityCard>
     </BaseGrid>
