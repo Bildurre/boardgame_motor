@@ -62,7 +62,7 @@ it('el job captura la URL /_render con token y guarda el PNG versionado', functi
     expect($url)->toContain('/_render/character/'.$character->id)
         ->and($url)->toContain('locale=es')
         ->and($url)->toContain('token=')
-        ->and($renderer->captured[0]['width'])->toBe(350);
+        ->and($renderer->captured[0]['width'])->toBe(315);
 });
 
 it('al regenerar borra el PNG anterior del locale', function () {
@@ -108,7 +108,7 @@ it('la ruta de datos de render exige un token válido', function () {
     $this->getJson("/api/render/character/{$character->id}?token={$token}&locale=es")
         ->assertOk()
         ->assertJsonPath('entity', 'character')
-        ->assertJsonPath('size.width', 350)
+        ->assertJsonPath('size.width', 315)
         ->assertJsonPath('data.name.es', 'Tyrion');
 });
 

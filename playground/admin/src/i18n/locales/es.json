@@ -251,7 +251,6 @@
     "title": "Imágenes (previews)"
   },
   "pdfs": {
-    "title": "PDF recortables",
     "generate": "Generar (todos los idiomas)",
     "refresh": "Actualizar",
     "download": "Descargar",
@@ -262,7 +261,11 @@
     "statusPending": "En cola…",
     "statusReady": "Listo",
     "statusFailed": "Error",
-    "globalCharacters": "Todos los personajes (recortables)",
-    "viewTitle": "PDF"
+    "viewTitle": "PDF",
+    "types": {
+      "characters": "Todos los personajes",
+      "schemes": "Todas las argucias",
+      "houseSchemes": "Por casa (sus argucias)"
+    }
   }
 }

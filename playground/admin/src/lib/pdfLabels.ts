@@ -7,9 +7,8 @@ export function usePdfLabels(): ComputedRef<PdfManagerLabels> {
   const { t } = useI18n()
 
   return computed(() => ({
-    title: t('pdfs.title'),
-    generate: t('pdfs.generate'),
     refresh: t('pdfs.refresh'),
+    generate: t('pdfs.generate'),
     download: t('pdfs.download'),
     regenerate: t('pdfs.regenerate'),
     delete: t('pdfs.delete'),

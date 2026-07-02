@@ -68,10 +68,10 @@ class Character extends Model implements HasMedia, PreviewableContract
 
     // --- Render a PNG (doc 01) ---
 
-    /** Tamaño del componente carta en px CSS (proporción 88x126 mm). */
+    /** Tamaño del componente carta en px CSS (proporción Magic 63x88 mm). */
     public function previewSize(): array
     {
-        return ['width' => 350, 'height' => 500];
+        return ['width' => 315, 'height' => 440];
     }
 
     /** Etiqueta para el gestor de previews del admin. */

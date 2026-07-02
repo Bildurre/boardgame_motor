@@ -4,10 +4,9 @@ namespace App\Providers;
 
 use App\Models\Character;
 use App\Models\Scheme;
-use App\Pdf\CharacterCardExport;
 use App\Pdf\CharactersExport;
 use App\Pdf\HouseSchemesExport;
-use App\Pdf\SchemeCardExport;
+use App\Pdf\SchemesExport;
 use Bgm\Core\Support\Facades\Pdfs;
 use Bgm\Core\Support\Facades\Previews;
 use Illuminate\Support\ServiceProvider;
@@ -32,10 +31,10 @@ class AppServiceProvider extends ServiceProvider
         Previews::register('character', Character::class);
         Previews::register('scheme', Scheme::class);
 
-        // Exports de PDF (doc 02): la clave es el `type` de /admin/pdfs.
-        Pdfs::register('house-schemes', HouseSchemesExport::class);   // colección por casa
-        Pdfs::register('characters', CharactersExport::class);        // colección global
-        Pdfs::register('character-card', CharacterCardExport::class); // carta individual
-        Pdfs::register('scheme-card', SchemeCardExport::class);           // argucia individual
+        // Catálogo de PDF de ESTE juego (doc 02): qué se puede generar y qué
+        // contiene cada uno. Todo se gestiona desde la sección PDF del admin.
+        Pdfs::register('characters', CharactersExport::class);      // todos los personajes
+        Pdfs::register('schemes', SchemesExport::class);            // todas las argucias
+        Pdfs::register('house-schemes', HouseSchemesExport::class); // un PDF por casa (sus argucias)
     }
 }

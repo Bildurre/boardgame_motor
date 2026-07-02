@@ -1,23 +1,44 @@
 @use "tokens" as *;
 
-// Gestor de PDF de un export (PdfManager).
+// Gestor de PDF del juego (PdfManager): catálogo de exports.
 .pdf-manager {
-  margin-top: $space-7;
+  display: grid;
+  gap: $space-5;
 
   &__bar {
     display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: $space-3;
-    flex-wrap: wrap;
-    border-bottom: 1px solid $border;
-    padding-bottom: $space-2;
-    margin-bottom: $space-4;
-
-    h2 { margin: 0; font-size: $fs-18; }
+    justify-content: flex-end;
+    gap: $space-2;
   }
 
-  &__actions { display: flex; gap: $space-2; flex-wrap: wrap; }
+  &__export {
+    border: 1px solid $border;
+    border-radius: $radius-lg;
+    background: $surface;
+    padding: $space-3 $space-4 $space-4;
+  }
+
+  &__head {
+    display: flex;
+    align-items: center;
+    gap: $space-3;
+    flex-wrap: wrap;
+    padding-bottom: $space-2;
+    margin-bottom: $space-3;
+    border-bottom: 1px solid $border;
+
+    h2 { margin: 0; font-size: $fs-16; }
+  }
+
+  &__layout {
+    font-size: $fs-12;
+    color: $text-3;
+    border: 1px solid $border;
+    border-radius: $radius-sm;
+    padding: 1px $space-2;
+  }
+
+  &__generate { margin-left: auto; }
 
   &__empty { color: $text-3; margin: 0; }
 
@@ -25,6 +46,46 @@
     list-style: none;
     display: grid;
     gap: $space-2;
+  }
+
+  &__sources {
+    display: grid;
+    gap: $space-3;
+  }
+}
+
+.pdf-source {
+  border: 1px solid $border;
+  border-radius: $radius-md;
+  background: $surface-2;
+  padding: $space-2 $space-3;
+  display: grid;
+  gap: $space-2;
+
+  &__head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: $space-3;
+  }
+
+  &__toggle {
+    display: flex;
+    align-items: center;
+    gap: $space-2;
+    background: none;
+    border: 0;
+    color: $text-1;
+    cursor: pointer;
+    padding: 0;
+    min-width: 0;
+  }
+
+  &__label {
+    font-weight: $k-fw-semibold;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
 }
 

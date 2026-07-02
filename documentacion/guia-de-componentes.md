@@ -492,18 +492,19 @@ vive en el composable `useEntityList` (ver la guía de montar una web, §4.4).
 
 ### PdfManager
 
-- **Finalidad:** gestor de PDF de **un export** (doc 02): lista los PDF por
-  idioma con su estado (en cola / listo / error con mensaje) y botones
-  **Generar (todos los idiomas) / Regenerar / Descargar / Borrar**. Se monta una
-  vez por export: en el single de la entidad dueña, o en una vista de exports
-  globales.
-- **Props:** `api: AxiosInstance`, `type: string` (clave del PdfExportRegistry),
-  `sourceId?: number | null` (omitir en exports globales) y
-  `labels?: Partial<PdfManagerLabels>` (DC-29).
-- **Uso** (ver `HouseSingleView` / `PdfsView` del playground):
+- **Finalidad:** gestor del **catálogo completo de PDF del juego** (doc 02).
+  Lee los exports registrados (`GET /api/admin/pdfs/exports`) y pinta cada uno:
+  los globales con sus filas por idioma, los por-entidad con sus entidades
+  desplegables (de `sources()`), cada una con su botón Generar. Filas con
+  estado (en cola / listo / error con mensaje) y Regenerar / Descargar /
+  Borrar. Toda la gestión de PDF vive aquí (nada en los singles); añadir un
+  export = registrarlo en el backend + su etiqueta en `typeLabels`.
+- **Props:** `api: AxiosInstance`, `labels?: Partial<PdfManagerLabels>` (DC-29)
+  y `typeLabels?: Record<string, string>` (nombre traducido por export).
+- **Uso** (ver `PdfsView` del playground):
 
 ```vue
-<PdfManager :api="api" type="house-schemes" :source-id="item.id" :labels="pdfLabels" />
+<PdfManager :api="api" :labels="pdfLabels" :type-labels="typeLabels" />
 ```
 
 ## `@bgm/admin-kit` — Composables

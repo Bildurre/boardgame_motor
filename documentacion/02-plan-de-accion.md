@@ -75,7 +75,7 @@
 - [x] `GeneratedPdf` **polimórfico** (permanentes + temporales, estado pending/ready/failed con error visible) + ensamblado DomPDF desde los PNG (genera al vuelo las previews que falten).
 - [x] `PdfExportRegistry` (facade `Pdfs`) + `PdfExport`: el juego describe el contenido (colección por entidad / global / individual) y opcionalmente su vista Blade; el motor pone el pipeline. `PrintLayout` con presets (card 88×126, counter) en config publicable (DC-07); rejilla genérica `motor::pdf.grid` con marcas de corte (posicionado absoluto en mm: DomPDF fiable).
 - [x] Colección temporal por usuario (`/api/pdf-collection`: ítems con copias, snapshot en payload, `expires_at`) + `pdf:cleanup` programable.
-- [x] Multi-idioma (un PDF por locale). API `/api/admin/pdfs` + descarga pública de permanentes + `PdfManager` en admin-kit (montado en los singles del playground y en la vista "PDF" para exports globales).
+- [x] Multi-idioma (un PDF por locale). API `/api/admin/pdfs` (+ catálogo `GET /admin/pdfs/exports`) + descarga pública de permanentes + `PdfManager` en admin-kit: **toda la gestión centralizada en la sección PDF del admin** (catálogo dirigido por los exports registrados; nada en los singles). Layout `card` por defecto = **Magic 63×88** (9/A4), ajustable por juego.
 - **Hito:** ✅ generar y regenerar desde el admin con un clic (fichero versionado, borra el anterior); PDF temporal a la carta cubierto por API + tests (la UI pública llega con la Fase 6). Verificado con PDF real (4 cartas por A4 con marcas de corte).
 
 ### Fase 5 — CRM de páginas y bloques

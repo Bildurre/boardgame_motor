@@ -152,9 +152,14 @@ POST   /api/v1/pdf-collection/generate    # → PDF temporal
 ## Notas de implementación (Fase 4)
 
 - El "qué va dentro" lo declara el juego con **exports** (`PdfExportRegistry` +
-  facade `Pdfs`, espejo del PreviewRegistry): tres sabores demostrados en el
-  playground — colección por entidad (`house-schemes`), global (`characters`)
-  e individual con copias (`character-card`). Guía §6.
+  facade `Pdfs`, espejo del PreviewRegistry): el conjunto registrado es el
+  **catálogo** del juego, y la sección PDF del admin lo pinta sola (endpoint
+  `GET /admin/pdfs/exports`; los exports por entidad listan sus dueñas con
+  `sources()`). Playground: `characters` y `schemes` (globales) y
+  `house-schemes` (un PDF por casa con sus argucias). Guía §6.
+- El layout `card` por defecto es **tamaño Magic (63×88 mm, 9 por A4)**; cada
+  juego ajusta el tamaño de sus cartas en `motor.pdf.layouts` y mantiene la
+  proporción en `previewSize()`.
 - `PdfService::generate()` reutiliza el registro de (type, source, locale) y
   versiona el fichero (URL nueva, borra el anterior): regenerar = volver a llamar.
 - Las previews que falten se generan **en el momento** al componer (sin pasos

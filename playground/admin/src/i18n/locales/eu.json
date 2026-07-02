@@ -251,7 +251,6 @@
     "title": "Irudiak (aurrebistak)"
   },
   "pdfs": {
-    "title": "PDF moztekoak",
     "generate": "Sortu (hizkuntza guztiak)",
     "refresh": "Eguneratu",
     "download": "Deskargatu",
@@ -262,7 +261,11 @@
     "statusPending": "Ilaran…",
     "statusReady": "Prest",
     "statusFailed": "Errorea",
-    "globalCharacters": "Pertsonaia guztiak (moztekoak)",
-    "viewTitle": "PDFak"
+    "viewTitle": "PDFak",
+    "types": {
+      "characters": "Pertsonaia guztiak",
+      "schemes": "Argucia guztiak",
+      "houseSchemes": "Etxeka (bere argukiak)"
+    }
   }
 }

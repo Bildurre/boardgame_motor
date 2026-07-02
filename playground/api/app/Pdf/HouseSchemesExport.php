@@ -28,4 +28,17 @@ class HouseSchemesExport extends PdfExport
             ->map(fn (Scheme $scheme) => PrintableItem::preview($scheme))
             ->all();
     }
+
+    /** Las casas disponibles en el gestor de PDF del admin. */
+    public function sources(string $locale): array
+    {
+        return House::query()
+            ->orderBy('id')
+            ->get()
+            ->map(fn (House $house) => [
+                'id' => $house->id,
+                'label' => $house->getTranslation('name', $locale) ?: "#{$house->id}",
+            ])
+            ->all();
+    }
 }

@@ -251,7 +251,6 @@
     "title": "Images (previews)"
   },
   "pdfs": {
-    "title": "Cut-out PDFs",
     "generate": "Generate (all languages)",
     "refresh": "Refresh",
     "download": "Download",
@@ -262,7 +261,11 @@
     "statusPending": "Queued…",
     "statusReady": "Ready",
     "statusFailed": "Failed",
-    "globalCharacters": "All characters (cut-out)",
-    "viewTitle": "PDFs"
+    "viewTitle": "PDFs",
+    "types": {
+      "characters": "All characters",
+      "schemes": "All schemes",
+      "houseSchemes": "Per house (its schemes)"
+    }
   }
 }

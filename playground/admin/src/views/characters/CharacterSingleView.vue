@@ -6,9 +6,7 @@ import { ArrowLeft, SquarePen } from '@lucide/vue'
 import { useResource } from '@bgm/admin-kit'
 import { BaseButton } from '@bgm/ui'
 import { api } from '@/lib/api'
-import { PdfManager } from '@bgm/admin-kit'
 import PreviewPanel from '@/components/previews/PreviewPanel.vue'
-import { usePdfLabels } from '@/lib/pdfLabels'
 import { useLocalesStore } from '@/stores/locales'
 import { type Character, CharacterCard } from '@playground/shared'
 import CharacterFormModal from '@/components/characters/CharacterFormModal.vue'
@@ -18,7 +16,6 @@ const route = useRoute()
 const router = useRouter()
 const locales = useLocalesStore()
 const { find } = useResource<Character>(api, '/admin/characters')
-const pdfLabels = usePdfLabels()
 
 const item = ref<Character | null>(null)
 const loading = ref(true)
@@ -82,14 +79,6 @@ onMounted(async () => {
     </div>
 
     <PreviewPanel v-if="item" :id="item.id" entity="character" />
-
-    <PdfManager
-      v-if="item"
-      :api="api"
-      type="character-card"
-      :source-id="item.id"
-      :labels="pdfLabels"
-    />
 
     <CharacterFormModal v-model="formOpen" mode="edit" :target-slug="slug" @saved="onSaved" />
   </div>

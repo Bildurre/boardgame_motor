@@ -86,11 +86,7 @@ it('regenerar reutiliza el registro y borra el fichero anterior', function () {
 it('expande copias y pagina según la capacidad del layout', function () {
     $character = makeCharacter(['is_published' => true]);
 
-    // character-card = la carta x1 -> 1 página.
-    $pdf = app(PdfService::class)->generate('character-card', $character, 'es', sync: true)->refresh();
-    expect(pdfPageCount(Storage::disk('public')->get($pdf->path)))->toBe(1);
-
-    // Colección temporal con 10 huecos -> 3 páginas.
+    // Layout 'card' (Magic 63x88): 9 por A4 -> 10 huecos = 2 páginas.
     $owner = motorUser();
     $pdf = app(PdfService::class)->generateCollection(
         $owner,
@@ -99,7 +95,7 @@ it('expande copias y pagina según la capacidad del layout', function () {
         sync: true,
     )->refresh();
 
-    expect(pdfPageCount(Storage::disk('public')->get($pdf->path)))->toBe(3)
+    expect(pdfPageCount(Storage::disk('public')->get($pdf->path)))->toBe(2)
         ->and($pdf->is_permanent)->toBeFalse()
         ->and($pdf->expires_at)->not->toBeNull();
 });
@@ -138,9 +134,10 @@ it('el admin genera un PDF por export y entidad (todos los locales)', function (
         ->assertJsonPath('data.0.status', 'pending');
 });
 
-it('el admin genera un export global y uno individual', function () {
+it('el admin genera los exports globales (personajes y argucias)', function () {
     Queue::fake();
     makeCharacter(['is_published' => true]);
+    makeHouseWithSchemes(1);
     $admin = motorUser('admin');
 
     $this->actingAs($admin)->postJson('/api/admin/pdfs/generate', [
@@ -148,21 +145,31 @@ it('el admin genera un export global y uno individual', function () {
         'locale' => 'es',
     ])->assertAccepted()->assertJsonCount(1, 'data');
 
-    // Individual sin source_id -> 422.
     $this->actingAs($admin)->postJson('/api/admin/pdfs/generate', [
-        'type' => 'character-card',
+        'type' => 'schemes',
+        'locale' => 'es',
+    ])->assertAccepted()->assertJsonCount(1, 'data');
+
+    // Un export por entidad sin source_id -> 422.
+    $this->actingAs($admin)->postJson('/api/admin/pdfs/generate', [
+        'type' => 'house-schemes',
         'locale' => 'es',
     ])->assertUnprocessable();
 });
 
-it('la argucia tiene su carta individual en PDF (x1)', function () {
+it('el catálogo de exports lista los tipos con sus entidades dueñas', function () {
     $house = makeHouseWithSchemes(1);
-    $scheme = $house->schemes()->first();
 
-    $pdf = app(PdfService::class)->generate('scheme-card', $scheme, 'es', sync: true)->refresh();
-
-    expect($pdf->status)->toBe(GeneratedPdf::STATUS_READY)
-        ->and(pdfPageCount(Storage::disk('public')->get($pdf->path)))->toBe(1);
+    $this->actingAs(motorUser('admin'))->getJson('/api/admin/pdfs/exports')
+        ->assertOk()
+        ->assertJsonCount(3, 'data')
+        ->assertJsonPath('data.0.type', 'characters')
+        ->assertJsonPath('data.0.global', true)
+        ->assertJsonPath('data.0.sources', [])
+        ->assertJsonPath('data.2.type', 'house-schemes')
+        ->assertJsonPath('data.2.global', false)
+        ->assertJsonPath('data.2.sources.0.id', $house->id)
+        ->assertJsonPath('data.2.sources.0.label', 'Casa Stark');
 });
 
 it('regenera, borra y descarga desde la API', function () {

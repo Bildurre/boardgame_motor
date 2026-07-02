@@ -414,11 +414,14 @@ el juego solo **describe el contenido** de cada PDF con un *export*. Frontera:
 el motor nunca sabe qué es una "casa" o un "mazo"; el juego nunca reescribe el
 ensamblado.
 
-### 6.1 Tipos de export (las tres plantillas típicas)
+### 6.1 Tipos de export (el catálogo del juego)
 
 Un export es una clase pequeña en `api/app/Pdf/` que extiende `Bgm\Core\Pdf\PdfExport`
 y declara: quién es la entidad dueña (`sourceModel()`) y qué ítems van dentro
-(`items()`). Las tres formas habituales (las tres están en el playground):
+(`items()`). El conjunto de exports registrados ES el catálogo de PDF del juego:
+define **qué PDF se pueden generar y qué contiene cada uno**, y la sección PDF
+del admin lo pinta solo. Las formas habituales (el playground trae las dos
+primeras):
 
 1. **Colección por entidad** — el PDF pertenece a una entidad y agrega sus
    hijas. Ej.: las argucias de una casa (`HouseSchemesExport`):
@@ -437,20 +440,25 @@ y declara: quién es la entidad dueña (`sourceModel()`) y qué ítems van dentr
    }
    ```
 
-2. **Colección global** — sin dueña (`sourceModel()` devuelve `null`). Ej.:
-   todas las cartas de personaje (`CharactersExport`).
-
-3. **Individual** — el PDF de UNA entidad (`CharacterCardExport`,
-   `SchemeCardExport`). En este playground las cartas van **x1**; otro juego
-   puede subir `copies` (p. ej. `copies: 4` = hoja A4 completa con el layout
-   `card`):
+   Para que el gestor del admin liste las casas, el export por entidad
+   implementa también `sources($locale)` (id + etiqueta legible):
 
    ```php
-   public function items(?Model $source, string $locale): array
+   public function sources(string $locale): array
    {
-       return [PrintableItem::preview($source)]; // x1 (copies: N para más)
+       return House::query()->orderBy('id')->get()
+           ->map(fn (House $h) => ['id' => $h->id, 'label' => $h->getTranslation('name', $locale)])
+           ->all();
    }
    ```
+
+2. **Colección global** — sin dueña (`sourceModel()` devuelve `null`). Ej.:
+   todas las cartas de personaje (`CharactersExport`) o todas las argucias
+   (`SchemesExport`).
+
+3. **Individual / con copias** — nada lo impide: un export con
+   `PrintableItem::preview($source, copies: N)` imprime una entidad repetida.
+   Este playground no usa cartas individuales; cada juego decide su catálogo.
 
 Los ítems se declaran con `PrintableItem::preview($entidad, copies: N)` (usa el
 PNG del render, doc 01, **generándolo al vuelo si falta**) o
@@ -459,9 +467,9 @@ PNG del render, doc 01, **generándolo al vuelo si falta**) o
 Registro en `AppServiceProvider::boot` (la clave es el `type` de la API):
 
 ```php
-Pdfs::register('house-schemes', HouseSchemesExport::class);
-Pdfs::register('characters', CharactersExport::class);
-Pdfs::register('character-card', CharacterCardExport::class);
+Pdfs::register('characters', CharactersExport::class);      // todos los personajes
+Pdfs::register('schemes', SchemesExport::class);            // todas las argucias
+Pdfs::register('house-schemes', HouseSchemesExport::class); // un PDF por casa
 ```
 
 ### 6.2 Plantillas (vistas del PDF)
@@ -476,29 +484,39 @@ Pdfs::register('character-card', CharacterCardExport::class);
   (huecos ya expandidos y paginados) y `$layout`. El resto del pipeline
   (cola, versionado, regeneración, gestor del admin) sigue siendo del motor.
 
-### 6.3 Layouts de impresión (DC-07)
+### 6.3 Layouts de impresión: el tamaño de las cartas (DC-07)
 
 Los presets viven en `config/motor.php` → `motor.pdf.layouts` (publicable): papel,
-orientación, tamaño de pieza en **mm**, margen, separación y marcas de corte.
-El motor calcula columnas/filas/capacidad del papel. Vienen `card` (88×126, 4 por
-A4) y `counter` (25×25); cada juego añade los suyos (p. ej. `tarot`, `token-grande`)
-publicando la config y ampliando el array. El export elige el suyo con `layout()`
-y la API admite `layout` para forzar otro puntual.
+orientación, **tamaño de pieza en mm**, margen, separación y marcas de corte.
+El motor calcula columnas/filas/capacidad del papel. Por defecto `card` es
+**tamaño Magic (63×88 mm, 9 por A4)** y `counter` 25×25; **cada juego ajusta el
+tamaño de sus cartas** publicando la config (`php artisan vendor:publish
+--tag=motor-config`) y editando/añadiendo presets (p. ej. `tarot`,
+`token-grande`). El export elige el suyo con `layout()` y la API admite `layout`
+para forzar otro puntual.
+
+> Mantén la **proporción** de `previewSize()` (px, doc 01) acorde al layout
+> (mm) para que la imagen no se deforme: p. ej. Magic 63:88 → 315×440 px.
 
 ### 6.4 Gestión desde el admin y API
 
-- **`PdfManager`** (admin-kit): se monta una vez por export — en el single de la
-  entidad dueña (`type` + `source-id`) o en una vista de exports globales:
+- **Toda la gestión vive en la sección PDF del admin** (nada en los detalles de
+  las entidades). `PdfManager` (admin-kit) lee el catálogo del backend
+  (`GET /api/admin/pdfs/exports`) y pinta cada export: los globales con sus
+  filas por idioma, y los por-entidad con sus entidades desplegables (de
+  `sources()`), cada una con su Generar:
 
   ```vue
-  <PdfManager :api="api" type="house-schemes" :source-id="item.id" :labels="pdfLabels" />
+  <PdfManager :api="api" :labels="pdfLabels" :type-labels="typeLabels" />
   ```
 
-  Lista los PDF por idioma con estado (en cola / listo / error con mensaje) y
-  botones Generar / Regenerar / Descargar / Borrar. **Regenerar = un clic**:
-  reutiliza el registro, versiona el fichero y borra el anterior.
-- API: `GET/POST /api/admin/pdfs[...]` (gestión), `GET /api/pdfs/{id}/download`
-  (permanentes públicos; temporales solo dueño/admin).
+  Filas por idioma con estado (en cola / listo / error con mensaje) y botones
+  Generar / Regenerar / Descargar / Borrar. **Regenerar = un clic**: reutiliza
+  el registro, versiona el fichero y borra el anterior. Añadir un export nuevo
+  al juego = registrarlo + su etiqueta en `typeLabels`; la vista no se toca.
+- API: `GET /api/admin/pdfs/exports` (catálogo), `GET/POST /api/admin/pdfs[...]`
+  (gestión), `GET /api/pdfs/{id}/download` (permanentes públicos; temporales
+  solo dueño/admin).
 
 ### 6.5 Colección temporal del usuario
 
@@ -542,10 +560,10 @@ Render a PNG (si la entidad se imprime/expone como carta):
 - [ ] Invalidar al subir imagen; `previews` en el Resource; `PreviewPanel` en el single.
 - [ ] `previewLabel()` en el modelo (etiqueta del gestor); la vista "Imágenes" ya lista el tipo sola.
 
-PDF (si la entidad se exporta):
-- [ ] Export en `api/app/Pdf/` (colección por entidad / global / individual) + `Pdfs::register(...)`.
-- [ ] `PdfManager` en el single de la entidad dueña (o en la vista de exports globales).
-- [ ] Layout propio en `motor.pdf.layouts` si la pieza no es carta/counter.
+PDF (si la entidad entra en algún export):
+- [ ] Export en `api/app/Pdf/` (colección por entidad con `sources()`, o global) + `Pdfs::register(...)`.
+- [ ] Etiqueta del export en `typeLabels` de la vista PDF (i18n `pdfs.types.*`).
+- [ ] Tamaño de pieza correcto en `motor.pdf.layouts` (Magic 63×88 por defecto) y `previewSize()` proporcional.
 
 ---
 
