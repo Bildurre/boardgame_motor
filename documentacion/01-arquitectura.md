@@ -118,7 +118,7 @@ admin-kit/                        # paquete @bgm/admin-kit
 ├── package.json                  # @bgm/admin-kit
 ├── src/
 │   ├── layout/                   # AdminLayout, Sidebar, Topbar, Breadcrumbs
-│   ├── crud/                     # ResourceList, ResourceForm, FiltersBar, useResource()
+│   ├── crud/                     # BaseGrid, EntityCard, FilterBar, EmptyState, useResource()
 │   ├── content/                  # PageEditor, BlockEditor, BlockPalette, reorder
 │   ├── pdf/                      # PdfManager, PreviewManager
 │   ├── users/                    # UsersAdmin, RolesAdmin
@@ -129,7 +129,7 @@ admin-kit/                        # paquete @bgm/admin-kit
 
 **Cómo lo extiende un juego:** el admin del juego importa `AdminLayout` y registra
 sus secciones/CRUDs declarándolos (modelo, campos, columnas) o componiendo con
-`ResourceList`/`ResourceForm`. Las pantallas muy específicas (ej. constructor de
+`BaseGrid`/`EntityCard`/`FilterBar` (y el futuro `ResourceForm`). Las pantallas muy específicas (ej. constructor de
 mazos) las escribe el juego a mano usando `@bgm/ui`.
 
 ## 3. Anatomía de un juego (ej. estructura futura de choque)

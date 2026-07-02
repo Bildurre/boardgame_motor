@@ -216,8 +216,8 @@ tarjetas**. Orden de la vista: **filtros → tabs → grid**. Componentes en
 `@bgm/admin-kit`, copiados/mezclados de kontuan y de Choque de Leyendas (DC-28):
 `FilterBar` (búsqueda con lupa, estilo kontuan), `BaseGrid` (grid responsive por
 `@container`), `EntityCard` (estructura kontuan + zonas `badges`/`meta` de CDL +
-franja `media`), `EmptyState`. `ResourceList`/`FiltersBar` (tabla + select) quedan
-obsoletos.
+franja `media`), `EmptyState`. `ResourceList`/`FiltersBar` (tabla + select) quedaron
+obsoletos y ya están **eliminados** del paquete.
 **Por qué:** consistencia visual con los juegos (cartas), mejor en móvil, y encaja
 con el modo "carta" del render a PNG (Fase 3).
 
@@ -256,9 +256,8 @@ Cuatro tiers, con los breakpoints de los tokens:
   rail** de iconos (toggle persistido en localStorage).
 - **Wide** (`≥ $bp-xl` 1280): tier amplio.
 
-**Listados (`ResourceList`)**: tarjetas mientras el menú es hamburguesa, tabla cuando
-es fijo — el cambio coincide en **`$bp-lg`**. Las tarjetas van a **1 columna** (`< $bp-md`)
-y **2 columnas** (`$bp-md`–`$bp-lg`) antes de pasar a tabla.
+**Listados**: siempre grid de tarjetas (DC-30); el grid es responsivo por `@container`
+(`BaseGrid`), pasando de 1 columna en móvil a varias según el ancho disponible.
 **Por qué:** la gestión será mucho en móvil; el rail da más espacio en escritorio;
 y los breakpoints de menú y de listado deben coincidir para no dar saltos raros.
 

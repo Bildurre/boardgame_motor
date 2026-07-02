@@ -1,5 +1,7 @@
 # 01 · Render de componentes a PNG
 
+> **Estado: implementado (Fase 3 ✅).** Notas de implementación al final.
+
 ## Qué hace
 
 Captura el **componente visual** de una entidad (la carta, el héroe…) a una
@@ -119,3 +121,24 @@ actual, pero **declarativa**: la entidad lista qué campos disparan regeneració
 
 - Memoria/concurrencia de Chrome: límite de instancias configurable.
 - Calidad vs peso del PNG (scale factor) — afecta también al PDF (doc 02).
+
+## Notas de implementación (Fase 3)
+
+- `previewSize()` se declara en **píxeles CSS** (la carta demo: 350×500, proporción
+  88×126 mm); la calidad la da `motor.previews.scale` (deviceScaleFactor, def. 2).
+  El mapeo px→mm exacto se cerrará con los presets de impresión del PDF (DC-07).
+- El token de servicio (DC-04) vive en **caché** con TTL `motor.previews.token_ttl`
+  (def. 300 s): `RenderToken::issue()` al lanzar Browsershot; `GET api/render/{entity}/{id}`
+  lo exige y solo vale para esa entidad+id.
+- La ruta `/_render` marca `window.__bgmRenderReady` cuando el componente está
+  montado con datos, fuentes (`document.fonts.ready`) e imágenes cargadas;
+  `PreviewRenderer` espera esa señal (`waitForFunction`) además de `networkidle`.
+- Los PNG se guardan **versionados** (`{locale}-{rand}.png`): cada render produce
+  una URL nueva (sin cachés rancias) y borra el fichero anterior.
+- La **imagen** de la entidad vive en MediaLibrary (no es columna), así que el
+  trait no puede detectar su cambio: el controlador invalida a mano tras
+  `setImageFromRequest()` (ver playground). La papelera conserva los PNG; el
+  borrado definitivo los elimina.
+- Apagado global con `MOTOR_PREVIEWS=false` (tests, entornos sin Chromium).
+- Chromium: por defecto el que descarga `puppeteer` (dependencia npm de la api
+  del juego); en el droplet se fija `MOTOR_CHROME_PATH` (DC-22).

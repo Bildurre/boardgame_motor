@@ -103,13 +103,17 @@ const tabs = [
 ### BaseModal
 
 - **Finalidad:** ventana modal base (overlay + diálogo) con cierre por overlay,
-  botón X y tecla `Escape`. Bloquea el scroll del body mientras está abierta.
-  Es la base de `ConfirmDialog`/`EditModal` y de cualquier formulario emergente.
+  botón X y tecla `Escape`. Bloquea el scroll del body mientras hay algún modal
+  abierto (pila compartida: con modal + confirmación superpuestos, `Escape`
+  cierra solo el de arriba y el scroll se libera al cerrar el último, incluso
+  si un modal se desmonta abierto). Es la base de `ConfirmDialog`/`EditModal`
+  y de cualquier formulario emergente.
 - **Comportamiento:** cabecera con fondo, la X se tiñe de rojo en hover, y el
   modal nunca supera el 88% del alto; si el contenido no cabe, **scrollea solo el
   `.modal__body`** (cabecera y pie quedan fijos).
 - **Modelo:** `v-model` (boolean abierto/cerrado).
-- **Props:** `title?: string`, `size?: 'sm' | 'md' | 'lg'` (def. `md`).
+- **Props:** `title?: string`, `size?: 'sm' | 'md' | 'lg'` (def. `md`),
+  `closeLabel?: string` (aria-label de la X; def. `'Cerrar'`, DC-29).
 - **Slots:** por defecto (cuerpo), `header` (sustituye al título), `footer`.
 - **Uso:**
 
@@ -217,7 +221,8 @@ color. Úsalos siempre en formularios (en modal o donde sea).
   `TranslatableInput type="wysiwyg"` (carga diferida: TipTap solo se descarga si
   hay algún campo wysiwyg).
 - **Props:** `modelValue` (HTML), `placeholder?`, `disabled?`,
-  `icons?: { name, url }[]` (biblioteca de iconos; la sirve el motor en `GET /icons`).
+  `icons?: { name, url }[]` (biblioteca de iconos; la sirve el motor en `GET /icons`),
+  `labels?: Partial<RichTextLabels>` (textos de la barra, DC-29; defaults en castellano).
 - **Uso directo (no traducible):**
 
 ```vue
@@ -241,6 +246,9 @@ color. Úsalos siempre en formularios (en modal o donde sea).
 <TranslatableInput v-model="form.description" :locales="locales.locales"
   label="Descripción" type="textarea" />
 ```
+
+> En `type="wysiwyg"` acepta también `icons` y `richLabels` (se pasan tal cual
+> al `RichTextInput` interno).
 
 ### ImageUpload
 
@@ -374,6 +382,7 @@ if (!ok) return
   componentes internos (tabs, listas) responden al ancho real, no al viewport.
 - **Props:** `title?`, `brand?` (def. `'BGM Admin'`), `locales?` (lista para el
   selector), `locale?` (v-model:locale del idioma de la app),
+  `homeRoute?` (destino del logo; def. `{ name: 'dashboard' }`),
   `homeCrumb?` (miga "home"; `null` la oculta), `breadcrumbs?` (migas ya
   traducidas que la app calcula con `t()`).
 - **Slots:** `nav` (enlaces, usa la clase `nav-item` + `nav-label`),
@@ -449,11 +458,12 @@ if (!ok) return
 </BaseGrid>
 ```
 
-### ResourceList _(legacy)_ y FiltersBar _(legacy)_
+### ResourceList y FiltersBar — eliminados
 
-`ResourceList` (tabla + tarjetas) y `FiltersBar` (select de estado) quedan
-**obsoletos** por DC-30 (sin tablas). Se mantienen exportados de momento por
-compatibilidad, pero los index nuevos usan el patrón de arriba.
+`ResourceList` (tabla + tarjetas) y `FiltersBar` (select de estado) quedaron
+obsoletos por DC-30 (sin tablas) y se han **eliminado del paquete**. Los index
+usan el patrón de arriba; en el playground, además, la lógica común de listado
+vive en el composable `useEntityList` (ver la guía de montar una web, §4.4).
 
 ---
 
@@ -462,7 +472,8 @@ compatibilidad, pero los index nuevos usan el patrón de arriba.
 ### useResource(api, basePath)
 
 - **Finalidad:** CRUD genérico sobre la API REST del motor; evita reescribir el
-  ir-y-venir con axios en cada entidad.
+  ir-y-venir con axios en cada entidad. Genérico: `useResource<House>(api, '/admin/houses')`
+  tipa `items`, `find`, etc.; `meta` es `ResourceMeta` (paginación).
 - **API devuelta:** `{ items, meta, loading, list, find, create, update,
   createForm, updateForm, remove, action }`.
   - `list(params)` — listar con filtros/página; rellena `items` y `meta`.

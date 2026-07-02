@@ -23,6 +23,9 @@ referencia en el `playground` (cópialos y adáptalos): **House** (CRUD básico)
   - `api/` — Laravel + Sanctum (usa `bgm/core` vía Composer _path repository_).
   - `admin/` — SPA Vue (panel) que usa `@bgm/admin-kit` + `@bgm/ui`.
   - `app/` — SPA Vue (público) que usa `@bgm/ui`.
+  - `packages/shared/` — lo del juego compartido entre admin y app: los
+    **componentes visuales de las entidades** (la carta que se ve en la web y
+    se captura a PNG, D8), sus tipos y su SCSS.
 - Regla de oro (DC-28): si necesitas un componente/patrón, **míralo primero en
   kontuan** (y para cartas, en CDL); si existe, cópialo y adáptalo.
 
@@ -30,7 +33,7 @@ referencia en el `playground` (cópialos y adáptalos): **House** (CRUD básico)
 
 ## 1. Crear el juego (una vez)
 
-1. Estructura: un monorepo con `api/`, `admin/`, `app/` (mira el `playground/`).
+1. Estructura: un monorepo con `api/`, `admin/`, `app/` y `packages/shared/` (mira el `playground/`).
 2. En `api/composer.json`, añade el motor como _path repository_:
 
    ```json
@@ -273,7 +276,23 @@ cualquier idioma). Las **altas/ediciones no son rutas** (son modales).
 
 ### 4.4 Vista de listado (`admin/src/views/<modelo>/XListView.vue`)
 
-Orden fijo: **filtros → tabs → grid de tarjetas**. Usa `useResource(api, '/admin/houses')`.
+Orden fijo: **filtros → tabs → grid de tarjetas**. La lógica común de todos los
+listados (tabs + búsqueda con debounce, modal de alta/edición, acciones de fila
+con confirmación + toast + manejo de errores, `tr()`/`slugFor()`) vive en el
+composable **`useEntityList`** (`admin/src/composables/useEntityList.ts`): la
+vista solo declara su template.
+
+```ts
+const { t, items, loading, status, search, tabs, tr, init, formOpen, formMode,
+  formSlug, openCreate, edit, goSingle, onSaved, togglePublish, del, restore,
+  forceDelete } = useEntityList<House>({
+  resource: '/admin/houses',
+  ns: 'houses',                 // namespace i18n (tabs/confirm/toast del modelo)
+  singleRoute: 'house-single',
+  nameOf: (item) => item.name,  // para los mensajes de confirmación
+})
+onMounted(init)
+```
 
 ```vue
 <FilterBar v-model="search" :placeholder="t('common.search')" />
@@ -290,10 +309,13 @@ Orden fijo: **filtros → tabs → grid de tarjetas**. Usa `useResource(api, '/a
 <XFormModal v-model="formOpen" :mode="formMode" :target-slug="formSlug" @saved="onSaved" />
 ```
 
-- `tr(obj)` = valor en el locale activo (`obj[locales.current] || fallback`).
+- `tr(obj)` = valor en el locale activo (con fallback al locale por defecto).
 - Editar → abre el modal con el **slug del locale activo**.
-- Acciones por slug: `remove(slug)`, `action(slug, 'toggle-published')`;
-  restaurar/borrado definitivo por id.
+- Acciones por slug: borrar y `toggle-published`; restaurar/borrado
+  definitivo por id. Todas confirman (las destructivas), avisan con toast y
+  capturan errores (`common.errors.action` / `common.errors.load`).
+- Textos comunes en `common.actions.*` (editar/publicar/borrar/restaurar…);
+  los específicos del modelo (tabs, toasts, confirmaciones) en su namespace.
 
 ### 4.5 Modal de alta/edición (`admin/src/components/<modelo>/XFormModal.vue`)
 
@@ -352,7 +374,34 @@ con clases BEM y decláralo en `views/_index.scss`.
 
 ---
 
-## 5. Checklist para una entidad nueva
+## 5. Render a PNG de una entidad (previews, Fase 3)
+
+Para que una entidad se capture a PNG (base del PDF), doc `funcionalidades/01-render-png.md`:
+
+1. **Migración**: columna `->json('preview_image')->nullable()`.
+2. **Modelo**: `implements PreviewableContract` + `use HasPreviewImage`, y declara:
+   - `previewSize()` — px CSS del componente (la carta demo: 350×500 ≈ 88×126 mm),
+   - `previewTriggerFields()` — campos cuyo cambio regenera (is_published no),
+   - `renderData($locale)` — payload que consumirá el componente en `/_render`.
+3. **Registro backend** (`AppServiceProvider::boot`):
+   `Previews::register('character', Character::class);`
+4. **Componente visual** en `packages/shared` del juego (fuente única web +
+   captura, D8) y **registro frontend** en `app/src/render/registry.ts`:
+   `{ character: CharacterCard }`. La ruta `/_render/:entity/:id` ya la trae el
+   andamiaje de la app (desnuda, con token DC-04 y señal `__bgmRenderReady`).
+5. **Invalidación por imagen**: la imagen vive en MediaLibrary (no es columna);
+   tras `setImageFromRequest()` llama a `regeneratePreviews()` en el controlador.
+6. **Resource**: expón `'previews' => $this->previewUrls()`; en el single del
+   admin añade `<PreviewPanel entity="character" :id="item.id" />`.
+7. En marcha: la creación/edición encola los renders (worker de cola;
+   `npm run dev` ya lo levanta). A mano: `php artisan preview:manage
+   generate|regenerate|status|delete|clean [--type --id --locale --sync --dry-run]`.
+
+Requisitos: `npm install` en `api/` (baja `puppeteer` con su Chromium) o
+`MOTOR_CHROME_PATH` apuntando a un Chromium del sistema. Apagado global con
+`MOTOR_PREVIEWS=false`.
+
+## 6. Checklist para una entidad nueva
 
 Backend:
 - [ ] Migración (json traducibles, `is_published`, `datetimes()`/`softDeletesDatetime()`; FK si hay relación).
@@ -375,9 +424,14 @@ Frontend admin:
 - [ ] Validación cliente + `fieldErrors` + toast genérico.
 - [ ] SCSS de la vista en `views/_<modelo>.scss`.
 
+Render a PNG (si la entidad se imprime/expone como carta):
+- [ ] Columna `preview_image` + contrato/trait + `Previews::register(...)`.
+- [ ] Componente visual en `packages/shared` + entrada en `render/registry.ts`.
+- [ ] Invalidar al subir imagen; `previews` en el Resource; `PreviewPanel` en el single.
+
 ---
 
-## 6. Convenciones que aplican siempre
+## 7. Convenciones que aplican siempre
 
 - **DC-24** — código/tablas en inglés; `datetimes()`/`softDeletesDatetime()`.
 - **DC-25** — iconos de UI con `@lucide/vue`.

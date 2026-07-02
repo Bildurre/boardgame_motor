@@ -1,5 +1,10 @@
 # 05 · Auth, usuarios y roles
 
+> **Estado: implementado (Fases 1–2 ✅), incluida la verificación de email (DC-14).**
+> Pendiente para más adelante: forgot/reset password (al montar el correo real
+> del juego) y el CRUD de usuarios del admin-kit (llegará con el gestor de
+> usuarios, Fase 6/7).
+
 ## Qué hace
 
 Autenticación de la API y gestión de usuarios con **3 roles simples**:

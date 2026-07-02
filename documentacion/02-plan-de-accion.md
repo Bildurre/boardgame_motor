@@ -31,7 +31,7 @@
 - [x] `playground`: Laravel `api` + Vue `admin` + Vue `app` que ya consumen los paquetes por *path*/workspace (enlace local), sin publicar.
 - [x] **PWA** (DC-01): `vite-plugin-pwa` en admin y app (manifest + service worker). Faltan iconos reales (los pone cada juego).
 - [x] Script `dev` con `concurrently` (estilo kontuan) + `dev:front` + `build`.
-- [ ] Linters/formatters: Pint (api), ESLint/Prettier (fronts), Pest — **pendiente** (se añade al empezar a escribir lógica).
+- [x] Linters/formatters: Pint (api + core, config de kontuan), ESLint flat + Prettier a nivel de monorepo, Pest en `playground/api` (suite completa de Fases 0–3). Scripts: `npm run lint / lint:fix / format / lint:php / fix:php / test:api / type-check`.
 - **Hito:** ✅ `npm run dev` levanta api + admin + app; la app muestra un componente del motor (`MotorBadge`/`AdminLayout`) y consume `api/motor/ping` por el proxy.
 
 ### Fase 1 — Auth, usuarios y roles ✅
@@ -42,7 +42,7 @@
 - [x] Roles admin/editor/user (Spatie) + middleware `motor.admin` + comando `motor:install`.
 - [x] Panel de usuario (datos de cuenta + cambio de contraseña) en la `app`.
 - [x] Stores Pinia de auth + cliente axios `createApi` (`@bgm/ui`) en admin y app; guards de router.
-- [ ] Verificación de email (DC-14) — **pendiente**: se hará al montar el correo (mailpit) en una fase posterior.
+- [x] Verificación de email (DC-14): `Registered` + ruta firmada `verification.verify` (verifica y redirige a la app), reenvío con throttle, y cambiar el email invalida y reenvía. Aviso + reenvío en 'Mi cuenta'. *(forgot/reset password: cuando se monte el correo real del juego.)*
 - **Hito:** ✅ login como admin/editor entra al admin; `user` no (403/redirección); `user` entra a su panel de cuenta.
 
 ### Fase 2 — Comportamientos de modelo + Media + i18n ✅
@@ -56,15 +56,16 @@
 - **Hito:** ✅ entidad demo `House` con CRUD completo en admin —
   traducible es/eu/en, **con imagen**, publicable, filtros, soft-delete + restaurar— **verificado en navegador headless**; slug traducible resuelve en público.
 
-### Fase 3 — Render de componentes a PNG
+### Fase 3 — Render de componentes a PNG ✅
 **Meta:** capturar el componente visual de una entidad a imagen, fiable y fácil de regenerar.
 > Plan: `funcionalidades/01-render-png.md`. Es la base del PDF.
 
-- [ ] Infra Browsershot + ruta de render dedicada en `app` (componente aislado).
-- [ ] `HasPreviewImage` + servicio de generación, almacenamiento y limpieza de huérfanos.
-- [ ] Jobs async + comando `preview:manage` rediseñado (generar/regenerar/borrar/limpiar, por lotes).
-- [ ] Invalidación automática al editar la entidad.
-- **Hito:** editar la entidad demo regenera su PNG sin comandos manuales; regenerar en lote por cola funciona.
+- [x] Infra Browsershot (`PreviewRenderer`, config única: noSandbox, scale, waits) + ruta desnuda `/_render/:entity/:id` en `app` con token de servicio (DC-04) y señal `__bgmRenderReady`.
+- [x] `PreviewableContract` + `PreviewRegistry` (facade `Previews`) + `HasPreviewImage` + `PreviewService` (PNG versionado por locale, borra el anterior, limpieza de huérfanos, status).
+- [x] `GeneratePreviewJob` (cola, único por entidad+locale; DC-05: workers acotan Chromes) + `preview:manage` genérico (status/generate/regenerate/delete/clean, `--type --id --locale --sync --force --dry-run`).
+- [x] Invalidación automática declarativa (`previewTriggerFields`; `is_published` no dispara; imagen nueva invalida desde el controlador).
+- [x] Playground: `Character` y `Scheme` renderizables; cartas en `@playground/shared` (fuente única admin/app, D8); `PreviewPanel` en el admin (ver PNG + regenerar).
+- **Hito:** ✅ editar la entidad demo regenera sus PNG (es/eu/en) por cola sin comandos; `preview:manage regenerate --type=character` en lote funciona; cero glob de CSS y cero base64.
 
 ### Fase 4 — Generación de PDF
 **Meta:** PDF recortables a partir de los PNG, y regenerar = trivial.
