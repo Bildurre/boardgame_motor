@@ -8,3 +8,15 @@
 .auth h1 { margin-top: 0; }
 .auth .hint { margin-top: $space-5; color: $text-2; }
 .auth .roles { color: $text-2; }
+
+// Aviso de email sin verificar en "Mi cuenta" (DC-14).
+.verify-notice {
+  border: 1px solid $warning;
+  border-radius: $radius-md;
+  padding: $space-4;
+  margin-bottom: $space-5;
+  display: grid;
+  gap: $space-3;
+
+  p { margin: 0; color: $text-2; }
+}

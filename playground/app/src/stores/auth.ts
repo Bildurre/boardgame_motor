@@ -8,6 +8,7 @@ export interface User {
   email: string
   roles: string[]
   can_access_admin: boolean
+  email_verified: boolean
 }
 
 export const useAuthStore = defineStore('auth', () => {
