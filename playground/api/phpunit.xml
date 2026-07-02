@@ -5,9 +5,8 @@
          colors="true"
 >
     <testsuites>
-        <testsuite name="Unit">
-            <directory>tests/Unit</directory>
-        </testsuite>
+        <!-- Solo Feature de momento; la suite Unit se añadirá con los
+             primeros tests unitarios (git no versiona carpetas vacías). -->
         <testsuite name="Feature">
             <directory>tests/Feature</directory>
         </testsuite>

@@ -139,6 +139,11 @@ actual, pero **declarativa**: la entidad lista qué campos disparan regeneració
   trait no puede detectar su cambio: el controlador invalida a mano tras
   `setImageFromRequest()` (ver playground). La papelera conserva los PNG; el
   borrado definitivo los elimina.
+- **Gestor en el admin** (`PreviewManager`, admin-kit): estado por tipo, lotes
+  (generar pendientes / regenerar todo / borrar todo), entidades paginadas con
+  su PNG por locale, acciones individuales y limpieza de huérfanos, sobre
+  `GET/POST/DELETE api/admin/previews/...`. El comando `preview:manage` cubre
+  lo mismo por CLI.
 - Apagado global con `MOTOR_PREVIEWS=false` (tests, entornos sin Chromium).
 - Chromium: por defecto el que descarga `puppeteer` (dependencia npm de la api
   del juego); en el droplet se fija `MOTOR_CHROME_PATH` (DC-22).

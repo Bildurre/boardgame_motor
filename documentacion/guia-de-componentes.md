@@ -467,6 +467,24 @@ vive en el composable `useEntityList` (ver la guía de montar una web, §4.4).
 
 ---
 
+### PreviewManager
+
+- **Finalidad:** gestor de las previews PNG (doc 01): estado por tipo
+  registrado (total / completas / pendientes), lotes por tipo (**generar
+  pendientes**, **regenerar todo**, **borrar todo**), listado paginado de
+  entidades con su PNG por locale y acciones individuales (regenerar / borrar),
+  y **limpieza de huérfanos**. Consume los endpoints `GET/POST/DELETE
+  /api/admin/previews/...` del motor. Todas las acciones destructivas piden
+  confirmación (ConfirmDialog) y avisan con toast (mensajes del servidor, ya
+  traducidos).
+- **Props:** `api: AxiosInstance` (el cliente del admin) y
+  `labels?: Partial<PreviewManagerLabels>` (textos, DC-29; defaults en castellano).
+- **Uso** (ver `playground/admin/src/views/previews/PreviewsView.vue`):
+
+```vue
+<PreviewManager :api="api" :labels="labels" />
+```
+
 ## `@bgm/admin-kit` — Composables
 
 ### useResource(api, basePath)

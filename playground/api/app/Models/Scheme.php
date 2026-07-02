@@ -55,6 +55,12 @@ class Scheme extends Model implements HasMedia, PreviewableContract
         return ['width' => 350, 'height' => 500];
     }
 
+    /** Etiqueta para el gestor de previews del admin. */
+    public function previewLabel(string $locale): string
+    {
+        return $this->getTranslation('title', $locale) ?: "#{$this->id}";
+    }
+
     public function previewTriggerFields(): array
     {
         return ['title', 'description', 'cost', 'house_id'];

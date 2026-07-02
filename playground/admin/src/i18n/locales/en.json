@@ -4,21 +4,24 @@
     "login": "login",
     "icons": "icons",
     "schemes": "schemes",
-    "characters": "characters"
+    "characters": "characters",
+    "previews": "previews"
   },
   "breadcrumbs": {
     "home": "Home",
     "houses": "Houses",
     "icons": "Icons",
     "schemes": "Schemes",
-    "characters": "Characters"
+    "characters": "Characters",
+    "previews": "Images"
   },
   "nav": {
     "dashboard": "Dashboard",
     "houses": "Houses",
     "icons": "Icons",
     "schemes": "Schemes",
-    "characters": "Characters"
+    "characters": "Characters",
+    "previews": "Images"
   },
   "icons": {
     "title": "Icons",
@@ -224,5 +227,24 @@
     "regenerate": "Regenerate PNGs",
     "refresh": "Refresh",
     "queued": "Regeneration queued; refresh in a few seconds."
+  },
+  "previewsManager": {
+    "refresh": "Refresh",
+    "generate": "Generate missing",
+    "regenerateAll": "Regenerate all",
+    "deleteAll": "Delete all",
+    "clean": "Clean orphans",
+    "total": "Total",
+    "complete": "Complete",
+    "pending": "Pending",
+    "loadMore": "Load more",
+    "itemRegenerate": "Regenerate",
+    "itemDelete": "Delete PNGs",
+    "confirmRegenerateAll": "Regenerate ALL {type} previews?",
+    "confirmDeleteAll": "Delete ALL {type} previews? The PNGs are removed from disk.",
+    "confirmDeleteItem": "Delete the PNGs of \"{name}\"?",
+    "confirmClean": "Delete orphan preview files (not referenced by any entity)?",
+    "confirm": "Confirm",
+    "title": "Images (previews)"
   }
 }

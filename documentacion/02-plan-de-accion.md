@@ -65,6 +65,7 @@
 - [x] `GeneratePreviewJob` (cola, único por entidad+locale; DC-05: workers acotan Chromes) + `preview:manage` genérico (status/generate/regenerate/delete/clean, `--type --id --locale --sync --force --dry-run`).
 - [x] Invalidación automática declarativa (`previewTriggerFields`; `is_published` no dispara; imagen nueva invalida desde el controlador).
 - [x] Playground: `Character` y `Scheme` renderizables; cartas en `@playground/shared` (fuente única admin/app, D8); `PreviewPanel` en el admin (ver PNG + regenerar).
+- [x] **Gestor de previews** (`PreviewManager`, admin-kit) + sección "Imágenes" del admin: estado por tipo, lotes (generar pendientes / regenerar todo / borrar todo), acciones por entidad y limpieza de huérfanos, sobre los endpoints `api/admin/previews/*`.
 - **Hito:** ✅ editar la entidad demo regenera sus PNG (es/eu/en) por cola sin comandos; `preview:manage regenerate --type=character` en lote funciona; cero glob de CSS y cero base64.
 
 ### Fase 4 — Generación de PDF

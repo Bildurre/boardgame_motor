@@ -4,21 +4,24 @@
     "login": "sarrera",
     "icons": "ikonoak",
     "schemes": "argaziak",
-    "characters": "pertsonaiak"
+    "characters": "pertsonaiak",
+    "previews": "irudiak"
   },
   "breadcrumbs": {
     "home": "Hasiera",
     "houses": "Etxeak",
     "icons": "Ikonoak",
     "schemes": "Argaziak",
-    "characters": "Pertsonaiak"
+    "characters": "Pertsonaiak",
+    "previews": "Irudiak"
   },
   "nav": {
     "dashboard": "Panela",
     "houses": "Etxeak",
     "icons": "Ikonoak",
     "schemes": "Argaziak",
-    "characters": "Pertsonaiak"
+    "characters": "Pertsonaiak",
+    "previews": "Irudiak"
   },
   "icons": {
     "title": "Ikonoak",
@@ -224,5 +227,24 @@
     "regenerate": "PNGak birsortu",
     "refresh": "Eguneratu",
     "queued": "Birsortzea ilaran; freskatu segundo batzuk barru."
+  },
+  "previewsManager": {
+    "refresh": "Eguneratu",
+    "generate": "Sortu falta direnak",
+    "regenerateAll": "Dena birsortu",
+    "deleteAll": "Dena ezabatu",
+    "clean": "Umezurtzak garbitu",
+    "total": "Guztira",
+    "complete": "Osatuta",
+    "pending": "Zain",
+    "loadMore": "Gehiago kargatu",
+    "itemRegenerate": "Birsortu",
+    "itemDelete": "PNGak ezabatu",
+    "confirmRegenerateAll": "{type} motako aurrebista GUZTIAK birsortu?",
+    "confirmDeleteAll": "{type} motako aurrebista GUZTIAK ezabatu? PNGak diskotik ezabatuko dira.",
+    "confirmDeleteItem": "\"{name}\"-(r)en PNGak ezabatu?",
+    "confirmClean": "Aurrebista-fitxategi umezurtzak ezabatu (entitaterik gabekoak)?",
+    "confirm": "Berretsi",
+    "title": "Irudiak (aurrebistak)"
   }
 }

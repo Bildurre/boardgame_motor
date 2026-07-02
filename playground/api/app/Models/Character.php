@@ -74,6 +74,12 @@ class Character extends Model implements HasMedia, PreviewableContract
         return ['width' => 350, 'height' => 500];
     }
 
+    /** Etiqueta para el gestor de previews del admin. */
+    public function previewLabel(string $locale): string
+    {
+        return $this->getTranslation('name', $locale) ?: "#{$this->id}";
+    }
+
     /** Cambios que invalidan la preview (declarativo; is_published no). */
     public function previewTriggerFields(): array
     {

@@ -393,7 +393,11 @@ Para que una entidad se capture a PNG (base del PDF), doc `funcionalidades/01-re
    tras `setImageFromRequest()` llama a `regeneratePreviews()` en el controlador.
 6. **Resource**: expón `'previews' => $this->previewUrls()`; en el single del
    admin añade `<PreviewPanel entity="character" :id="item.id" />`.
-7. En marcha: la creación/edición encola los renders (worker de cola;
+7. **Gestor en el admin**: monta la vista "Imágenes" con el `PreviewManager`
+   del admin-kit (`<PreviewManager :api="api" :labels="labels" />`, ver
+   `playground/admin/src/views/previews/PreviewsView.vue`): estado por tipo,
+   lotes, acciones por entidad y limpieza de huérfanos.
+8. En marcha: la creación/edición encola los renders (worker de cola;
    `npm run dev` ya lo levanta). A mano: `php artisan preview:manage
    generate|regenerate|status|delete|clean [--type --id --locale --sync --dry-run]`.
 
@@ -428,6 +432,7 @@ Render a PNG (si la entidad se imprime/expone como carta):
 - [ ] Columna `preview_image` + contrato/trait + `Previews::register(...)`.
 - [ ] Componente visual en `packages/shared` + entrada en `render/registry.ts`.
 - [ ] Invalidar al subir imagen; `previews` en el Resource; `PreviewPanel` en el single.
+- [ ] `previewLabel()` en el modelo (etiqueta del gestor); la vista "Imágenes" ya lista el tipo sola.
 
 ---
 

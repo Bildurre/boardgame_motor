@@ -4,21 +4,24 @@
     "login": "acceso",
     "icons": "iconos",
     "schemes": "argucias",
-    "characters": "personajes"
+    "characters": "personajes",
+    "previews": "imagenes"
   },
   "breadcrumbs": {
     "home": "Inicio",
     "houses": "Casas",
     "icons": "Iconos",
     "schemes": "Argucias",
-    "characters": "Personajes"
+    "characters": "Personajes",
+    "previews": "Imágenes"
   },
   "nav": {
     "dashboard": "Panel",
     "houses": "Casas",
     "icons": "Iconos",
     "schemes": "Argucias",
-    "characters": "Personajes"
+    "characters": "Personajes",
+    "previews": "Imágenes"
   },
   "icons": {
     "title": "Iconos",
@@ -224,5 +227,24 @@
     "regenerate": "Regenerar PNG",
     "refresh": "Actualizar",
     "queued": "Regeneración encolada; refresca en unos segundos."
+  },
+  "previewsManager": {
+    "refresh": "Actualizar",
+    "generate": "Generar pendientes",
+    "regenerateAll": "Regenerar todo",
+    "deleteAll": "Borrar todo",
+    "clean": "Limpiar huérfanos",
+    "total": "Total",
+    "complete": "Completas",
+    "pending": "Pendientes",
+    "loadMore": "Cargar más",
+    "itemRegenerate": "Regenerar",
+    "itemDelete": "Borrar PNG",
+    "confirmRegenerateAll": "¿Regenerar TODAS las previews de {type}?",
+    "confirmDeleteAll": "¿Borrar TODAS las previews de {type}? Los PNG se eliminan del disco.",
+    "confirmDeleteItem": "¿Borrar los PNG de \"{name}\"?",
+    "confirmClean": "¿Eliminar los ficheros de preview huérfanos (no referenciados por ninguna entidad)?",
+    "confirm": "Confirmar",
+    "title": "Imágenes (previews)"
   }
 }

@@ -208,3 +208,93 @@ it('preview:manage generate solo rellena lo que falta', function () {
     expect(count($renderer->captured))->toBe(2)
         ->and($character->refresh()->previewUrls())->toHaveKeys(['es', 'eu', 'en']);
 });
+
+// --- Gestor de previews del admin (lotes) ---
+
+it('el gestor lista el estado por tipo', function () {
+    makeCharacter();
+
+    $this->actingAs(motorUser('admin'))->getJson('/api/admin/previews')
+        ->assertOk()
+        ->assertJsonPath('data.0.key', 'character')
+        ->assertJsonPath('data.0.total', 1)
+        ->assertJsonPath('data.0.complete', 1) // la creación renderizó (cola síncrona + fake)
+        ->assertJsonPath('data.1.key', 'scheme');
+});
+
+it('el gestor lista las entidades con su estado por locale', function () {
+    $character = makeCharacter();
+
+    $this->actingAs(motorUser('admin'))
+        ->getJson('/api/admin/previews/character/items')
+        ->assertOk()
+        ->assertJsonPath('data.0.id', $character->id)
+        ->assertJsonPath('data.0.label', 'Tyrion')
+        ->assertJsonStructure(['data' => [['previews' => ['es', 'eu', 'en']]], 'meta'])
+        ->assertJsonPath('meta.total', 1);
+});
+
+it('el gestor encola por lotes: pendientes y regenerar todo', function () {
+    $character = makeCharacter();
+    // Deja solo es generado.
+    $character->refresh();
+    $character->preview_image = ['es' => $character->previewPath('es')];
+    $character->saveQuietly();
+
+    $admin = motorUser('admin');
+
+    Queue::fake();
+    $this->actingAs($admin)->postJson('/api/admin/previews/character/generate')
+        ->assertAccepted()->assertJsonPath('queued', 2); // eu + en
+    Queue::assertPushed(GeneratePreviewJob::class, 2);
+
+    Queue::fake();
+    $this->actingAs($admin)->postJson('/api/admin/previews/character/regenerate')
+        ->assertAccepted()->assertJsonPath('queued', 3);
+    Queue::assertPushed(GeneratePreviewJob::class, 3);
+
+    // Limitado a un locale.
+    Queue::fake();
+    $this->actingAs($admin)->postJson('/api/admin/previews/character/regenerate?locale=eu')
+        ->assertAccepted()->assertJsonPath('queued', 1);
+});
+
+it('el gestor borra las previews de un tipo y de una entidad', function () {
+    $character = makeCharacter();
+    $path = $character->refresh()->previewPath('es');
+    $admin = motorUser('admin');
+
+    // Individual.
+    $this->actingAs($admin)->deleteJson("/api/admin/previews/character/{$character->id}")
+        ->assertOk();
+    Storage::disk('public')->assertMissing($path);
+    expect($character->refresh()->previewUrls())->toBe([]);
+
+    // Por tipo.
+    GeneratePreviewJob::dispatchSync(Character::class, $character->id, 'es');
+    expect($character->refresh()->hasPreview('es'))->toBeTrue();
+
+    $this->actingAs($admin)->deleteJson('/api/admin/previews/character')
+        ->assertOk()->assertJsonPath('entities', 1);
+    expect($character->refresh()->previewUrls())->toBe([]);
+});
+
+it('el gestor limpia huérfanos con y sin dry-run', function () {
+    makeCharacter();
+    Storage::disk('public')->put('previews/character/999/es-huerfano.png', 'x');
+    $admin = motorUser('admin');
+
+    $this->actingAs($admin)->postJson('/api/admin/previews/clean', ['dry_run' => true])
+        ->assertOk()->assertJsonPath('dry_run', true)->assertJsonCount(1, 'orphans');
+    Storage::disk('public')->assertExists('previews/character/999/es-huerfano.png');
+
+    $this->actingAs($admin)->postJson('/api/admin/previews/clean')
+        ->assertOk()->assertJsonCount(1, 'orphans');
+    Storage::disk('public')->assertMissing('previews/character/999/es-huerfano.png');
+});
+
+it('el gestor exige acceso de admin', function () {
+    $this->getJson('/api/admin/previews')->assertUnauthorized();
+    $this->actingAs(motorUser('user'))->getJson('/api/admin/previews')->assertForbidden();
+    $this->actingAs(motorUser('user'))->postJson('/api/admin/previews/clean')->assertForbidden();
+});
