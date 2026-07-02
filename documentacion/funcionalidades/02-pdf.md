@@ -1,5 +1,7 @@
 # 02 · Generación de PDF
 
+> **Estado: implementado (Fase 4 ✅).** Notas de implementación al final.
+
 ## Qué hace
 
 Monta **PDF recortables** a partir de los PNG (doc 01): hojas A4 con cartas/counters
@@ -146,3 +148,24 @@ POST   /api/v1/pdf-collection/generate    # → PDF temporal
 
 - Que los presets de corte cuadren con el recorte físico real (verificar imprimiendo).
 - Tamaño/peso de los PNG a scale factor alto (equilibrio en doc 01).
+
+## Notas de implementación (Fase 4)
+
+- El "qué va dentro" lo declara el juego con **exports** (`PdfExportRegistry` +
+  facade `Pdfs`, espejo del PreviewRegistry): tres sabores demostrados en el
+  playground — colección por entidad (`house-schemes`), global (`characters`)
+  e individual con copias (`character-card`). Guía §6.
+- `PdfService::generate()` reutiliza el registro de (type, source, locale) y
+  versiona el fichero (URL nueva, borra el anterior): regenerar = volver a llamar.
+- Las previews que falten se generan **en el momento** al componer (sin pasos
+  manuales previos).
+- La rejilla `motor::pdf.grid` usa **posicionamiento absoluto en mm** (nada de
+  floats: DomPDF los maneja mal con marcas absolutas) y desplaza el margen de
+  página para que las marcas de corte no necesiten coordenadas negativas.
+- La colección temporal vive en BD por usuario (`pdf_collection_items`) y el
+  PDF temporal guarda un **snapshot** en `payload` (regenerable aunque la
+  colección cambie). `pdf:cleanup` borra caducados (programar en el juego).
+- El estado del job queda en el registro (`pending/ready/failed` + `error`),
+  visible en el `PdfManager` del admin.
+- Los tests componen PDF **reales** con DomPDF (sin browser): se verifica hasta
+  el número de páginas resultante.

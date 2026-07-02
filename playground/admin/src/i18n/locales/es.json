@@ -5,7 +5,8 @@
     "icons": "iconos",
     "schemes": "argucias",
     "characters": "personajes",
-    "previews": "imagenes"
+    "previews": "imagenes",
+    "pdfs": "pdf"
   },
   "breadcrumbs": {
     "home": "Inicio",
@@ -13,7 +14,8 @@
     "icons": "Iconos",
     "schemes": "Argucias",
     "characters": "Personajes",
-    "previews": "Imágenes"
+    "previews": "Imágenes",
+    "pdfs": "PDF"
   },
   "nav": {
     "dashboard": "Panel",
@@ -21,7 +23,8 @@
     "icons": "Iconos",
     "schemes": "Argucias",
     "characters": "Personajes",
-    "previews": "Imágenes"
+    "previews": "Imágenes",
+    "pdfs": "PDF"
   },
   "icons": {
     "title": "Iconos",
@@ -246,5 +249,20 @@
     "confirmClean": "¿Eliminar los ficheros de preview huérfanos (no referenciados por ninguna entidad)?",
     "confirm": "Confirmar",
     "title": "Imágenes (previews)"
+  },
+  "pdfs": {
+    "title": "PDF recortables",
+    "generate": "Generar (todos los idiomas)",
+    "refresh": "Actualizar",
+    "download": "Descargar",
+    "regenerate": "Regenerar",
+    "delete": "Borrar",
+    "confirmDelete": "¿Borrar el PDF \"{name}\"?",
+    "empty": "Aún no hay PDF generados.",
+    "statusPending": "En cola…",
+    "statusReady": "Listo",
+    "statusFailed": "Error",
+    "globalCharacters": "Todos los personajes (recortables)",
+    "viewTitle": "PDF"
   }
 }

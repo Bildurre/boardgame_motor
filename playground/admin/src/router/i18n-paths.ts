@@ -108,6 +108,13 @@ export function createLocalizedRoutes(locale: string): RouteRecordRaw[] {
       alias: buildAliases((t) => `/${t.previews}`, locale),
       meta: { admin: true, titleKey: 'previewsManager.title', breadcrumbs: [{ key: 'previews' }] },
     },
+    {
+      path: `/${p.pdfs}`,
+      name: 'pdfs',
+      component: () => import('@/views/pdfs/PdfsView.vue'),
+      alias: buildAliases((t) => `/${t.pdfs}`, locale),
+      meta: { admin: true, titleKey: 'pdfs.viewTitle', breadcrumbs: [{ key: 'pdfs' }] },
+    },
     // URLs desconocidas: al dashboard (evita la página en blanco).
     {
       path: '/:pathMatch(.*)*',

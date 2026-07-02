@@ -6,8 +6,8 @@ PDF/PNG, CRM de páginas y bloques, i18n, auth y backup reutilizables. Cada jueg
 consume el motor y programa solo sus entidades.
 
 > Diseño y decisiones en [`documentacion/`](documentacion/README.md).
-> **Estado: Fases 0–3 completadas** (andamiaje · auth con verificación de
-> email · traits/media/i18n · render de componentes a PNG). Plan en
+> **Estado: Fases 0–4 completadas** (andamiaje · auth con verificación de
+> email · traits/media/i18n · render a PNG · generación de PDF). Plan en
 > [`documentacion/02-plan-de-accion.md`](documentacion/02-plan-de-accion.md).
 
 ## Estructura
@@ -110,3 +110,12 @@ Gestión desde el admin (sección **Imágenes**) o en lote:
 `php artisan preview:manage status|generate|regenerate|delete|clean`.
 Detalles en `documentacion/funcionalidades/01-render-png.md` y en la guía
 de montar una web (§5).
+
+## PDF recortables
+
+DomPDF ensambla los PNG en hojas A4 con marcas de corte según presets de
+impresión (`motor.pdf.layouts`). Cada juego declara sus *exports* (colecciones
+por entidad, globales o cartas individuales) y los gestiona con un clic desde
+el admin (sección **PDF** y el gestor en cada detalle) o por API; los usuarios
+pueden armar colecciones temporales a la carta. `php artisan pdf:cleanup`
+borra los temporales caducados. Guía §6 y `funcionalidades/02-pdf.md`.

@@ -2,46 +2,9 @@
 
 use App\Models\Character;
 use Bgm\Core\Previews\Jobs\GeneratePreviewJob;
-use Bgm\Core\Previews\PreviewRenderer;
 use Bgm\Core\Previews\RenderToken;
 use Illuminate\Support\Facades\Queue;
 use Illuminate\Support\Facades\Storage;
-
-/**
- * Renderer de mentira: no abre Chromium, escribe un PNG falso y registra las
- * URLs capturadas para poder asertar sobre ellas.
- */
-class FakePreviewRenderer extends PreviewRenderer
-{
-    public array $captured = [];
-
-    public function capture(string $url, int $width, int $height, string $savePath): void
-    {
-        $this->captured[] = compact('url', 'width', 'height');
-        file_put_contents($savePath, 'fake-png');
-    }
-}
-
-function fakeRenderer(): FakePreviewRenderer
-{
-    $fake = new FakePreviewRenderer;
-    app()->instance(PreviewRenderer::class, $fake);
-
-    return $fake;
-}
-
-function makeCharacter(array $overrides = []): Character
-{
-    $character = new Character;
-    $character->setTranslations('name', ['es' => 'Tyrion']);
-    $character->power = $overrides['power'] ?? 1;
-    $character->prestige = 2;
-    $character->intrigue = 3;
-    $character->money = 4;
-    $character->save();
-
-    return $character;
-}
 
 beforeEach(function () {
     config(['motor.previews.enabled' => true]);

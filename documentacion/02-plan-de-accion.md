@@ -68,15 +68,15 @@
 - [x] **Gestor de previews** (`PreviewManager`, admin-kit) + sección "Imágenes" del admin: estado por tipo, lotes (generar pendientes / regenerar todo / borrar todo), acciones por entidad y limpieza de huérfanos, sobre los endpoints `api/admin/previews/*`.
 - **Hito:** ✅ editar la entidad demo regenera sus PNG (es/eu/en) por cola sin comandos; `preview:manage regenerate --type=character` en lote funciona; cero glob de CSS y cero base64.
 
-### Fase 4 — Generación de PDF
+### Fase 4 — Generación de PDF ✅
 **Meta:** PDF recortables a partir de los PNG, y regenerar = trivial.
 > Plan: `funcionalidades/02-pdf.md`. Depende de Fase 3.
 
-- [ ] `GeneratedPdf` (permanentes + temporales) + ensamblado desde PNG.
-- [ ] Tipos de export: cartas/counters recortables, "mazos"/colecciones, páginas.
-- [ ] Colecciones temporales (elegir ítems → PDF al vuelo) + limpieza programada.
-- [ ] Multi-idioma. API + gestor de PDF en el admin-kit.
-- **Hito:** desde el admin, generar y regenerar un PDF de una colección con un clic; PDF temporal de ítems elegidos a la carta.
+- [x] `GeneratedPdf` **polimórfico** (permanentes + temporales, estado pending/ready/failed con error visible) + ensamblado DomPDF desde los PNG (genera al vuelo las previews que falten).
+- [x] `PdfExportRegistry` (facade `Pdfs`) + `PdfExport`: el juego describe el contenido (colección por entidad / global / individual) y opcionalmente su vista Blade; el motor pone el pipeline. `PrintLayout` con presets (card 88×126, counter) en config publicable (DC-07); rejilla genérica `motor::pdf.grid` con marcas de corte (posicionado absoluto en mm: DomPDF fiable).
+- [x] Colección temporal por usuario (`/api/pdf-collection`: ítems con copias, snapshot en payload, `expires_at`) + `pdf:cleanup` programable.
+- [x] Multi-idioma (un PDF por locale). API `/api/admin/pdfs` + descarga pública de permanentes + `PdfManager` en admin-kit (montado en los singles del playground y en la vista "PDF" para exports globales).
+- **Hito:** ✅ generar y regenerar desde el admin con un clic (fichero versionado, borra el anterior); PDF temporal a la carta cubierto por API + tests (la UI pública llega con la Fase 6). Verificado con PDF real (4 cartas por A4 con marcas de corte).
 
 ### Fase 5 — CRM de páginas y bloques
 **Meta:** construir la web pública por bloques, y añadir un bloque nuevo sin sufrir.

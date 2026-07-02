@@ -406,7 +406,112 @@ Requisitos: `npm install` en `api/` (instala `puppeteer`) **y su navegador**
 Chrome"), o `MOTOR_CHROME_PATH` apuntando a un Chromium del sistema. Apagado
 global con `MOTOR_PREVIEWS=false`.
 
-## 6. Checklist para una entidad nueva
+## 6. PDF de un juego (exports, plantillas y layouts)
+
+El motor pone el **pipeline entero** (cola, ensamblado con DomPDF, almacenamiento
+versionado, regeneración con un clic, colección temporal del usuario, limpieza);
+el juego solo **describe el contenido** de cada PDF con un *export*. Frontera:
+el motor nunca sabe qué es una "casa" o un "mazo"; el juego nunca reescribe el
+ensamblado.
+
+### 6.1 Tipos de export (las tres plantillas típicas)
+
+Un export es una clase pequeña en `api/app/Pdf/` que extiende `Bgm\Core\Pdf\PdfExport`
+y declara: quién es la entidad dueña (`sourceModel()`) y qué ítems van dentro
+(`items()`). Las tres formas habituales (las tres están en el playground):
+
+1. **Colección por entidad** — el PDF pertenece a una entidad y agrega sus
+   hijas. Ej.: las argucias de una casa (`HouseSchemesExport`):
+
+   ```php
+   class HouseSchemesExport extends PdfExport
+   {
+       public function sourceModel(): ?string { return House::class; }
+
+       public function items(?Model $source, string $locale): array
+       {
+           return $source->schemes()->published()->get()
+               ->map(fn (Scheme $s) => PrintableItem::preview($s))
+               ->all();
+       }
+   }
+   ```
+
+2. **Colección global** — sin dueña (`sourceModel()` devuelve `null`). Ej.:
+   todas las cartas de personaje (`CharactersExport`).
+
+3. **Individual** — el PDF de UNA entidad, normalmente con copias para llenar
+   la hoja. Ej. reponer una carta concreta (`CharacterCardExport`):
+
+   ```php
+   public function items(?Model $source, string $locale): array
+   {
+       return [PrintableItem::preview($source, copies: 4)]; // 4 = hoja completa
+   }
+   ```
+
+Los ítems se declaran con `PrintableItem::preview($entidad, copies: N)` (usa el
+PNG del render, doc 01, **generándolo al vuelo si falta**) o
+`PrintableItem::image($rutaOUrl, copies: N)` para imágenes arbitrarias.
+
+Registro en `AppServiceProvider::boot` (la clave es el `type` de la API):
+
+```php
+Pdfs::register('house-schemes', HouseSchemesExport::class);
+Pdfs::register('characters', CharactersExport::class);
+Pdfs::register('character-card', CharacterCardExport::class);
+```
+
+### 6.2 Plantillas (vistas del PDF)
+
+- **La generalista del motor** (`motor::pdf.grid`): rejilla de imágenes a tamaño
+  físico exacto con **marcas de corte**, paginada según el layout. Es la que usan
+  todos los exports por defecto y vale para cartas, counters y cualquier pieza
+  recortable. No hay que tocarla nunca.
+- **Una vista propia por export**: si un juego quiere un PDF especial (portada,
+  reglas maquetadas, dorso+frente…), su export sobreescribe `view()` apuntando a
+  una Blade del juego (`api/resources/views/pdf/...`). Recibe `$pdf`, `$pages`
+  (huecos ya expandidos y paginados) y `$layout`. El resto del pipeline
+  (cola, versionado, regeneración, gestor del admin) sigue siendo del motor.
+
+### 6.3 Layouts de impresión (DC-07)
+
+Los presets viven en `config/motor.php` → `motor.pdf.layouts` (publicable): papel,
+orientación, tamaño de pieza en **mm**, margen, separación y marcas de corte.
+El motor calcula columnas/filas/capacidad del papel. Vienen `card` (88×126, 4 por
+A4) y `counter` (25×25); cada juego añade los suyos (p. ej. `tarot`, `token-grande`)
+publicando la config y ampliando el array. El export elige el suyo con `layout()`
+y la API admite `layout` para forzar otro puntual.
+
+### 6.4 Gestión desde el admin y API
+
+- **`PdfManager`** (admin-kit): se monta una vez por export — en el single de la
+  entidad dueña (`type` + `source-id`) o en una vista de exports globales:
+
+  ```vue
+  <PdfManager :api="api" type="house-schemes" :source-id="item.id" :labels="pdfLabels" />
+  ```
+
+  Lista los PDF por idioma con estado (en cola / listo / error con mensaje) y
+  botones Generar / Regenerar / Descargar / Borrar. **Regenerar = un clic**:
+  reutiliza el registro, versiona el fichero y borra el anterior.
+- API: `GET/POST /api/admin/pdfs[...]` (gestión), `GET /api/pdfs/{id}/download`
+  (permanentes públicos; temporales solo dueño/admin).
+
+### 6.5 Colección temporal del usuario
+
+`/api/pdf-collection` (autenticado): añadir entidades renderizables con copias,
+listar (con su preview y etiqueta), vaciar y `generate` → PDF **temporal** con
+`expires_at` (TTL en `motor.pdf.temporary_ttl`). `php artisan pdf:cleanup` borra
+los caducados — prográmalo en `api/routes/console.php`:
+
+```php
+Schedule::command('pdf:cleanup')->daily();
+```
+
+La UI pública de esta colección llega con el andamiaje de la web (Fase 6).
+
+## 7. Checklist para una entidad nueva
 
 Backend:
 - [ ] Migración (json traducibles, `is_published`, `datetimes()`/`softDeletesDatetime()`; FK si hay relación).
@@ -435,9 +540,14 @@ Render a PNG (si la entidad se imprime/expone como carta):
 - [ ] Invalidar al subir imagen; `previews` en el Resource; `PreviewPanel` en el single.
 - [ ] `previewLabel()` en el modelo (etiqueta del gestor); la vista "Imágenes" ya lista el tipo sola.
 
+PDF (si la entidad se exporta):
+- [ ] Export en `api/app/Pdf/` (colección por entidad / global / individual) + `Pdfs::register(...)`.
+- [ ] `PdfManager` en el single de la entidad dueña (o en la vista de exports globales).
+- [ ] Layout propio en `motor.pdf.layouts` si la pieza no es carta/counter.
+
 ---
 
-## 7. Convenciones que aplican siempre
+## 8. Convenciones que aplican siempre
 
 - **DC-24** — código/tablas en inglés; `datetimes()`/`softDeletesDatetime()`.
 - **DC-25** — iconos de UI con `@lucide/vue`.

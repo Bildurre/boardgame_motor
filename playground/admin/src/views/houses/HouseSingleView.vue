@@ -8,13 +8,16 @@ import { BaseButton } from '@bgm/ui'
 import { api } from '@/lib/api'
 import { useLocalesStore } from '@/stores/locales'
 import type { House, Scheme } from '@playground/shared'
+import { PdfManager } from '@bgm/admin-kit'
 import HouseFormModal from '@/components/houses/HouseFormModal.vue'
+import { usePdfLabels } from '@/lib/pdfLabels'
 
 const { t } = useI18n()
 const route = useRoute()
 const router = useRouter()
 const locales = useLocalesStore()
 const { find } = useResource<House>(api, '/admin/houses')
+const pdfLabels = usePdfLabels()
 
 const item = ref<House | null>(null)
 const loading = ref(true)
@@ -110,6 +113,14 @@ onMounted(async () => {
         </template>
       </EntityCard>
     </BaseGrid>
+
+    <PdfManager
+      v-if="item"
+      :api="api"
+      type="house-schemes"
+      :source-id="item.id"
+      :labels="pdfLabels"
+    />
 
     <HouseFormModal v-model="formOpen" mode="edit" :target-slug="slug" @saved="onSaved" />
   </div>

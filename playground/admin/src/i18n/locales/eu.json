@@ -5,7 +5,8 @@
     "icons": "ikonoak",
     "schemes": "argaziak",
     "characters": "pertsonaiak",
-    "previews": "irudiak"
+    "previews": "irudiak",
+    "pdfs": "pdfak"
   },
   "breadcrumbs": {
     "home": "Hasiera",
@@ -13,7 +14,8 @@
     "icons": "Ikonoak",
     "schemes": "Argaziak",
     "characters": "Pertsonaiak",
-    "previews": "Irudiak"
+    "previews": "Irudiak",
+    "pdfs": "PDFak"
   },
   "nav": {
     "dashboard": "Panela",
@@ -21,7 +23,8 @@
     "icons": "Ikonoak",
     "schemes": "Argaziak",
     "characters": "Pertsonaiak",
-    "previews": "Irudiak"
+    "previews": "Irudiak",
+    "pdfs": "PDFak"
   },
   "icons": {
     "title": "Ikonoak",
@@ -246,5 +249,20 @@
     "confirmClean": "Aurrebista-fitxategi umezurtzak ezabatu (entitaterik gabekoak)?",
     "confirm": "Berretsi",
     "title": "Irudiak (aurrebistak)"
+  },
+  "pdfs": {
+    "title": "PDF moztekoak",
+    "generate": "Sortu (hizkuntza guztiak)",
+    "refresh": "Eguneratu",
+    "download": "Deskargatu",
+    "regenerate": "Birsortu",
+    "delete": "Ezabatu",
+    "confirmDelete": "\"{name}\" PDFa ezabatu?",
+    "empty": "Oraindik ez dago PDFrik.",
+    "statusPending": "Ilaran…",
+    "statusReady": "Prest",
+    "statusFailed": "Errorea",
+    "globalCharacters": "Pertsonaia guztiak (moztekoak)",
+    "viewTitle": "PDFak"
   }
 }

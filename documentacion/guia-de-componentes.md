@@ -490,6 +490,22 @@ vive en el composable `useEntityList` (ver la guía de montar una web, §4.4).
 <PreviewManager :api="api" :labels="labels" />
 ```
 
+### PdfManager
+
+- **Finalidad:** gestor de PDF de **un export** (doc 02): lista los PDF por
+  idioma con su estado (en cola / listo / error con mensaje) y botones
+  **Generar (todos los idiomas) / Regenerar / Descargar / Borrar**. Se monta una
+  vez por export: en el single de la entidad dueña, o en una vista de exports
+  globales.
+- **Props:** `api: AxiosInstance`, `type: string` (clave del PdfExportRegistry),
+  `sourceId?: number | null` (omitir en exports globales) y
+  `labels?: Partial<PdfManagerLabels>` (DC-29).
+- **Uso** (ver `HouseSingleView` / `PdfsView` del playground):
+
+```vue
+<PdfManager :api="api" type="house-schemes" :source-id="item.id" :labels="pdfLabels" />
+```
+
 ## `@bgm/admin-kit` — Composables
 
 ### useResource(api, basePath)

@@ -1,0 +1,71 @@
+@use "tokens" as *;
+
+// Gestor de PDF de un export (PdfManager).
+.pdf-manager {
+  margin-top: $space-7;
+
+  &__bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: $space-3;
+    flex-wrap: wrap;
+    border-bottom: 1px solid $border;
+    padding-bottom: $space-2;
+    margin-bottom: $space-4;
+
+    h2 { margin: 0; font-size: $fs-18; }
+  }
+
+  &__actions { display: flex; gap: $space-2; flex-wrap: wrap; }
+
+  &__empty { color: $text-3; margin: 0; }
+
+  &__list {
+    list-style: none;
+    display: grid;
+    gap: $space-2;
+  }
+}
+
+.pdf-row {
+  display: flex;
+  align-items: center;
+  gap: $space-3;
+  border: 1px solid $border;
+  border-radius: $radius-md;
+  background: $surface;
+  padding: $space-2 $space-3;
+
+  &__locale { font-weight: $k-fw-bold; min-width: 2.5em; }
+
+  &__status {
+    font-size: $fs-13;
+    padding: 1px $space-2;
+    border-radius: $radius-sm;
+    border: 1px solid $border;
+    color: $text-2;
+
+    &--ready { color: $success; border-color: color-mix(in srgb, $success 45%, transparent); }
+    &--failed { color: $danger; border-color: color-mix(in srgb, $danger 45%, transparent); }
+  }
+
+  &__error {
+    display: inline-flex;
+    align-items: center;
+    gap: $space-1;
+    color: $danger;
+    font-size: $fs-13;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    min-width: 0;
+  }
+
+  &__buttons {
+    margin-left: auto;
+    display: flex;
+    gap: $space-1;
+    align-items: center;
+  }
+}

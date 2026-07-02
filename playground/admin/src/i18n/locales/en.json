@@ -5,7 +5,8 @@
     "icons": "icons",
     "schemes": "schemes",
     "characters": "characters",
-    "previews": "previews"
+    "previews": "previews",
+    "pdfs": "pdfs"
   },
   "breadcrumbs": {
     "home": "Home",
@@ -13,7 +14,8 @@
     "icons": "Icons",
     "schemes": "Schemes",
     "characters": "Characters",
-    "previews": "Images"
+    "previews": "Images",
+    "pdfs": "PDFs"
   },
   "nav": {
     "dashboard": "Dashboard",
@@ -21,7 +23,8 @@
     "icons": "Icons",
     "schemes": "Schemes",
     "characters": "Characters",
-    "previews": "Images"
+    "previews": "Images",
+    "pdfs": "PDFs"
   },
   "icons": {
     "title": "Icons",
@@ -246,5 +249,20 @@
     "confirmClean": "Delete orphan preview files (not referenced by any entity)?",
     "confirm": "Confirm",
     "title": "Images (previews)"
+  },
+  "pdfs": {
+    "title": "Cut-out PDFs",
+    "generate": "Generate (all languages)",
+    "refresh": "Refresh",
+    "download": "Download",
+    "regenerate": "Regenerate",
+    "delete": "Delete",
+    "confirmDelete": "Delete the PDF \"{name}\"?",
+    "empty": "No PDFs generated yet.",
+    "statusPending": "Queued…",
+    "statusReady": "Ready",
+    "statusFailed": "Failed",
+    "globalCharacters": "All characters (cut-out)",
+    "viewTitle": "PDFs"
   }
 }
