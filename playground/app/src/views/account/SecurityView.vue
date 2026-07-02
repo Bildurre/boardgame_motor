@@ -2,6 +2,7 @@
 import { ref } from 'vue'
 import { BaseButton } from '@bgm/ui'
 import { api } from '@/lib/api'
+import { apiMessage } from '@/lib/apiError'
 
 const currentPassword = ref('')
 const password = ref('')
@@ -19,8 +20,8 @@ async function save() {
     })
     message.value = 'Contraseña actualizada.'
     currentPassword.value = password.value = passwordConfirmation.value = ''
-  } catch (e: any) {
-    error.value = e.response?.data?.message ?? 'No se pudo cambiar la contraseña.'
+  } catch (e) {
+    error.value = apiMessage(e, 'No se pudo cambiar la contraseña.')
   }
 }
 </script>

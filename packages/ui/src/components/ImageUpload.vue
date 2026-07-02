@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, ref } from 'vue'
+import { computed, onBeforeUnmount, ref } from 'vue'
 import { Trash2 } from '@lucide/vue'
 
 // Subida de imagen con arrastrar-y-soltar o clic (portado de kontuan).
@@ -83,6 +83,10 @@ function clear() {
 function openDialog() {
   fileInputRef.value?.click()
 }
+
+onBeforeUnmount(() => {
+  if (previewUrl.value) URL.revokeObjectURL(previewUrl.value)
+})
 </script>
 
 <template>

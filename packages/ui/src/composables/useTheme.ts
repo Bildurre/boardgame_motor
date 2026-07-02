@@ -1,9 +1,15 @@
-import { ref, watch, onMounted } from 'vue'
+import { ref, watch, onMounted, onUnmounted } from 'vue'
 
 // Modo de tema. 'system' sigue la preferencia del SO. Copiado de kontuan.
 export type ThemeMode = 'light' | 'dark' | 'system'
 
-const themeMode = ref<ThemeMode>((localStorage.getItem('theme') as ThemeMode) || 'dark')
+function storedTheme(): ThemeMode {
+  // Guarda ante entornos sin window (prerender en build, DC-18).
+  if (typeof window === 'undefined') return 'dark'
+  return (localStorage.getItem('theme') as ThemeMode) || 'dark'
+}
+
+const themeMode = ref<ThemeMode>(storedTheme())
 
 function getSystemTheme(): 'light' | 'dark' {
   return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
@@ -23,14 +29,21 @@ export function useTheme() {
 
   watch(themeMode, (mode) => applyTheme(mode))
 
+  const media =
+    typeof window !== 'undefined' ? window.matchMedia('(prefers-color-scheme: dark)') : null
+  const onSystemChange = () => {
+    if (themeMode.value === 'system') {
+      applyTheme('system')
+    }
+  }
+
   onMounted(() => {
     applyTheme(themeMode.value)
+    media?.addEventListener('change', onSystemChange)
+  })
 
-    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
-      if (themeMode.value === 'system') {
-        applyTheme('system')
-      }
-    })
+  onUnmounted(() => {
+    media?.removeEventListener('change', onSystemChange)
   })
 
   return { themeMode, setTheme }

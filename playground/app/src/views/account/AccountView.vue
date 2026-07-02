@@ -3,6 +3,7 @@ import { onMounted, ref } from 'vue'
 import { BaseButton } from '@bgm/ui'
 import { api } from '@/lib/api'
 import { useAuthStore } from '@/stores/auth'
+import { apiMessage } from '@/lib/apiError'
 
 const auth = useAuthStore()
 const name = ref('')
@@ -22,8 +23,8 @@ async function save() {
     const { data } = await api.put('/account', { name: name.value, email: email.value })
     auth.user = data.data
     message.value = 'Datos guardados.'
-  } catch (e: any) {
-    error.value = e.response?.data?.message ?? 'No se pudo guardar.'
+  } catch (e) {
+    error.value = apiMessage(e, 'No se pudo guardar.')
   }
 }
 </script>

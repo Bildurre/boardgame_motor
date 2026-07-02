@@ -12,8 +12,10 @@ import {
 import { useResource } from '@bgm/admin-kit'
 import { api } from '@/lib/api'
 import { fieldErrors } from '@/lib/apiError'
+import { useEditorLabels } from '@/lib/editorLabels'
 import { useLocalesStore } from '@/stores/locales'
 import { useIconsStore } from '@/stores/icons'
+import type { House } from '@/types/entities'
 
 // Formulario de House en modal (patrón kontuan): se abre desde el listado.
 const props = defineProps<{
@@ -28,7 +30,8 @@ const { t } = useI18n()
 const toast = useToast()
 const locales = useLocalesStore()
 const icons = useIconsStore()
-const { find, createForm, updateForm } = useResource(api, '/admin/houses')
+const { find, createForm, updateForm } = useResource<House>(api, '/admin/houses')
+const editorLabels = useEditorLabels()
 
 const saving = ref(false)
 const image = ref<File | null>(null)
@@ -39,7 +42,7 @@ function clearErrors() {
   for (const k of Object.keys(errors)) delete errors[k]
 }
 // Traduce cualquier error del backend con clave name.<locale> al campo 'name'.
-function mapServerErrors(e: any) {
+function mapServerErrors(e: unknown) {
   const f = fieldErrors(e)
   for (const [k, v] of Object.entries(f)) {
     if (k === 'name' || k.startsWith('name.')) errors.name = v
@@ -78,11 +81,14 @@ watch(
   async (open) => {
     if (!open) return
     reset()
-    await locales.load()
-    await icons.load()
+    try {
+      await Promise.all([locales.load(), icons.load()])
+    } catch {
+      toast.danger(t('common.errors.load'))
+    }
     if (props.mode === 'edit' && props.targetSlug) {
       try {
-        const h: any = await find(props.targetSlug)
+        const h = await find(props.targetSlug)
         form.name = h.name ?? {}
         form.description = h.description ?? {}
         form.color = h.color ?? '#888888'
@@ -157,13 +163,14 @@ async function submit() {
       :label="t('houses.fields.description')"
       type="wysiwyg"
       :icons="iconList"
+      :rich-labels="editorLabels"
     />
     <ImageUpload
       v-model="image"
       :current-url="currentImage"
       :label="t('houses.fields.image')"
-      :drag-text="t('houses.fields.imageDrag')"
-      :hint-text="t('houses.fields.imageHint')"
+      :drag-text="t('common.imageDrag')"
+      :hint-text="t('common.imageHint')"
       :too-large-text="t('common.fileTooLarge')"
       :invalid-type-text="t('common.fileType')"
     />

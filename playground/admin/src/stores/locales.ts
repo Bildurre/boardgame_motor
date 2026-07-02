@@ -22,11 +22,21 @@ export const useLocalesStore = defineStore('locales', () => {
   }
   applyToApi(current.value)
 
-  async function load() {
-    if (locales.value.length) return
-    const { data } = await api.get('/locales')
-    locales.value = data.locales
-    defaultLocale.value = data.default
+  // Guarda de vuelo: varias vistas piden load() al montar; solo va una request.
+  let inflight: Promise<void> | null = null
+
+  function load(): Promise<void> {
+    if (locales.value.length) return Promise.resolve()
+    inflight ??= api
+      .get('/locales')
+      .then(({ data }) => {
+        locales.value = data.locales
+        defaultLocale.value = data.default
+      })
+      .finally(() => {
+        inflight = null
+      })
+    return inflight
   }
 
   function setCurrent(code: string) {

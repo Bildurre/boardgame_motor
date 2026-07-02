@@ -7,6 +7,7 @@ import { useResource } from '@bgm/admin-kit'
 import { BaseButton } from '@bgm/ui'
 import { api } from '@/lib/api'
 import { useLocalesStore } from '@/stores/locales'
+import type { Scheme } from '@/types/entities'
 import SchemeCard from '@/components/schemes/SchemeCard.vue'
 import SchemeFormModal from '@/components/schemes/SchemeFormModal.vue'
 
@@ -14,14 +15,16 @@ const { t } = useI18n()
 const route = useRoute()
 const router = useRouter()
 const locales = useLocalesStore()
-const { find } = useResource(api, '/admin/schemes')
+const { find } = useResource<Scheme>(api, '/admin/schemes')
 
-const item = ref<any>(null)
+const item = ref<Scheme | null>(null)
 const loading = ref(true)
 const formOpen = ref(false)
 
-function tr(obj: Record<string, string>) {
-  return obj?.[locales.current] || Object.values(obj || {})[0] || '—'
+function tr(obj: Record<string, string> | null | undefined) {
+  return (
+    obj?.[locales.current] || obj?.[locales.defaultLocale] || Object.values(obj || {})[0] || '—'
+  )
 }
 const slug = computed(() => route.params.slug as string)
 
@@ -45,6 +48,7 @@ onMounted(async () => {
 })
 </script>
 
+<!-- eslint-disable vue/no-v-html -- HTML del WYSIWYG propio (sanitización en servidor: DC-09) -->
 <template>
   <div v-if="item" class="single">
     <div class="single__bar">
@@ -52,7 +56,7 @@ onMounted(async () => {
         ><ArrowLeft :size="16" /> {{ t('schemes.title') }}</BaseButton
       >
       <BaseButton variant="success" @click="formOpen = true"
-        ><SquarePen :size="16" /> {{ t('houses.actions.edit') }}</BaseButton
+        ><SquarePen :size="16" /> {{ t('common.actions.edit') }}</BaseButton
       >
     </div>
 

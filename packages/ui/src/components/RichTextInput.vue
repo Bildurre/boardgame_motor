@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, watch, onBeforeUnmount, onMounted } from 'vue'
+import { computed, ref, watch, onBeforeUnmount, onMounted } from 'vue'
 import { useEditor, EditorContent } from '@tiptap/vue-3'
 import StarterKit from '@tiptap/starter-kit'
 import Image from '@tiptap/extension-image'
@@ -25,17 +25,50 @@ export interface RichIcon {
   url: string
 }
 
+// Textos de la barra de herramientas, sobreescribibles por la app (DC-29).
+export interface RichTextLabels {
+  bold: string
+  italic: string
+  strike: string
+  heading: string
+  bulletList: string
+  orderedList: string
+  undo: string
+  redo: string
+  insertIcon: string
+  editHtml: string
+}
+
+const defaultLabels: RichTextLabels = {
+  bold: 'Negrita',
+  italic: 'Cursiva',
+  strike: 'Tachado',
+  heading: 'Título',
+  bulletList: 'Lista',
+  orderedList: 'Lista numerada',
+  undo: 'Deshacer',
+  redo: 'Rehacer',
+  insertIcon: 'Insertar icono',
+  editHtml: 'Editar HTML',
+}
+
 const props = withDefaults(
   defineProps<{
     modelValue?: string
     placeholder?: string
     disabled?: boolean
     icons?: RichIcon[]
+    labels?: Partial<RichTextLabels>
   }>(),
-  { modelValue: '', disabled: false, icons: () => [] },
+  { modelValue: '', disabled: false, icons: () => [], labels: () => ({}) },
 )
 
 const emit = defineEmits<{ 'update:modelValue': [value: string] }>()
+
+const t = computed<RichTextLabels>(() => ({ ...defaultLabels, ...props.labels }))
+
+// Declarado antes del watch de modelValue, que lo lee.
+const source = ref(false)
 
 const editor = useEditor({
   content: props.modelValue,
@@ -65,50 +98,50 @@ watch(
   (d) => editor.value?.setEditable(!d),
 )
 
-const tools = [
+const tools = computed(() => [
   {
     key: 'bold',
     icon: Bold,
-    title: 'Negrita',
+    title: t.value.bold,
     run: () => editor.value?.chain().focus().toggleBold().run(),
     active: () => editor.value?.isActive('bold'),
   },
   {
     key: 'italic',
     icon: Italic,
-    title: 'Cursiva',
+    title: t.value.italic,
     run: () => editor.value?.chain().focus().toggleItalic().run(),
     active: () => editor.value?.isActive('italic'),
   },
   {
     key: 'strike',
     icon: Strikethrough,
-    title: 'Tachado',
+    title: t.value.strike,
     run: () => editor.value?.chain().focus().toggleStrike().run(),
     active: () => editor.value?.isActive('strike'),
   },
   {
     key: 'h2',
     icon: Heading2,
-    title: 'Título',
+    title: t.value.heading,
     run: () => editor.value?.chain().focus().toggleHeading({ level: 2 }).run(),
     active: () => editor.value?.isActive('heading', { level: 2 }),
   },
   {
     key: 'ul',
     icon: List,
-    title: 'Lista',
+    title: t.value.bulletList,
     run: () => editor.value?.chain().focus().toggleBulletList().run(),
     active: () => editor.value?.isActive('bulletList'),
   },
   {
     key: 'ol',
     icon: ListOrdered,
-    title: 'Lista numerada',
+    title: t.value.orderedList,
     run: () => editor.value?.chain().focus().toggleOrderedList().run(),
     active: () => editor.value?.isActive('orderedList'),
   },
-]
+])
 
 // --- Selector de iconos ---
 const pickerOpen = ref(false)
@@ -127,8 +160,7 @@ onBeforeUnmount(() => {
   editor.value?.destroy()
 })
 
-// --- Toggle modo visual / HTML ---
-const source = ref(false)
+// --- Toggle modo visual / HTML (source declarado arriba, antes del watch) ---
 const sourceHtml = ref('')
 
 function toggleSource() {
@@ -169,7 +201,7 @@ function onSourceInput(value: string) {
         <button
           type="button"
           class="rich-text__tool"
-          title="Deshacer"
+          :title="t.undo"
           :disabled="disabled"
           @click="editor?.chain().focus().undo().run()"
         >
@@ -178,7 +210,7 @@ function onSourceInput(value: string) {
         <button
           type="button"
           class="rich-text__tool"
-          title="Rehacer"
+          :title="t.redo"
           :disabled="disabled"
           @click="editor?.chain().focus().redo().run()"
         >
@@ -193,7 +225,7 @@ function onSourceInput(value: string) {
               type="button"
               class="rich-text__tool"
               :class="{ 'rich-text__tool--active': pickerOpen }"
-              title="Insertar icono"
+              :title="t.insertIcon"
               :disabled="disabled"
               @click="pickerOpen = !pickerOpen"
             >
@@ -220,7 +252,7 @@ function onSourceInput(value: string) {
         type="button"
         class="rich-text__tool rich-text__tool--source"
         :class="{ 'rich-text__tool--active': source }"
-        title="Editar HTML"
+        :title="t.editHtml"
         :disabled="disabled"
         @click="toggleSource"
       >

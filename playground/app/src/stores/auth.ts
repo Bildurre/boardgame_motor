@@ -43,15 +43,20 @@ export const useAuthStore = defineStore('auth', () => {
     user.value = data.data
   }
 
+  /** Limpieza local (sin llamar a la API): para 401 del interceptor. */
+  function clearSession() {
+    setToken(null)
+    user.value = null
+  }
+
   async function logout() {
     try {
       await api.post('/auth/logout')
     } catch {
       // da igual si falla; limpiamos igualmente
     }
-    setToken(null)
-    user.value = null
+    clearSession()
   }
 
-  return { user, token, isAuthenticated, login, register, fetchMe, logout }
+  return { user, token, isAuthenticated, login, register, fetchMe, logout, clearSession }
 })

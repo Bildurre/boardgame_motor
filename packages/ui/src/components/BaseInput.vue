@@ -24,7 +24,9 @@ const props = withDefaults(
   { modelValue: '', type: 'text', disabled: false, required: false },
 )
 
-const emit = defineEmits<{ 'update:modelValue': [value: string | number] }>()
+// El DOM siempre entrega string: no se declara `number` para no mentir al
+// consumidor (para números está NumericInput).
+const emit = defineEmits<{ 'update:modelValue': [value: string] }>()
 
 const inputId = props.id || `input-${Math.random().toString(36).slice(2, 9)}`
 </script>

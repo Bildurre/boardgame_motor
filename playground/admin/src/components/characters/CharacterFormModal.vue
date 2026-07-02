@@ -12,8 +12,10 @@ import {
 import { useResource } from '@bgm/admin-kit'
 import { api } from '@/lib/api'
 import { fieldErrors } from '@/lib/apiError'
+import { useEditorLabels } from '@/lib/editorLabels'
 import { useLocalesStore } from '@/stores/locales'
 import { useIconsStore } from '@/stores/icons'
+import type { Character } from '@/types/entities'
 
 const props = defineProps<{
   modelValue: boolean
@@ -26,7 +28,8 @@ const { t } = useI18n()
 const toast = useToast()
 const locales = useLocalesStore()
 const icons = useIconsStore()
-const { find, createForm, updateForm } = useResource(api, '/admin/characters')
+const { find, createForm, updateForm } = useResource<Character>(api, '/admin/characters')
+const editorLabels = useEditorLabels()
 
 const saving = ref(false)
 const image = ref<File | null>(null)
@@ -36,7 +39,7 @@ const errors = reactive<Record<string, string>>({})
 function clearErrors() {
   for (const k of Object.keys(errors)) delete errors[k]
 }
-function mapServerErrors(e: any) {
+function mapServerErrors(e: unknown) {
   for (const [k, v] of Object.entries(fieldErrors(e))) {
     if (k === 'name' || k.startsWith('name.')) errors.name = v
   }
@@ -95,10 +98,14 @@ watch(
   async (open) => {
     if (!open) return
     reset()
-    await Promise.all([locales.load(), icons.load()])
+    try {
+      await Promise.all([locales.load(), icons.load()])
+    } catch {
+      toast.danger(t('common.errors.load'))
+    }
     if (props.mode === 'edit' && props.targetSlug) {
       try {
-        const c: any = await find(props.targetSlug)
+        const c = await find(props.targetSlug)
         form.name = c.name ?? {}
         form.description = c.description ?? {}
         form.ability = c.ability ?? {}
@@ -179,6 +186,7 @@ async function submit() {
       :label="t('characters.fields.description')"
       type="wysiwyg"
       :icons="iconList"
+      :rich-labels="editorLabels"
     />
     <TranslatableInput
       v-model="form.ability"
@@ -186,6 +194,7 @@ async function submit() {
       :label="t('characters.fields.ability')"
       type="wysiwyg"
       :icons="iconList"
+      :rich-labels="editorLabels"
     />
 
     <div class="stats-grid">
@@ -207,8 +216,8 @@ async function submit() {
       v-model="image"
       :current-url="currentImage"
       :label="t('characters.fields.image')"
-      :drag-text="t('houses.fields.imageDrag')"
-      :hint-text="t('houses.fields.imageHint')"
+      :drag-text="t('common.imageDrag')"
+      :hint-text="t('common.imageHint')"
       :too-large-text="t('common.fileTooLarge')"
       :invalid-type-text="t('common.fileType')"
     />

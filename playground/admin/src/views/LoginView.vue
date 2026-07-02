@@ -4,6 +4,7 @@ import { useRoute, useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { BaseButton, MotorBadge } from '@bgm/ui'
 import { useAuthStore } from '@/stores/auth'
+import { apiMessage } from '@/lib/apiError'
 
 const { t } = useI18n()
 const auth = useAuthStore()
@@ -25,8 +26,8 @@ async function submit() {
       return
     }
     router.push({ name: 'dashboard' })
-  } catch (e: any) {
-    error.value = e.response?.data?.message ?? t('login.failed')
+  } catch (e) {
+    error.value = apiMessage(e, t('login.failed'))
   } finally {
     loading.value = false
   }

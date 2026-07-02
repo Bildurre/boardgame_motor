@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref, computed, onMounted, onBeforeUnmount, defineAsyncComponent } from 'vue'
 import { ChevronDown } from '@lucide/vue'
+import type { RichTextLabels } from './RichTextInput.vue'
 
 // Editor WYSIWYG cargado en diferido: TipTap solo se descarga si algún campo
 // traducible usa type="wysiwyg".
@@ -26,8 +27,17 @@ const props = withDefaults(
     id?: string
     /** Iconos del juego para el selector del editor (solo type="wysiwyg"). */
     icons?: { name: string; url: string }[]
+    /** Textos de la barra del editor (solo type="wysiwyg"), DC-29. */
+    richLabels?: Partial<RichTextLabels>
   }>(),
-  { modelValue: () => ({}), type: 'text', rows: 4, required: false, icons: () => [] },
+  {
+    modelValue: () => ({}),
+    type: 'text',
+    rows: 4,
+    required: false,
+    icons: () => [],
+    richLabels: () => ({}),
+  },
 )
 
 const emit = defineEmits<{ 'update:modelValue': [Record<string, string>] }>()
@@ -98,6 +108,7 @@ onBeforeUnmount(() => document.removeEventListener('click', onClickOutside))
       :model-value="currentValue"
       :placeholder="placeholder"
       :icons="icons"
+      :labels="richLabels"
       @update:model-value="update"
     />
     <textarea

@@ -31,6 +31,17 @@ it('exige el nombre en el locale por defecto', function () {
     ])->assertUnprocessable()->assertJsonValidationErrors('name.es');
 });
 
+it('permite vaciar una traducción al editar', function () {
+    makeHouse(['description' => ['es' => 'Se acerca el invierno', 'en' => 'Winter is coming']]);
+
+    $this->actingAs(motorUser('admin'))->putJson('/api/admin/houses/casa-stark', [
+        'name' => ['es' => 'Casa Stark', 'en' => 'House Stark'],
+        'description' => ['es' => 'Se acerca el invierno', 'en' => ''],
+    ])->assertOk()
+        ->assertJsonPath('data.description.es', 'Se acerca el invierno')
+        ->assertJsonMissingPath('data.description.en');
+});
+
 it('resuelve una casa por su slug en cualquier locale', function () {
     makeHouse();
     $admin = motorUser('admin');

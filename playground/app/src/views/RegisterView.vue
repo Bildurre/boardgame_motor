@@ -3,6 +3,7 @@ import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { BaseButton } from '@bgm/ui'
 import { useAuthStore } from '@/stores/auth'
+import { apiMessage } from '@/lib/apiError'
 
 const auth = useAuthStore()
 const router = useRouter()
@@ -24,8 +25,8 @@ async function submit() {
       password_confirmation: passwordConfirmation.value,
     })
     router.push({ name: 'account' })
-  } catch (e: any) {
-    error.value = e.response?.data?.message ?? 'No se pudo completar el registro.'
+  } catch (e) {
+    error.value = apiMessage(e, 'No se pudo completar el registro.')
   } finally {
     loading.value = false
   }

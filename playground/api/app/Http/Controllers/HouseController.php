@@ -116,8 +116,8 @@ class HouseController extends Controller
 
     protected function fill(House $house, array $data): void
     {
-        $house->setTranslations('name', array_filter($data['name'] ?? []));
-        $house->setTranslations('description', array_filter($data['description'] ?? []));
+        $house->replaceTranslations('name', array_filter($data['name'] ?? [], fn ($v) => $v !== null && $v !== ''));
+        $house->replaceTranslations('description', array_filter($data['description'] ?? [], fn ($v) => $v !== null && $v !== ''));
         $house->color = $data['color'] ?? null;
         if (array_key_exists('is_published', $data)) {
             $house->is_published = (bool) $data['is_published'];

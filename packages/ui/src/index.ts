@@ -10,7 +10,11 @@ export { default as BaseCheckbox } from './components/BaseCheckbox.vue'
 export { default as NumericInput } from './components/NumericInput.vue'
 export { default as PaletteColorPicker } from './components/PaletteColorPicker.vue'
 export { default as TranslatableInput } from './components/TranslatableInput.vue'
-export { default as RichTextInput, type RichIcon } from './components/RichTextInput.vue'
+export {
+  default as RichTextInput,
+  type RichIcon,
+  type RichTextLabels,
+} from './components/RichTextInput.vue'
 export { default as ImageUpload } from './components/ImageUpload.vue'
 export { default as BaseModal } from './components/BaseModal.vue'
 export { default as EditModal } from './components/EditModal.vue'

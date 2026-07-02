@@ -1,8 +1,6 @@
 {
   "routes": {
     "houses": "etxeak",
-    "new": "berria",
-    "edit": "editatu",
     "login": "sarrera",
     "icons": "ikonoak",
     "schemes": "argaziak",
@@ -11,8 +9,6 @@
   "breadcrumbs": {
     "home": "Hasiera",
     "houses": "Etxeak",
-    "houseNew": "Etxe berria",
-    "houseEdit": "Etxea editatu",
     "icons": "Ikonoak",
     "schemes": "Argaziak",
     "characters": "Pertsonaiak"
@@ -42,16 +38,28 @@
   },
   "common": {
     "save": "Gorde",
-    "saving": "Gordetzen…",
     "cancel": "Utzi",
     "search": "Bilatu…",
-    "loading": "Kargatzen…",
     "empty": "Emaitzarik ez.",
-    "all": "Guztiak",
     "logout": "Irten",
     "required": "Eremu hau beharrezkoa da.",
     "fileTooLarge": "Fitxategia handiegia da.",
-    "fileType": "Fitxategi-formatu baliogabea."
+    "fileType": "Fitxategi-formatu baliogabea.",
+    "actions": {
+      "edit": "Editatu",
+      "publish": "Argitaratu",
+      "unpublish": "Argitaratzea kendu",
+      "delete": "Ezabatu",
+      "restore": "Berreskuratu",
+      "forceDelete": "Betiko ezabatu"
+    },
+    "errors": {
+      "action": "Ezin izan da eragiketa burutu.",
+      "load": "Ezin izan dira datuak kargatu."
+    },
+    "imageDrag": "Arrastatu irudi bat edo egin klik",
+    "close": "Itxi",
+    "imageHint": "Geh. 4 MB"
   },
   "login": {
     "title": "Panelerako sarrera",
@@ -78,11 +86,6 @@
       "draft": "Zirriborroa",
       "trashed": "Zakarrontzia"
     },
-    "cols": {
-      "name": "Izena",
-      "color": "Kolorea",
-      "status": "Egoera"
-    },
     "state": {
       "published": "Argitaratua",
       "draft": "Zirriborroa",
@@ -93,22 +96,11 @@
       "description": "Deskribapena",
       "image": "Ikurra",
       "color": "Kolorea",
-      "published": "Argitaratua",
-      "imageDrag": "Arrastatu irudi bat edo egin klik",
-      "imageHint": "Geh. 4 MB"
-    },
-    "actions": {
-      "edit": "Editatu",
-      "publish": "Argitaratu",
-      "unpublish": "Ezkutatu",
-      "delete": "Ezabatu",
-      "restore": "Berreskuratu",
-      "forceDelete": "Behin betiko ezabatu"
+      "published": "Argitaratua"
     },
     "confirmDelete": {
       "title": "Zakarrontzira bidali",
-      "message": "\"{name}\" zakarrontzira bidali?",
-      "confirm": "Ezabatu"
+      "message": "\"{name}\" zakarrontzira bidali?"
     },
     "toast": {
       "created": "Etxea ondo sortu da.",
@@ -130,17 +122,10 @@
     "new": "Argazi berria",
     "edit": "Argazia editatu",
     "newButton": "Argazi berria",
-    "single": "Argazia",
     "tabs": {
       "published": "Argitaratuak",
       "draft": "Zirriborroa",
       "trashed": "Zakarrontzia"
-    },
-    "cols": {
-      "title": "Izenburua",
-      "house": "Etxea",
-      "cost": "Kostua",
-      "status": "Egoera"
     },
     "state": {
       "published": "Argitaratua",
@@ -179,16 +164,10 @@
     "new": "Pertsonaia berria",
     "edit": "Pertsonaia editatu",
     "newButton": "Pertsonaia berria",
-    "single": "Pertsonaia",
     "tabs": {
       "published": "Argitaratuak",
       "draft": "Zirriborroa",
       "trashed": "Zakarrontzia"
-    },
-    "cols": {
-      "name": "Izena",
-      "cost": "Kostua",
-      "status": "Egoera"
     },
     "state": {
       "published": "Argitaratua",
@@ -226,5 +205,17 @@
       "forceDeleted": "Pertsonaia behin betiko ezabatua",
       "saveError": "Ezin izan da gorde."
     }
+  },
+  "editor": {
+    "bold": "Lodia",
+    "italic": "Etzana",
+    "strike": "Marratua",
+    "heading": "Izenburua",
+    "bulletList": "Zerrenda",
+    "orderedList": "Zerrenda zenbakiduna",
+    "undo": "Desegin",
+    "redo": "Berregin",
+    "insertIcon": "Ikonoa txertatu",
+    "editHtml": "HTML editatu"
   }
 }

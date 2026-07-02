@@ -1,13 +1,15 @@
 <script setup lang="ts">
 import { useI18n } from 'vue-i18n'
+import type { Character } from '@/types/entities'
 // Composición "modo carta" de un personaje, lista para renderizar a PNG (Fase 3).
-const props = defineProps<{ item: any; locale: string }>()
+const props = defineProps<{ item: Character; locale: string }>()
 const { t } = useI18n()
 function tr(obj: Record<string, string>) {
   return obj?.[props.locale] || Object.values(obj || {})[0] || ''
 }
 </script>
 
+<!-- eslint-disable vue/no-v-html -- HTML del WYSIWYG propio (sanitización en servidor: DC-09) -->
 <template>
   <div class="play-card play-card--character">
     <div class="play-card__art">

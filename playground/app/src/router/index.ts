@@ -29,6 +29,12 @@ const router = createRouter({
       component: () => import('@/views/account/SecurityView.vue'),
       meta: { auth: true },
     },
+    // URLs desconocidas: a la home (evita la página en blanco).
+    {
+      path: '/:pathMatch(.*)*',
+      name: 'not-found',
+      redirect: { name: 'home' },
+    },
   ],
 })
 

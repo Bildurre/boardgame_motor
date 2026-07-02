@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted, watch } from 'vue'
-import { useRoute } from 'vue-router'
+import { useRoute, type RouteLocationRaw } from 'vue-router'
 import { ChevronLeft, ChevronRight, Menu, X } from '@lucide/vue'
 import { MotorBadge, ThemeSelector, LocaleSelector, AppBreadcrumbs, type Crumb } from '@bgm/ui'
 
@@ -19,6 +19,8 @@ const props = withDefaults(
     locales?: Locale[]
     /** Locale de contenido (v-model:locale). */
     locale?: string
+    /** Ruta a la que lleva el logo (la app puede no llamarla 'dashboard'). */
+    homeRoute?: RouteLocationRaw
     /** Miga "home"; pasa null para ocultarla. */
     homeCrumb?: Crumb | null
     /** Migas ya traducidas (i18n desde la app). */
@@ -29,6 +31,7 @@ const props = withDefaults(
     brand: 'BGM Admin',
     locales: () => [],
     locale: '',
+    homeRoute: () => ({ name: 'dashboard' }),
     homeCrumb: () => ({ label: 'Inicio', to: { name: 'dashboard' } }),
     breadcrumbs: null,
   },
@@ -83,7 +86,7 @@ function toggleSidebar() {
       >
         <RouterLink
           v-if="!sidebarCollapsed || isMobile"
-          :to="{ name: 'dashboard' }"
+          :to="props.homeRoute"
           class="sidebar-logo-link"
         >
           <MotorBadge :label="brand" />

@@ -1,8 +1,6 @@
 {
   "routes": {
     "houses": "casas",
-    "new": "nueva",
-    "edit": "editar",
     "login": "acceso",
     "icons": "iconos",
     "schemes": "argucias",
@@ -11,8 +9,6 @@
   "breadcrumbs": {
     "home": "Inicio",
     "houses": "Casas",
-    "houseNew": "Nueva casa",
-    "houseEdit": "Editar casa",
     "icons": "Iconos",
     "schemes": "Argucias",
     "characters": "Personajes"
@@ -42,16 +38,28 @@
   },
   "common": {
     "save": "Guardar",
-    "saving": "Guardando…",
     "cancel": "Cancelar",
     "search": "Buscar…",
-    "loading": "Cargando…",
     "empty": "Sin resultados.",
-    "all": "Todos",
     "logout": "Salir",
     "required": "Este campo es obligatorio.",
     "fileTooLarge": "El archivo es demasiado grande.",
-    "fileType": "Formato de archivo no válido."
+    "fileType": "Formato de archivo no válido.",
+    "actions": {
+      "edit": "Editar",
+      "publish": "Publicar",
+      "unpublish": "Despublicar",
+      "delete": "Borrar",
+      "restore": "Restaurar",
+      "forceDelete": "Borrar definitivamente"
+    },
+    "errors": {
+      "action": "No se ha podido completar la acción.",
+      "load": "No se han podido cargar los datos."
+    },
+    "imageDrag": "Arrastra una imagen o haz clic",
+    "close": "Cerrar",
+    "imageHint": "Máx. 4 MB"
   },
   "login": {
     "title": "Acceso al panel",
@@ -78,11 +86,6 @@
       "draft": "Borrador",
       "trashed": "Papelera"
     },
-    "cols": {
-      "name": "Nombre",
-      "color": "Color",
-      "status": "Estado"
-    },
     "state": {
       "published": "Publicada",
       "draft": "Borrador",
@@ -93,22 +96,11 @@
       "description": "Descripción",
       "image": "Emblema",
       "color": "Color",
-      "published": "Publicada",
-      "imageDrag": "Arrastra una imagen o haz clic",
-      "imageHint": "Máx. 4 MB"
-    },
-    "actions": {
-      "edit": "Editar",
-      "publish": "Publicar",
-      "unpublish": "Despublicar",
-      "delete": "Borrar",
-      "restore": "Restaurar",
-      "forceDelete": "Borrar definitivamente"
+      "published": "Publicada"
     },
     "confirmDelete": {
       "title": "Enviar a la papelera",
-      "message": "¿Enviar \"{name}\" a la papelera?",
-      "confirm": "Borrar"
+      "message": "¿Enviar \"{name}\" a la papelera?"
     },
     "toast": {
       "created": "Casa creada correctamente.",
@@ -130,17 +122,10 @@
     "new": "Nueva argucia",
     "edit": "Editar argucia",
     "newButton": "Nueva argucia",
-    "single": "Argucia",
     "tabs": {
       "published": "Publicadas",
       "draft": "Borrador",
       "trashed": "Papelera"
-    },
-    "cols": {
-      "title": "Título",
-      "house": "Casa",
-      "cost": "Coste",
-      "status": "Estado"
     },
     "state": {
       "published": "Publicada",
@@ -179,16 +164,10 @@
     "new": "Nuevo personaje",
     "edit": "Editar personaje",
     "newButton": "Nuevo personaje",
-    "single": "Personaje",
     "tabs": {
       "published": "Publicados",
       "draft": "Borrador",
       "trashed": "Papelera"
-    },
-    "cols": {
-      "name": "Nombre",
-      "cost": "Coste",
-      "status": "Estado"
     },
     "state": {
       "published": "Publicado",
@@ -226,5 +205,17 @@
       "forceDeleted": "Personaje borrado definitivamente",
       "saveError": "No se pudo guardar."
     }
+  },
+  "editor": {
+    "bold": "Negrita",
+    "italic": "Cursiva",
+    "strike": "Tachado",
+    "heading": "Título",
+    "bulletList": "Lista",
+    "orderedList": "Lista numerada",
+    "undo": "Deshacer",
+    "redo": "Rehacer",
+    "insertIcon": "Insertar icono",
+    "editHtml": "Editar HTML"
   }
 }

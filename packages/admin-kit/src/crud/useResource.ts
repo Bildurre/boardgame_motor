@@ -1,16 +1,24 @@
 import { ref } from 'vue'
 import type { AxiosInstance } from 'axios'
 
+/** Meta de paginación que devuelve la API ({ data, meta }). */
+export interface ResourceMeta {
+  current_page?: number
+  last_page?: number
+  per_page?: number
+  total?: number
+}
+
 /**
  * Composable de CRUD genérico sobre la API REST del motor. Cada juego lo usa
  * para sus entidades sin reescribir el ir-y-venir con axios.
  */
-export function useResource<T = any>(api: AxiosInstance, basePath: string) {
+export function useResource<T = unknown>(api: AxiosInstance, basePath: string) {
   const items = ref<T[]>([])
-  const meta = ref<Record<string, any> | null>(null)
+  const meta = ref<ResourceMeta | null>(null)
   const loading = ref(false)
 
-  async function list(params: Record<string, any> = {}) {
+  async function list(params: Record<string, unknown> = {}) {
     loading.value = true
     try {
       const { data } = await api.get(basePath, { params })
@@ -26,12 +34,12 @@ export function useResource<T = any>(api: AxiosInstance, basePath: string) {
     return data.data
   }
 
-  async function create(payload: Record<string, any>): Promise<T> {
+  async function create(payload: Record<string, unknown>): Promise<T> {
     const { data } = await api.post(basePath, payload)
     return data.data
   }
 
-  async function update(id: number | string, payload: Record<string, any>): Promise<T> {
+  async function update(id: number | string, payload: Record<string, unknown>): Promise<T> {
     const { data } = await api.put(`${basePath}/${id}`, payload)
     return data.data
   }

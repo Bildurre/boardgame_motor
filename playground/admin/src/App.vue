@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, onMounted, watch } from 'vue'
+import { computed, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { LayoutDashboard, Home, Shapes, ScrollText, Swords, LogOut } from '@lucide/vue'
@@ -31,16 +31,15 @@ const crumbs = computed<Crumb[]>(() => {
 })
 
 // Carga los locales cuando entramos al área de admin (para el selector).
+// El store deduplica peticiones en vuelo; si falla, los selectores quedan
+// vacíos y cada vista ya avisa de sus propios errores de carga.
 watch(
   isAdminArea,
   (inAdmin) => {
-    if (inAdmin) locales.load()
+    if (inAdmin) locales.load().catch(() => {})
   },
   { immediate: true },
 )
-onMounted(() => {
-  if (isAdminArea.value) locales.load()
-})
 
 async function logout() {
   await auth.logout()

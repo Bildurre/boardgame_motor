@@ -1,11 +1,13 @@
 <script setup lang="ts">
+import type { Scheme } from '@/types/entities'
 // Composición "modo carta" de una argucia, lista para renderizar a PNG (Fase 3).
-const props = defineProps<{ item: any; locale: string }>()
+const props = defineProps<{ item: Scheme; locale: string }>()
 function tr(obj: Record<string, string>) {
   return obj?.[props.locale] || Object.values(obj || {})[0] || ''
 }
 </script>
 
+<!-- eslint-disable vue/no-v-html -- HTML del WYSIWYG propio (sanitización en servidor: DC-09) -->
 <template>
   <div class="play-card play-card--scheme">
     <div class="play-card__art">

@@ -1,7 +1,5 @@
 @use "tokens" as *;
 
-.houses__top { display: flex; justify-content: flex-end; margin-bottom: $space-4; }
-
 // Emblema de la casa en la franja "media" de la EntityCard.
 .house-emblem {
   width: 100%;

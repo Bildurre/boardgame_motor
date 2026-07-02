@@ -7,22 +7,25 @@ import { useResource, BaseGrid, EntityCard, EmptyState } from '@bgm/admin-kit'
 import { BaseButton } from '@bgm/ui'
 import { api } from '@/lib/api'
 import { useLocalesStore } from '@/stores/locales'
+import type { House, Scheme } from '@/types/entities'
 import HouseFormModal from '@/components/houses/HouseFormModal.vue'
 
 const { t } = useI18n()
 const route = useRoute()
 const router = useRouter()
 const locales = useLocalesStore()
-const { find } = useResource(api, '/admin/houses')
+const { find } = useResource<House>(api, '/admin/houses')
 
-const item = ref<any>(null)
+const item = ref<House | null>(null)
 const loading = ref(true)
 const formOpen = ref(false)
 
-function tr(obj: Record<string, string>) {
-  return obj?.[locales.current] || Object.values(obj || {})[0] || '—'
+function tr(obj: Record<string, string> | null | undefined) {
+  return (
+    obj?.[locales.current] || obj?.[locales.defaultLocale] || Object.values(obj || {})[0] || '—'
+  )
 }
-function slugFor(obj: any): string {
+function slugFor(obj: Scheme): string {
   return obj?.slug?.[locales.current] || Object.values(obj?.slug || {})[0] || ''
 }
 const slug = computed(() => route.params.slug as string)
@@ -40,7 +43,7 @@ async function load() {
 async function onSaved() {
   await load()
 }
-function goScheme(s: any) {
+function goScheme(s: Scheme) {
   router.push({ name: 'scheme-single', params: { slug: slugFor(s) } })
 }
 
@@ -50,6 +53,7 @@ onMounted(async () => {
 })
 </script>
 
+<!-- eslint-disable vue/no-v-html -- HTML del WYSIWYG propio (sanitización en servidor: DC-09) -->
 <template>
   <div v-if="item" class="single">
     <div class="single__bar">
@@ -57,7 +61,7 @@ onMounted(async () => {
         ><ArrowLeft :size="16" /> {{ t('houses.title') }}</BaseButton
       >
       <BaseButton variant="success" @click="formOpen = true"
-        ><SquarePen :size="16" /> {{ t('houses.actions.edit') }}</BaseButton
+        ><SquarePen :size="16" /> {{ t('common.actions.edit') }}</BaseButton
       >
     </div>
 

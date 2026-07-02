@@ -13,12 +13,20 @@ export interface Icon {
 export const useIconsStore = defineStore('icons', () => {
   const icons = ref<Icon[]>([])
   const loaded = ref(false)
+  let inflight: Promise<void> | null = null
 
-  async function load(force = false) {
-    if (loaded.value && !force) return
-    const { data } = await api.get('/icons')
-    icons.value = data.data
-    loaded.value = true
+  function load(force = false): Promise<void> {
+    if (loaded.value && !force) return Promise.resolve()
+    inflight ??= api
+      .get('/icons')
+      .then(({ data }) => {
+        icons.value = data.data
+        loaded.value = true
+      })
+      .finally(() => {
+        inflight = null
+      })
+    return inflight
   }
 
   return { icons, loaded, load }

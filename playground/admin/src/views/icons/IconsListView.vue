@@ -14,7 +14,7 @@ import {
 } from '@bgm/ui'
 import { api } from '@/lib/api'
 import { fieldErrors } from '@/lib/apiError'
-import { useIconsStore } from '@/stores/icons'
+import { useIconsStore, type Icon } from '@/stores/icons'
 
 const { t } = useI18n()
 const store = useIconsStore()
@@ -27,6 +27,8 @@ async function reload() {
   loading.value = true
   try {
     await store.load(true)
+  } catch {
+    toast.danger(t('common.errors.load'))
   } finally {
     loading.value = false
   }
@@ -66,7 +68,7 @@ async function save() {
     toast.success(t('icons.toast.created'))
     open.value = false
     await reload()
-  } catch (e: any) {
+  } catch (e) {
     // Errores de validación por campo (traducidos) + aviso genérico. Nunca se
     // muestra el mensaje crudo del servidor.
     Object.assign(errors, fieldErrors(e))
@@ -76,23 +78,27 @@ async function save() {
   }
 }
 
-async function del(icon: any) {
+async function del(icon: Icon) {
   const ok = await confirm({
     title: t('icons.confirmDelete.title'),
     message: t('icons.confirmDelete.message', { name: icon.name }),
-    confirmLabel: t('houses.actions.delete'),
+    confirmLabel: t('common.actions.delete'),
     variant: 'danger',
   })
   if (!ok) return
-  await api.delete(`/admin/icons/${icon.id}`)
-  toast.success(t('icons.toast.deleted'))
-  await reload()
+  try {
+    await api.delete(`/admin/icons/${icon.id}`)
+    toast.success(t('icons.toast.deleted'))
+    await reload()
+  } catch {
+    toast.danger(t('common.errors.action'))
+  }
 }
 </script>
 
 <template>
   <div class="icons">
-    <div class="houses__top">
+    <div class="list-view__top">
       <BaseButton @click="openCreate">{{ t('icons.new') }}</BaseButton>
     </div>
 
@@ -104,7 +110,7 @@ async function del(icon: any) {
           <div class="icon-tile"><img v-if="icon.url" :src="icon.url" :alt="icon.name" /></div>
         </template>
         <template #actions>
-          <IconButton variant="danger" :title="t('houses.actions.delete')" @click="del(icon)"
+          <IconButton variant="danger" :title="t('common.actions.delete')" @click="del(icon)"
             ><Trash2 :size="18"
           /></IconButton>
         </template>
@@ -125,7 +131,7 @@ async function del(icon: any) {
         :label="t('icons.imageLabel')"
         accept=".svg,.png,.jpg,.jpeg,.webp"
         :max-size="2"
-        :drag-text="t('houses.fields.imageDrag')"
+        :drag-text="t('common.imageDrag')"
         :hint-text="t('icons.imageHint')"
         :too-large-text="t('common.fileTooLarge')"
         :invalid-type-text="t('common.fileType')"

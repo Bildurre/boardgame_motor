@@ -13,9 +13,11 @@ import {
 import { useResource } from '@bgm/admin-kit'
 import { api } from '@/lib/api'
 import { fieldErrors } from '@/lib/apiError'
+import { useEditorLabels } from '@/lib/editorLabels'
 import { useLocalesStore } from '@/stores/locales'
 import { useIconsStore } from '@/stores/icons'
 import { useHousesStore } from '@/stores/houses'
+import type { Scheme } from '@/types/entities'
 
 const props = defineProps<{
   modelValue: boolean
@@ -29,7 +31,8 @@ const toast = useToast()
 const locales = useLocalesStore()
 const icons = useIconsStore()
 const houses = useHousesStore()
-const { find, createForm, updateForm } = useResource(api, '/admin/schemes')
+const { find, createForm, updateForm } = useResource<Scheme>(api, '/admin/schemes')
+const editorLabels = useEditorLabels()
 
 const saving = ref(false)
 const image = ref<File | null>(null)
@@ -39,7 +42,7 @@ const errors = reactive<Record<string, string>>({})
 function clearErrors() {
   for (const k of Object.keys(errors)) delete errors[k]
 }
-function mapServerErrors(e: any) {
+function mapServerErrors(e: unknown) {
   for (const [k, v] of Object.entries(fieldErrors(e))) {
     if (k === 'title' || k.startsWith('title.')) errors.title = v
     if (k === 'house_id') errors.house_id = v
@@ -89,10 +92,14 @@ watch(
   async (open) => {
     if (!open) return
     reset()
-    await Promise.all([locales.load(), icons.load(), houses.loadOptions()])
+    try {
+      await Promise.all([locales.load(), icons.load(), houses.loadOptions()])
+    } catch {
+      toast.danger(t('common.errors.load'))
+    }
     if (props.mode === 'edit' && props.targetSlug) {
       try {
-        const s: any = await find(props.targetSlug)
+        const s = await find(props.targetSlug)
         form.house_id = String(s.house_id ?? '')
         form.title = s.title ?? {}
         form.description = s.description ?? {}
@@ -174,6 +181,7 @@ async function submit() {
       :label="t('schemes.fields.description')"
       type="wysiwyg"
       :icons="iconList"
+      :rich-labels="editorLabels"
     />
     <NumericInput
       v-model="form.cost"
@@ -185,8 +193,8 @@ async function submit() {
       v-model="image"
       :current-url="currentImage"
       :label="t('schemes.fields.image')"
-      :drag-text="t('houses.fields.imageDrag')"
-      :hint-text="t('houses.fields.imageHint')"
+      :drag-text="t('common.imageDrag')"
+      :hint-text="t('common.imageHint')"
       :too-large-text="t('common.fileTooLarge')"
       :invalid-type-text="t('common.fileType')"
     />

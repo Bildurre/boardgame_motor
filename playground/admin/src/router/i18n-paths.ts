@@ -101,5 +101,11 @@ export function createLocalizedRoutes(locale: string): RouteRecordRaw[] {
       alias: buildAliases((t) => `/${t.icons}`, locale),
       meta: { admin: true, titleKey: 'icons.title', breadcrumbs: [{ key: 'icons' }] },
     },
+    // URLs desconocidas: al dashboard (evita la página en blanco).
+    {
+      path: '/:pathMatch(.*)*',
+      name: 'not-found',
+      redirect: { name: 'dashboard' },
+    },
   ]
 }

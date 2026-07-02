@@ -3,6 +3,7 @@ import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { BaseButton } from '@bgm/ui'
 import { useAuthStore } from '@/stores/auth'
+import { apiMessage } from '@/lib/apiError'
 
 const auth = useAuthStore()
 const router = useRouter()
@@ -17,8 +18,8 @@ async function submit() {
   try {
     await auth.login(email.value, password.value)
     router.push({ name: 'account' })
-  } catch (e: any) {
-    error.value = e.response?.data?.message ?? 'No se pudo iniciar sesión.'
+  } catch (e) {
+    error.value = apiMessage(e, 'No se pudo iniciar sesión.')
   } finally {
     loading.value = false
   }

@@ -104,9 +104,9 @@ class CharacterController extends Controller
 
     protected function fill(Character $character, array $data): void
     {
-        $character->setTranslations('name', array_filter($data['name'] ?? []));
-        $character->setTranslations('description', array_filter($data['description'] ?? []));
-        $character->setTranslations('ability', array_filter($data['ability'] ?? []));
+        $character->replaceTranslations('name', array_filter($data['name'] ?? [], fn ($v) => $v !== null && $v !== ''));
+        $character->replaceTranslations('description', array_filter($data['description'] ?? [], fn ($v) => $v !== null && $v !== ''));
+        $character->replaceTranslations('ability', array_filter($data['ability'] ?? [], fn ($v) => $v !== null && $v !== ''));
         $character->power = (int) $data['power'];
         $character->prestige = (int) $data['prestige'];
         $character->intrigue = (int) $data['intrigue'];

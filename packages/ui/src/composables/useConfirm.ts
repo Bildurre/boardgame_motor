@@ -28,6 +28,9 @@ export function useConfirm() {
   /** Muestra un diálogo de confirmación y resuelve a true/false. */
   function confirm(options: ConfirmOptions): Promise<boolean> {
     return new Promise((resolve) => {
+      // Si había otro diálogo pendiente, se resuelve como cancelado para no
+      // dejar su promesa colgada para siempre.
+      state.resolver?.(false)
       state.open = true
       state.title = options.title ?? ''
       state.message = options.message

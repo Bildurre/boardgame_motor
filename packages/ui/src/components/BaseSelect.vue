@@ -20,7 +20,9 @@ const props = withDefaults(
   { modelValue: '', disabled: false, required: false },
 )
 
-const emit = defineEmits<{ 'update:modelValue': [value: string | number] }>()
+// El DOM siempre entrega string: no se declara `number` para no mentir al
+// consumidor (que convierta él si guarda ids numéricos).
+const emit = defineEmits<{ 'update:modelValue': [value: string] }>()
 
 const selectId = props.id || `select-${Math.random().toString(36).slice(2, 9)}`
 </script>

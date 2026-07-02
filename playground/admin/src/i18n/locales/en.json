@@ -1,8 +1,6 @@
 {
   "routes": {
     "houses": "houses",
-    "new": "new",
-    "edit": "edit",
     "login": "login",
     "icons": "icons",
     "schemes": "schemes",
@@ -11,8 +9,6 @@
   "breadcrumbs": {
     "home": "Home",
     "houses": "Houses",
-    "houseNew": "New house",
-    "houseEdit": "Edit house",
     "icons": "Icons",
     "schemes": "Schemes",
     "characters": "Characters"
@@ -42,16 +38,28 @@
   },
   "common": {
     "save": "Save",
-    "saving": "Saving…",
     "cancel": "Cancel",
     "search": "Search…",
-    "loading": "Loading…",
     "empty": "No results.",
-    "all": "All",
     "logout": "Log out",
     "required": "This field is required.",
     "fileTooLarge": "The file is too large.",
-    "fileType": "Invalid file format."
+    "fileType": "Invalid file format.",
+    "actions": {
+      "edit": "Edit",
+      "publish": "Publish",
+      "unpublish": "Unpublish",
+      "delete": "Delete",
+      "restore": "Restore",
+      "forceDelete": "Delete permanently"
+    },
+    "errors": {
+      "action": "The action could not be completed.",
+      "load": "Data could not be loaded."
+    },
+    "imageDrag": "Drag an image or click",
+    "close": "Close",
+    "imageHint": "Max. 4 MB"
   },
   "login": {
     "title": "Panel access",
@@ -78,11 +86,6 @@
       "draft": "Draft",
       "trashed": "Trash"
     },
-    "cols": {
-      "name": "Name",
-      "color": "Color",
-      "status": "Status"
-    },
     "state": {
       "published": "Published",
       "draft": "Draft",
@@ -93,22 +96,11 @@
       "description": "Description",
       "image": "Emblem",
       "color": "Color",
-      "published": "Published",
-      "imageDrag": "Drag an image or click",
-      "imageHint": "Max 4 MB"
-    },
-    "actions": {
-      "edit": "Edit",
-      "publish": "Publish",
-      "unpublish": "Unpublish",
-      "delete": "Delete",
-      "restore": "Restore",
-      "forceDelete": "Delete permanently"
+      "published": "Published"
     },
     "confirmDelete": {
       "title": "Move to trash",
-      "message": "Move \"{name}\" to the trash?",
-      "confirm": "Delete"
+      "message": "Move \"{name}\" to the trash?"
     },
     "toast": {
       "created": "House created successfully.",
@@ -130,17 +122,10 @@
     "new": "New scheme",
     "edit": "Edit scheme",
     "newButton": "New scheme",
-    "single": "Scheme",
     "tabs": {
       "published": "Published",
       "draft": "Draft",
       "trashed": "Trash"
-    },
-    "cols": {
-      "title": "Title",
-      "house": "House",
-      "cost": "Cost",
-      "status": "Status"
     },
     "state": {
       "published": "Published",
@@ -179,16 +164,10 @@
     "new": "New character",
     "edit": "Edit character",
     "newButton": "New character",
-    "single": "Character",
     "tabs": {
       "published": "Published",
       "draft": "Draft",
       "trashed": "Trash"
-    },
-    "cols": {
-      "name": "Name",
-      "cost": "Cost",
-      "status": "Status"
     },
     "state": {
       "published": "Published",
@@ -226,5 +205,17 @@
       "forceDeleted": "Character permanently deleted",
       "saveError": "Could not save."
     }
+  },
+  "editor": {
+    "bold": "Bold",
+    "italic": "Italic",
+    "strike": "Strikethrough",
+    "heading": "Heading",
+    "bulletList": "Bullet list",
+    "orderedList": "Ordered list",
+    "undo": "Undo",
+    "redo": "Redo",
+    "insertIcon": "Insert icon",
+    "editHtml": "Edit HTML"
   }
 }

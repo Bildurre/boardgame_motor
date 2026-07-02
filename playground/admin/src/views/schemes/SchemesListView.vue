@@ -1,124 +1,45 @@
 <script setup lang="ts">
-import { computed, onMounted, ref, watch } from 'vue'
-import { useI18n } from 'vue-i18n'
-import { useRouter } from 'vue-router'
-import {
-  SquarePen,
-  Trash2,
-  Eye,
-  EyeOff,
-  RotateCcw,
-  CircleCheck,
-  FilePen,
-  Trash,
-  FlameKindling,
-} from '@lucide/vue'
-import { BaseGrid, EntityCard, FilterBar, EmptyState, useResource } from '@bgm/admin-kit'
-import { BaseButton, BaseTabs, IconButton, useToast, useConfirm } from '@bgm/ui'
-import { api } from '@/lib/api'
-import { useLocalesStore } from '@/stores/locales'
+import { onMounted } from 'vue'
+import { SquarePen, Trash2, Eye, EyeOff, RotateCcw, FlameKindling } from '@lucide/vue'
+import { BaseGrid, EntityCard, FilterBar, EmptyState } from '@bgm/admin-kit'
+import { BaseButton, BaseTabs, IconButton } from '@bgm/ui'
+import { useEntityList } from '@/composables/useEntityList'
+import type { Scheme } from '@/types/entities'
 import SchemeFormModal from '@/components/schemes/SchemeFormModal.vue'
 
-const { t } = useI18n()
-const router = useRouter()
-const locales = useLocalesStore()
-const toast = useToast()
-const { confirm } = useConfirm()
-const { items, meta, loading, list, remove, action } = useResource(api, '/admin/schemes')
-
-const status = ref('published')
-const search = ref('')
-
-const tabs = computed(() => [
-  { key: 'published', label: t('schemes.tabs.published'), icon: CircleCheck },
-  { key: 'draft', label: t('schemes.tabs.draft'), icon: FilePen },
-  { key: 'trashed', label: t('schemes.tabs.trashed'), icon: Trash },
-])
-
-function tr(obj: Record<string, string>) {
-  return (
-    obj?.[locales.current] || obj?.[locales.defaultLocale] || Object.values(obj || {})[0] || '—'
-  )
-}
-function slugFor(item: any): string {
-  return item.slug?.[locales.current] || Object.values(item.slug || {})[0] || ''
-}
-
-async function load(page = 1) {
-  await list({ search: search.value, status: status.value, page })
-}
-watch(status, () => load(1))
-let timer: ReturnType<typeof setTimeout> | null = null
-watch(search, () => {
-  if (timer) clearTimeout(timer)
-  timer = setTimeout(() => load(1), 250)
+const {
+  t,
+  items,
+  loading,
+  status,
+  search,
+  tabs,
+  tr,
+  init,
+  formOpen,
+  formMode,
+  formSlug,
+  openCreate,
+  edit,
+  goSingle,
+  onSaved,
+  togglePublish,
+  del,
+  restore,
+  forceDelete,
+} = useEntityList<Scheme>({
+  resource: '/admin/schemes',
+  ns: 'schemes',
+  singleRoute: 'scheme-single',
+  nameOf: (item) => item.title,
 })
 
-const formOpen = ref(false)
-const formMode = ref<'create' | 'edit'>('create')
-const formSlug = ref<string | null>(null)
-
-function openCreate() {
-  formMode.value = 'create'
-  formSlug.value = null
-  formOpen.value = true
-}
-function edit(item: any) {
-  formMode.value = 'edit'
-  formSlug.value = slugFor(item)
-  formOpen.value = true
-}
-function goSingle(item: any) {
-  router.push({ name: 'scheme-single', params: { slug: slugFor(item) } })
-}
-function onSaved() {
-  load(meta.value?.current_page ?? 1)
-}
-
-async function togglePublish(item: any) {
-  await action(slugFor(item), 'toggle-published')
-  toast.success(item.is_published ? t('schemes.toast.unpublished') : t('schemes.toast.published'))
-  load(meta.value?.current_page ?? 1)
-}
-async function del(item: any) {
-  const ok = await confirm({
-    title: t('schemes.confirmDelete.title'),
-    message: t('schemes.confirmDelete.message', { name: tr(item.title) }),
-    confirmLabel: t('houses.actions.delete'),
-    variant: 'danger',
-  })
-  if (!ok) return
-  await remove(slugFor(item))
-  toast.success(t('schemes.toast.deleted'))
-  load(meta.value?.current_page ?? 1)
-}
-async function restore(item: any) {
-  await action(item.id, 'restore')
-  toast.success(t('schemes.toast.restored'))
-  load(meta.value?.current_page ?? 1)
-}
-async function forceDelete(item: any) {
-  const ok = await confirm({
-    title: t('schemes.confirmForceDelete.title'),
-    message: t('schemes.confirmForceDelete.message', { name: tr(item.title) }),
-    confirmLabel: t('houses.actions.forceDelete'),
-    variant: 'danger',
-  })
-  if (!ok) return
-  await api.delete(`/admin/schemes/${item.id}/force`)
-  toast.success(t('schemes.toast.forceDeleted'))
-  load(meta.value?.current_page ?? 1)
-}
-
-onMounted(async () => {
-  await locales.load()
-  load()
-})
+onMounted(init)
 </script>
 
 <template>
   <div class="schemes">
-    <div class="houses__top">
+    <div class="list-view__top">
       <BaseButton @click="openCreate">{{ t('schemes.newButton') }}</BaseButton>
     </div>
 
@@ -145,30 +66,30 @@ onMounted(async () => {
 
         <template #actions>
           <template v-if="item.deleted_at">
-            <IconButton variant="info" :title="t('houses.actions.restore')" @click="restore(item)"
+            <IconButton variant="info" :title="t('common.actions.restore')" @click="restore(item)"
               ><RotateCcw :size="18"
             /></IconButton>
             <IconButton
               variant="danger"
-              :title="t('houses.actions.forceDelete')"
+              :title="t('common.actions.forceDelete')"
               @click="forceDelete(item)"
               ><FlameKindling :size="18"
             /></IconButton>
           </template>
           <template v-else>
-            <IconButton variant="success" :title="t('houses.actions.edit')" @click="edit(item)"
+            <IconButton variant="success" :title="t('common.actions.edit')" @click="edit(item)"
               ><SquarePen :size="18"
             /></IconButton>
             <IconButton
               :variant="item.is_published ? 'warning' : 'info'"
               :title="
-                item.is_published ? t('houses.actions.unpublish') : t('houses.actions.publish')
+                item.is_published ? t('common.actions.unpublish') : t('common.actions.publish')
               "
               @click="togglePublish(item)"
             >
               <component :is="item.is_published ? EyeOff : Eye" :size="18" />
             </IconButton>
-            <IconButton variant="danger" :title="t('houses.actions.delete')" @click="del(item)"
+            <IconButton variant="danger" :title="t('common.actions.delete')" @click="del(item)"
               ><Trash2 :size="18"
             /></IconButton>
           </template>

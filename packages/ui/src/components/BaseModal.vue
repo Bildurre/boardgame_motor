@@ -2,11 +2,34 @@
 import { onMounted, onBeforeUnmount, watch, ref } from 'vue'
 import { X } from '@lucide/vue'
 
+// Pila de modales abiertos compartida entre instancias: el bloqueo del scroll
+// del body dura mientras haya ALGÚN modal abierto, y Escape solo cierra el de
+// arriba (no todos a la vez cuando hay modal + confirmación superpuestos).
+const openStack: symbol[] = []
+
 const props = withDefaults(
-  defineProps<{ modelValue: boolean; title?: string; size?: 'sm' | 'md' | 'lg' }>(),
-  { size: 'md' },
+  defineProps<{
+    modelValue: boolean
+    title?: string
+    size?: 'sm' | 'md' | 'lg'
+    closeLabel?: string
+  }>(),
+  { size: 'md', closeLabel: 'Cerrar' },
 )
 const emit = defineEmits<{ 'update:modelValue': [boolean] }>()
+
+const stackId = Symbol('modal')
+
+function pushOpen() {
+  openStack.push(stackId)
+  document.body.style.overflow = 'hidden'
+}
+
+function popOpen() {
+  const i = openStack.indexOf(stackId)
+  if (i > -1) openStack.splice(i, 1)
+  if (openStack.length === 0) document.body.style.overflow = ''
+}
 
 function close() {
   emit('update:modelValue', false)
@@ -24,15 +47,26 @@ function onOverlayClick(e: MouseEvent) {
   downOnOverlay.value = false
 }
 function onKeydown(e: KeyboardEvent) {
-  if (e.key === 'Escape' && props.modelValue) close()
+  if (e.key === 'Escape' && props.modelValue && openStack[openStack.length - 1] === stackId) {
+    close()
+  }
 }
 
-onMounted(() => window.addEventListener('keydown', onKeydown))
-onBeforeUnmount(() => window.removeEventListener('keydown', onKeydown))
+onMounted(() => {
+  window.addEventListener('keydown', onKeydown)
+  if (props.modelValue) pushOpen()
+})
+onBeforeUnmount(() => {
+  window.removeEventListener('keydown', onKeydown)
+  // Si se desmonta con el modal abierto (navegación atrás…), libera el scroll.
+  popOpen()
+})
 watch(
   () => props.modelValue,
   (open) => {
-    if (typeof document !== 'undefined') document.body.style.overflow = open ? 'hidden' : ''
+    if (typeof document === 'undefined') return
+    if (open) pushOpen()
+    else popOpen()
   },
 )
 </script>
@@ -51,7 +85,7 @@ watch(
             <slot name="header"
               ><h3 class="modal__title">{{ title }}</h3></slot
             >
-            <button class="modal__close" aria-label="Cerrar" @click="close">
+            <button class="modal__close" :aria-label="closeLabel" @click="close">
               <X :size="18" />
             </button>
           </div>

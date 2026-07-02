@@ -101,8 +101,8 @@ class SchemeController extends Controller
 
     protected function fill(Scheme $scheme, array $data): void
     {
-        $scheme->setTranslations('title', array_filter($data['title'] ?? []));
-        $scheme->setTranslations('description', array_filter($data['description'] ?? []));
+        $scheme->replaceTranslations('title', array_filter($data['title'] ?? [], fn ($v) => $v !== null && $v !== ''));
+        $scheme->replaceTranslations('description', array_filter($data['description'] ?? [], fn ($v) => $v !== null && $v !== ''));
         $scheme->house_id = (int) $data['house_id'];
         $scheme->cost = (int) $data['cost'];
         if (array_key_exists('is_published', $data)) {

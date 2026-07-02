@@ -12,12 +12,20 @@ export interface HouseOption {
 export const useHousesStore = defineStore('houses', () => {
   const options = ref<HouseOption[]>([])
   const loaded = ref(false)
+  let inflight: Promise<void> | null = null
 
-  async function loadOptions(force = false) {
-    if (loaded.value && !force) return
-    const { data } = await api.get('/admin/houses/options')
-    options.value = data.data
-    loaded.value = true
+  function loadOptions(force = false): Promise<void> {
+    if (loaded.value && !force) return Promise.resolve()
+    inflight ??= api
+      .get('/admin/houses/options')
+      .then(({ data }) => {
+        options.value = data.data
+        loaded.value = true
+      })
+      .finally(() => {
+        inflight = null
+      })
+    return inflight
   }
 
   return { options, loaded, loadOptions }
