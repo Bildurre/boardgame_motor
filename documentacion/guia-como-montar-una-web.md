@@ -401,9 +401,10 @@ Para que una entidad se capture a PNG (base del PDF), doc `funcionalidades/01-re
    `npm run dev` ya lo levanta). A mano: `php artisan preview:manage
    generate|regenerate|status|delete|clean [--type --id --locale --sync --dry-run]`.
 
-Requisitos: `npm install` en `api/` (baja `puppeteer` con su Chromium) o
-`MOTOR_CHROME_PATH` apuntando a un Chromium del sistema. Apagado global con
-`MOTOR_PREVIEWS=false`.
+Requisitos: `npm install` en `api/` (instala `puppeteer`) **y su navegador**
+(`npm run chrome:install` si npm saltó el postinstall — error "Could not find
+Chrome"), o `MOTOR_CHROME_PATH` apuntando a un Chromium del sistema. Apagado
+global con `MOTOR_PREVIEWS=false`.
 
 ## 6. Checklist para una entidad nueva
 
