@@ -68,6 +68,10 @@
   flex: 1;
   overflow-y: auto;
   padding: $space-3;
+  // Contenedor `content`: los botones con icono pasan a modo vertical
+  // (mini-etiqueta bajo el icono) en el ancho del panel.
+  container-type: inline-size;
+  container-name: content;
 }
 
 .right-sidebar-handle {

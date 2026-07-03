@@ -158,16 +158,20 @@ onMounted(load)
           <!-- Acciones arriba del todo (patrón kontuan) -->
           <div class="manager-detail__actions">
             <BaseButton @click="open(selected)">
-              <ArrowRight :size="14" /> {{ t('pages.open') }}
+              <template #icon><ArrowRight :size="14" /></template>
+              {{ t('pages.open') }}
             </BaseButton>
             <BaseButton variant="secondary" @click="openEdit(selected)">
-              <SquarePen :size="14" /> {{ t('common.actions.edit') }}
+              <template #icon><SquarePen :size="14" /></template>
+              {{ t('common.actions.edit') }}
             </BaseButton>
             <BaseButton v-if="!selected.is_home" variant="secondary" @click="setHome(selected)">
-              <HomeIcon :size="14" /> {{ t('pages.setHome') }}
+              <template #icon><HomeIcon :size="14" /></template>
+              {{ t('pages.setHome') }}
             </BaseButton>
             <BaseButton variant="danger" @click="remove(selected)">
-              <Trash2 :size="14" /> {{ t('common.actions.delete') }}
+              <template #icon><Trash2 :size="14" /></template>
+              {{ t('common.actions.delete') }}
             </BaseButton>
           </div>
 

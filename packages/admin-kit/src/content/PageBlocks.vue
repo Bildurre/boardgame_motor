@@ -346,10 +346,12 @@ defineExpose({ reload: load })
           <!-- Acciones arriba del todo -->
           <div class="manager-detail__actions">
             <BaseButton :disabled="busy" @click="openEdit(selected)">
-              <SquarePen :size="14" /> {{ L.edit }}
+              <template #icon><SquarePen :size="14" /></template>
+              {{ L.edit }}
             </BaseButton>
             <BaseButton variant="danger" :disabled="busy" @click="remove(selected)">
-              <Trash2 :size="14" /> {{ L.delete }}
+              <template #icon><Trash2 :size="14" /></template>
+              {{ L.delete }}
             </BaseButton>
           </div>
 
