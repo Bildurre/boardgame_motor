@@ -509,6 +509,15 @@ vive en el composable `useEntityList` (ver la guía de montar una web, §4.4).
   contenedor** `content` — container query, no viewport). El detalle de la
   tarjeta activa vive en el panel derecho.
 
+### PageBlocks + panel derecho de páginas
+
+- **Patrón de selección** (kontuan): en la lista de páginas y en el gestor de
+  bloques, **toda la tarjeta/fila selecciona** (salvo controles interiores) y
+  el panel derecho muestra el elemento con **las acciones arriba del todo**
+  (abrir, editar, marcar home, borrar) más las **acciones rápidas sin modal**
+  (publicar/despublicar, imprimible, indexable — toggles que hacen PUT solo
+  con el flag). El título/flecha de la tarjeta de página entra al single.
+
 ### PreviewManager
 
 - **Finalidad:** gestor de las previews PNG (doc 01), **mobile-first** sobre

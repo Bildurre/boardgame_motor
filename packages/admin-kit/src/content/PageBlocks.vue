@@ -14,6 +14,7 @@ import {
   type RichTextLabels,
 } from '@bgm/ui'
 import SchemaFields, { type FieldSchema } from './SchemaFields.vue'
+import { useRightSidebar } from '../composables/useRightSidebar'
 
 // Gestor de bloques de una página (doc 03): paleta de tipos (motor + juego),
 // lista reordenable con drag (DC-17) y modal de edición GENERADO desde el
@@ -32,6 +33,8 @@ export interface PageBlocksLabels {
   common: string
   confirmDelete: string
   error: string
+  panelTitle: string
+  panelEmpty: string
 }
 
 const defaultLabels: PageBlocksLabels = {
@@ -46,6 +49,8 @@ const defaultLabels: PageBlocksLabels = {
   common: 'Ajustes comunes',
   confirmDelete: '¿Borrar este bloque?',
   error: 'No se ha podido completar la acción.',
+  panelTitle: 'Bloque',
+  panelEmpty: 'Selecciona un bloque para ver sus acciones.',
 }
 
 const props = withDefaults(
@@ -67,6 +72,10 @@ const L = reactive({ ...defaultLabels, ...props.labels }) as PageBlocksLabels
 const toast = useToast()
 const { confirm } = useConfirm()
 
+// El detalle/acciones del bloque seleccionado viven en el panel derecho.
+const sidebar = useRightSidebar()
+sidebar.useRegister(L.panelTitle)
+
 interface BlockTypeSchema {
   key: string
   name: string
@@ -87,6 +96,27 @@ interface BlockRow {
 
 const types = ref<BlockTypeSchema[]>([])
 const blocks = ref<BlockRow[]>([])
+const selectedId = ref<number | null>(null)
+const selected = computed(() => blocks.value.find((b) => b.id === selectedId.value) ?? null)
+
+/** Toda la fila selecciona, salvo sus controles interiores y el grip. */
+function selectBlock(block: BlockRow, event: MouseEvent) {
+  const target = event.target as HTMLElement | null
+  if (target?.closest('button, a, input, label, .page-blocks__grip')) return
+  selectedId.value = block.id
+  sidebar.reveal()
+}
+
+/** Acción rápida del panel: alterna un flag sin abrir el modal. */
+async function toggleFlag(flag: 'is_printable' | 'is_indexable', value: boolean) {
+  if (!selected.value) return
+  try {
+    await props.api.put(`/admin/blocks/${selected.value.id}`, { [flag]: value })
+    selected.value[flag] = value
+  } catch {
+    toast.danger(L.error)
+  }
+}
 const busy = ref(false)
 const paletteOpen = ref(false)
 
@@ -187,6 +217,7 @@ async function remove(block: BlockRow) {
   if (!ok) return
   try {
     await props.api.delete(`/admin/blocks/${block.id}`)
+    if (selectedId.value === block.id) selectedId.value = null
     await load()
   } catch {
     toast.danger(L.error)
@@ -244,7 +275,13 @@ defineExpose({ reload: load })
       :animation="150"
       @end="persistOrder"
     >
-      <article v-for="block in blocks" :key="block.id" class="page-blocks__item">
+      <article
+        v-for="block in blocks"
+        :key="block.id"
+        class="page-blocks__item"
+        :class="{ 'is-active': selectedId === block.id }"
+        @click="(e) => selectBlock(block, e)"
+      >
         <span class="page-blocks__grip"><GripVertical :size="16" /></span>
         <span class="page-blocks__type">{{ typeName(block.type) }}</span>
         <span class="page-blocks__summary">{{ summary(block) }}</span>
@@ -297,5 +334,38 @@ defineExpose({ reload: load })
         </details>
       </template>
     </EditModal>
+
+    <!-- Acciones del bloque seleccionado, en el panel derecho (patrón kontuan) -->
+    <Teleport defer to="#right-sidebar-target">
+      <div class="manager-panel">
+        <p v-if="!selected" class="manager-panel__empty">{{ L.panelEmpty }}</p>
+        <template v-else>
+          <p class="manager-panel__kicker">{{ typeName(selected.type) }}</p>
+          <h3 class="manager-detail__title">{{ summary(selected) || typeName(selected.type) }}</h3>
+
+          <!-- Acciones arriba del todo -->
+          <div class="manager-detail__actions">
+            <BaseButton :disabled="busy" @click="openEdit(selected)">
+              <SquarePen :size="14" /> {{ L.edit }}
+            </BaseButton>
+            <BaseButton variant="danger" :disabled="busy" @click="remove(selected)">
+              <Trash2 :size="14" /> {{ L.delete }}
+            </BaseButton>
+          </div>
+
+          <!-- Acciones rápidas sin modal -->
+          <BaseCheckbox
+            :model-value="selected.is_printable"
+            :label="L.printable"
+            @update:model-value="(v) => toggleFlag('is_printable', v)"
+          />
+          <BaseCheckbox
+            :model-value="selected.is_indexable"
+            :label="L.indexable"
+            @update:model-value="(v) => toggleFlag('is_indexable', v)"
+          />
+        </template>
+      </div>
+    </Teleport>
   </div>
 </template>

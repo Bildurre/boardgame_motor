@@ -321,7 +321,12 @@
       "printable": "Entra en el PDF de la página",
       "indexable": "Aparece en el índice",
       "common": "Ajustes comunes",
-      "confirmDelete": "¿Borrar este bloque?"
-    }
+      "confirmDelete": "¿Borrar este bloque?",
+      "panelTitle": "Bloque",
+      "panelEmpty": "Selecciona un bloque para ver sus acciones."
+    },
+    "panelTitle": "Página",
+    "panelEmpty": "Selecciona una página para ver sus acciones.",
+    "open": "Abrir"
   }
 }

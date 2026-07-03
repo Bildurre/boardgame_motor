@@ -59,6 +59,11 @@
     background: $surface;
     padding: $space-2 $space-3;
     min-width: 0;
+    cursor: pointer; // toda la fila selecciona (panel derecho)
+    transition: border-color 0.15s ease;
+
+    &:hover { border-color: $border-strong; }
+    &.is-active { border-color: $accent-500; }
   }
 
   &__grip {

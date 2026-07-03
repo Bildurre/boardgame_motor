@@ -19,7 +19,11 @@
     background: $surface;
     padding: $space-2 $space-3;
     min-width: 0;
+    cursor: pointer; // toda la tarjeta selecciona (panel derecho)
+    transition: border-color 0.15s ease;
 
+    &:hover { border-color: $border-strong; }
+    &.is-active { border-color: $accent-500; }
     &.is-child { margin-left: $space-6; }
   }
 

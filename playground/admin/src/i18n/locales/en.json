@@ -321,8 +321,13 @@
       "printable": "Included in the page PDF",
       "indexable": "Shown in the index",
       "common": "Common settings",
-      "confirmDelete": "Delete this block?"
-    }
+      "confirmDelete": "Delete this block?",
+      "panelTitle": "Block",
+      "panelEmpty": "Pick a block to see its actions."
+    },
+    "panelTitle": "Page",
+    "panelEmpty": "Pick a page to see its actions.",
+    "open": "Open"
   },
   "blockTypes": {
     "header": "Header",

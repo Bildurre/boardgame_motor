@@ -48,6 +48,8 @@ const blockLabels = computed<Partial<PageBlocksLabels>>(() => ({
   common: t('pages.blocks.common'),
   confirmDelete: t('pages.blocks.confirmDelete'),
   error: t('common.errors.action'),
+  panelTitle: t('pages.blocks.panelTitle'),
+  panelEmpty: t('pages.blocks.panelEmpty'),
 }))
 
 async function load() {
