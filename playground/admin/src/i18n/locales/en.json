@@ -384,7 +384,9 @@
       "top": "Top",
       "left": "Left",
       "right": "Right",
-      "bottom": "Bottom"
+      "bottom": "Bottom",
+      "clear-left": "Left (text wraps around)",
+      "clear-right": "Right (text wraps around)"
     },
     "button_variant": {
       "primary": "Primary",

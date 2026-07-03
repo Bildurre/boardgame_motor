@@ -564,14 +564,15 @@ vive en el composable `useEntityList` (ver la guía de montar una web, §4.4).
 
 - **Finalidad:** gestor de las previews PNG (doc 01), **mobile-first** sobre
   ManagerCard: una tarjeta FIJA por tipo (sin listas dentro) con el total y
-  las **generadas por idioma** (chips `ES 3/3`) y los botones "de todas" con
-  icono: **generar faltantes / regenerar todo / borrar todo**. Al seleccionar
-  la tarjeta, el panel derecho muestra un **SearchSelect** (combobox con buscador; busca
-  en servidor por las columnas `$searchable`, `?q=`, y pagina) de sus elementos; el
-  elegido enseña sus **imágenes por idioma** y sus acciones (generar
-  faltantes —solo los idiomas que faltan—, regenerar, borrar). Sin
-  multiselección: lo masivo son los botones "todas". Barra global con
-  Actualizar y **limpieza de huérfanos**. Consume
+  las **generadas por idioma** (chips `ES 3/3`) y **solo la acción principal**
+  (generar faltantes). Al seleccionar la tarjeta, el panel derecho pone
+  arriba del todo TODAS las acciones del tipo (**generar faltantes /
+  regenerar todo / borrar todo**) y debajo un **SearchSelect** (combobox con
+  buscador; busca en servidor por las columnas `$searchable`, `?q=`, y
+  pagina) de sus elementos; el elegido enseña sus **imágenes por idioma** y
+  sus acciones (generar faltantes —solo los idiomas que faltan—, regenerar,
+  borrar). Sin multiselección: lo masivo son los botones "todas". Barra
+  global con Actualizar y **limpieza de huérfanos**. Consume
   `GET/POST/DELETE /api/admin/previews/...`; confirmaciones (ConfirmDialog) y
   toasts con los mensajes del servidor.
 - **Props:** `api: AxiosInstance` (el cliente del admin),
@@ -590,11 +591,12 @@ vive en el composable `useEntityList` (ver la guía de montar una web, §4.4).
 - **Finalidad:** gestor del **catálogo completo de PDF del juego** (doc 02).
   Lee los exports registrados (`GET /api/admin/pdfs/exports`) y pinta cada uno
   como ManagerCard fija: los globales con el **estado por idioma** en chips y
-  Generar; los por-entidad con el nº de dueñas y **Generar todo**. Al
-  seleccionar la tarjeta, el panel derecho muestra sus PDF por idioma (estado,
-  fecha, error completo, Descargar / Regenerar / Borrar) — y en los
-  por-entidad, antes, un **SearchSelect** (combobox) de la entidad dueña (de
-  `sources()`, filtro en cliente) con su Generar. Toda la
+  Generar; los por-entidad con el nº de dueñas y **Generar todo** (la única
+  acción de la tarjeta). Al seleccionar la tarjeta, el panel derecho pone
+  arriba del todo la acción del export (Generar / Generar todo) y muestra sus
+  PDF por idioma (estado, fecha, error completo, Descargar / Regenerar /
+  Borrar) — y en los por-entidad un **SearchSelect** (combobox) de la entidad
+  dueña (de `sources()`, filtro en cliente) con su Generar. Toda la
   gestión de PDF vive aquí (nada en los singles); añadir un
   export = registrarlo en el backend + su etiqueta en `typeLabels`.
 - **Props:** `api: AxiosInstance`, `labels?: Partial<PdfManagerLabels>` (DC-29)

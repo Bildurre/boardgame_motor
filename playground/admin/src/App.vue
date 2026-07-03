@@ -59,6 +59,14 @@ async function logout() {
   await auth.logout()
   router.push({ name: 'login' })
 }
+
+// Resalta el ítem del menú también en las vistas hijas (single de heroe →
+// Personajes; single de página → Páginas): cada ruta declara su sección en
+// meta.nav y aquí se aplica la clase `active` (mismo estilo que
+// router-link-active, que solo cubre la lista).
+function navActive(section: string) {
+  return { active: route.meta.nav === section }
+}
 </script>
 
 <template>
@@ -73,34 +81,34 @@ async function logout() {
     @update:locale="locales.setCurrent"
   >
     <template #nav>
-      <RouterLink class="nav-item" :to="{ name: 'dashboard' }">
+      <RouterLink class="nav-item" :class="navActive('dashboard')" :to="{ name: 'dashboard' }">
         <LayoutDashboard class="nav-icon" :size="20" /><span class="nav-label">{{
           t('nav.dashboard')
         }}</span>
       </RouterLink>
-      <RouterLink class="nav-item" :to="{ name: 'houses' }">
+      <RouterLink class="nav-item" :class="navActive('houses')" :to="{ name: 'houses' }">
         <Home class="nav-icon" :size="20" /><span class="nav-label">{{ t('nav.houses') }}</span>
       </RouterLink>
-      <RouterLink class="nav-item" :to="{ name: 'schemes' }">
+      <RouterLink class="nav-item" :class="navActive('schemes')" :to="{ name: 'schemes' }">
         <ScrollText class="nav-icon" :size="20" /><span class="nav-label">{{
           t('nav.schemes')
         }}</span>
       </RouterLink>
-      <RouterLink class="nav-item" :to="{ name: 'characters' }">
+      <RouterLink class="nav-item" :class="navActive('characters')" :to="{ name: 'characters' }">
         <Swords class="nav-icon" :size="20" /><span class="nav-label">{{
           t('nav.characters')
         }}</span>
       </RouterLink>
-      <RouterLink class="nav-item" :to="{ name: 'icons' }">
+      <RouterLink class="nav-item" :class="navActive('icons')" :to="{ name: 'icons' }">
         <Shapes class="nav-icon" :size="20" /><span class="nav-label">{{ t('nav.icons') }}</span>
       </RouterLink>
-      <RouterLink class="nav-item" :to="{ name: 'pages' }">
+      <RouterLink class="nav-item" :class="navActive('pages')" :to="{ name: 'pages' }">
         <FileText class="nav-icon" :size="20" /><span class="nav-label">{{ t('nav.pages') }}</span>
       </RouterLink>
-      <RouterLink class="nav-item" :to="{ name: 'previews' }">
+      <RouterLink class="nav-item" :class="navActive('previews')" :to="{ name: 'previews' }">
         <Images class="nav-icon" :size="20" /><span class="nav-label">{{ t('nav.previews') }}</span>
       </RouterLink>
-      <RouterLink class="nav-item" :to="{ name: 'pdfs' }">
+      <RouterLink class="nav-item" :class="navActive('pdfs')" :to="{ name: 'pdfs' }">
         <FileText class="nav-icon" :size="20" /><span class="nav-label">{{ t('nav.pdfs') }}</span>
       </RouterLink>
     </template>

@@ -37,14 +37,19 @@ export function createLocalizedRoutes(locale: string): RouteRecordRaw[] {
       path: '/',
       name: 'dashboard',
       component: () => import('@/views/DashboardView.vue'),
-      meta: { admin: true, titleKey: 'dashboard.title' },
+      meta: { admin: true, nav: 'dashboard', titleKey: 'dashboard.title' },
     },
     {
       path: `/${p.houses}`,
       name: 'houses',
       component: () => import('@/views/houses/HousesListView.vue'),
       alias: buildAliases((t) => `/${t.houses}`, locale),
-      meta: { admin: true, titleKey: 'houses.title', breadcrumbs: [{ key: 'houses' }] },
+      meta: {
+        admin: true,
+        nav: 'houses',
+        titleKey: 'houses.title',
+        breadcrumbs: [{ key: 'houses' }],
+      },
     },
     // Las altas/ediciones son modales (patrón kontuan). El detalle sí es ruta.
     {
@@ -54,6 +59,7 @@ export function createLocalizedRoutes(locale: string): RouteRecordRaw[] {
       alias: buildAliases((t) => `/${t.houses}/:slug`, locale),
       meta: {
         admin: true,
+        nav: 'houses',
         titleKey: 'houses.title',
         breadcrumbs: [{ key: 'houses', to: 'houses' }],
       },
@@ -63,7 +69,12 @@ export function createLocalizedRoutes(locale: string): RouteRecordRaw[] {
       name: 'schemes',
       component: () => import('@/views/schemes/SchemesListView.vue'),
       alias: buildAliases((t) => `/${t.schemes}`, locale),
-      meta: { admin: true, titleKey: 'schemes.title', breadcrumbs: [{ key: 'schemes' }] },
+      meta: {
+        admin: true,
+        nav: 'schemes',
+        titleKey: 'schemes.title',
+        breadcrumbs: [{ key: 'schemes' }],
+      },
     },
     {
       path: `/${p.schemes}/:slug`,
@@ -72,6 +83,7 @@ export function createLocalizedRoutes(locale: string): RouteRecordRaw[] {
       alias: buildAliases((t) => `/${t.schemes}/:slug`, locale),
       meta: {
         admin: true,
+        nav: 'schemes',
         titleKey: 'schemes.title',
         breadcrumbs: [{ key: 'schemes', to: 'schemes' }],
       },
@@ -81,7 +93,12 @@ export function createLocalizedRoutes(locale: string): RouteRecordRaw[] {
       name: 'characters',
       component: () => import('@/views/characters/CharactersListView.vue'),
       alias: buildAliases((t) => `/${t.characters}`, locale),
-      meta: { admin: true, titleKey: 'characters.title', breadcrumbs: [{ key: 'characters' }] },
+      meta: {
+        admin: true,
+        nav: 'characters',
+        titleKey: 'characters.title',
+        breadcrumbs: [{ key: 'characters' }],
+      },
     },
     {
       path: `/${p.characters}/:slug`,
@@ -90,6 +107,7 @@ export function createLocalizedRoutes(locale: string): RouteRecordRaw[] {
       alias: buildAliases((t) => `/${t.characters}/:slug`, locale),
       meta: {
         admin: true,
+        nav: 'characters',
         titleKey: 'characters.title',
         breadcrumbs: [{ key: 'characters', to: 'characters' }],
       },
@@ -99,35 +117,50 @@ export function createLocalizedRoutes(locale: string): RouteRecordRaw[] {
       name: 'icons',
       component: () => import('@/views/icons/IconsListView.vue'),
       alias: buildAliases((t) => `/${t.icons}`, locale),
-      meta: { admin: true, titleKey: 'icons.title', breadcrumbs: [{ key: 'icons' }] },
+      meta: { admin: true, nav: 'icons', titleKey: 'icons.title', breadcrumbs: [{ key: 'icons' }] },
     },
     {
       path: `/${p.previews}`,
       name: 'previews',
       component: () => import('@/views/previews/PreviewsView.vue'),
       alias: buildAliases((t) => `/${t.previews}`, locale),
-      meta: { admin: true, titleKey: 'previewsManager.title', breadcrumbs: [{ key: 'previews' }] },
+      meta: {
+        admin: true,
+        nav: 'previews',
+        titleKey: 'previewsManager.title',
+        breadcrumbs: [{ key: 'previews' }],
+      },
     },
     {
       path: `/${p.pages}`,
       name: 'pages',
       component: () => import('@/views/pages/PagesListView.vue'),
       alias: buildAliases((t) => `/${t.pages}`, locale),
-      meta: { admin: true, titleKey: 'pages.title', breadcrumbs: [{ key: 'pages' }] },
+      meta: { admin: true, nav: 'pages', titleKey: 'pages.title', breadcrumbs: [{ key: 'pages' }] },
     },
     {
       path: `/${p.pages}/:id`,
       name: 'page',
       component: () => import('@/views/pages/PageSingleView.vue'),
       alias: buildAliases((t) => `/${t.pages}/:id`, locale),
-      meta: { admin: true, titleKey: 'pages.title', breadcrumbs: [{ key: 'pages', to: 'pages' }] },
+      meta: {
+        admin: true,
+        nav: 'pages',
+        titleKey: 'pages.title',
+        breadcrumbs: [{ key: 'pages', to: 'pages' }],
+      },
     },
     {
       path: `/${p.pdfs}`,
       name: 'pdfs',
       component: () => import('@/views/pdfs/PdfsView.vue'),
       alias: buildAliases((t) => `/${t.pdfs}`, locale),
-      meta: { admin: true, titleKey: 'pdfs.viewTitle', breadcrumbs: [{ key: 'pdfs' }] },
+      meta: {
+        admin: true,
+        nav: 'pdfs',
+        titleKey: 'pdfs.viewTitle',
+        breadcrumbs: [{ key: 'pdfs' }],
+      },
     },
     // URLs desconocidas: al dashboard (evita la página en blanco).
     {

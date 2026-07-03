@@ -9,7 +9,7 @@ defineProps<{ settings: Record<string, unknown>; data?: Record<string, unknown> 
   <BlockShell
     :settings="settings"
     class="block--text"
-    :class="settings.image ? `block--image-${settings.image_position}` : ''"
+    :class="settings.image ? `block--image-${settings.image_position || 'top'}` : ''"
   >
     <h2 v-if="settings.title" class="block__title">{{ settings.title }}</h2>
     <div class="block__media-layout">

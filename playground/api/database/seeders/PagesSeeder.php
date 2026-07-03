@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use Bgm\Core\Content\Models\Block;
 use Bgm\Core\Content\Models\Page;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Storage;
 
 /**
  * Páginas demo del CRM (doc 03): la home por bloques, una página con el
@@ -51,10 +52,35 @@ class PagesSeeder extends Seeder
         $this->blocks($reglas, [
             ['header', ['title' => ['es' => 'Reglamento', 'en' => 'Rulebook']]],
             ['index', ['title' => ['es' => 'Contenido'], 'numbered' => true]],
-            ['text', ['title' => ['es' => 'Preparación'], 'body' => ['es' => '<p>Baraja el mazo y reparte <strong>5 cartas</strong> a cada jugador. El más joven empieza.</p>']]],
+            // Con imagen flotada: el texto la rodea (cleartext, clear-left).
+            ['text', array_filter([
+                'title' => ['es' => 'Preparación'],
+                'body' => ['es' => '<p>Baraja el mazo y reparte <strong>5 cartas</strong> a cada jugador. El más joven empieza.</p>'],
+                'image' => $this->demoImage(),
+                'image_position' => 'clear-left',
+            ])],
             ['text', ['title' => ['es' => 'Turno de juego'], 'body' => ['es' => '<p>En tu turno: roba una carta, juega hasta <strong>una argucia</strong> y ataca con tus personajes.</p>']]],
             ['text-card', ['label' => ['es' => 'Regla de oro'], 'body' => ['es' => '<p>Cuando el texto de una carta contradiga estas reglas, <strong>manda la carta</strong>.</p>']]],
         ]);
+    }
+
+    /** Genera un PNG de muestra (GD) y devuelve su URL pública, o null sin GD. */
+    protected function demoImage(): ?string
+    {
+        if (! function_exists('imagecreatetruecolor')) {
+            return null;
+        }
+
+        $image = imagecreatetruecolor(480, 360);
+        imagefill($image, 0, 0, imagecolorallocate($image, 108, 92, 231));
+        imagefilledellipse($image, 240, 180, 200, 200, imagecolorallocate($image, 255, 255, 255));
+        imagestring($image, 5, 190, 172, 'BGM demo', imagecolorallocate($image, 60, 50, 140));
+
+        ob_start();
+        imagepng($image);
+        Storage::disk('public')->put('content/demo-block.png', (string) ob_get_clean());
+
+        return Storage::disk('public')->url('content/demo-block.png');
     }
 
     protected function page(array $title, array $meta = []): Page

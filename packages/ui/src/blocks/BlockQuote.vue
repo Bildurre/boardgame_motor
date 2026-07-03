@@ -8,6 +8,7 @@ defineProps<{ settings: Record<string, unknown>; data?: Record<string, unknown> 
 <template>
   <BlockShell :settings="settings" class="block--quote">
     <blockquote class="block__quote">
+      <img v-if="settings.image" class="block__avatar" :src="String(settings.image)" alt="" />
       <div class="rich-content" v-html="settings.quote" />
       <footer v-if="settings.author" class="block__author">— {{ settings.author }}</footer>
     </blockquote>

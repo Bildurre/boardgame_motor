@@ -623,16 +623,22 @@ La UI pública de esta colección llega con el andamiaje de la web (Fase 6).
 
 | Tipo | Clave | Campos propios |
 |---|---|---|
-| Cabecera | `header` | `title`* (texto, trad.), `subtitle` (texto, trad.) |
-| Texto | `text` | `title` (texto, trad.), `body`* (richtext, trad.), `image` (imagen), `image_position` (select: top/left/right/bottom) |
-| Tarjeta de texto | `text-card` | `label` (texto, trad.), `title` (texto, trad.), `body`* (richtext, trad.) |
-| Cita | `quote` | `quote`* (richtext, trad.), `author` (texto, trad.) |
+| Cabecera | `header` | `title`* (texto, trad.), `subtitle` (texto, trad.), `image` (banner a lo ancho) |
+| Texto | `text` | `title` (texto, trad.), `body`* (richtext, trad.), `image` (imagen), `image_position` |
+| Tarjeta de texto | `text-card` | `label` (texto, trad.), `title` (texto, trad.), `body`* (richtext, trad.), `image`, `image_position` |
+| Cita | `quote` | `quote`* (richtext, trad.), `author` (texto, trad.), `image` (retrato del autor) |
 | Índice automático | `index` | `title` (texto, trad.), `numbered` (boolean) — enlaza a los bloques posteriores indexables |
-| Llamada a la acción | `cta` | `title`, `body` (richtext), `button_text`*, `button_url`* (trad.), `button_variant` (select: primary/secondary) |
+| Llamada a la acción | `cta` | `title`, `body` (richtext), `button_text`*, `button_url`* (trad.), `button_variant` (select: primary/secondary), `image`, `image_position` |
 
 (*) obligatorio en el locale por defecto. TODOS los bloques llevan además los
 **campos comunes** que añade el motor: `align` (select: left/center/right/
 justify) y `background` (color), aplicados por el envoltorio `BlockShell`.
+
+`image_position` es el campo estándar `BlockType::imagePositionField()`
+(reutilizable por los bloques del juego): `top` / `left` / `right` / `bottom`
+(columnas o encima/debajo) y `clear-left` / `clear-right` — la imagen queda
+**flotada y el texto la rodea** siguiendo por debajo (el "cleartext" de CDL);
+en pantallas estrechas la imagen pasa arriba a lo ancho.
 
 ### 6bis.0b El DSL de campos (DC-08), referencia
 

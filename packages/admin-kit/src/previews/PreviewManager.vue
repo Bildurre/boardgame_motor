@@ -314,18 +314,11 @@ defineExpose({ refreshAll })
           >
         </template>
 
+        <!-- Solo la acción principal; el resto vive en el panel derecho -->
         <template #actions>
           <BaseButton :disabled="busy || type.pending === 0" @click="generateType(type)">
             <template #icon><ImagePlus :size="16" /></template>
             {{ L.generateMissing }}
-          </BaseButton>
-          <BaseButton variant="secondary" :disabled="busy" @click="regenerateType(type)">
-            <template #icon><RefreshCw :size="16" /></template>
-            {{ L.regenerateAll }}
-          </BaseButton>
-          <BaseButton variant="danger" :disabled="busy" @click="deleteType(type)">
-            <template #icon><Trash2 :size="16" /></template>
-            {{ L.deleteAll }}
           </BaseButton>
         </template>
       </ManagerCard>
@@ -337,6 +330,25 @@ defineExpose({ refreshAll })
         <p v-if="!activeStatus" class="manager-panel__empty">{{ L.panelEmpty }}</p>
         <template v-else>
           <p class="manager-panel__kicker">{{ typeName(activeStatus) }}</p>
+
+          <!-- TODAS las acciones del tipo, arriba del todo (patrón kontuan) -->
+          <div class="manager-detail__actions">
+            <BaseButton
+              :disabled="busy || activeStatus.pending === 0"
+              @click="generateType(activeStatus)"
+            >
+              <template #icon><ImagePlus :size="14" /></template>
+              {{ L.generateMissing }}
+            </BaseButton>
+            <BaseButton variant="secondary" :disabled="busy" @click="regenerateType(activeStatus)">
+              <template #icon><RefreshCw :size="14" /></template>
+              {{ L.regenerateAll }}
+            </BaseButton>
+            <BaseButton variant="danger" :disabled="busy" @click="deleteType(activeStatus)">
+              <template #icon><Trash2 :size="14" /></template>
+              {{ L.deleteAll }}
+            </BaseButton>
+          </div>
 
           <SearchSelect
             :model-value="selectedId"

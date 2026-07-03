@@ -384,7 +384,9 @@
       "top": "Goian",
       "left": "Ezkerrean",
       "right": "Eskuinean",
-      "bottom": "Behean"
+      "bottom": "Behean",
+      "clear-left": "Ezkerrean (testuak inguratzen du)",
+      "clear-right": "Eskuinean (testuak inguratzen du)"
     },
     "button_variant": {
       "primary": "Nagusia",

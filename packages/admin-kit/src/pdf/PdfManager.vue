@@ -344,6 +344,26 @@ defineExpose({ refreshAll })
         <template v-else>
           <p class="manager-panel__kicker">{{ typeName(activeExport) }}</p>
 
+          <!-- TODAS las acciones del export, arriba del todo (patrón kontuan) -->
+          <div class="manager-detail__actions">
+            <BaseButton
+              v-if="activeExport.global"
+              :disabled="busy"
+              @click="generate(activeExport.type, null)"
+            >
+              <template #icon><FilePlus :size="14" /></template>
+              {{ L.generate }}
+            </BaseButton>
+            <BaseButton
+              v-else
+              :disabled="busy || !activeExport.sources.length"
+              @click="generateAllSources(activeExport)"
+            >
+              <template #icon><FilePlus :size="14" /></template>
+              {{ L.generateAll }}
+            </BaseButton>
+          </div>
+
           <!-- Por entidad: combobox (con buscador) de la entidad dueña -->
           <SearchSelect
             v-if="!activeExport.global"

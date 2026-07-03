@@ -61,6 +61,54 @@
   &--image-right .block__media-layout .block__image { order: 2; }
   &--image-bottom .block__media-layout .block__image { order: 2; }
 
+  // Imagen flotada: el texto la rodea y sigue por debajo (cleartext, como
+  // CDL). En estrecho la imagen va arriba a lo ancho, sin flotar.
+  &--image-clear-left .block__media-layout,
+  &--image-clear-right .block__media-layout {
+    display: block;
+
+    // Clearfix: el bloque no se corta si la imagen es más alta que el texto.
+    &::after { content: ""; display: table; clear: both; }
+
+    .block__image { margin-bottom: $space-3; }
+  }
+  &--image-clear-left .block__media-layout .block__image {
+    @container content (min-width: #{$bp-sm}) {
+      float: left;
+      max-width: 50%;
+      margin-right: $space-4;
+    }
+  }
+  &--image-clear-right .block__media-layout .block__image {
+    @container content (min-width: #{$bp-sm}) {
+      float: right;
+      max-width: 50%;
+      margin-left: $space-4;
+    }
+  }
+
+  // Banner de la cabecera (a lo ancho del bloque).
+  &__banner {
+    width: 100%;
+    border-radius: $radius-md;
+  }
+
+  // Retrato del autor de la cita.
+  &__avatar {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-bottom: $space-2;
+  }
+
+  // Cuerpo del CTA (texto + botón) dentro de su media-layout.
+  &__cta-body {
+    display: grid;
+    gap: $space-3;
+    justify-items: start;
+  }
+
   &--quote .block__quote {
     margin: 0;
     border-left: 3px solid $accent-500;
