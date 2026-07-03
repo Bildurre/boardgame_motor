@@ -1,167 +1,76 @@
 @use "tokens" as *;
 
-// Gestor de previews PNG (PreviewManager).
-.preview-manager {
+// Gestor de previews PNG (PreviewManager), sobre .manager-card / .manager-grid
+// (ver _manager-card.scss). Mobile-first: la fila es flexible y los chips de
+// locale saltan a otra fila cuando no caben junto al nombre.
+
+.preview-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
   display: grid;
-  gap: $space-5;
-
-  &__bar {
-    display: flex;
-    justify-content: flex-end;
-    gap: $space-2;
-    flex-wrap: wrap;
-  }
-
-  &__type {
-    border: 1px solid $border;
-    border-radius: $radius-lg;
-    background: $surface;
-    overflow: hidden;
-  }
-
-  &__head {
-    display: flex;
-    align-items: center;
-    gap: $space-4;
-    flex-wrap: wrap;
-    padding: $space-3 $space-4;
-  }
-
-  &__toggle {
-    display: flex;
-    align-items: center;
-    gap: $space-2;
-    background: none;
-    border: 0;
-    color: $text-1;
-    cursor: pointer;
-    padding: 0;
-
-    h2 { margin: 0; font-size: $fs-16; }
-  }
-
-  &__stats {
-    display: flex;
-    gap: $space-4;
-    color: $text-2;
-    font-size: $fs-13;
-    flex-wrap: wrap;
-
-    .ok strong { color: $success; }
-    .warn strong { color: $warning; }
-  }
-
-  &__actions {
-    margin-left: auto;
-    display: flex;
-    gap: $space-2;
-    flex-wrap: wrap;
-  }
-
-  &__items {
-    border-top: 1px solid $border;
-    padding: $space-4;
-    display: grid;
-    gap: $space-4;
-    background: $surface-2;
-  }
-
-  &__empty {
-    display: flex;
-    align-items: center;
-    gap: $space-2;
-    color: $text-3;
-    margin: 0;
-  }
-
-  &__more { display: flex; justify-content: center; }
+  gap: $space-2;
 }
 
 .preview-item {
+  display: flex;
+  flex-wrap: wrap; // los chips pasan de fila en estrecho
+  align-items: center;
+  gap: $space-1 $space-2;
   border: 1px solid $border;
   border-radius: $radius-md;
   background: $surface;
-  padding: $space-3;
-  display: grid;
-  gap: $space-3;
+  padding: $space-2 $space-3;
+  min-width: 0;
 
-  &__head {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: $space-3;
+  &.is-active {
+    border-color: $accent-500;
   }
 
-  &__toggle {
-    display: flex;
-    align-items: center;
-    gap: $space-2;
+  input[type="checkbox"] {
+    accent-color: $accent-500;
+    flex: 0 0 auto;
+    cursor: pointer;
+  }
+
+  // El nombre abre el detalle en el panel derecho.
+  &__label {
+    flex: 1 1 8rem;
+    min-width: 0;
     background: none;
     border: 0;
-    color: $text-1;
-    cursor: pointer;
     padding: 0;
-    min-width: 0;
-  }
-
-  &__label {
+    color: $text-1;
     font-weight: $k-fw-semibold;
+    text-align: left;
+    cursor: pointer;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+
+    &:hover { color: $accent-500; }
   }
 
   &__chips {
     display: flex;
     gap: $space-1;
     margin-left: auto;
+    flex: 0 0 auto;
   }
+}
 
-  &__chip {
-    font-size: $fs-12;
-    font-weight: $k-fw-semibold;
-    padding: 1px $space-2;
-    border-radius: $radius-sm;
-    border: 1px solid $border;
-    color: $text-3;
+.preview-manager__empty {
+  display: flex;
+  align-items: center;
+  gap: $space-2;
+  color: $text-3;
+  margin: 0;
+}
 
-    &.is-ok { color: $success; border-color: color-mix(in srgb, $success 45%, transparent); }
-    &.is-missing { color: $warning; border-color: color-mix(in srgb, $warning 45%, transparent); }
-  }
+.preview-manager__more { display: flex; justify-content: center; }
 
-  &__buttons { display: flex; gap: $space-1; }
-
-  &__locales {
-    display: flex;
-    gap: $space-3;
-    flex-wrap: wrap;
-  }
-
-  &__locale {
-    margin: 0;
-    display: grid;
-    gap: $space-1;
-    justify-items: center;
-
-    img,
-    .preview-item__hole {
-      width: 96px;
-      height: 137px; // proporción de carta (350x500)
-      object-fit: contain;
-      border-radius: $radius-sm;
-      border: 1px solid $border;
-      background: $surface-2;
-    }
-
-    figcaption { color: $text-3; font-size: $fs-13; }
-
-    &--missing figcaption { color: $warning; }
-  }
-
-  &__hole {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: $text-3;
-  }
+.preview-manager__count {
+  margin-right: auto;
+  color: $text-2;
+  font-size: $fs-13;
 }

@@ -9,6 +9,7 @@ export function usePdfLabels(): ComputedRef<PdfManagerLabels> {
   return computed(() => ({
     refresh: t('pdfs.refresh'),
     generate: t('pdfs.generate'),
+    generateAll: t('pdfs.generateAll'),
     download: t('pdfs.download'),
     regenerate: t('pdfs.regenerate'),
     delete: t('pdfs.delete'),
@@ -19,5 +20,8 @@ export function usePdfLabels(): ComputedRef<PdfManagerLabels> {
     statusPending: t('pdfs.statusPending'),
     statusReady: t('pdfs.statusReady'),
     statusFailed: t('pdfs.statusFailed'),
+    detailTitle: t('pdfs.detailTitle'),
+    detailEmpty: t('pdfs.detailEmpty'),
+    generatedAt: t('pdfs.generatedAt'),
   }))
 }

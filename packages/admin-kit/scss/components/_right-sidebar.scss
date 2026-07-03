@@ -1,0 +1,142 @@
+@use "tokens" as *;
+
+// Panel lateral derecho contextual (portado de kontuan): lo registra cada
+// vista con useRightSidebar() y lo pinta <RightSidebar />, montado una vez
+// por AdminLayout. El comportamiento móvil usa la clase `is-mobile` que el
+// layout pone en su raíz.
+
+.right-sidebar {
+  width: 320px;
+  flex-shrink: 0;
+  background: $surface;
+  border-left: 1px solid $border;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  transition: width 0.2s ease, transform 0.25s ease;
+
+  &--collapsed {
+    width: 0;
+    border-left: 0;
+  }
+}
+
+.right-sidebar__header {
+  display: flex;
+  align-items: center;
+  padding: 0;
+  height: 48px;
+  width: 100%;
+  border-bottom: 1px solid $border;
+  flex-shrink: 0;
+}
+
+.right-sidebar__toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  align-self: stretch;
+  width: 48px;
+  padding: 0;
+  background: transparent;
+  border: none;
+  border-right: 1px solid $border;
+  color: $accent-500;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: background-color 0.15s ease;
+
+  &:hover {
+    background: $surface-2;
+    color: $accent-600;
+  }
+}
+
+.right-sidebar__title {
+  flex: 1;
+  font-size: $fs-14;
+  font-weight: $k-fw-semibold;
+  color: $text-1;
+  margin: 0;
+  padding: 0 $space-3;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.right-sidebar__body {
+  flex: 1;
+  overflow-y: auto;
+  padding: $space-3;
+}
+
+.right-sidebar-handle {
+  position: fixed;
+  top: 64px;
+  right: 0;
+  z-index: 95;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 48px;
+  padding: 0;
+  background: $surface;
+  border: 1px solid $accent-500;
+  border-right: none;
+  border-radius: $radius-md 0 0 $radius-md;
+  color: $accent-500;
+  cursor: pointer;
+  transition: background-color 0.15s ease, color 0.15s ease;
+
+  &:hover {
+    background: $surface-2;
+    color: $accent-600;
+  }
+
+  &--flash {
+    animation: right-sidebar-handle-flash 1.1s ease-in-out;
+  }
+}
+
+@keyframes right-sidebar-handle-flash {
+  0%, 50%, 100% {
+    background: $surface;
+    color: $accent-500;
+  }
+  25%, 75% {
+    background: $accent-500;
+    color: white;
+  }
+}
+
+.right-sidebar-overlay {
+  position: fixed;
+  top: 56px;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgb(0 0 0 / 40%);
+  z-index: 90;
+}
+
+.is-mobile {
+  .right-sidebar {
+    position: fixed;
+    top: 56px;
+    right: 0;
+    bottom: 0;
+    height: auto;
+    z-index: 100;
+    width: min(320px, 100vw);
+    transform: translateX(100%);
+
+    &.right-sidebar--mobile-open {
+      transform: translateX(0);
+    }
+  }
+
+  .right-sidebar-handle {
+    z-index: 110;
+  }
+}

@@ -3,6 +3,7 @@ import { ref, onMounted, onUnmounted, watch } from 'vue'
 import { useRoute, type RouteLocationRaw } from 'vue-router'
 import { ChevronLeft, ChevronRight, Menu, X } from '@lucide/vue'
 import { MotorBadge, ThemeSelector, LocaleSelector, AppBreadcrumbs, type Crumb } from '@bgm/ui'
+import RightSidebar from './RightSidebar.vue'
 
 // Layout del panel — portado del AppLayout de kontuan (DC-28): sidebar
 // colapsable en escritorio, drawer a pantalla completa en móvil, preferencias
@@ -146,6 +147,8 @@ function toggleSidebar() {
           <AppBreadcrumbs :home="homeCrumb" :crumbs="breadcrumbs" />
           <slot />
         </main>
+        <!-- Panel derecho contextual: cada vista lo activa con useRightSidebar() -->
+        <RightSidebar />
       </div>
     </div>
   </div>

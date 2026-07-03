@@ -467,23 +467,43 @@ vive en el composable `useEntityList` (ver la guía de montar una web, §4.4).
 
 ---
 
+### RightSidebar + useRightSidebar()
+
+- **Finalidad:** panel lateral derecho **contextual** (portado de kontuan):
+  `AdminLayout` lo monta una vez; cada vista lo activa con
+  `useRightSidebar().useRegister(titulo)` y teletransporta su contenido a
+  `#right-sidebar-target` (`<Teleport defer to="#right-sidebar-target">`).
+  Escritorio: columna plegable junto al contenido; móvil: drawer con asa
+  flotante y overlay. `reveal()` lo muestra (despliega/abre) al seleccionar
+  algo. Los gestores (PreviewManager/PdfManager) lo usan para el detalle.
+
+### ManagerCard
+
+- **Finalidad:** tarjeta **colapsable** compartida por los gestores: cabecera
+  clicable (título + `chip` opcional), resumen siempre visible (slot `meta`),
+  cuerpo al abrir (slot por defecto) y pie de acciones (slot `actions`).
+  `v-model:open`. Se coloca dentro de `.manager-grid` (1 columna en estrecho,
+  **2 a partir del ancho del contenedor** `content` — container query, no
+  viewport).
+
 ### PreviewManager
 
-- **Finalidad:** gestor de las previews PNG (doc 01): estado por tipo
-  registrado (total / completas / pendientes), lotes por tipo (**generar
-  pendientes**, **regenerar todo**, **borrar todo**), listado paginado de
-  entidades con su PNG por locale y acciones individuales (regenerar / borrar),
-  y **limpieza de huérfanos**. Consume los endpoints `GET/POST/DELETE
-  /api/admin/previews/...` del motor. Todas las acciones destructivas piden
-  confirmación (ConfirmDialog) y avisan con toast (mensajes del servidor, ya
-  traducidos).
+- **Finalidad:** gestor de las previews PNG (doc 01), **mobile-first** sobre
+  ManagerCard: una tarjeta por tipo con el resumen (total / completas /
+  pendientes) visible aun cerrada. Dentro, filas compactas con **checkbox de
+  selección** + nombre + chips de estado por locale (saltan de fila en
+  estrecho). El pie de la tarjeta cambia según haya selección: **acciones en
+  bloque** (regenerar/borrar selección) o lotes del tipo (generar pendientes /
+  regenerar todo / borrar todo). El clic en el nombre abre el **detalle en el
+  panel derecho** (imágenes por idioma + regenerar/borrar del elemento).
+  Barra global con Actualizar y **limpieza de huérfanos**. Consume
+  `GET/POST/DELETE /api/admin/previews/...`; confirmaciones (ConfirmDialog) y
+  toasts con los mensajes del servidor.
 - **Props:** `api: AxiosInstance` (el cliente del admin),
   `labels?: Partial<PreviewManagerLabels>` (textos, DC-29; defaults en castellano)
   y `typeLabels?: Record<string, string>` (nombre traducido de cada tipo del
   registro, p. ej. `{ character: t('characters.title') }`; fallback: nombre del
-  modelo). Cada entidad del listado va **plegada**: la cabecera muestra el
-  nombre + chips de estado por locale (verde = generado, ámbar = falta) y las
-  imágenes solo se cargan al desplegarla.
+  modelo).
 - **Uso** (ver `playground/admin/src/views/previews/PreviewsView.vue`):
 
 ```vue
@@ -493,11 +513,13 @@ vive en el composable `useEntityList` (ver la guía de montar una web, §4.4).
 ### PdfManager
 
 - **Finalidad:** gestor del **catálogo completo de PDF del juego** (doc 02).
-  Lee los exports registrados (`GET /api/admin/pdfs/exports`) y pinta cada uno:
-  los globales con sus filas por idioma, los por-entidad con sus entidades
-  desplegables (de `sources()`), cada una con su botón Generar. Filas con
-  estado (en cola / listo / error con mensaje) y Regenerar / Descargar /
-  Borrar. Toda la gestión de PDF vive aquí (nada en los singles); añadir un
+  Lee los exports registrados (`GET /api/admin/pdfs/exports`) y pinta cada uno
+  como ManagerCard: los globales con filas por idioma y el **estado resumido
+  en la cabecera** (chips por locale aun cerrada), los por-entidad con sus
+  entidades desplegables (de `sources()`) y **Generar todo** en el pie. El
+  clic en una fila abre su **detalle en el panel derecho** (fichero, fecha de
+  generación, error completo, Descargar / Regenerar / Borrar). Toda la
+  gestión de PDF vive aquí (nada en los singles); añadir un
   export = registrarlo en el backend + su etiqueta en `typeLabels`.
 - **Props:** `api: AxiosInstance`, `labels?: Partial<PdfManagerLabels>` (DC-29)
   y `typeLabels?: Record<string, string>` (nombre traducido por export).
