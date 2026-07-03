@@ -11,7 +11,9 @@ use Spatie\Permission\PermissionRegistrar;
 class DatabaseSeeder extends Seeder
 {
     /**
-     * Crea un usuario de prueba por cada rol del motor.
+     * Deja el playground listo para jugar: roles + un usuario de prueba por
+     * rol, contenido del juego (casas/argucias/personajes) y páginas del CRM
+     * (home por bloques, casas y reglamento imprimible).
      * Idempotente: se puede re-ejecutar sin duplicar.
      */
     public function run(): void
@@ -39,5 +41,7 @@ class DatabaseSeeder extends Seeder
             );
             $user->syncRoles([$role]);
         }
+
+        $this->call([GameSeeder::class, PagesSeeder::class]);
     }
 }

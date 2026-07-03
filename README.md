@@ -54,6 +54,10 @@ cp .env.example .env          # ajusta DB_USERNAME / DB_PASSWORD si hace falta
 php artisan key:generate
 php artisan migrate
 php artisan motor:install     # roles base (admin/editor/user)
+php artisan db:seed           # demo completa: usuarios de prueba (admin@bgm.test /
+                              # editor@ / user@, contraseña "password"), casas,
+                              # argucias, personajes y páginas del CRM (home,
+                              # casas y reglamento imprimible)
 php artisan storage:link
 cd ../..
 
