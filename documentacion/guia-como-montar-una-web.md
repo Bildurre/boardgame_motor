@@ -607,6 +607,33 @@ La UI pública de esta colección llega con el andamiaje de la web (Fase 6).
 
 ## 6bis. CRM de páginas y bloques (Fase 5)
 
+### 6bis.0 Qué bloques trae el motor (catálogo)
+
+| Tipo | Clave | Campos propios |
+|---|---|---|
+| Cabecera | `header` | `title`* (texto, trad.), `subtitle` (texto, trad.) |
+| Texto | `text` | `title` (texto, trad.), `body`* (richtext, trad.), `image` (imagen), `image_position` (select: top/left/right/bottom) |
+| Tarjeta de texto | `text-card` | `label` (texto, trad.), `title` (texto, trad.), `body`* (richtext, trad.) |
+| Cita | `quote` | `quote`* (richtext, trad.), `author` (texto, trad.) |
+| Llamada a la acción | `cta` | `title`, `body` (richtext), `button_text`*, `button_url`* (trad.), `button_variant` (select: primary/secondary) |
+
+(*) obligatorio en el locale por defecto. TODOS los bloques llevan además los
+**campos comunes** que añade el motor: `align` (select: left/center/right/
+justify) y `background` (color), aplicados por el envoltorio `BlockShell`.
+
+### 6bis.0b El DSL de campos (DC-08), referencia
+
+`Field::text|textarea|richtext|number|boolean|select|color|image('clave')`
+con modificadores encadenables: `->translatable()` (el valor se guarda por
+locale), `->required()` (exige el locale por defecto), `->default(v)`,
+`->label('Etiqueta')` (castellano; el admin la localiza por convención),
+`->min(n)` / `->max(n)` (number). `select` recibe `[valor => etiqueta]`.
+De cada campo salen: el input del formulario (SchemaFields), la validación
+en servidor y la localización del valor en el render. `richtext` se sanea
+en servidor (HtmlSanitizer, DC-09). `image` sube al momento
+(`POST /admin/content/uploads`) y guarda la URL. Pendientes del DSL:
+`repeater`, `group`, `entity-ref`, imagen multilingüe.
+
 El motor pone TODO el CRM (páginas jerárquicas traducibles con SEO y home
 única, bloques reordenables, editor generado, render público con caché); el
 juego solo **declara sus tipos de bloque**. Añadir un bloque son dos piezas:
