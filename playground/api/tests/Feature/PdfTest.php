@@ -2,6 +2,7 @@
 
 use App\Models\House;
 use App\Models\Scheme;
+use Bgm\Core\Content\Models\Page;
 use Bgm\Core\Pdf\Jobs\GeneratePdfJob;
 use Bgm\Core\Pdf\Models\GeneratedPdf;
 use Bgm\Core\Pdf\Models\PdfCollectionItem;
@@ -166,6 +167,30 @@ it('los errores inesperados no se filtran al frontend (mensaje genérico)', func
         ->and(GeneratedPdf::first()->error)->not->toContain('SQLSTATE');
 });
 
+it('genera el PDF de una página imprimible del CRM (vista propia, sin rejilla)', function () {
+    $admin = motorUser('admin');
+    $pageId = $this->actingAs($admin)->postJson('/api/admin/pages', [
+        'title' => ['es' => 'Reglamento'], 'is_published' => true, 'is_printable' => true,
+    ])->json('data.id');
+    $this->actingAs($admin)->postJson("/api/admin/pages/{$pageId}/blocks", [
+        'type' => 'text', 'settings' => ['title' => ['es' => 'Preparación'], 'body' => ['es' => '<p>Baraja y reparte <strong>5 cartas</strong>.</p>']],
+    ]);
+    $this->actingAs($admin)->postJson("/api/admin/pages/{$pageId}/blocks", [
+        'type' => 'text', 'settings' => ['body' => ['es' => '<p>Secreto</p>']], 'is_printable' => false,
+    ]);
+
+    $page = Page::find($pageId);
+    $pdf = app(PdfService::class)->generate('pages', $page, 'es', sync: true)->refresh();
+
+    expect($pdf->status)->toBe(GeneratedPdf::STATUS_READY);
+    $raw = Storage::disk('public')->get($pdf->path);
+    expect(str_starts_with($raw, '%PDF'))->toBeTrue();
+
+    // El catálogo lista la página imprimible como fuente.
+    $this->actingAs($admin)->getJson('/api/admin/pdfs/exports')
+        ->assertJsonPath('data.0.sources.0.label', 'Reglamento');
+});
+
 it('marca el PDF como failed si no hay ítems', function () {
     $house = makeHouseWithSchemes(0);
 
@@ -229,20 +254,21 @@ it('el catálogo de exports lista los tipos con sus entidades dueñas', function
 
     $this->actingAs(motorUser('admin'))->getJson('/api/admin/pdfs/exports')
         ->assertOk()
-        ->assertJsonCount(5, 'data')
-        ->assertJsonPath('data.0.type', 'characters')
-        ->assertJsonPath('data.0.global', true)
-        ->assertJsonPath('data.0.layout', 'card-big')
-        ->assertJsonPath('data.0.sources', [])
-        ->assertJsonPath('data.2.type', 'house-schemes')
-        ->assertJsonPath('data.2.global', false)
-        ->assertJsonPath('data.2.sources.0.id', $house->id)
-        ->assertJsonPath('data.2.sources.0.label', 'Casa Stark')
-        ->assertJsonPath('data.3.type', 'house-tokens')
-        ->assertJsonPath('data.3.global', true)
-        ->assertJsonPath('data.3.layout', 'token-40')
-        ->assertJsonPath('data.4.type', 'house-counters')
-        ->assertJsonPath('data.4.layout', 'counter');
+        ->assertJsonCount(6, 'data')
+        ->assertJsonPath('data.0.type', 'pages') // lo registra el motor (CRM)
+        ->assertJsonPath('data.1.type', 'characters')
+        ->assertJsonPath('data.1.global', true)
+        ->assertJsonPath('data.1.layout', 'card-big')
+        ->assertJsonPath('data.1.sources', [])
+        ->assertJsonPath('data.3.type', 'house-schemes')
+        ->assertJsonPath('data.3.global', false)
+        ->assertJsonPath('data.3.sources.0.id', $house->id)
+        ->assertJsonPath('data.3.sources.0.label', 'Casa Stark')
+        ->assertJsonPath('data.4.type', 'house-tokens')
+        ->assertJsonPath('data.4.global', true)
+        ->assertJsonPath('data.4.layout', 'token-40')
+        ->assertJsonPath('data.5.type', 'house-counters')
+        ->assertJsonPath('data.5.layout', 'counter');
 });
 
 it('regenera, borra y descarga desde la API', function () {

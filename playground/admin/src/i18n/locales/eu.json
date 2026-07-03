@@ -285,7 +285,8 @@
       "schemes": "Argucia guztiak",
       "houseSchemes": "Etxeka (bere argukiak)",
       "houseTokens": "Etxeen fitxak (x9, 40 mm)",
-      "houseCounters": "Etxeen kontagailuak (x9, 25 mm)"
+      "houseCounters": "Etxeen kontagailuak (x9, 25 mm)",
+      "pages": "Orri inprimagarriak"
     },
     "selectSource": "Aukeratu elementu bat…"
   },

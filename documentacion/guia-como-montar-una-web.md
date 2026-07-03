@@ -654,6 +654,10 @@ En el admin: vista Páginas (lista + modal) y single con `PageBlocks`
 (admin-kit): paleta, drag (DC-17) y modal generado por `SchemaFields`.
 Etiquetas localizables por convención i18n: `blockTypes.{key}`,
 `blockFields.{key}`, `blockOptions.{key}.{valor}` (fallback: las del esquema).
+**PDF de páginas** (doc 02): el motor registra solo el export `pages` — toda
+página publicada con `is_printable` aparece en la sección PDF del admin y se
+imprime con la vista `motor::pdf.page` (los bloques imprimibles como
+documento de texto; añade la etiqueta `pdfs.types.pages` en typeLabels).
 En público: `PageView` pide `/api/pages/{slug}` (slug resuelto en cualquier
 locale, redirige a la canónica DC-12), la nav sale de `/api/pages/nav` y la
 home del CRM manda si existe. El texto rico se sanea en servidor (DC-09) y el

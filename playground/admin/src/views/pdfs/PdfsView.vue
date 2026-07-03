@@ -12,6 +12,7 @@ const labels = usePdfLabels()
 
 // Nombre traducido de cada export registrado en el AppServiceProvider.
 const typeLabels = computed<Record<string, string>>(() => ({
+  pages: t('pdfs.types.pages'),
   characters: t('pdfs.types.characters'),
   schemes: t('pdfs.types.schemes'),
   'house-schemes': t('pdfs.types.houseSchemes'),

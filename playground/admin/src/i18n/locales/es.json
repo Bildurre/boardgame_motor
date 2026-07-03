@@ -285,7 +285,8 @@
       "schemes": "Todas las argucias",
       "houseSchemes": "Por casa (sus argucias)",
       "houseTokens": "Tokens de casas (x9, 40 mm)",
-      "houseCounters": "Contadores de casas (x9, 25 mm)"
+      "houseCounters": "Contadores de casas (x9, 25 mm)",
+      "pages": "Páginas imprimibles"
     },
     "selectSource": "Elige un elemento…"
   },

@@ -285,7 +285,8 @@
       "schemes": "All schemes",
       "houseSchemes": "Per house (its schemes)",
       "houseTokens": "House tokens (x9, 40 mm)",
-      "houseCounters": "House counters (x9, 25 mm)"
+      "houseCounters": "House counters (x9, 25 mm)",
+      "pages": "Printable pages"
     },
     "selectSource": "Pick an item…"
   },

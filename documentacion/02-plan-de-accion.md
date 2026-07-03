@@ -86,7 +86,8 @@
 - [x] **`BlockType` + `BlockTypeRegistry`** (facade `Blocks`): un tipo se declara UNA vez (esquema de campos DC-08) y de ahí salen formulario, validación, localización y `resolveData`. Motor: header/text/text-card/quote/cta; juego: `Blocks::register(...)`. `HtmlSanitizer` en servidor (DC-09). Caché por (página, locale) invalidada al editar (DC-10).
 - [x] Editor en admin-kit: `SchemaFields` (renderer del DSL) + `PageBlocks` (paleta, drag con vue-draggable-plus DC-17, modal generado). Playground: vistas de páginas + i18n.
 - [x] Render público en `app`: nav de páginas publicadas, home del CRM, `PageView` por slug traducible con redirección a la canónica (DC-12); `blockRegistry` = componentes del motor (@bgm/ui) + los del juego.
-- [ ] Flecos a futuro: plantillas por juego en la SPA, bloque índice automático, integración PDF de páginas imprimibles (con doc 02), repeater/group/entity-ref del DSL.
+- [x] Bloque índice automático (`index`) y **PDF de páginas imprimibles** (export `pages` del motor con vista `motor::pdf.page`).
+- [ ] Flecos a futuro: plantillas por juego en la SPA, repeater/group/entity-ref del DSL, imagen multilingüe.
 - **Hito:** ✅ página con bloques (incluidos los con-datos del playground: rejilla de personajes y casas-argucias), reordenable, traducible, publicada y visible en público con URL traducible. **Añadir un bloque = una clase + un componente Vue.**
 
 ### Fase 6 — Backup, web pública y panel de usuario extensible
