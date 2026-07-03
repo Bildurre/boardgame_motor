@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Blocks\CharactersGridBlock;
+use App\Blocks\HousesSchemesBlock;
 use App\Models\Character;
 use App\Models\House;
 use App\Models\Scheme;
@@ -10,6 +12,7 @@ use App\Pdf\HouseCountersExport;
 use App\Pdf\HouseSchemesExport;
 use App\Pdf\HouseTokensExport;
 use App\Pdf\SchemesExport;
+use Bgm\Core\Support\Facades\Blocks;
 use Bgm\Core\Support\Facades\Pdfs;
 use Bgm\Core\Support\Facades\Previews;
 use Illuminate\Support\ServiceProvider;
@@ -54,6 +57,12 @@ class AppServiceProvider extends ServiceProvider
             'gap' => 4,
             'crop_mark_length' => 2,
         ]);
+
+        // Bloques con-datos de ESTE juego (doc 03): el motor trae los de
+        // presentación; estos consultan los modelos del juego. Su componente
+        // Vue vive en la app (blockRegistry).
+        Blocks::register(CharactersGridBlock::class);
+        Blocks::register(HousesSchemesBlock::class);
 
         // Catálogo de PDF de ESTE juego (doc 02): qué se puede generar y qué
         // contiene cada uno. Todo se gestiona desde la sección PDF del admin.

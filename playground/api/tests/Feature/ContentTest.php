@@ -1,0 +1,217 @@
+<?php
+
+use Bgm\Core\Content\Models\Block;
+use Bgm\Core\Content\Models\Page;
+use Bgm\Core\Content\PageService;
+
+function makePage(array $attributes = []): Page
+{
+    $page = new Page;
+    $page->setTranslations('title', $attributes['title'] ?? ['es' => 'Sobre el juego']);
+    $page->is_published = $attributes['is_published'] ?? true;
+    $page->save();
+
+    return $page->refresh();
+}
+
+// --- Catálogo de tipos ---
+
+it('la paleta lista los tipos del motor y los del juego con su esquema', function () {
+    $response = $this->actingAs(motorUser('admin'))->getJson('/api/admin/block-types')
+        ->assertOk()
+        ->assertJsonCount(7, 'data'); // 5 presentación (motor) + 2 con-datos (juego)
+
+    $keys = collect($response->json('data'))->pluck('key');
+    expect($keys)->toContain('header', 'text', 'text-card', 'quote', 'cta', 'characters-grid', 'houses-schemes');
+
+    // El esquema de campos viaja serializado (el BlockEditor se genera de aquí).
+    $header = collect($response->json('data'))->firstWhere('key', 'header');
+    expect($header['fields'][0])->toMatchArray(['key' => 'title', 'type' => 'text', 'translatable' => true, 'required' => true])
+        ->and($header['common'])->toHaveCount(2); // align + background
+});
+
+// --- CRUD de páginas ---
+
+it('crea, edita y publica una página con slug traducible', function () {
+    $admin = motorUser('admin');
+
+    $response = $this->actingAs($admin)->postJson('/api/admin/pages', [
+        'title' => ['es' => 'Cómo jugar', 'en' => 'How to play'],
+        'is_published' => true,
+    ])->assertCreated();
+
+    $id = $response->json('data.id');
+    expect($response->json('data.slug.es'))->toBe('como-jugar')
+        ->and($response->json('data.slug.en'))->toBe('how-to-play');
+
+    // El título por defecto es obligatorio.
+    $this->actingAs($admin)->postJson('/api/admin/pages', ['title' => ['en' => 'Only english']])
+        ->assertUnprocessable();
+
+    $this->actingAs($admin)->putJson("/api/admin/pages/{$id}", [
+        'title' => ['es' => 'Cómo se juega'],
+        'meta_description' => ['es' => 'Aprende a jugar'],
+        'is_published' => false,
+    ])->assertOk();
+
+    expect(Page::find($id)->getTranslation('meta_description', 'es'))->toBe('Aprende a jugar');
+});
+
+it('solo puede haber una home y el borrado pasa las hijas a raíz', function () {
+    $admin = motorUser('admin');
+    $first = makePage(['title' => ['es' => 'Inicio']]);
+    $second = makePage(['title' => ['es' => 'Novedades']]);
+    $child = makePage(['title' => ['es' => 'Hija']]);
+    $child->parent_id = $second->id;
+    $child->save();
+
+    $this->actingAs($admin)->postJson("/api/admin/pages/{$first->id}/set-home")->assertOk();
+    $this->actingAs($admin)->postJson("/api/admin/pages/{$second->id}/set-home")->assertOk();
+
+    expect(Page::where('is_home', true)->count())->toBe(1)
+        ->and($second->refresh()->is_home)->toBeTrue();
+
+    // Papelera: la hija queda en raíz; restore la recupera.
+    $this->actingAs($admin)->deleteJson("/api/admin/pages/{$second->id}")->assertNoContent();
+    expect($child->refresh()->parent_id)->toBeNull();
+
+    $this->actingAs($admin)->postJson("/api/admin/pages/{$second->id}/restore")->assertOk();
+    expect($second->refresh()->deleted_at)->toBeNull();
+});
+
+// --- Bloques ---
+
+it('valida los bloques con las reglas derivadas del esquema', function () {
+    $admin = motorUser('admin');
+    $page = makePage();
+
+    // header exige título en el locale por defecto.
+    $this->actingAs($admin)->postJson("/api/admin/pages/{$page->id}/blocks", [
+        'type' => 'header',
+        'settings' => ['title' => ['en' => 'Only english']],
+    ])->assertUnprocessable();
+
+    // select fuera de opciones -> 422.
+    $this->actingAs($admin)->postJson("/api/admin/pages/{$page->id}/blocks", [
+        'type' => 'header',
+        'settings' => ['title' => ['es' => 'Hola'], 'align' => 'diagonal'],
+    ])->assertUnprocessable();
+
+    // Tipo desconocido -> 422.
+    $this->actingAs($admin)->postJson("/api/admin/pages/{$page->id}/blocks", ['type' => 'nope'])
+        ->assertUnprocessable();
+
+    $this->actingAs($admin)->postJson("/api/admin/pages/{$page->id}/blocks", [
+        'type' => 'header',
+        'settings' => ['title' => ['es' => 'Hola'], 'align' => 'center'],
+    ])->assertCreated();
+});
+
+it('sanea el texto rico en servidor (DC-09)', function () {
+    $admin = motorUser('admin');
+    $page = makePage();
+
+    $response = $this->actingAs($admin)->postJson("/api/admin/pages/{$page->id}/blocks", [
+        'type' => 'text',
+        'settings' => [
+            'body' => ['es' => '<p onclick="hack()">Hola <script>alert(1)</script><strong>mundo</strong></p><img class="rt-icon" src="/storage/icons/dado.png">'],
+        ],
+    ])->assertCreated();
+
+    $saved = Block::find($response->json('data.id'))->settings['body']['es'];
+    expect($saved)->not->toContain('<script')
+        ->and($saved)->not->toContain('onclick')
+        ->and($saved)->toContain('<strong>mundo</strong>')
+        ->and($saved)->toContain('rt-icon'); // los iconos del juego sobreviven
+});
+
+it('reordena los bloques con la lista de ids', function () {
+    $admin = motorUser('admin');
+    $page = makePage();
+
+    $ids = collect(['Uno', 'Dos', 'Tres'])->map(function ($title) use ($admin, $page) {
+        return $this->actingAs($admin)->postJson("/api/admin/pages/{$page->id}/blocks", [
+            'type' => 'header',
+            'settings' => ['title' => ['es' => $title]],
+        ])->json('data.id');
+    });
+
+    $this->actingAs($admin)->postJson("/api/admin/pages/{$page->id}/blocks/reorder", [
+        'ids' => [$ids[2], $ids[0], $ids[1]],
+    ])->assertOk()->assertJsonPath('data.0.id', $ids[2]);
+
+    expect($page->blocks()->pluck('id')->all())->toBe([$ids[2], $ids[0], $ids[1]]);
+});
+
+// --- Render público ---
+
+it('sirve la página publicada por slug con settings localizados y datos resueltos', function () {
+    config(['motor.previews.enabled' => false]);
+    $admin = motorUser('admin');
+    $character = makeCharacter(['is_published' => true]);
+    makeCharacter(['name' => ['es' => 'Borrador']]); // sin publicar: fuera
+
+    $page = makePage(['title' => ['es' => 'Personajes', 'en' => 'Characters']]);
+
+    $this->actingAs($admin)->postJson("/api/admin/pages/{$page->id}/blocks", [
+        'type' => 'characters-grid',
+        'settings' => ['title' => ['es' => 'Todas las cartas'], 'limit' => 4, 'order' => 'name'],
+    ])->assertCreated();
+
+    // Por slug en es… y también por el slug de OTRO locale (canónica, DC-12).
+    foreach (['personajes', 'characters'] as $slug) {
+        $this->getJson("/api/pages/{$slug}?locale=es")
+            ->assertOk()
+            ->assertJsonPath('data.title', 'Personajes')
+            ->assertJsonPath('data.slugs.en', 'characters')
+            ->assertJsonPath('data.blocks.0.component', 'characters-grid')
+            ->assertJsonPath('data.blocks.0.settings.title', 'Todas las cartas')
+            ->assertJsonPath('data.blocks.0.settings.align', 'left') // default del común
+            ->assertJsonPath('data.blocks.0.data.characters.0.name.es', $character->getTranslation('name', 'es'));
+    }
+
+    // Sin publicar -> 404 en público.
+    $page->update(['is_published' => false]);
+    app(PageService::class)->forget($page);
+    $this->getJson('/api/pages/personajes')->assertNotFound();
+});
+
+it('nav y home públicos con caché invalidada al cambiar bloques (DC-10)', function () {
+    $admin = motorUser('admin');
+    $home = makePage(['title' => ['es' => 'Bienvenida']]);
+    makePage(['title' => ['es' => 'Reglas']]);
+    makePage(['title' => ['es' => 'Oculta'], 'is_published' => false]);
+
+    $this->actingAs($admin)->postJson("/api/admin/pages/{$home->id}/set-home")->assertOk();
+
+    $this->getJson('/api/pages/nav')
+        ->assertOk()
+        ->assertJsonCount(2, 'data')
+        ->assertJsonPath('data.0.is_home', true);
+
+    $this->getJson('/api/pages/home')->assertOk()->assertJsonPath('data.title', 'Bienvenida');
+
+    // El payload se cachea… y el cambio de un bloque lo invalida al momento.
+    $block = $this->actingAs($admin)->postJson("/api/admin/pages/{$home->id}/blocks", [
+        'type' => 'header', 'settings' => ['title' => ['es' => 'Hola']],
+    ])->json('data.id');
+
+    $this->getJson('/api/pages/home')->assertJsonPath('data.blocks.0.settings.title', 'Hola');
+
+    $this->actingAs($admin)->putJson("/api/admin/blocks/{$block}", [
+        'settings' => ['title' => ['es' => 'Adiós']],
+    ])->assertOk();
+
+    $this->getJson('/api/pages/home')->assertJsonPath('data.blocks.0.settings.title', 'Adiós');
+});
+
+it('el CRM exige admin', function () {
+    $page = makePage();
+
+    $this->postJson('/api/admin/pages', [])->assertUnauthorized();
+    $this->actingAs(motorUser('user'))->postJson('/api/admin/pages', [])->assertForbidden();
+    $this->actingAs(motorUser('user'))
+        ->postJson("/api/admin/pages/{$page->id}/blocks", ['type' => 'header'])
+        ->assertForbidden();
+    $this->actingAs(motorUser('user'))->getJson('/api/admin/block-types')->assertForbidden();
+});
