@@ -24,20 +24,22 @@ class PagesSeeder extends Seeder
         $home->forceFill(['is_home' => true])->save();
         $this->blocks($home, [
             ['header', ['title' => ['es' => 'Choque de Leyendas', 'eu' => 'Kondairen Talka', 'en' => 'Clash of Legends'],
-                        'subtitle' => ['es' => 'El juego de cartas de las grandes casas', 'en' => 'The card game of the great houses'],
-                        'align' => 'center']],
+                'subtitle' => ['es' => 'El juego de cartas de las grandes casas', 'en' => 'The card game of the great houses'],
+                'align' => 'center']],
             ['text', ['body' => ['es' => '<p>Un juego de <strong>intriga y poder</strong> donde cada casa lucha por el trono. Imprime tus cartas y juega.</p>'],
-                      'align' => 'center']],
+                'align' => 'center']],
             ['characters-grid', ['title' => ['es' => 'Los personajes', 'en' => 'The characters'], 'limit' => 6, 'order' => 'name']],
             ['quote', ['quote' => ['es' => '<p>Cuando juegas al juego de tronos, solo puedes ganar o morir.</p>'],
-                       'author' => ['es' => 'Cersei Lannister']]],
+                'author' => ['es' => 'Cersei Lannister']]],
             ['cta', ['title' => ['es' => '¿Listo para jugar?'], 'button_text' => ['es' => 'Crea tu cuenta'],
-                     'button_url' => ['es' => '/registro'], 'align' => 'center']],
+                'button_url' => ['es' => '/registro'], 'align' => 'center']],
         ]);
 
         // --- Las casas (bloque con-datos del juego) ---
-        $casas = $this->page(['es' => 'Las casas', 'eu' => 'Etxeak', 'en' => 'The houses'],
-            meta: ['es' => 'Las grandes casas y sus argucias.']);
+        $casas = $this->page(
+            ['es' => 'Las casas', 'eu' => 'Etxeak', 'en' => 'The houses'],
+            meta: ['es' => 'Las grandes casas y sus argucias.']
+        );
         $this->blocks($casas, [
             ['header', ['title' => ['es' => 'Las grandes casas', 'en' => 'The great houses']]],
             ['houses-schemes', ['intro' => ['es' => '<p>Cada casa juega con sus propias <em>argucias</em>.</p>'], 'show_empty' => false]],
