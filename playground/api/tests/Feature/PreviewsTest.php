@@ -216,7 +216,26 @@ it('el gestor lista el estado por tipo', function () {
         ->assertJsonPath('data.0.key', 'character')
         ->assertJsonPath('data.0.total', 1)
         ->assertJsonPath('data.0.complete', 1) // la creación renderizó (cola síncrona + fake)
-        ->assertJsonPath('data.1.key', 'scheme');
+        ->assertJsonPath('data.0.locales.es', 1) // generadas por idioma
+        ->assertJsonPath('data.0.locales.eu', 1)
+        ->assertJsonPath('data.1.key', 'scheme')
+        ->assertJsonPath('data.1.locales.es', 0);
+});
+
+it('el selector del gestor busca por texto (?q)', function () {
+    makeCharacter(); // Tyrion
+    $otro = makeCharacter(['name' => ['es' => 'Cersei']]);
+
+    $admin = motorUser('admin');
+
+    $this->actingAs($admin)->getJson('/api/admin/previews/character/items?q=cersei')
+        ->assertOk()
+        ->assertJsonCount(1, 'data')
+        ->assertJsonPath('data.0.id', $otro->id);
+
+    $this->actingAs($admin)->getJson('/api/admin/previews/character/items?q=nadie')
+        ->assertOk()
+        ->assertJsonCount(0, 'data');
 });
 
 it('el gestor lista las entidades con su estado por locale', function () {

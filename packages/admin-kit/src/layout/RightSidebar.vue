@@ -5,8 +5,10 @@ import { useRightSidebar } from '../composables/useRightSidebar'
 
 // Panel lateral derecho contextual (portado de kontuan, DC-28): cada vista lo
 // activa con useRightSidebar().useRegister(titulo) y teletransporta su
-// contenido a #right-sidebar-target. Escritorio: columna plegable junto al
-// contenido; móvil: drawer con asa flotante. Lo monta AdminLayout una vez.
+// contenido a #right-sidebar-target. En pantallas anchas es una columna
+// plegable junto al contenido; por debajo de OVERLAY_BREAKPOINT pasa a drawer
+// superpuesto (con asa flotante) para que el contenido principal NUNCA quede
+// más estrecho que las barras. Lo monta AdminLayout una vez.
 // Agnóstico de i18n (DC-29): textos por prop, defaults en castellano.
 
 const props = withDefaults(
@@ -30,29 +32,30 @@ const {
   closeMobile,
 } = useRightSidebar()
 
-// Umbral móvil (igual que el sidebar izquierdo: bp-md = 768).
-const MOBILE_BREAKPOINT = 768
+// Por debajo de este ancho el panel se superpone (drawer) en vez de ocupar
+// columna: sidebar izquierda (~240) + panel (320) + contenido útil mínimo.
+const OVERLAY_BREAKPOINT = 1100
 
-const isMobile = ref(false)
+const overlay = ref(false)
 const flashing = ref(false)
 let flashTimer: ReturnType<typeof setTimeout> | null = null
 
-function checkMobile() {
-  isMobile.value = window.innerWidth < MOBILE_BREAKPOINT
-  if (!isMobile.value) mobileOpen.value = false
+function checkOverlay() {
+  overlay.value = window.innerWidth < OVERLAY_BREAKPOINT
+  if (!overlay.value) mobileOpen.value = false
 }
 
 onMounted(() => {
-  checkMobile()
-  window.addEventListener('resize', checkMobile)
+  checkOverlay()
+  window.addEventListener('resize', checkOverlay)
 })
 
 onUnmounted(() => {
-  window.removeEventListener('resize', checkMobile)
+  window.removeEventListener('resize', checkOverlay)
   if (flashTimer) clearTimeout(flashTimer)
 })
 
-const isVisible = computed(() => (isMobile.value ? mobileOpen.value : !collapsed.value))
+const isVisible = computed(() => (overlay.value ? mobileOpen.value : !collapsed.value))
 const panelTitle = computed(() => title.value || props.fallbackTitle)
 
 // Con el panel oculto, un destello en el asa avisa de contenido nuevo.
@@ -71,14 +74,14 @@ watch(handleFlashId, () => {
 function handleToggle(e: MouseEvent) {
   // Evita dejar el foco dentro de un subárbol inert/aria-hidden.
   ;(e.currentTarget as HTMLElement | null)?.blur()
-  if (isMobile.value) toggleMobile()
+  if (overlay.value) toggleMobile()
   else toggleCollapsed()
 }
 </script>
 
 <template>
   <div
-    v-if="isMobile && hasContent && mobileOpen"
+    v-if="overlay && hasContent && mobileOpen"
     class="right-sidebar-overlay"
     @click="closeMobile"
   />
@@ -98,8 +101,9 @@ function handleToggle(e: MouseEvent) {
     v-show="hasContent"
     class="right-sidebar"
     :class="{
-      'right-sidebar--collapsed': collapsed && !isMobile,
-      'right-sidebar--mobile-open': mobileOpen,
+      'right-sidebar--collapsed': collapsed && !overlay,
+      'right-sidebar--drawer': overlay,
+      'right-sidebar--drawer-open': overlay && mobileOpen,
     }"
     :inert="!isVisible"
   >

@@ -1,41 +1,37 @@
 <script setup lang="ts">
-import { computed, onMounted, reactive, ref } from 'vue'
+import { computed, onMounted, onUnmounted, reactive, ref, watch } from 'vue'
 import type { AxiosInstance } from 'axios'
-import { ImageOff, RefreshCw, Trash2 } from '@lucide/vue'
-import { BaseButton, useConfirm, useToast } from '@bgm/ui'
+import { Eraser, ImageOff, ImagePlus, RefreshCw, Trash2 } from '@lucide/vue'
+import { BaseButton, BaseInput, useConfirm, useToast } from '@bgm/ui'
 import ManagerCard from '../components/ManagerCard.vue'
 import { useRightSidebar } from '../composables/useRightSidebar'
 
-// Gestor de previews PNG (doc 01/08), mobile-first: tarjetas colapsables por
-// tipo (rejilla de 1-2 columnas según el contenedor). Cada fila muestra el
-// estado por locale con chips (saltan de fila en estrecho); el checkbox
-// selecciona para las acciones EN BLOQUE del pie, y el clic en el nombre abre
-// el DETALLE en el panel derecho (imágenes por idioma + acciones del
-// elemento, patrón kontuan). Endpoints /admin/previews del motor.
+// Gestor de previews PNG (doc 01/08), mobile-first. Una tarjeta FIJA por tipo
+// (sin colapsar, sin listas interminables): estadísticas —total y generadas
+// por idioma— y los botones "de todas" (generar faltantes / regenerar todo /
+// borrar todo). Al seleccionar una tarjeta, el panel derecho (patrón kontuan)
+// muestra un SELECTOR CON BUSCADOR de sus elementos; el elegido enseña sus
+// imágenes por idioma y sus acciones (generar faltantes / regenerar /
+// borrar). Endpoints /admin/previews del motor.
 // Agnóstico de i18n (DC-29): textos por prop, defaults en castellano.
 
 export interface PreviewManagerLabels {
   refresh: string
-  generate: string
-  regenerateAll: string
-  deleteAll: string
   clean: string
   total: string
-  complete: string
-  pending: string
-  empty: string
+  generateMissing: string
+  regenerateAll: string
+  deleteAll: string
+  searchPlaceholder: string
+  noResults: string
   loadMore: string
-  selectedCount: string
-  regenerateSelected: string
-  deleteSelected: string
-  clearSelection: string
+  panelEmpty: string
   detailTitle: string
-  detailEmpty: string
+  itemGenerateMissing: string
   itemRegenerate: string
   itemDelete: string
   confirmRegenerateAll: string
   confirmDeleteAll: string
-  confirmDeleteSelected: string
   confirmDeleteItem: string
   confirmClean: string
   confirm: string
@@ -45,26 +41,21 @@ export interface PreviewManagerLabels {
 
 const defaultLabels: PreviewManagerLabels = {
   refresh: 'Actualizar',
-  generate: 'Generar pendientes',
-  regenerateAll: 'Regenerar todo',
-  deleteAll: 'Borrar todo',
   clean: 'Limpiar huérfanos',
   total: 'Total',
-  complete: 'Completas',
-  pending: 'Pendientes',
-  empty: 'No hay entidades.',
+  generateMissing: 'Generar faltantes',
+  regenerateAll: 'Regenerar todo',
+  deleteAll: 'Borrar todo',
+  searchPlaceholder: 'Buscar…',
+  noResults: 'Sin resultados.',
   loadMore: 'Cargar más',
-  selectedCount: '{count} seleccionadas',
-  regenerateSelected: 'Regenerar selección',
-  deleteSelected: 'Borrar selección',
-  clearSelection: 'Quitar selección',
-  detailTitle: 'Detalle',
-  detailEmpty: 'Elige un elemento para ver sus imágenes por idioma.',
+  panelEmpty: 'Selecciona una tarjeta para gestionar sus elementos.',
+  detailTitle: 'Elementos',
+  itemGenerateMissing: 'Generar faltantes',
   itemRegenerate: 'Regenerar',
   itemDelete: 'Borrar PNG',
   confirmRegenerateAll: '¿Regenerar TODAS las previews de {type}?',
   confirmDeleteAll: '¿Borrar TODAS las previews de {type}?',
-  confirmDeleteSelected: '¿Borrar los PNG de {count} entidades?',
   confirmDeleteItem: '¿Borrar los PNG de "{name}"?',
   confirmClean: '¿Eliminar los ficheros de preview huérfanos?',
   confirm: 'Confirmar',
@@ -87,7 +78,7 @@ const L = reactive({ ...defaultLabels, ...props.labels }) as PreviewManagerLabel
 const toast = useToast()
 const { confirm } = useConfirm()
 
-// El detalle del elemento vive en el panel derecho del layout.
+// El selector y el detalle viven en el panel derecho del layout.
 const sidebar = useRightSidebar()
 sidebar.useRegister(L.detailTitle)
 
@@ -97,6 +88,7 @@ interface TypeStatus {
   total: number
   complete: number
   pending: number
+  locales: Record<string, number>
 }
 
 interface PreviewItem {
@@ -114,23 +106,22 @@ function typeName(type: TypeStatus): string {
   return props.typeLabels[type.key] ?? type.model
 }
 
-const open = reactive<Record<string, boolean>>({})
-const items = reactive<Record<string, PreviewItem[]>>({})
-const pages = reactive<Record<string, { current: number; last: number }>>({})
-// Selección por tipo (checkbox): las acciones en bloque del pie operan sobre ella.
-const selected = reactive<Record<string, number[]>>({})
-// Elemento activo: su detalle se enseña en el panel derecho.
-const active = ref<{ key: string; id: number } | null>(null)
+// Tipo activo (tarjeta seleccionada) y su selector en el panel.
+const activeType = ref<string | null>(null)
+const search = ref('')
+const items = ref<PreviewItem[]>([])
+const page = ref({ current: 1, last: 1 })
+const selectedId = ref<number | null>(null)
 
-const activeItem = computed<PreviewItem | null>(() => {
-  if (!active.value) return null
-  return (items[active.value.key] ?? []).find((i) => i.id === active.value!.id) ?? null
-})
-
-const activeTypeName = computed(() => {
-  const type = types.value.find((t) => t.key === active.value?.key)
-  return type ? typeName(type) : ''
-})
+const activeStatus = computed(() => types.value.find((t) => t.key === activeType.value) ?? null)
+const selectedItem = computed(() => items.value.find((i) => i.id === selectedId.value) ?? null)
+const missingLocales = computed(() =>
+  selectedItem.value
+    ? Object.entries(selectedItem.value.previews)
+        .filter(([, url]) => !url)
+        .map(([locale]) => locale)
+    : [],
+)
 
 async function loadStatus() {
   loading.value = true
@@ -144,31 +135,43 @@ async function loadStatus() {
   }
 }
 
-async function loadItems(key: string, page = 1) {
+async function loadItems(pageNumber = 1) {
+  if (!activeType.value) return
   try {
-    const { data } = await props.api.get(`/admin/previews/${key}/items`, { params: { page } })
-    items[key] = page === 1 ? data.data : [...(items[key] ?? []), ...data.data]
-    pages[key] = { current: data.meta.current_page, last: data.meta.last_page }
-    selected[key] ??= []
+    const { data } = await props.api.get(`/admin/previews/${activeType.value}/items`, {
+      params: { page: pageNumber, q: search.value || undefined },
+    })
+    items.value = pageNumber === 1 ? data.data : [...items.value, ...data.data]
+    page.value = { current: data.meta.current_page, last: data.meta.last_page }
   } catch {
     toast.danger(L.error)
   }
 }
 
-function onToggle(key: string, isOpen: boolean) {
-  if (isOpen && !items[key]) loadItems(key)
+function select(type: TypeStatus) {
+  if (activeType.value !== type.key) {
+    activeType.value = type.key
+    search.value = ''
+    items.value = []
+    selectedId.value = null
+    loadItems()
+  }
+  sidebar.reveal()
 }
 
-function show(key: string, item: PreviewItem) {
-  active.value = { key, id: item.id }
-  sidebar.reveal() // en móvil entra el drawer; en escritorio se despliega
-}
+// Buscador del selector: consulta al servidor con un pequeño debounce.
+let searchTimer: ReturnType<typeof setTimeout> | null = null
+watch(search, () => {
+  if (searchTimer) clearTimeout(searchTimer)
+  searchTimer = setTimeout(() => loadItems(), 300)
+})
+onUnmounted(() => {
+  if (searchTimer) clearTimeout(searchTimer)
+})
 
 async function refreshAll() {
   await loadStatus()
-  for (const key of Object.keys(open)) {
-    if (open[key]) await loadItems(key)
-  }
+  if (activeType.value) await loadItems()
 }
 
 /** Envuelve una acción: bloquea botones, toast con el mensaje del servidor. */
@@ -184,6 +187,8 @@ async function run(action: () => Promise<{ data: { message?: string } }>, after?
     busy.value = false
   }
 }
+
+// --- Acciones "de todas" (tarjeta) ---
 
 function generateType(type: TypeStatus) {
   run(() => props.api.post(`/admin/previews/${type.key}/generate`))
@@ -225,22 +230,31 @@ async function cleanOrphans() {
   run(() => props.api.post('/admin/previews/clean'))
 }
 
-/** Acción secuencial sobre varios ids; un solo toast al final. */
-async function runMany(
-  key: string,
-  ids: number[],
-  request: (id: number) => Promise<{ data: { message?: string } }>,
-) {
+// --- Acciones del elemento elegido (panel) ---
+
+function regenerateItem() {
+  if (!activeType.value || !selectedId.value) return
+  run(
+    () => props.api.post(`/admin/previews/${activeType.value}/${selectedId.value}/regenerate`),
+    () => refreshAll(),
+  )
+}
+
+/** Encola solo los idiomas que faltan del elemento elegido. */
+async function generateMissingItem() {
+  if (!activeType.value || !selectedId.value) return
   busy.value = true
   let message: string | undefined
   try {
-    for (const id of ids) {
-      const { data } = await request(id)
+    for (const locale of missingLocales.value) {
+      const { data } = await props.api.post(
+        `/admin/previews/${activeType.value}/${selectedId.value}/regenerate`,
+        { locale },
+      )
       message = data.message ?? message
     }
     if (message) toast.success(message)
-    await loadStatus()
-    await loadItems(key)
+    await refreshAll()
   } catch {
     toast.danger(L.error)
   } finally {
@@ -248,43 +262,19 @@ async function runMany(
   }
 }
 
-function regenerateSelected(key: string) {
-  runMany(key, [...(selected[key] ?? [])], (id) =>
-    props.api.post(`/admin/previews/${key}/${id}/regenerate`),
-  ).then(() => (selected[key] = []))
-}
-
-async function deleteSelected(key: string) {
-  const ok = await confirm({
-    message: L.confirmDeleteSelected.replace('{count}', String(selected[key]?.length ?? 0)),
-    confirmLabel: L.deleteSelected,
-    cancelLabel: L.cancel,
-    variant: 'danger',
-  })
-  if (!ok) return
-  await runMany(key, [...(selected[key] ?? [])], (id) =>
-    props.api.delete(`/admin/previews/${key}/${id}`),
-  )
-  selected[key] = []
-}
-
-function regenerateItem() {
-  if (!active.value) return
-  const { key, id } = active.value
-  runMany(key, [id], (i) => props.api.post(`/admin/previews/${key}/${i}/regenerate`))
-}
-
 async function deleteItem() {
-  if (!active.value || !activeItem.value) return
-  const { key, id } = active.value
+  if (!activeType.value || !selectedItem.value) return
   const ok = await confirm({
-    message: L.confirmDeleteItem.replace('{name}', activeItem.value.label),
+    message: L.confirmDeleteItem.replace('{name}', selectedItem.value.label),
     confirmLabel: L.itemDelete,
     cancelLabel: L.cancel,
     variant: 'danger',
   })
   if (!ok) return
-  runMany(key, [id], (i) => props.api.delete(`/admin/previews/${key}/${i}`))
+  run(
+    () => props.api.delete(`/admin/previews/${activeType.value}/${selectedId.value}`),
+    () => refreshAll(),
+  )
 }
 
 onMounted(loadStatus)
@@ -295,9 +285,11 @@ defineExpose({ refreshAll })
   <div class="preview-manager manager-container">
     <div class="manager-bar">
       <BaseButton variant="secondary" :disabled="loading || busy" @click="refreshAll">
-        <RefreshCw :size="16" /> {{ L.refresh }}
+        <template #icon><RefreshCw :size="16" /></template>
+        {{ L.refresh }}
       </BaseButton>
       <BaseButton variant="danger" :disabled="busy" @click="cleanOrphans">
+        <template #icon><Eraser :size="16" /></template>
         {{ L.clean }}
       </BaseButton>
     </div>
@@ -306,117 +298,102 @@ defineExpose({ refreshAll })
       <ManagerCard
         v-for="type in types"
         :key="type.key"
-        v-model:open="open[type.key]"
         :title="typeName(type)"
-        @update:open="(v: boolean) => onToggle(type.key, v)"
+        :active="activeType === type.key"
+        @select="select(type)"
       >
-        <!-- Resumen siempre visible, también con la tarjeta cerrada -->
+        <!-- Total + generadas por idioma, de un vistazo -->
         <template #meta>
           <span class="manager-stat"
             >{{ L.total }} <strong>{{ type.total }}</strong></span
           >
-          <span class="manager-stat is-ok"
-            >{{ L.complete }} <strong>{{ type.complete }}</strong></span
+          <span
+            v-for="(count, locale) in type.locales"
+            :key="locale"
+            :class="['locale-chip', count === type.total ? 'is-ok' : 'is-missing']"
+            >{{ String(locale).toUpperCase() }} {{ count }}/{{ type.total }}</span
           >
-          <span class="manager-stat" :class="{ 'is-warn': type.pending > 0 }">
-            {{ L.pending }} <strong>{{ type.pending }}</strong>
-          </span>
         </template>
 
-        <p v-if="items[type.key] && !items[type.key].length" class="preview-manager__empty">
-          <ImageOff :size="16" /> {{ L.empty }}
-        </p>
-
-        <ul v-else class="preview-list">
-          <li v-for="item in items[type.key]" :key="item.id">
-            <div
-              class="preview-item"
-              :class="{ 'is-active': active?.key === type.key && active?.id === item.id }"
-            >
-              <input v-model="selected[type.key]" type="checkbox" :value="item.id" />
-              <button type="button" class="preview-item__label" @click="show(type.key, item)">
-                {{ item.label }}
-              </button>
-              <!-- Estado por locale; en estrecho, los chips saltan de fila -->
-              <span class="preview-item__chips">
-                <span
-                  v-for="(url, locale) in item.previews"
-                  :key="locale"
-                  :class="['locale-chip', url ? 'is-ok' : 'is-missing']"
-                  >{{ String(locale).toUpperCase() }}</span
-                >
-              </span>
-            </div>
-          </li>
-        </ul>
-
-        <div
-          v-if="pages[type.key] && pages[type.key].current < pages[type.key].last"
-          class="preview-manager__more"
-        >
-          <BaseButton variant="secondary" @click="loadItems(type.key, pages[type.key].current + 1)">
-            {{ L.loadMore }}
-          </BaseButton>
-        </div>
-
         <template #actions>
-          <!-- Con selección: acciones sobre el bloque; sin ella, lotes del tipo -->
-          <template v-if="selected[type.key]?.length">
-            <span class="preview-manager__count">
-              {{ L.selectedCount.replace('{count}', String(selected[type.key].length)) }}
-            </span>
-            <BaseButton variant="secondary" :disabled="busy" @click="selected[type.key] = []">
-              {{ L.clearSelection }}
-            </BaseButton>
-            <BaseButton :disabled="busy" @click="regenerateSelected(type.key)">
-              {{ L.regenerateSelected }}
-            </BaseButton>
-            <BaseButton variant="danger" :disabled="busy" @click="deleteSelected(type.key)">
-              {{ L.deleteSelected }}
-            </BaseButton>
-          </template>
-          <template v-else>
-            <BaseButton :disabled="busy || type.pending === 0" @click="generateType(type)">
-              {{ L.generate }}
-            </BaseButton>
-            <BaseButton variant="secondary" :disabled="busy" @click="regenerateType(type)">
-              {{ L.regenerateAll }}
-            </BaseButton>
-            <BaseButton variant="danger" :disabled="busy" @click="deleteType(type)">
-              {{ L.deleteAll }}
-            </BaseButton>
-          </template>
+          <BaseButton :disabled="busy || type.pending === 0" @click="generateType(type)">
+            <template #icon><ImagePlus :size="16" /></template>
+            {{ L.generateMissing }}
+          </BaseButton>
+          <BaseButton variant="secondary" :disabled="busy" @click="regenerateType(type)">
+            <template #icon><RefreshCw :size="16" /></template>
+            {{ L.regenerateAll }}
+          </BaseButton>
+          <BaseButton variant="danger" :disabled="busy" @click="deleteType(type)">
+            <template #icon><Trash2 :size="16" /></template>
+            {{ L.deleteAll }}
+          </BaseButton>
         </template>
       </ManagerCard>
     </div>
 
-    <!-- Detalle del elemento activo, en el panel derecho del layout -->
+    <!-- Panel derecho: selector con buscador + detalle del elemento -->
     <Teleport defer to="#right-sidebar-target">
-      <div class="manager-detail">
-        <p v-if="!activeItem" class="manager-detail__empty">{{ L.detailEmpty }}</p>
+      <div class="manager-panel">
+        <p v-if="!activeStatus" class="manager-panel__empty">{{ L.panelEmpty }}</p>
         <template v-else>
-          <p class="manager-detail__kicker">{{ activeTypeName }}</p>
-          <h3 class="manager-detail__title">{{ activeItem.label }}</h3>
+          <p class="manager-panel__kicker">{{ typeName(activeStatus) }}</p>
 
-          <div class="manager-detail__figures">
-            <figure
-              v-for="(url, locale) in activeItem.previews"
-              :key="locale"
-              :class="['manager-detail__figure', { 'is-missing': !url }]"
-            >
-              <img v-if="url" :src="url" :alt="`${activeItem.label} ${locale}`" />
-              <span v-else class="manager-detail__hole"><ImageOff :size="18" /></span>
-              <figcaption>{{ String(locale).toUpperCase() }}</figcaption>
-            </figure>
-          </div>
+          <BaseInput
+            v-model="search"
+            class="manager-panel__search"
+            :placeholder="L.searchPlaceholder"
+          />
 
-          <div class="manager-detail__actions">
-            <BaseButton :disabled="busy" @click="regenerateItem">
-              <RefreshCw :size="14" /> {{ L.itemRegenerate }}
-            </BaseButton>
-            <BaseButton variant="danger" :disabled="busy" @click="deleteItem">
-              <Trash2 :size="14" /> {{ L.itemDelete }}
-            </BaseButton>
+          <p v-if="!items.length" class="manager-panel__empty">{{ L.noResults }}</p>
+          <ul v-else class="manager-panel__list">
+            <li v-for="item in items" :key="item.id">
+              <button
+                type="button"
+                class="manager-panel__option"
+                :class="{ 'is-active': selectedId === item.id }"
+                @click="selectedId = item.id"
+              >
+                {{ item.label }}
+              </button>
+            </li>
+            <li v-if="page.current < page.last" class="manager-panel__more">
+              <BaseButton variant="secondary" @click="loadItems(page.current + 1)">
+                {{ L.loadMore }}
+              </BaseButton>
+            </li>
+          </ul>
+
+          <div v-if="selectedItem" class="manager-detail">
+            <h3 class="manager-detail__title">{{ selectedItem.label }}</h3>
+
+            <div class="manager-detail__figures">
+              <figure
+                v-for="(url, locale) in selectedItem.previews"
+                :key="locale"
+                :class="['manager-detail__figure', { 'is-missing': !url }]"
+              >
+                <img v-if="url" :src="url" :alt="`${selectedItem.label} ${locale}`" />
+                <span v-else class="manager-detail__hole"><ImageOff :size="18" /></span>
+                <figcaption>{{ String(locale).toUpperCase() }}</figcaption>
+              </figure>
+            </div>
+
+            <div class="manager-detail__actions">
+              <BaseButton
+                v-if="missingLocales.length"
+                :disabled="busy"
+                @click="generateMissingItem"
+              >
+                <ImagePlus :size="14" /> {{ L.itemGenerateMissing }}
+              </BaseButton>
+              <BaseButton variant="secondary" :disabled="busy" @click="regenerateItem">
+                <RefreshCw :size="14" /> {{ L.itemRegenerate }}
+              </BaseButton>
+              <BaseButton variant="danger" :disabled="busy" @click="deleteItem">
+                <Trash2 :size="14" /> {{ L.itemDelete }}
+              </BaseButton>
+            </div>
           </div>
         </template>
       </div>

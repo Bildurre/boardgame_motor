@@ -21,7 +21,10 @@ export function usePdfLabels(): ComputedRef<PdfManagerLabels> {
     statusReady: t('pdfs.statusReady'),
     statusFailed: t('pdfs.statusFailed'),
     detailTitle: t('pdfs.detailTitle'),
-    detailEmpty: t('pdfs.detailEmpty'),
+    panelEmpty: t('pdfs.panelEmpty'),
+    searchPlaceholder: t('pdfs.searchPlaceholder'),
+    noResults: t('pdfs.noResults'),
     generatedAt: t('pdfs.generatedAt'),
+    sourcesCount: t('pdfs.sourcesCount'),
   }))
 }

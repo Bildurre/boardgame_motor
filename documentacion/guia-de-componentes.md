@@ -43,6 +43,12 @@ Los estilos se importan vía SCSS:
 <BaseButton variant="danger" type="submit">Eliminar</BaseButton>
 ```
 
+- **Slot `icon`** (patrón kontuan): coloca el icono a la izquierda y hace el
+  texto **adaptable al contenedor**: en anchos pequeños del contenedor
+  `content` el texto pasa a mini-etiqueta bajo el icono; en anchos normales
+  vuelve a la fila. Los botones con icono inline en el slot por defecto no
+  cambian.
+
 ### IconButton
 
 - **Finalidad:** botón compacto solo-icono para acciones de fila (editar,
@@ -473,30 +479,33 @@ vive en el composable `useEntityList` (ver la guía de montar una web, §4.4).
   `AdminLayout` lo monta una vez; cada vista lo activa con
   `useRightSidebar().useRegister(titulo)` y teletransporta su contenido a
   `#right-sidebar-target` (`<Teleport defer to="#right-sidebar-target">`).
-  Escritorio: columna plegable junto al contenido; móvil: drawer con asa
-  flotante y overlay. `reveal()` lo muestra (despliega/abre) al seleccionar
-  algo. Los gestores (PreviewManager/PdfManager) lo usan para el detalle.
+  En pantallas anchas: columna plegable junto al contenido; **por debajo de
+  ~1100px pasa a drawer superpuesto** (asa flotante + overlay) para que el
+  contenido principal nunca quede más estrecho que las barras. `reveal()` lo
+  muestra al seleccionar algo. Los gestores lo usan para el selector/detalle.
 
 ### ManagerCard
 
-- **Finalidad:** tarjeta **colapsable** compartida por los gestores: cabecera
-  clicable (título + `chip` opcional), resumen siempre visible (slot `meta`),
-  cuerpo al abrir (slot por defecto) y pie de acciones (slot `actions`).
-  `v-model:open`. Se coloca dentro de `.manager-grid` (1 columna en estrecho,
-  **2 a partir del ancho del contenedor** `content` — container query, no
-  viewport).
+- **Finalidad:** tarjeta **fija** (no colapsa) compartida por los gestores:
+  cabecera clicable que **selecciona** la tarjeta (título + `chip` opcional,
+  emite `select`, prop `active`), resumen siempre visible (slot `meta`) y pie
+  de acciones "de todas" (slot `actions`). Se coloca dentro de
+  `.manager-grid` (1 columna en estrecho, **2 a partir del ancho del
+  contenedor** `content` — container query, no viewport). El detalle de la
+  tarjeta activa vive en el panel derecho.
 
 ### PreviewManager
 
 - **Finalidad:** gestor de las previews PNG (doc 01), **mobile-first** sobre
-  ManagerCard: una tarjeta por tipo con el resumen (total / completas /
-  pendientes) visible aun cerrada. Dentro, filas compactas con **checkbox de
-  selección** + nombre + chips de estado por locale (saltan de fila en
-  estrecho). El pie de la tarjeta cambia según haya selección: **acciones en
-  bloque** (regenerar/borrar selección) o lotes del tipo (generar pendientes /
-  regenerar todo / borrar todo). El clic en el nombre abre el **detalle en el
-  panel derecho** (imágenes por idioma + regenerar/borrar del elemento).
-  Barra global con Actualizar y **limpieza de huérfanos**. Consume
+  ManagerCard: una tarjeta FIJA por tipo (sin listas dentro) con el total y
+  las **generadas por idioma** (chips `ES 3/3`) y los botones "de todas" con
+  icono: **generar faltantes / regenerar todo / borrar todo**. Al seleccionar
+  la tarjeta, el panel derecho muestra un **selector con buscador** (busca en
+  servidor por las columnas `$searchable`, `?q=`) de sus elementos; el
+  elegido enseña sus **imágenes por idioma** y sus acciones (generar
+  faltantes —solo los idiomas que faltan—, regenerar, borrar). Sin
+  multiselección: lo masivo son los botones "todas". Barra global con
+  Actualizar y **limpieza de huérfanos**. Consume
   `GET/POST/DELETE /api/admin/previews/...`; confirmaciones (ConfirmDialog) y
   toasts con los mensajes del servidor.
 - **Props:** `api: AxiosInstance` (el cliente del admin),
@@ -514,11 +523,12 @@ vive en el composable `useEntityList` (ver la guía de montar una web, §4.4).
 
 - **Finalidad:** gestor del **catálogo completo de PDF del juego** (doc 02).
   Lee los exports registrados (`GET /api/admin/pdfs/exports`) y pinta cada uno
-  como ManagerCard: los globales con filas por idioma y el **estado resumido
-  en la cabecera** (chips por locale aun cerrada), los por-entidad con sus
-  entidades desplegables (de `sources()`) y **Generar todo** en el pie. El
-  clic en una fila abre su **detalle en el panel derecho** (fichero, fecha de
-  generación, error completo, Descargar / Regenerar / Borrar). Toda la
+  como ManagerCard fija: los globales con el **estado por idioma** en chips y
+  Generar; los por-entidad con el nº de dueñas y **Generar todo**. Al
+  seleccionar la tarjeta, el panel derecho muestra sus PDF por idioma (estado,
+  fecha, error completo, Descargar / Regenerar / Borrar) — y en los
+  por-entidad, antes, un **selector con buscador** de la entidad dueña (de
+  `sources()`, filtro en cliente) con su Generar. Toda la
   gestión de PDF vive aquí (nada en los singles); añadir un
   export = registrarlo en el backend + su etiqueta en `typeLabels`.
 - **Props:** `api: AxiosInstance`, `labels?: Partial<PdfManagerLabels>` (DC-29)

@@ -1,17 +1,17 @@
 <script setup lang="ts">
 import { computed, onMounted, reactive, ref } from 'vue'
 import type { AxiosInstance } from 'axios'
-import { ChevronDown, ChevronRight, Download, RefreshCw, Trash2 } from '@lucide/vue'
-import { BaseButton, useConfirm, useToast } from '@bgm/ui'
+import { Download, FilePlus, RefreshCw, Trash2 } from '@lucide/vue'
+import { BaseButton, BaseInput, IconButton, useConfirm, useToast } from '@bgm/ui'
 import ManagerCard from '../components/ManagerCard.vue'
 import { useRightSidebar } from '../composables/useRightSidebar'
 
-// Gestor de PDF del juego (doc 02), mobile-first: pinta el CATÁLOGO de
-// exports registrados (GET /admin/pdfs/exports) como tarjetas colapsables
-// (rejilla de 1-2 columnas según el contenedor). Los globales resumen el
-// estado por idioma en la cabecera; los por-entidad listan sus dueñas. El
-// clic en una fila abre su DETALLE en el panel derecho (fichero, fecha,
-// error completo y acciones, patrón kontuan). Toda la gestión de PDF vive
+// Gestor de PDF del juego (doc 02), mobile-first. Una tarjeta FIJA por export
+// del catálogo (GET /admin/pdfs/exports): los globales resumen el estado por
+// idioma y generan con un botón; los por-entidad enseñan cuántas dueñas hay y
+// generan todas. Al seleccionar una tarjeta, el panel derecho (patrón
+// kontuan) muestra sus PDF por idioma con acciones — y, en los por-entidad,
+// un SELECTOR CON BUSCADOR de la entidad dueña. Toda la gestión de PDF vive
 // aquí (no en los detalles de las entidades).
 // Agnóstico de i18n (DC-29): textos por prop, defaults en castellano.
 
@@ -30,8 +30,11 @@ export interface PdfManagerLabels {
   statusReady: string
   statusFailed: string
   detailTitle: string
-  detailEmpty: string
+  panelEmpty: string
+  searchPlaceholder: string
+  noResults: string
   generatedAt: string
+  sourcesCount: string
 }
 
 const defaultLabels: PdfManagerLabels = {
@@ -48,9 +51,12 @@ const defaultLabels: PdfManagerLabels = {
   statusPending: 'En cola…',
   statusReady: 'Listo',
   statusFailed: 'Error',
-  detailTitle: 'Detalle',
-  detailEmpty: 'Elige un PDF para ver su detalle.',
+  detailTitle: 'PDF',
+  panelEmpty: 'Selecciona una tarjeta para gestionar sus PDF.',
+  searchPlaceholder: 'Buscar…',
+  noResults: 'Sin resultados.',
   generatedAt: 'Generado',
+  sourcesCount: '{count} elementos',
 }
 
 const props = withDefaults(
@@ -68,7 +74,7 @@ const L = reactive({ ...defaultLabels, ...props.labels }) as PdfManagerLabels
 const toast = useToast()
 const { confirm } = useConfirm()
 
-// El detalle del PDF vive en el panel derecho del layout.
+// El panel derecho enseña los PDF del export seleccionado.
 const sidebar = useRightSidebar()
 sidebar.useRegister(L.detailTitle)
 
@@ -93,12 +99,12 @@ const exports = ref<ExportInfo[]>([])
 const loading = ref(true)
 const busy = ref(false)
 
-// Filas por clave "type:sourceId|global"; expansión de tarjetas y fuentes.
+// Filas por clave "type:sourceId|global".
 const rows = reactive<Record<string, PdfRow[]>>({})
-const open = reactive<Record<string, boolean>>({})
-const openSource = reactive<Record<string, boolean>>({})
-// PDF activo: su detalle se enseña en el panel derecho.
-const active = ref<{ key: string; id: number } | null>(null)
+// Export activo (tarjeta) + entidad dueña elegida en el selector del panel.
+const activeType = ref<string | null>(null)
+const sourceSearch = ref('')
+const selectedSourceId = ref<number | null>(null)
 
 function keyOf(type: string, sourceId: number | null): string {
   return `${type}:${sourceId ?? 'global'}`
@@ -108,9 +114,23 @@ function typeName(exp: ExportInfo): string {
   return props.typeLabels[exp.type] ?? exp.type
 }
 
-const activeRow = computed<PdfRow | null>(() => {
-  if (!active.value) return null
-  return (rows[active.value.key] ?? []).find((r) => r.id === active.value!.id) ?? null
+const activeExport = computed(() => exports.value.find((e) => e.type === activeType.value) ?? null)
+
+/** Fuentes filtradas por el buscador del panel (filtro en cliente). */
+const filteredSources = computed(() => {
+  if (!activeExport.value) return []
+  const q = sourceSearch.value.trim().toLowerCase()
+  return q
+    ? activeExport.value.sources.filter((s) => s.label.toLowerCase().includes(q))
+    : activeExport.value.sources
+})
+
+/** Filas visibles en el panel: las del export global o las de la dueña elegida. */
+const panelRows = computed<PdfRow[] | null>(() => {
+  if (!activeExport.value) return null
+  if (activeExport.value.global) return rows[keyOf(activeExport.value.type, null)] ?? null
+  if (selectedSourceId.value === null) return null
+  return rows[keyOf(activeExport.value.type, selectedSourceId.value)] ?? null
 })
 
 async function loadRows(type: string, sourceId: number | null) {
@@ -129,8 +149,7 @@ async function loadCatalog() {
   try {
     const { data } = await props.api.get('/admin/pdfs/exports')
     exports.value = data.data
-    // Los globales cargan sus filas ya (alimentan el resumen de la cabecera);
-    // los por-entidad, al desplegar cada fuente.
+    // Los globales cargan sus filas ya (alimentan el resumen de la tarjeta).
     await Promise.all(exports.value.filter((e) => e.global).map((e) => loadRows(e.type, null)))
   } catch {
     toast.danger(L.error)
@@ -139,24 +158,26 @@ async function loadCatalog() {
   }
 }
 
-async function toggleSource(type: string, sourceId: number) {
-  const key = keyOf(type, sourceId)
-  openSource[key] = !openSource[key]
-  if (openSource[key] && !rows[key]) await loadRows(type, sourceId)
+function select(exp: ExportInfo) {
+  if (activeType.value !== exp.type) {
+    activeType.value = exp.type
+    sourceSearch.value = ''
+    selectedSourceId.value = null
+  }
+  sidebar.reveal()
 }
 
-function show(key: string, pdf: PdfRow) {
-  active.value = { key, id: pdf.id }
-  sidebar.reveal()
+function selectSource(id: number) {
+  selectedSourceId.value = id
+  if (activeExport.value && !rows[keyOf(activeExport.value.type, id)]) {
+    loadRows(activeExport.value.type, id)
+  }
 }
 
 async function refreshAll() {
   await loadCatalog()
-  for (const key of Object.keys(openSource)) {
-    if (openSource[key]) {
-      const [type, source] = key.split(':')
-      await loadRows(type, Number(source))
-    }
+  if (activeExport.value && !activeExport.value.global && selectedSourceId.value !== null) {
+    await loadRows(activeExport.value.type, selectedSourceId.value)
   }
 }
 
@@ -178,7 +199,6 @@ async function run(
 }
 
 function generate(type: string, sourceId: number | null) {
-  if (sourceId !== null) openSource[keyOf(type, sourceId)] = true
   run(
     () =>
       props.api.post('/admin/pdfs/generate', {
@@ -201,7 +221,7 @@ async function generateAllSources(exp: ExportInfo) {
         source_id: source.id,
       })
       message = data.message ?? message
-      if (openSource[keyOf(exp.type, source.id)]) await loadRows(exp.type, source.id)
+      if (rows[keyOf(exp.type, source.id)]) await loadRows(exp.type, source.id)
     }
     if (message) toast.success(message)
   } catch {
@@ -211,16 +231,24 @@ async function generateAllSources(exp: ExportInfo) {
   }
 }
 
-function regenerate(pdf: PdfRow, key: string) {
-  const [type, source] = key.split(':')
-  run(
-    () => props.api.post(`/admin/pdfs/${pdf.id}/regenerate`),
-    type,
-    source === 'global' ? null : Number(source),
-  )
+/** (type, sourceId) del contexto visible en el panel. */
+function panelContext(): { type: string; sourceId: number | null } | null {
+  if (!activeExport.value) return null
+  return {
+    type: activeExport.value.type,
+    sourceId: activeExport.value.global ? null : selectedSourceId.value,
+  }
 }
 
-async function del(pdf: PdfRow, key: string) {
+function regenerate(pdf: PdfRow) {
+  const ctx = panelContext()
+  if (!ctx) return
+  run(() => props.api.post(`/admin/pdfs/${pdf.id}/regenerate`), ctx.type, ctx.sourceId)
+}
+
+async function del(pdf: PdfRow) {
+  const ctx = panelContext()
+  if (!ctx) return
   const ok = await confirm({
     message: L.confirmDelete.replace('{name}', `${pdf.filename} (${pdf.locale.toUpperCase()})`),
     confirmLabel: L.delete,
@@ -228,13 +256,7 @@ async function del(pdf: PdfRow, key: string) {
     variant: 'danger',
   })
   if (!ok) return
-  if (active.value?.key === key && active.value.id === pdf.id) active.value = null
-  const [type, source] = key.split(':')
-  run(
-    () => props.api.delete(`/admin/pdfs/${pdf.id}`),
-    type,
-    source === 'global' ? null : Number(source),
-  )
+  run(() => props.api.delete(`/admin/pdfs/${pdf.id}`), ctx.type, ctx.sourceId)
 }
 
 function statusLabel(pdf: PdfRow): string {
@@ -250,7 +272,7 @@ function statusClass(pdf: PdfRow): string {
 }
 
 function formatDate(iso: string | null): string {
-  return iso ? new Date(iso).toLocaleString() : '—'
+  return iso ? new Date(iso).toLocaleString() : ''
 }
 
 onMounted(loadCatalog)
@@ -261,7 +283,8 @@ defineExpose({ refreshAll })
   <div class="pdf-manager manager-container">
     <div class="manager-bar">
       <BaseButton variant="secondary" :disabled="loading || busy" @click="refreshAll">
-        <RefreshCw :size="16" /> {{ L.refresh }}
+        <template #icon><RefreshCw :size="16" /></template>
+        {{ L.refresh }}
       </BaseButton>
     </div>
 
@@ -269,11 +292,12 @@ defineExpose({ refreshAll })
       <ManagerCard
         v-for="exp in exports"
         :key="exp.type"
-        v-model:open="open[exp.type]"
         :title="typeName(exp)"
         :chip="exp.layout"
+        :active="activeType === exp.type"
+        @select="select(exp)"
       >
-        <!-- Resumen en cabecera: estado por idioma (globales) o nº de dueñas -->
+        <!-- Resumen: estado por idioma (globales) o nº de dueñas -->
         <template #meta>
           <template v-if="exp.global">
             <span
@@ -288,79 +312,14 @@ defineExpose({ refreshAll })
               >{{ L.empty }}</span
             >
           </template>
-          <span v-else class="manager-stat"
-            ><strong>{{ exp.sources.length }}</strong></span
-          >
+          <span v-else class="manager-stat">
+            {{ L.sourcesCount.replace('{count}', String(exp.sources.length)) }}
+          </span>
         </template>
-
-        <!-- Export global: filas por idioma -->
-        <template v-if="exp.global">
-          <p v-if="!(rows[keyOf(exp.type, null)] ?? []).length" class="pdf-manager__empty">
-            {{ L.empty }}
-          </p>
-          <ul v-else class="pdf-list">
-            <li v-for="pdf in rows[keyOf(exp.type, null)]" :key="pdf.id">
-              <button
-                type="button"
-                class="pdf-row"
-                :class="{
-                  'is-active': active?.key === keyOf(exp.type, null) && active?.id === pdf.id,
-                }"
-                @click="show(keyOf(exp.type, null), pdf)"
-              >
-                <span class="pdf-row__locale">{{ pdf.locale.toUpperCase() }}</span>
-                <span :class="['locale-chip', statusClass(pdf)]">{{ statusLabel(pdf) }}</span>
-              </button>
-            </li>
-          </ul>
-        </template>
-
-        <!-- Export por entidad: una fila desplegable por entidad dueña -->
-        <div v-else class="pdf-manager__sources">
-          <article v-for="source in exp.sources" :key="source.id" class="pdf-source">
-            <div class="pdf-source__head">
-              <button
-                type="button"
-                class="pdf-source__toggle"
-                @click="toggleSource(exp.type, source.id)"
-              >
-                <component
-                  :is="openSource[keyOf(exp.type, source.id)] ? ChevronDown : ChevronRight"
-                  :size="16"
-                />
-                <span class="pdf-source__label">{{ source.label }}</span>
-              </button>
-              <BaseButton :disabled="busy" @click="generate(exp.type, source.id)">
-                {{ L.generate }}
-              </BaseButton>
-            </div>
-
-            <template v-if="openSource[keyOf(exp.type, source.id)]">
-              <p v-if="!(rows[keyOf(exp.type, source.id)] ?? []).length" class="pdf-manager__empty">
-                {{ L.empty }}
-              </p>
-              <ul v-else class="pdf-list">
-                <li v-for="pdf in rows[keyOf(exp.type, source.id)]" :key="pdf.id">
-                  <button
-                    type="button"
-                    class="pdf-row"
-                    :class="{
-                      'is-active':
-                        active?.key === keyOf(exp.type, source.id) && active?.id === pdf.id,
-                    }"
-                    @click="show(keyOf(exp.type, source.id), pdf)"
-                  >
-                    <span class="pdf-row__locale">{{ pdf.locale.toUpperCase() }}</span>
-                    <span :class="['locale-chip', statusClass(pdf)]">{{ statusLabel(pdf) }}</span>
-                  </button>
-                </li>
-              </ul>
-            </template>
-          </article>
-        </div>
 
         <template #actions>
           <BaseButton v-if="exp.global" :disabled="busy" @click="generate(exp.type, null)">
+            <template #icon><FilePlus :size="16" /></template>
             {{ L.generate }}
           </BaseButton>
           <BaseButton
@@ -368,45 +327,80 @@ defineExpose({ refreshAll })
             :disabled="busy || !exp.sources.length"
             @click="generateAllSources(exp)"
           >
+            <template #icon><FilePlus :size="16" /></template>
             {{ L.generateAll }}
           </BaseButton>
         </template>
       </ManagerCard>
     </div>
 
-    <!-- Detalle del PDF activo, en el panel derecho del layout -->
+    <!-- Panel derecho: PDF del export activo (con selector en los por-entidad) -->
     <Teleport defer to="#right-sidebar-target">
-      <div class="manager-detail">
-        <p v-if="!activeRow" class="manager-detail__empty">{{ L.detailEmpty }}</p>
+      <div class="manager-panel">
+        <p v-if="!activeExport" class="manager-panel__empty">{{ L.panelEmpty }}</p>
         <template v-else>
-          <h3 class="manager-detail__title">{{ activeRow.filename }}</h3>
-          <div class="manager-detail__row">
-            <span class="locale-chip">{{ activeRow.locale.toUpperCase() }}</span>
-            <span :class="['locale-chip', statusClass(activeRow)]">{{
-              statusLabel(activeRow)
-            }}</span>
-          </div>
-          <p class="manager-detail__meta">
-            {{ L.generatedAt }}: {{ formatDate(activeRow.generated_at) }}
-          </p>
-          <p v-if="activeRow.error" class="manager-detail__error">{{ activeRow.error }}</p>
+          <p class="manager-panel__kicker">{{ typeName(activeExport) }}</p>
 
-          <div class="manager-detail__actions">
-            <a
-              v-if="activeRow.url"
-              class="bgm-button bgm-button--secondary"
-              :href="activeRow.url"
-              target="_blank"
-              rel="noopener"
-            >
-              <Download :size="14" /> {{ L.download }}
-            </a>
-            <BaseButton :disabled="busy" @click="regenerate(activeRow, active!.key)">
-              <RefreshCw :size="14" /> {{ L.regenerate }}
-            </BaseButton>
-            <BaseButton variant="danger" :disabled="busy" @click="del(activeRow, active!.key)">
-              <Trash2 :size="14" /> {{ L.delete }}
-            </BaseButton>
+          <!-- Por entidad: selector con buscador de la entidad dueña -->
+          <template v-if="!activeExport.global">
+            <BaseInput
+              v-model="sourceSearch"
+              class="manager-panel__search"
+              :placeholder="L.searchPlaceholder"
+            />
+            <p v-if="!filteredSources.length" class="manager-panel__empty">{{ L.noResults }}</p>
+            <ul v-else class="manager-panel__list">
+              <li v-for="source in filteredSources" :key="source.id">
+                <button
+                  type="button"
+                  class="manager-panel__option"
+                  :class="{ 'is-active': selectedSourceId === source.id }"
+                  @click="selectSource(source.id)"
+                >
+                  {{ source.label }}
+                </button>
+              </li>
+            </ul>
+          </template>
+
+          <div v-if="panelRows" class="manager-detail">
+            <div v-if="!activeExport.global" class="manager-detail__actions">
+              <BaseButton :disabled="busy" @click="generate(activeExport.type, selectedSourceId)">
+                <FilePlus :size="14" /> {{ L.generate }}
+              </BaseButton>
+            </div>
+
+            <p v-if="!panelRows.length" class="manager-panel__empty">{{ L.empty }}</p>
+
+            <div v-for="pdf in panelRows" :key="pdf.id" class="pdf-entry">
+              <div class="pdf-entry__head">
+                <span class="pdf-entry__locale">{{ pdf.locale.toUpperCase() }}</span>
+                <span :class="['locale-chip', statusClass(pdf)]">{{ statusLabel(pdf) }}</span>
+                <span class="pdf-entry__buttons">
+                  <a
+                    v-if="pdf.url"
+                    class="icon-btn icon-btn--success"
+                    :href="pdf.url"
+                    target="_blank"
+                    rel="noopener"
+                    :title="L.download"
+                    ><Download :size="16"
+                  /></a>
+                  <IconButton variant="info" :title="L.regenerate" @click="regenerate(pdf)"
+                    ><RefreshCw :size="16"
+                  /></IconButton>
+                  <IconButton variant="danger" :title="L.delete" @click="del(pdf)"
+                    ><Trash2 :size="16"
+                  /></IconButton>
+                </span>
+              </div>
+              <p v-if="pdf.generated_at" class="pdf-entry__meta">
+                {{ L.generatedAt }}: {{ formatDate(pdf.generated_at) }}
+              </p>
+              <p v-if="pdf.status === 'failed' && pdf.error" class="pdf-entry__error">
+                {{ pdf.error }}
+              </p>
+            </div>
           </div>
         </template>
       </div>

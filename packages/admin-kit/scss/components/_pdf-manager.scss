@@ -1,84 +1,46 @@
 @use "tokens" as *;
 
-// Gestor de PDF (PdfManager), sobre .manager-card / .manager-grid (ver
-// _manager-card.scss). Mobile-first: filas compactas (idioma + estado) que
-// abren su detalle en el panel derecho.
+// Gestor de PDF (PdfManager), sobre .manager-card / .manager-grid y el panel
+// derecho (ver _manager-card.scss). Cada PDF del panel es una entrada
+// compacta: idioma + estado + acciones, con fecha o error debajo.
 
-.pdf-list {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  display: grid;
-  gap: $space-2;
-}
-
-.pdf-row {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: $space-1 $space-2;
-  width: 100%;
-  border: 1px solid $border;
-  border-radius: $radius-md;
-  background: $surface;
-  padding: $space-2 $space-3;
-  color: $text-1;
-  cursor: pointer;
-  text-align: left;
-  min-width: 0;
-
-  &:hover { border-color: $border-strong; }
-  &.is-active { border-color: $accent-500; }
-
-  &__locale {
-    font-weight: $k-fw-bold;
-    min-width: 2.5em;
-  }
-}
-
-.pdf-manager__empty {
-  color: $text-3;
-  margin: 0;
-}
-
-.pdf-manager__sources {
-  display: grid;
-  gap: $space-2;
-}
-
-.pdf-source {
+.pdf-entry {
   border: 1px solid $border;
   border-radius: $radius-md;
   background: $surface;
   padding: $space-2 $space-3;
   display: grid;
-  gap: $space-2;
+  gap: $space-1;
 
   &__head {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
-    gap: $space-2;
+    gap: $space-1 $space-2;
   }
 
-  &__toggle {
-    flex: 1 1 8rem;
+  &__locale {
+    font-weight: $k-fw-bold;
+    min-width: 2.5em;
+  }
+
+  &__buttons {
+    margin-left: auto;
     display: flex;
+    gap: $space-1;
     align-items: center;
-    gap: $space-2;
-    background: none;
-    border: 0;
-    color: $text-1;
-    cursor: pointer;
-    padding: 0;
-    min-width: 0;
-    text-align: left;
   }
 
-  &__label {
-    font-weight: $k-fw-semibold;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
+  &__meta {
+    color: $text-3;
+    font-size: $fs-12;
+    margin: 0;
+  }
+
+  &__error {
+    color: $danger;
+    font-size: $fs-12;
+    margin: 0;
+    overflow-wrap: anywhere;
   }
 }

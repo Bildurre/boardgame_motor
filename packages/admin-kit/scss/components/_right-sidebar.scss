@@ -120,23 +120,19 @@
   z-index: 90;
 }
 
-.is-mobile {
-  .right-sidebar {
-    position: fixed;
-    top: 56px;
-    right: 0;
-    bottom: 0;
-    height: auto;
-    z-index: 100;
-    width: min(320px, 100vw);
-    transform: translateX(100%);
+// Modo drawer (por debajo del umbral del componente): superpuesto al
+// contenido para que el main nunca quede más estrecho que las barras.
+.right-sidebar--drawer {
+  position: fixed;
+  top: 56px;
+  right: 0;
+  bottom: 0;
+  height: auto;
+  z-index: 100;
+  width: min(320px, 100vw);
+  transform: translateX(100%);
 
-    &.right-sidebar--mobile-open {
-      transform: translateX(0);
-    }
-  }
-
-  .right-sidebar-handle {
-    z-index: 110;
+  &.right-sidebar--drawer-open {
+    transform: translateX(0);
   }
 }
