@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import BaseModal from './BaseModal.vue'
+import { Save, X } from '@lucide/vue'
 import BaseButton from './BaseButton.vue'
 
 // Modal de formulario (portado de kontuan): BaseModal + pie con Cancelar/Guardar.
@@ -43,8 +44,12 @@ function close() {
     </form>
 
     <template #footer>
-      <BaseButton variant="secondary" type="button" @click="close">{{ cancelLabel }}</BaseButton>
+      <BaseButton variant="secondary" type="button" @click="close">
+        <template #icon><X :size="16" /></template>
+        {{ cancelLabel }}
+      </BaseButton>
       <BaseButton :variant="submitVariant" type="button" @click="emit('submit')">
+        <template #icon><Save :size="16" /></template>
         {{ loading ? '…' : submitLabel }}
       </BaseButton>
     </template>

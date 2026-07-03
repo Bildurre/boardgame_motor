@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { onMounted, reactive, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { Trash2 } from '@lucide/vue'
+import { Plus, Trash2 } from '@lucide/vue'
 import { BaseGrid, EntityCard, EmptyState } from '@bgm/admin-kit'
 import {
   BaseButton,
@@ -99,7 +99,10 @@ async function del(icon: Icon) {
 <template>
   <div class="icons">
     <div class="list-view__top">
-      <BaseButton @click="openCreate">{{ t('icons.new') }}</BaseButton>
+      <BaseButton @click="openCreate">
+        <template #icon><Plus :size="16" /></template>
+        {{ t('icons.new') }}
+      </BaseButton>
     </div>
 
     <EmptyState v-if="!loading && !store.icons.length" :title="t('common.empty')" />

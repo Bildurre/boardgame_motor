@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { onMounted } from 'vue'
-import { SquarePen, Trash2, Eye, EyeOff, RotateCcw, FlameKindling } from '@lucide/vue'
+import { Eye, EyeOff, FlameKindling, Plus, RotateCcw, SquarePen, Trash2 } from '@lucide/vue'
 import { BaseGrid, EntityCard, FilterBar, EmptyState } from '@bgm/admin-kit'
 import { BaseButton, BaseTabs, IconButton } from '@bgm/ui'
 import { useEntityList } from '@/composables/useEntityList'
@@ -40,7 +40,10 @@ onMounted(init)
 <template>
   <div class="houses">
     <div class="list-view__top">
-      <BaseButton @click="openCreate">{{ t('houses.newButton') }}</BaseButton>
+      <BaseButton @click="openCreate">
+        <template #icon><Plus :size="16" /></template>
+        {{ t('houses.newButton') }}
+      </BaseButton>
     </div>
 
     <!-- Filtros por encima de las tabs (estilo kontuan) -->

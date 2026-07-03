@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { onMounted } from 'vue'
-import { Camera, SquarePen, Trash2, Eye, EyeOff, RotateCcw, FlameKindling } from '@lucide/vue'
+import { Camera, Eye, EyeOff, FlameKindling, Plus, RotateCcw, SquarePen, Trash2 } from '@lucide/vue'
 import { BaseGrid, EntityCard, FilterBar, EmptyState } from '@bgm/admin-kit'
 import { BaseButton, BaseTabs, IconButton } from '@bgm/ui'
 import { useEntityList } from '@/composables/useEntityList'
@@ -42,7 +42,10 @@ onMounted(init)
 <template>
   <div class="characters">
     <div class="list-view__top">
-      <BaseButton @click="openCreate">{{ t('characters.newButton') }}</BaseButton>
+      <BaseButton @click="openCreate">
+        <template #icon><Plus :size="16" /></template>
+        {{ t('characters.newButton') }}
+      </BaseButton>
     </div>
 
     <FilterBar v-model="search" :placeholder="t('common.search')" />

@@ -2,6 +2,7 @@
 import { ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
+import { LogIn } from '@lucide/vue'
 import { BaseButton, MotorBadge } from '@bgm/ui'
 import { useAuthStore } from '@/stores/auth'
 import { apiMessage } from '@/lib/apiError'
@@ -49,9 +50,10 @@ async function submit() {
           ><input v-model="password" type="password" required autocomplete="current-password" />
         </div>
         <p v-if="error" class="error">{{ error }}</p>
-        <BaseButton type="submit">{{
-          loading ? t('login.submitting') : t('login.submit')
-        }}</BaseButton>
+        <BaseButton type="submit">
+          <template #icon><LogIn :size="16" /></template>
+          {{ loading ? t('login.submitting') : t('login.submit') }}
+        </BaseButton>
       </form>
     </div>
   </main>

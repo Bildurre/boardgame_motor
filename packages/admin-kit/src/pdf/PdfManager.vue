@@ -366,7 +366,8 @@ defineExpose({ refreshAll })
           <div v-if="panelRows" class="manager-detail">
             <div v-if="!activeExport.global" class="manager-detail__actions">
               <BaseButton :disabled="busy" @click="generate(activeExport.type, selectedSourceId)">
-                <FilePlus :size="14" /> {{ L.generate }}
+                <template #icon><FilePlus :size="14" /></template>
+                {{ L.generate }}
               </BaseButton>
             </div>
 

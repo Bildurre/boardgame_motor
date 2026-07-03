@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import BaseModal from './BaseModal.vue'
+import { Check, X } from '@lucide/vue'
 import BaseButton from './BaseButton.vue'
 import { useConfirm } from '../composables/useConfirm'
 
@@ -21,10 +22,14 @@ const { state, resolve } = useConfirm()
   >
     <p class="confirm__message">{{ state.message }}</p>
     <template #footer>
-      <BaseButton variant="secondary" @click="resolve(false)">{{ state.cancelLabel }}</BaseButton>
-      <BaseButton :variant="state.variant" @click="resolve(true)">{{
-        state.confirmLabel
-      }}</BaseButton>
+      <BaseButton variant="secondary" @click="resolve(false)">
+        <template #icon><X :size="16" /></template>
+        {{ state.cancelLabel }}
+      </BaseButton>
+      <BaseButton :variant="state.variant" @click="resolve(true)">
+        <template #icon><Check :size="16" /></template>
+        {{ state.confirmLabel }}
+      </BaseButton>
     </template>
   </BaseModal>
 </template>

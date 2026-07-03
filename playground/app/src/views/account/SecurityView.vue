@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref } from 'vue'
+import { KeyRound } from '@lucide/vue'
 import { BaseButton } from '@bgm/ui'
 import { api } from '@/lib/api'
 import { apiMessage } from '@/lib/apiError'
@@ -42,7 +43,10 @@ async function save() {
       </div>
       <p v-if="message" class="ok">{{ message }}</p>
       <p v-if="error" class="error">{{ error }}</p>
-      <BaseButton type="submit">Actualizar</BaseButton>
+      <BaseButton type="submit">
+        <template #icon><KeyRound :size="16" /></template>
+        Actualizar
+      </BaseButton>
     </form>
     <p class="hint"><RouterLink to="/cuenta">Volver a mi cuenta</RouterLink></p>
   </main>

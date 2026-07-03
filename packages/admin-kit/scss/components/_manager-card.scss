@@ -37,27 +37,32 @@
   box-shadow: $shadow-sm;
   overflow: hidden;
   min-width: 0;
-  transition: border-color 0.15s ease;
+  cursor: pointer; // TODA la tarjeta selecciona (menos sus controles)
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+
+  &:hover {
+    border-color: $border-strong;
+    box-shadow: $shadow-md;
+
+    .manager-card__hint { color: $accent-500; }
+  }
+
+  &:focus-visible {
+    outline: 2px solid $accent-500;
+    outline-offset: 2px;
+  }
 
   &.is-active {
     border-color: $accent-500;
   }
 
-  // La cabecera SELECCIONA la tarjeta (el detalle va al panel derecho).
   &__head {
     display: flex;
     align-items: center;
     gap: $space-2;
-    width: 100%;
-    background: none;
-    border: 0;
     color: $text-1;
-    cursor: pointer;
     padding: $space-3 $space-4;
-    text-align: left;
     min-width: 0;
-
-    &:hover .manager-card__hint { color: $accent-500; }
   }
 
   &__title {

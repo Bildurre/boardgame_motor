@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref } from 'vue'
+import { UserPlus } from '@lucide/vue'
 import { useRouter } from 'vue-router'
 import { BaseButton } from '@bgm/ui'
 import { useAuthStore } from '@/stores/auth'
@@ -59,7 +60,10 @@ async function submit() {
         />
       </div>
       <p v-if="error" class="error">{{ error }}</p>
-      <BaseButton type="submit">{{ loading ? 'Creando…' : 'Crear cuenta' }}</BaseButton>
+      <BaseButton type="submit">
+        <template #icon><UserPlus :size="16" /></template>
+        {{ loading ? 'Creando…' : 'Crear cuenta' }}
+      </BaseButton>
     </form>
     <p class="hint">¿Ya tienes cuenta? <RouterLink to="/login">Entra</RouterLink>.</p>
   </main>

@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed, onMounted, ref } from 'vue'
+import { MailCheck, Save } from '@lucide/vue'
 import { useRoute } from 'vue-router'
 import { BaseButton } from '@bgm/ui'
 import { api } from '@/lib/api'
@@ -66,6 +67,7 @@ async function resendVerification() {
         vuelve a pedir el enlace.
       </p>
       <BaseButton variant="secondary" :disabled="resending" @click="resendVerification">
+        <template #icon><MailCheck :size="16" /></template>
         Reenviar correo de verificación
       </BaseButton>
     </div>
@@ -75,7 +77,10 @@ async function resendVerification() {
       <div class="field"><label>Email</label><input v-model="email" type="email" required /></div>
       <p v-if="message" class="ok">{{ message }}</p>
       <p v-if="error" class="error">{{ error }}</p>
-      <BaseButton type="submit">Guardar</BaseButton>
+      <BaseButton type="submit">
+        <template #icon><Save :size="16" /></template>
+        Guardar
+      </BaseButton>
     </form>
 
     <p class="hint"><RouterLink to="/cuenta/seguridad">Cambiar contraseña</RouterLink></p>

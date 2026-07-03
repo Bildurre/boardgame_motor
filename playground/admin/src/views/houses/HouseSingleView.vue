@@ -57,12 +57,14 @@ onMounted(async () => {
 <template>
   <div v-if="item" class="single">
     <div class="single__bar">
-      <BaseButton variant="secondary" @click="router.push({ name: 'houses' })"
-        ><ArrowLeft :size="16" /> {{ t('houses.title') }}</BaseButton
-      >
-      <BaseButton variant="success" @click="formOpen = true"
-        ><SquarePen :size="16" /> {{ t('common.actions.edit') }}</BaseButton
-      >
+      <BaseButton variant="secondary" @click="router.push({ name: 'houses' })">
+        <template #icon><ArrowLeft :size="16" /></template>
+        {{ t('houses.title') }}
+      </BaseButton>
+      <BaseButton variant="success" @click="formOpen = true">
+        <template #icon><SquarePen :size="16" /></template>
+        {{ t('common.actions.edit') }}
+      </BaseButton>
     </div>
 
     <div class="single__layout">

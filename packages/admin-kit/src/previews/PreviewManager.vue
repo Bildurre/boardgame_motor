@@ -385,13 +385,16 @@ defineExpose({ refreshAll })
                 :disabled="busy"
                 @click="generateMissingItem"
               >
-                <ImagePlus :size="14" /> {{ L.itemGenerateMissing }}
+                <template #icon><ImagePlus :size="14" /></template>
+                {{ L.itemGenerateMissing }}
               </BaseButton>
               <BaseButton variant="secondary" :disabled="busy" @click="regenerateItem">
-                <RefreshCw :size="14" /> {{ L.itemRegenerate }}
+                <template #icon><RefreshCw :size="14" /></template>
+                {{ L.itemRegenerate }}
               </BaseButton>
               <BaseButton variant="danger" :disabled="busy" @click="deleteItem">
-                <Trash2 :size="14" /> {{ L.itemDelete }}
+                <template #icon><Trash2 :size="14" /></template>
+                {{ L.itemDelete }}
               </BaseButton>
             </div>
           </div>

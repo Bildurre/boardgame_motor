@@ -487,9 +487,10 @@ vive en el composable `useEntityList` (ver la guía de montar una web, §4.4).
 ### ManagerCard
 
 - **Finalidad:** tarjeta **fija** (no colapsa) compartida por los gestores:
-  cabecera clicable que **selecciona** la tarjeta (título + `chip` opcional,
-  emite `select`, prop `active`), resumen siempre visible (slot `meta`) y pie
-  de acciones "de todas" (slot `actions`). Se coloca dentro de
+  **toda la tarjeta selecciona** (emite `select`, prop `active`) salvo los
+  botones/enlaces/inputs interiores; título + `chip` opcional, resumen
+  siempre visible (slot `meta`) y pie de acciones "de todas" (slot
+  `actions`). Se coloca dentro de
   `.manager-grid` (1 columna en estrecho, **2 a partir del ancho del
   contenedor** `content` — container query, no viewport). El detalle de la
   tarjeta activa vive en el panel derecho.

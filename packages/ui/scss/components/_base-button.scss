@@ -32,27 +32,18 @@
     line-height: 1.2;
   }
 
-  // Con slot de icono (patrón kontuan): en contenedores estrechos el texto
-  // pasa a mini-etiqueta bajo el icono; a partir de bp-sm vuelve a la fila.
-  // Solo aplica dentro del contenedor `content` (el área de contenido).
+  // Con slot de icono (patrón kontuan): fila por defecto en todas partes;
+  // SOLO cuando el contenedor `content` (el área de contenido) es estrecho,
+  // el texto pasa a mini-etiqueta bajo el icono.
   &--has-icon {
-    flex-direction: column;
-    gap: 2px;
-    padding: $space-1 $space-2;
-
-    .bgm-button__text {
-      font-size: 10px;
-      line-height: 1;
-    }
-
-    @container content (min-width: #{$bp-sm}) {
-      flex-direction: row;
-      gap: $space-2;
-      padding: $space-2 $space-4;
+    @container content (max-width: #{$bp-sm - 1px}) {
+      flex-direction: column;
+      gap: 2px;
+      padding: $space-1 $space-2;
 
       .bgm-button__text {
-        font-size: inherit;
-        line-height: 1.2;
+        font-size: 10px;
+        line-height: 1;
       }
     }
   }

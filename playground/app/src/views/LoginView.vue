@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref } from 'vue'
+import { LogIn } from '@lucide/vue'
 import { useRouter } from 'vue-router'
 import { BaseButton } from '@bgm/ui'
 import { useAuthStore } from '@/stores/auth'
@@ -39,7 +40,10 @@ async function submit() {
         <input v-model="password" type="password" required autocomplete="current-password" />
       </div>
       <p v-if="error" class="error">{{ error }}</p>
-      <BaseButton type="submit">{{ loading ? 'Entrando…' : 'Entrar' }}</BaseButton>
+      <BaseButton type="submit">
+        <template #icon><LogIn :size="16" /></template>
+        {{ loading ? 'Entrando…' : 'Entrar' }}
+      </BaseButton>
     </form>
     <p class="hint">¿No tienes cuenta? <RouterLink to="/registro">Regístrate</RouterLink>.</p>
   </main>

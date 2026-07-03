@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue'
+import { LogIn, User } from '@lucide/vue'
 import { MotorBadge, BaseButton } from '@bgm/ui'
 import { api } from '@/lib/api'
 import { useAuthStore } from '@/stores/auth'
@@ -51,8 +52,16 @@ onMounted(async () => {
     <p v-else-if="error" class="error">No conecta con la API: {{ error }}</p>
 
     <RouterLink v-if="!auth.isAuthenticated" to="/login"
-      ><BaseButton>Entrar</BaseButton></RouterLink
+      ><BaseButton>
+        <template #icon><LogIn :size="16" /></template>
+        Entrar
+      </BaseButton></RouterLink
     >
-    <RouterLink v-else to="/cuenta"><BaseButton>Ir a mi cuenta</BaseButton></RouterLink>
+    <RouterLink v-else to="/cuenta"
+      ><BaseButton>
+        <template #icon><User :size="16" /></template>
+        Ir a mi cuenta
+      </BaseButton></RouterLink
+    >
   </main>
 </template>

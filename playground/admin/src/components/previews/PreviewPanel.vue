@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { RefreshCw, ImageOff } from '@lucide/vue'
+import { ImageOff, ImagePlus, RefreshCw } from '@lucide/vue'
 import { BaseButton, useToast } from '@bgm/ui'
 import { api } from '@/lib/api'
 
@@ -50,9 +50,11 @@ defineExpose({ load })
       <h2>{{ t('previews.title') }}</h2>
       <div class="preview-panel__actions">
         <BaseButton variant="secondary" :disabled="loading" @click="load">
-          <RefreshCw :size="16" /> {{ t('previews.refresh') }}
+          <template #icon><RefreshCw :size="16" /></template>
+          {{ t('previews.refresh') }}
         </BaseButton>
         <BaseButton :disabled="regenerating" @click="regenerate">
+          <template #icon><ImagePlus :size="16" /></template>
           {{ t('previews.regenerate') }}
         </BaseButton>
       </div>
