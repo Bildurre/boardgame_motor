@@ -217,6 +217,20 @@ color. Úsalos siempre en formularios (en modal o donde sea).
 <BaseCheckbox v-model="form.is_published" :label="t('houses.fields.published')" />
 ```
 
+### SearchSelect
+
+- **Finalidad:** select con buscador (combobox de selección única): cerrado
+  ocupa una línea; al desplegar muestra un input de búsqueda y las opciones
+  filtradas con scroll interno — las listas largas viven DENTRO del
+  desplegable. Emparentado con el `TagCombobox` de kontuan (que es
+  multi-etiquetas con "crear"; este es su hermano de selección única):
+  teclado (flechas + Enter + Escape), highlight y cierre por clic exterior.
+- **Props:** `modelValue` (id), `options` (`{id, label}[]`), `placeholder`,
+  `searchPlaceholder`, `noResults`, `canLoadMore` + `loadMoreLabel`.
+  El **filtrado lo hace el padre** con el evento `search` (debounce dentro):
+  en cliente (filtrar el array) o contra el servidor (`?q=`); `loadMore`
+  pagina. Lo usan los gestores de imágenes y PDF en el panel derecho.
+
 ### RichTextInput (WYSIWYG)
 
 - **Finalidad:** editor de texto enriquecido basado en **TipTap** (DC-09). Barra
@@ -501,8 +515,8 @@ vive en el composable `useEntityList` (ver la guía de montar una web, §4.4).
   ManagerCard: una tarjeta FIJA por tipo (sin listas dentro) con el total y
   las **generadas por idioma** (chips `ES 3/3`) y los botones "de todas" con
   icono: **generar faltantes / regenerar todo / borrar todo**. Al seleccionar
-  la tarjeta, el panel derecho muestra un **selector con buscador** (busca en
-  servidor por las columnas `$searchable`, `?q=`) de sus elementos; el
+  la tarjeta, el panel derecho muestra un **SearchSelect** (combobox con buscador; busca
+  en servidor por las columnas `$searchable`, `?q=`, y pagina) de sus elementos; el
   elegido enseña sus **imágenes por idioma** y sus acciones (generar
   faltantes —solo los idiomas que faltan—, regenerar, borrar). Sin
   multiselección: lo masivo son los botones "todas". Barra global con
@@ -528,7 +542,7 @@ vive en el composable `useEntityList` (ver la guía de montar una web, §4.4).
   Generar; los por-entidad con el nº de dueñas y **Generar todo**. Al
   seleccionar la tarjeta, el panel derecho muestra sus PDF por idioma (estado,
   fecha, error completo, Descargar / Regenerar / Borrar) — y en los
-  por-entidad, antes, un **selector con buscador** de la entidad dueña (de
+  por-entidad, antes, un **SearchSelect** (combobox) de la entidad dueña (de
   `sources()`, filtro en cliente) con su Generar. Toda la
   gestión de PDF vive aquí (nada en los singles); añadir un
   export = registrarlo en el backend + su etiqueta en `typeLabels`.
