@@ -36,6 +36,12 @@ const router = createRouter({
       component: () => import('@/views/RenderView.vue'),
       meta: { bare: true },
     },
+    // Páginas del CRM (doc 03): slug traducible en un único segmento.
+    {
+      path: '/:slug([a-z0-9-]+)',
+      name: 'page',
+      component: () => import('@/views/PageView.vue'),
+    },
     // URLs desconocidas: a la home (evita la página en blanco).
     {
       path: '/:pathMatch(.*)*',

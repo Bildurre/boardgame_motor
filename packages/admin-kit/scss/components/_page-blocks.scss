@@ -1,0 +1,120 @@
+@use "tokens" as *;
+
+// Gestor de bloques de una página (PageBlocks) + renderer del DSL de campos.
+.page-blocks {
+  display: grid;
+  gap: $space-3;
+
+  &__bar {
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  &__palette { position: relative; }
+
+  &__menu {
+    position: absolute;
+    top: calc(100% + #{$space-1});
+    right: 0;
+    z-index: 40;
+    min-width: 220px;
+    background: $surface;
+    border: 1px solid $border-strong;
+    border-radius: $radius-md;
+    box-shadow: $shadow-md;
+    padding: $space-1;
+    display: grid;
+    gap: 1px;
+  }
+
+  &__menu-item {
+    background: none;
+    border: 0;
+    border-radius: $radius-sm;
+    color: $text-1;
+    cursor: pointer;
+    padding: $space-2 $space-3;
+    text-align: left;
+    font-size: $fs-13;
+
+    &:hover { background: $surface-2; }
+    // Los bloques con-datos del juego, marcados.
+    &.is-data { color: $accent-500; }
+  }
+
+  &__empty { color: $text-3; margin: 0; }
+
+  &__list {
+    display: grid;
+    gap: $space-2;
+  }
+
+  &__item {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: $space-1 $space-2;
+    border: 1px solid $border;
+    border-radius: $radius-md;
+    background: $surface;
+    padding: $space-2 $space-3;
+    min-width: 0;
+  }
+
+  &__grip {
+    display: inline-flex;
+    color: $text-3;
+    cursor: grab;
+
+    &:active { cursor: grabbing; }
+  }
+
+  &__type { font-weight: $k-fw-semibold; white-space: nowrap; }
+
+  &__summary {
+    flex: 1 1 10rem;
+    min-width: 0;
+    color: $text-3;
+    font-size: $fs-13;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  &__flags { display: flex; gap: $space-1; }
+
+  &__buttons {
+    margin-left: auto;
+    display: flex;
+    gap: $space-1;
+  }
+
+  &__common {
+    border-top: 1px dashed $border;
+    padding-top: $space-3;
+
+    summary {
+      cursor: pointer;
+      color: $text-2;
+      font-size: $fs-13;
+      margin-bottom: $space-3;
+    }
+
+    display: grid;
+    gap: $space-3;
+  }
+}
+
+.schema-fields {
+  display: grid;
+  gap: $space-4;
+
+  &__color,
+  &__image {
+    display: grid;
+    gap: $space-1;
+  }
+}
+
+// Item fantasma del drag (vue-draggable-plus / SortableJS).
+.sortable-ghost { opacity: 0.4; }

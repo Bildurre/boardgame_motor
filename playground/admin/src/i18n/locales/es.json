@@ -6,7 +6,8 @@
     "schemes": "argucias",
     "characters": "personajes",
     "previews": "imagenes",
-    "pdfs": "pdf"
+    "pdfs": "pdf",
+    "pages": "paginas"
   },
   "breadcrumbs": {
     "home": "Inicio",
@@ -15,7 +16,8 @@
     "schemes": "Argucias",
     "characters": "Personajes",
     "previews": "Imágenes",
-    "pdfs": "PDF"
+    "pdfs": "PDF",
+    "pages": "Páginas"
   },
   "nav": {
     "dashboard": "Panel",
@@ -24,7 +26,8 @@
     "schemes": "Argucias",
     "characters": "Personajes",
     "previews": "Imágenes",
-    "pdfs": "PDF"
+    "pdfs": "PDF",
+    "pages": "Páginas"
   },
   "icons": {
     "title": "Iconos",
@@ -285,5 +288,39 @@
       "houseCounters": "Contadores de casas (x9, 25 mm)"
     },
     "selectSource": "Elige un elemento…"
+  },
+  "pages": {
+    "title": "Páginas",
+    "new": "Nueva página",
+    "edit": "Editar página",
+    "homeChip": "Home",
+    "published": "Publicada",
+    "draft": "Borrador",
+    "setHome": "Marcar como home",
+    "confirmDelete": "¿Enviar \"{name}\" a la papelera?",
+    "fields": {
+      "title": "Título",
+      "description": "Descripción",
+      "parent": "Página madre",
+      "metaTitle": "Meta título (SEO)",
+      "metaDescription": "Meta descripción (SEO)",
+      "published": "Publicada",
+      "printable": "Imprimible (PDF)"
+    },
+    "toast": {
+      "saved": "Página guardada.",
+      "deleted": "Página enviada a la papelera.",
+      "homeSet": "Página marcada como home.",
+      "saveError": "No se pudo guardar."
+    },
+    "blocks": {
+      "add": "Añadir bloque",
+      "edit": "Editar bloque",
+      "empty": "La página aún no tiene bloques.",
+      "printable": "Entra en el PDF de la página",
+      "indexable": "Aparece en el índice",
+      "common": "Ajustes comunes",
+      "confirmDelete": "¿Borrar este bloque?"
+    }
   }
 }

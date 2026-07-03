@@ -1,9 +1,38 @@
 <script setup lang="ts">
-import { onMounted, ref } from 'vue'
+import { onMounted, ref, watch } from 'vue'
 import { LogIn, User } from '@lucide/vue'
 import { MotorBadge, BaseButton } from '@bgm/ui'
 import { api } from '@/lib/api'
+import { blockRegistry } from '@/blocks/registry'
 import { useAuthStore } from '@/stores/auth'
+import { useLocalesStore } from '@/stores/locales'
+
+// Si el CRM tiene una home publicada, la home ES esa página (doc 03); el
+// contenido de siempre queda de fallback mientras no la haya.
+interface HomePage {
+  meta: { title: string; description: string }
+  blocks: {
+    id: number
+    component: string
+    settings: Record<string, unknown>
+    data: Record<string, unknown>
+  }[]
+}
+
+const locales = useLocalesStore()
+const homePage = ref<HomePage | null>(null)
+
+async function loadHome() {
+  try {
+    const { data } = await api.get('/pages/home')
+    homePage.value = data.data
+    document.title = homePage.value?.meta.title ?? document.title
+  } catch {
+    homePage.value = null // sin home del CRM: fallback
+  }
+}
+
+watch(() => locales.current, loadHome)
 
 interface Ping {
   name: string
@@ -17,6 +46,8 @@ const ping = ref<Ping | null>(null)
 const error = ref<string | null>(null)
 
 onMounted(async () => {
+  await locales.load()
+  await loadHome()
   try {
     const { data } = await api.get('/motor/ping')
     ping.value = data
@@ -27,7 +58,18 @@ onMounted(async () => {
 </script>
 
 <template>
-  <main class="home">
+  <!-- Home del CRM (si la hay) -->
+  <main v-if="homePage" class="page-view">
+    <component
+      :is="blockRegistry[block.component]"
+      v-for="block in homePage.blocks.filter((b) => blockRegistry[b.component])"
+      :key="block.id"
+      :settings="block.settings"
+      :data="block.data"
+    />
+  </main>
+
+  <main v-else class="home">
     <MotorBadge label="BGM" :version="ping?.version ?? ''" />
     <h1>Playground · Web pública</h1>
     <p v-if="auth.user">

@@ -11,11 +11,12 @@
   },
   "dependencies": {
     "@bgm/ui": "*",
-    "axios": "^1.7.0"
+    "axios": "^1.7.0",
+    "vue-draggable-plus": "^0.6.1"
   },
   "peerDependencies": {
-    "vue": "^3.5.0",
     "@lucide/vue": "^1.0.0",
+    "vue": "^3.5.0",
     "vue-router": "^5.0.0"
   }
 }

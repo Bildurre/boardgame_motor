@@ -1,5 +1,13 @@
 # 03 · CRM de páginas y bloques
 
+> **Estado: núcleo implementado (Fase 5 ✅).** Notas: los valores de TODOS los
+> campos de un bloque viven en `settings` JSON (sin columnas title/subtitle/
+> content); los campos comunes (align, background) los añade el motor a cada
+> tipo; el DSL v1 cubre text/textarea/richtext/number/boolean/select/color/
+> image (repeater/group/entity-ref, pendientes); imágenes de bloque por URL
+> (POST /admin/content/uploads). Flecos: plantillas por juego en la SPA,
+> bloque índice, PDF de páginas imprimibles.
+
 ## Qué hace
 
 Construye la **web pública** (el expositor) por composición de **bloques** dentro

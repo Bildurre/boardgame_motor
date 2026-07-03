@@ -94,6 +94,9 @@ async function logout() {
       <RouterLink class="nav-item" :to="{ name: 'icons' }">
         <Shapes class="nav-icon" :size="20" /><span class="nav-label">{{ t('nav.icons') }}</span>
       </RouterLink>
+      <RouterLink class="nav-item" :to="{ name: 'pages' }">
+        <FileText class="nav-icon" :size="20" /><span class="nav-label">{{ t('nav.pages') }}</span>
+      </RouterLink>
       <RouterLink class="nav-item" :to="{ name: 'previews' }">
         <Images class="nav-icon" :size="20" /><span class="nav-label">{{ t('nav.previews') }}</span>
       </RouterLink>

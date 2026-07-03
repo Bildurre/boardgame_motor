@@ -15,3 +15,6 @@ export { default as EmptyState } from './crud/EmptyState.vue'
 export { default as PreviewManager, type PreviewManagerLabels } from './previews/PreviewManager.vue'
 export { default as PdfManager, type PdfManagerLabels } from './pdf/PdfManager.vue'
 export { useResource, type ResourceMeta } from './crud/useResource'
+// CRM de páginas y bloques (doc 03): editor dirigido por esquema.
+export { default as SchemaFields, type FieldSchema } from './content/SchemaFields.vue'
+export { default as PageBlocks, type PageBlocksLabels } from './content/PageBlocks.vue'

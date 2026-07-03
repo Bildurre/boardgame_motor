@@ -1,0 +1,43 @@
+@use "tokens" as *;
+
+// Listado de páginas del CRM (pocas: lista simple, sin paginación).
+.pages-view {
+  display: grid;
+  gap: $space-4;
+
+  &__empty { color: $text-3; margin: 0; }
+
+  &__list { display: grid; gap: $space-2; }
+
+  &__item {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: $space-1 $space-2;
+    border: 1px solid $border;
+    border-radius: $radius-md;
+    background: $surface;
+    padding: $space-2 $space-3;
+    min-width: 0;
+
+    &.is-child { margin-left: $space-6; }
+  }
+
+  &__title {
+    background: none;
+    border: 0;
+    padding: 0;
+    color: $text-1;
+    font-weight: $k-fw-semibold;
+    cursor: pointer;
+    text-align: left;
+
+    &:hover { color: $accent-500; }
+  }
+
+  &__slug { color: $text-3; font-size: $fs-13; }
+
+  &__chips { display: flex; gap: $space-1; flex-wrap: wrap; }
+
+  &__buttons { margin-left: auto; display: flex; gap: $space-1; }
+}

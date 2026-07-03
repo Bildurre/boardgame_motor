@@ -6,7 +6,8 @@
     "schemes": "schemes",
     "characters": "characters",
     "previews": "previews",
-    "pdfs": "pdfs"
+    "pdfs": "pdfs",
+    "pages": "pages"
   },
   "breadcrumbs": {
     "home": "Home",
@@ -15,7 +16,8 @@
     "schemes": "Schemes",
     "characters": "Characters",
     "previews": "Images",
-    "pdfs": "PDFs"
+    "pdfs": "PDFs",
+    "pages": "Pages"
   },
   "nav": {
     "dashboard": "Dashboard",
@@ -24,7 +26,8 @@
     "schemes": "Schemes",
     "characters": "Characters",
     "previews": "Images",
-    "pdfs": "PDFs"
+    "pdfs": "PDFs",
+    "pages": "Pages"
   },
   "icons": {
     "title": "Icons",
@@ -285,5 +288,90 @@
       "houseCounters": "House counters (x9, 25 mm)"
     },
     "selectSource": "Pick an item…"
+  },
+  "pages": {
+    "title": "Pages",
+    "new": "New page",
+    "edit": "Edit page",
+    "homeChip": "Home",
+    "published": "Published",
+    "draft": "Draft",
+    "setHome": "Set as home",
+    "confirmDelete": "Send \"{name}\" to the trash?",
+    "fields": {
+      "title": "Title",
+      "description": "Description",
+      "parent": "Parent page",
+      "metaTitle": "Meta title (SEO)",
+      "metaDescription": "Meta description (SEO)",
+      "published": "Published",
+      "printable": "Printable (PDF)"
+    },
+    "toast": {
+      "saved": "Page saved.",
+      "deleted": "Page sent to the trash.",
+      "homeSet": "Page set as home.",
+      "saveError": "Could not save."
+    },
+    "blocks": {
+      "add": "Add block",
+      "edit": "Edit block",
+      "empty": "This page has no blocks yet.",
+      "printable": "Included in the page PDF",
+      "indexable": "Shown in the index",
+      "common": "Common settings",
+      "confirmDelete": "Delete this block?"
+    }
+  },
+  "blockTypes": {
+    "header": "Header",
+    "text": "Text",
+    "text-card": "Text card",
+    "quote": "Quote",
+    "cta": "Call to action",
+    "characters-grid": "Characters grid",
+    "houses-schemes": "Houses and schemes"
+  },
+  "blockFields": {
+    "title": "Title",
+    "subtitle": "Subtitle",
+    "body": "Text",
+    "label": "Label",
+    "quote": "Quote",
+    "author": "Author",
+    "button_text": "Button text",
+    "button_url": "Button link",
+    "button_variant": "Button style",
+    "image": "Image",
+    "image_position": "Image position",
+    "limit": "Max cards",
+    "order": "Order",
+    "intro": "Intro",
+    "show_empty": "Show houses without schemes",
+    "align": "Alignment",
+    "background": "Background color"
+  },
+  "blockOptions": {
+    "align": {
+      "left": "Left",
+      "center": "Center",
+      "right": "Right",
+      "justify": "Justify"
+    },
+    "order": {
+      "recent": "Most recent",
+      "cost": "By cost",
+      "name": "By name"
+    },
+    "image_position": {
+      "top": "Top",
+      "left": "Left",
+      "right": "Right",
+      "bottom": "Bottom"
+    },
+    "button_variant": {
+      "primary": "Primary",
+      "secondary": "Secondary"
+    }
   }
 }

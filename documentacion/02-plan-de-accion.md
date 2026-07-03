@@ -78,15 +78,16 @@
 - [x] Multi-idioma (un PDF por locale). API `/api/admin/pdfs` (+ catálogo `GET /admin/pdfs/exports`) + descarga pública de permanentes + `PdfManager` en admin-kit: **toda la gestión centralizada en la sección PDF del admin** (catálogo dirigido por los exports registrados; nada en los singles). Layout `card` por defecto = **Magic 63×88** (9/A4); presets propios del juego con `Pdfs::layout()` y **tamaño por export** vía `layout()` (playground: personajes al doble `card-big`, argucias en Magic, y `house-tokens` con 9 tokens redondos de 40 mm por casa).
 - **Hito:** ✅ generar y regenerar desde el admin con un clic (fichero versionado, borra el anterior); PDF temporal a la carta cubierto por API + tests (la UI pública llega con la Fase 6). Verificado con PDF real (4 cartas por A4 con marcas de corte).
 
-### Fase 5 — CRM de páginas y bloques
+### Fase 5 — CRM de páginas y bloques ✅ (núcleo)
 **Meta:** construir la web pública por bloques, y añadir un bloque nuevo sin sufrir.
 > Plan: `funcionalidades/03-crm-paginas-bloques.md`.
 
-- [ ] Modelos Page/Block (jerárquicos, traducibles, reordenables), plantillas, SEO, printable/indexable.
-- [ ] **Registro de tipos de bloque**: presentación (motor) + con-datos (juego), con esquema declarativo de campos y settings.
-- [ ] Editor de bloques en admin-kit (paleta, formularios por tipo, drag, preview).
-- [ ] Render público de páginas en `app` + SEO/meta + integración con PDF (páginas imprimibles).
-- **Hito:** crear una página con varios bloques (incluido uno con-datos del playground), reordenar, traducir, publicar y verla en público con su URL traducible.
+- [x] Modelos Page/Block (jerárquicos, traducibles, reordenables), SEO, home única, printable/indexable. Bloques SIN columnas por tipo: todo en `settings` JSON.
+- [x] **`BlockType` + `BlockTypeRegistry`** (facade `Blocks`): un tipo se declara UNA vez (esquema de campos DC-08) y de ahí salen formulario, validación, localización y `resolveData`. Motor: header/text/text-card/quote/cta; juego: `Blocks::register(...)`. `HtmlSanitizer` en servidor (DC-09). Caché por (página, locale) invalidada al editar (DC-10).
+- [x] Editor en admin-kit: `SchemaFields` (renderer del DSL) + `PageBlocks` (paleta, drag con vue-draggable-plus DC-17, modal generado). Playground: vistas de páginas + i18n.
+- [x] Render público en `app`: nav de páginas publicadas, home del CRM, `PageView` por slug traducible con redirección a la canónica (DC-12); `blockRegistry` = componentes del motor (@bgm/ui) + los del juego.
+- [ ] Flecos a futuro: plantillas por juego en la SPA, bloque índice automático, integración PDF de páginas imprimibles (con doc 02), repeater/group/entity-ref del DSL.
+- **Hito:** ✅ página con bloques (incluidos los con-datos del playground: rejilla de personajes y casas-argucias), reordenable, traducible, publicada y visible en público con URL traducible. **Añadir un bloque = una clase + un componente Vue.**
 
 ### Fase 6 — Backup, web pública y panel de usuario extensible
 **Meta:** rematar lo transversal y dejar ganchos de extensión por juego.

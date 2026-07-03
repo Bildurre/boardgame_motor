@@ -1,0 +1,72 @@
+@use "tokens" as *;
+
+// Bloques públicos del CRM (doc 03): estilos base, cada juego los ajusta.
+.block {
+  padding: $space-6 0;
+  background: var(--block-bg, transparent);
+
+  &__inner {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 0 $space-4;
+    display: grid;
+    gap: $space-3;
+  }
+
+  &__title { margin: 0; }
+  &__subtitle { margin: 0; color: $text-2; font-size: $fs-18; }
+  &__text { color: $text-1; }
+
+  &__label {
+    display: inline-block;
+    justify-self: start;
+    font-size: $fs-12;
+    font-weight: $k-fw-semibold;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: $accent-500;
+    border: 1px solid color-mix(in srgb, $accent-500 45%, transparent);
+    border-radius: $radius-pill;
+    padding: 2px $space-3;
+  }
+
+  &__card {
+    background: $surface;
+    border: 1px solid $border;
+    border-radius: $radius-lg;
+    box-shadow: $shadow-sm;
+    padding: $space-6;
+    display: grid;
+    gap: $space-3;
+
+    .bgm-button { justify-self: start; text-decoration: none; }
+  }
+
+  &--header .block__title { font-size: $fs-28; }
+
+  &__media-layout { display: grid; gap: $space-4; }
+  &__image {
+    max-width: 100%;
+    border-radius: $radius-md;
+    justify-self: center;
+  }
+
+  &--image-left .block__media-layout,
+  &--image-right .block__media-layout {
+    @container content (min-width: #{$bp-sm}) {
+      grid-template-columns: minmax(0, 2fr) minmax(0, 3fr);
+      align-items: start;
+    }
+  }
+  &--image-right .block__media-layout .block__image { order: 2; }
+  &--image-bottom .block__media-layout .block__image { order: 2; }
+
+  &--quote .block__quote {
+    margin: 0;
+    border-left: 3px solid $accent-500;
+    padding-left: $space-4;
+    font-size: $fs-18;
+    font-style: italic;
+  }
+  &__author { margin-top: $space-2; color: $text-3; font-style: normal; font-size: $fs-14; }
+}

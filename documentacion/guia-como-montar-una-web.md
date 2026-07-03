@@ -605,6 +605,32 @@ Schedule::command('pdf:cleanup')->daily();
 
 La UI pública de esta colección llega con el andamiaje de la web (Fase 6).
 
+## 6bis. CRM de páginas y bloques (Fase 5)
+
+El motor pone TODO el CRM (páginas jerárquicas traducibles con SEO y home
+única, bloques reordenables, editor generado, render público con caché); el
+juego solo **declara sus tipos de bloque**. Añadir un bloque son dos piezas:
+
+1. **La clase** en `api/app/Blocks/` (extiende `Bgm\Core\Content\BlockType`):
+   `$key`, `fields()` con el DSL (DC-08: `Field::text|richtext|number|boolean|
+   select|color|image`, con `->translatable() ->required() ->default()`) y,
+   si consulta modelos del juego, `resolveData($block, $locale)`. Registro:
+   `Blocks::register(MiBloque::class)` en el AppServiceProvider. Con eso ya
+   está en la paleta del admin, con formulario y validación generados.
+2. **El componente Vue** en `app/src/blocks/` + su entrada en
+   `app/src/blocks/registry.ts` (clave = `$key`). Recibe `settings`
+   (localizados) y `data` (lo de `resolveData`). Los cinco de presentación
+   del motor vienen hechos (`motorBlockComponents` de `@bgm/ui`).
+
+En el admin: vista Páginas (lista + modal) y single con `PageBlocks`
+(admin-kit): paleta, drag (DC-17) y modal generado por `SchemaFields`.
+Etiquetas localizables por convención i18n: `blockTypes.{key}`,
+`blockFields.{key}`, `blockOptions.{key}.{valor}` (fallback: las del esquema).
+En público: `PageView` pide `/api/pages/{slug}` (slug resuelto en cualquier
+locale, redirige a la canónica DC-12), la nav sale de `/api/pages/nav` y la
+home del CRM manda si existe. El texto rico se sanea en servidor (DC-09) y el
+payload se cachea por (página, locale) con invalidación al editar (DC-10).
+
 ## 7. Checklist para una entidad nueva
 
 Backend:

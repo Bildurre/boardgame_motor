@@ -6,7 +6,8 @@
     "schemes": "argaziak",
     "characters": "pertsonaiak",
     "previews": "irudiak",
-    "pdfs": "pdfak"
+    "pdfs": "pdfak",
+    "pages": "orriak"
   },
   "breadcrumbs": {
     "home": "Hasiera",
@@ -15,7 +16,8 @@
     "schemes": "Argaziak",
     "characters": "Pertsonaiak",
     "previews": "Irudiak",
-    "pdfs": "PDFak"
+    "pdfs": "PDFak",
+    "pages": "Orriak"
   },
   "nav": {
     "dashboard": "Panela",
@@ -24,7 +26,8 @@
     "schemes": "Argaziak",
     "characters": "Pertsonaiak",
     "previews": "Irudiak",
-    "pdfs": "PDFak"
+    "pdfs": "PDFak",
+    "pages": "Orriak"
   },
   "icons": {
     "title": "Ikonoak",
@@ -285,5 +288,90 @@
       "houseCounters": "Etxeen kontagailuak (x9, 25 mm)"
     },
     "selectSource": "Aukeratu elementu bat…"
+  },
+  "pages": {
+    "title": "Orriak",
+    "new": "Orri berria",
+    "edit": "Editatu orria",
+    "homeChip": "Hasiera",
+    "published": "Argitaratuta",
+    "draft": "Zirriborroa",
+    "setHome": "Ezarri hasiera gisa",
+    "confirmDelete": "\"{name}\" zakarrontzira bidali?",
+    "fields": {
+      "title": "Izenburua",
+      "description": "Deskribapena",
+      "parent": "Orri gurasoa",
+      "metaTitle": "Meta izenburua (SEO)",
+      "metaDescription": "Meta deskribapena (SEO)",
+      "published": "Argitaratuta",
+      "printable": "Inprimagarria (PDF)"
+    },
+    "toast": {
+      "saved": "Orria gordeta.",
+      "deleted": "Orria zakarrontzira bidalita.",
+      "homeSet": "Orria hasiera gisa ezarrita.",
+      "saveError": "Ezin izan da gorde."
+    },
+    "blocks": {
+      "add": "Gehitu blokea",
+      "edit": "Editatu blokea",
+      "empty": "Orriak ez du blokerik oraindik.",
+      "printable": "Orriaren PDFan sartzen da",
+      "indexable": "Aurkibidean agertzen da",
+      "common": "Ezarpen komunak",
+      "confirmDelete": "Bloke hau ezabatu?"
+    }
+  },
+  "blockTypes": {
+    "header": "Goiburua",
+    "text": "Testua",
+    "text-card": "Testu-txartela",
+    "quote": "Aipua",
+    "cta": "Ekintza-deia",
+    "characters-grid": "Pertsonaien sareta",
+    "houses-schemes": "Etxeak eta argukiak"
+  },
+  "blockFields": {
+    "title": "Izenburua",
+    "subtitle": "Azpititulua",
+    "body": "Testua",
+    "label": "Etiketa",
+    "quote": "Aipua",
+    "author": "Egilea",
+    "button_text": "Botoiaren testua",
+    "button_url": "Botoiaren esteka",
+    "button_variant": "Botoiaren estiloa",
+    "image": "Irudia",
+    "image_position": "Irudiaren posizioa",
+    "limit": "Karta kopurua gehienez",
+    "order": "Ordena",
+    "intro": "Sarrera",
+    "show_empty": "Erakutsi argukirik gabeko etxeak",
+    "align": "Lerrokatzea",
+    "background": "Atzeko kolorea"
+  },
+  "blockOptions": {
+    "align": {
+      "left": "Ezkerrera",
+      "center": "Erdian",
+      "right": "Eskuinera",
+      "justify": "Justifikatuta"
+    },
+    "order": {
+      "recent": "Berrienak",
+      "cost": "Kostuaren arabera",
+      "name": "Izenaren arabera"
+    },
+    "image_position": {
+      "top": "Goian",
+      "left": "Ezkerrean",
+      "right": "Eskuinean",
+      "bottom": "Behean"
+    },
+    "button_variant": {
+      "primary": "Nagusia",
+      "secondary": "Bigarren mailakoa"
+    }
   }
 }

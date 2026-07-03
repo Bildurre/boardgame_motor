@@ -109,6 +109,20 @@ export function createLocalizedRoutes(locale: string): RouteRecordRaw[] {
       meta: { admin: true, titleKey: 'previewsManager.title', breadcrumbs: [{ key: 'previews' }] },
     },
     {
+      path: `/${p.pages}`,
+      name: 'pages',
+      component: () => import('@/views/pages/PagesListView.vue'),
+      alias: buildAliases((t) => `/${t.pages}`, locale),
+      meta: { admin: true, titleKey: 'pages.title', breadcrumbs: [{ key: 'pages' }] },
+    },
+    {
+      path: `/${p.pages}/:id`,
+      name: 'page',
+      component: () => import('@/views/pages/PageSingleView.vue'),
+      alias: buildAliases((t) => `/${t.pages}/:id`, locale),
+      meta: { admin: true, titleKey: 'pages.title', breadcrumbs: [{ key: 'pages', to: 'pages' }] },
+    },
+    {
       path: `/${p.pdfs}`,
       name: 'pdfs',
       component: () => import('@/views/pdfs/PdfsView.vue'),
