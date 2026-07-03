@@ -8,6 +8,8 @@ defineProps<{
   title: string
   clickable?: boolean
   muted?: boolean
+  /** Marca la tarjeta como seleccionada (panel derecho). */
+  active?: boolean
 }>()
 
 defineEmits<{ view: [] }>()
@@ -24,7 +26,11 @@ defineSlots<{
 <template>
   <div
     class="entity-card"
-    :class="{ 'entity-card--clickable': clickable, 'entity-card--muted': muted }"
+    :class="{
+      'entity-card--clickable': clickable,
+      'entity-card--muted': muted,
+      'is-active': active,
+    }"
     @click="clickable ? $emit('view') : undefined"
   >
     <div v-if="$slots.media" class="entity-card__media"><slot name="media" /></div>

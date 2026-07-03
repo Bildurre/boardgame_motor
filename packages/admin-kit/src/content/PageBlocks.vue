@@ -35,6 +35,7 @@ export interface PageBlocksLabels {
   error: string
   panelTitle: string
   panelEmpty: string
+  panelContent: string
 }
 
 const defaultLabels: PageBlocksLabels = {
@@ -51,6 +52,7 @@ const defaultLabels: PageBlocksLabels = {
   error: 'No se ha podido completar la acción.',
   panelTitle: 'Bloque',
   panelEmpty: 'Selecciona un bloque para ver sus acciones.',
+  panelContent: 'Contenido',
 }
 
 const props = withDefaults(
@@ -146,6 +148,45 @@ function summary(block: BlockRow): string {
   }
   return ''
 }
+
+/** Etiqueta de un campo del esquema (misma convención que SchemaFields). */
+function fieldLabel(field: FieldSchema): string {
+  return props.translate?.(`blockFields.${field.key}`, field.label) ?? field.label
+}
+
+/** Valor legible de un campo para el panel: texto plano, truncado por CSS. */
+function fieldValue(field: FieldSchema, block: BlockRow): string {
+  const raw = block.settings?.[field.key]
+  if (raw === null || raw === undefined || raw === '') return ''
+  if (field.translatable && typeof raw === 'object') {
+    const text = Object.values(raw as Record<string, string>).find(Boolean) ?? ''
+    return text
+      .replace(/<[^>]*>/g, ' ')
+      .replace(/\s+/g, ' ')
+      .trim()
+  }
+  if (field.type === 'boolean') return raw ? '✓' : '✗'
+  if (field.type === 'select' && field.options) {
+    const text = field.options[String(raw)] ?? String(raw)
+    return props.translate?.(`blockOptions.${field.key}.${String(raw)}`, text) ?? text
+  }
+  return String(raw)
+}
+
+/** Campos del bloque seleccionado con valor (la imagen se pinta aparte). */
+const selectedFields = computed(() => {
+  if (!selected.value) return []
+  const type = types.value.find((t) => t.key === selected.value?.type)
+  return (type?.fields ?? [])
+    .map((field) => ({
+      field,
+      value:
+        field.type === 'image'
+          ? String(selected.value?.settings?.[field.key] ?? '')
+          : fieldValue(field, selected.value!),
+    }))
+    .filter((entry) => entry.value)
+})
 
 async function load() {
   try {
@@ -366,6 +407,28 @@ defineExpose({ reload: load })
             :label="L.indexable"
             @update:model-value="(v) => toggleFlag('is_indexable', v)"
           />
+
+          <!-- Contenido: cada campo del bloque con su valor (truncado) -->
+          <div v-if="selectedFields.length" class="manager-detail">
+            <p class="manager-panel__kicker">{{ L.panelContent }}</p>
+            <dl class="manager-detail__fields">
+              <div
+                v-for="entry in selectedFields"
+                :key="entry.field.key"
+                class="manager-detail__field"
+              >
+                <dt>{{ fieldLabel(entry.field) }}</dt>
+                <dd v-if="entry.field.type === 'image'">
+                  <img
+                    :src="entry.value"
+                    :alt="fieldLabel(entry.field)"
+                    class="manager-detail__thumb"
+                  />
+                </dd>
+                <dd v-else>{{ entry.value }}</dd>
+              </div>
+            </dl>
+          </div>
         </template>
       </div>
     </Teleport>

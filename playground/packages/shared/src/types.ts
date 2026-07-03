@@ -9,6 +9,8 @@ export interface EntityBase {
   image: string | null
   is_published: boolean
   deleted_at: string | null
+  /** PNG generados por idioma (solo entidades renderizables). */
+  previews?: Record<string, string>
 }
 
 export interface Scheme extends EntityBase {

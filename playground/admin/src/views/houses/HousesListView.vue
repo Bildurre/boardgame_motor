@@ -1,12 +1,15 @@
 <script setup lang="ts">
 import { onMounted } from 'vue'
-import { Eye, EyeOff, FlameKindling, Plus, RotateCcw, SquarePen, Trash2 } from '@lucide/vue'
+import { ArrowRight, Plus, SquarePen } from '@lucide/vue'
 import { BaseGrid, EntityCard, FilterBar, EmptyState } from '@bgm/admin-kit'
 import { BaseButton, BaseTabs, IconButton } from '@bgm/ui'
 import { useEntityList } from '@/composables/useEntityList'
 import type { House } from '@playground/shared'
 import HouseFormModal from '@/components/houses/HouseFormModal.vue'
+import EntityPanel from '@/components/EntityPanel.vue'
 
+// La tarjeta selecciona (panel derecho con TODAS las acciones); en la tarjeta
+// quedan solo las básicas: abrir y editar.
 const {
   t,
   items,
@@ -27,6 +30,9 @@ const {
   del,
   restore,
   forceDelete,
+  selectedId,
+  selected,
+  select,
 } = useEntityList<House>({
   resource: '/admin/houses',
   ns: 'houses',
@@ -58,8 +64,9 @@ onMounted(init)
         :key="item.id"
         :title="tr(item.name)"
         :muted="!!item.deleted_at"
+        :active="selectedId === item.id"
         clickable
-        @view="goSingle(item)"
+        @view="select(item)"
       >
         <template #media>
           <div class="house-emblem" :style="{ '--c': item.color || 'transparent' }">
@@ -69,32 +76,12 @@ onMounted(init)
         </template>
 
         <template #actions>
-          <template v-if="item.deleted_at">
-            <IconButton variant="info" :title="t('common.actions.restore')" @click="restore(item)"
-              ><RotateCcw :size="18"
-            /></IconButton>
-            <IconButton
-              variant="danger"
-              :title="t('common.actions.forceDelete')"
-              @click="forceDelete(item)"
-              ><FlameKindling :size="18"
-            /></IconButton>
-          </template>
-          <template v-else>
+          <template v-if="!item.deleted_at">
             <IconButton variant="success" :title="t('common.actions.edit')" @click="edit(item)"
               ><SquarePen :size="18"
             /></IconButton>
-            <IconButton
-              :variant="item.is_published ? 'warning' : 'info'"
-              :title="
-                item.is_published ? t('common.actions.unpublish') : t('common.actions.publish')
-              "
-              @click="togglePublish(item)"
-            >
-              <component :is="item.is_published ? EyeOff : Eye" :size="18" />
-            </IconButton>
-            <IconButton variant="danger" :title="t('common.actions.delete')" @click="del(item)"
-              ><Trash2 :size="18"
+            <IconButton variant="info" :title="t('common.actions.open')" @click="goSingle(item)"
+              ><ArrowRight :size="18"
             /></IconButton>
           </template>
         </template>
@@ -120,5 +107,25 @@ onMounted(init)
     </BaseGrid>
 
     <HouseFormModal v-model="formOpen" :mode="formMode" :target-slug="formSlug" @saved="onSaved" />
+
+    <EntityPanel
+      :item="selected"
+      :name="selected ? tr(selected.name) : ''"
+      :kicker="t('houses.panelTitle')"
+      :empty="t('houses.panelEmpty')"
+      @open="selected && goSingle(selected)"
+      @edit="selected && edit(selected)"
+      @toggle-publish="selected && togglePublish(selected)"
+      @del="selected && del(selected)"
+      @restore="selected && restore(selected)"
+      @force-delete="selected && forceDelete(selected)"
+    >
+      <template #meta>
+        <p v-if="selected" class="manager-detail__meta">
+          <span class="swatch" :style="{ background: selected.color || 'transparent' }" />
+          {{ selected.color || '—' }}
+        </p>
+      </template>
+    </EntityPanel>
   </div>
 </template>

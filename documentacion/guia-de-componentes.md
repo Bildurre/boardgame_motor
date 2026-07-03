@@ -517,6 +517,48 @@ vive en el composable `useEntityList` (ver la guía de montar una web, §4.4).
   (abrir, editar, marcar home, borrar) más las **acciones rápidas sin modal**
   (publicar/despublicar, imprimible, indexable — toggles que hacen PUT solo
   con el flag). El título/flecha de la tarjeta de página entra al single.
+- **Info del panel:** con una **página** seleccionada, debajo de los slugs
+  aparece la sección **"Bloques"**: sus bloques en orden, cada uno con el tipo
+  y el primer texto traducible con valor (una línea, truncada —
+  `.manager-detail__rows` / `__row-line` / `__row-text`). Con un **bloque**
+  seleccionado, la sección **"Contenido"** lista cada campo de su esquema con
+  su valor legible (traducible → primer idioma sin HTML, select → etiqueta de
+  la opción, boolean → ✓/✗, imagen → miniatura); los valores largos se
+  recortan a unas líneas con `line-clamp` (`.manager-detail__field`). La
+  etiqueta de la sección llega por `labels.panelContent`.
+
+### EntityPanel (playground) + selección en listados de entidades
+
+- **Finalidad:** panel derecho de los listados de entidades del juego
+  (casas, argucias, personajes): la **tarjeta entera selecciona** (prop
+  `active` de EntityCard marca la elegida) y en la tarjeta quedan solo las
+  acciones básicas (editar + abrir). El panel trae **todas** las acciones
+  arriba del todo — Abrir, Editar, Publicar/Despublicar, **Regenerar PNG**
+  (solo entidades renderizables) y Borrar; en papelera, Restaurar + Borrar
+  definitivamente — más la info del elemento (slot `meta`) y, si
+  `hasPreview`, las **imágenes por idioma** (huecos "—" para las que faltan).
+- **Dónde:** `playground/admin/src/components/EntityPanel.vue`; la selección
+  (`selectedId` / `selected` / `select()`, registro del sidebar con
+  `` t(`${ns}.panelTitle`) `` y `reveal()`) vive en `useEntityList`. Es código
+  del playground (usa i18n y el store de locales del juego), no del admin-kit:
+  cada juego copia el patrón.
+
+```vue
+<EntityPanel
+  :item="selected"
+  :name="selected ? tr(selected.name) : ''"
+  :kicker="t('houses.panelTitle')"
+  :empty="t('houses.panelEmpty')"
+  :has-preview="hasPreview"
+  @open="selected && goSingle(selected)"
+  @edit="selected && edit(selected)"
+  @toggle-publish="selected && togglePublish(selected)"
+  @regenerate="selected && regeneratePreview(selected)"
+  @del="selected && del(selected)"
+  @restore="selected && restore(selected)"
+  @force-delete="selected && forceDelete(selected)"
+/>
+```
 
 ### PreviewManager
 

@@ -1,12 +1,15 @@
 <script setup lang="ts">
 import { onMounted } from 'vue'
-import { Camera, Eye, EyeOff, FlameKindling, Plus, RotateCcw, SquarePen, Trash2 } from '@lucide/vue'
+import { ArrowRight, Plus, SquarePen } from '@lucide/vue'
 import { BaseGrid, EntityCard, FilterBar, EmptyState } from '@bgm/admin-kit'
 import { BaseButton, BaseTabs, IconButton } from '@bgm/ui'
 import { useEntityList } from '@/composables/useEntityList'
 import type { Scheme } from '@playground/shared'
 import SchemeFormModal from '@/components/schemes/SchemeFormModal.vue'
+import EntityPanel from '@/components/EntityPanel.vue'
 
+// La tarjeta selecciona (panel derecho con TODAS las acciones + PNG por
+// idioma); en la tarjeta quedan solo las básicas: abrir y editar.
 const {
   t,
   items,
@@ -28,6 +31,10 @@ const {
   restore,
   forceDelete,
   regeneratePreview,
+  selectedId,
+  selected,
+  select,
+  hasPreview,
 } = useEntityList<Scheme>({
   resource: '/admin/schemes',
   ns: 'schemes',
@@ -59,8 +66,9 @@ onMounted(init)
         :key="item.id"
         :title="tr(item.title)"
         :muted="!!item.deleted_at"
+        :active="selectedId === item.id"
         clickable
-        @view="goSingle(item)"
+        @view="select(item)"
       >
         <template #media>
           <div class="card-art">
@@ -70,38 +78,12 @@ onMounted(init)
         </template>
 
         <template #actions>
-          <template v-if="item.deleted_at">
-            <IconButton variant="info" :title="t('common.actions.restore')" @click="restore(item)"
-              ><RotateCcw :size="18"
-            /></IconButton>
-            <IconButton
-              variant="danger"
-              :title="t('common.actions.forceDelete')"
-              @click="forceDelete(item)"
-              ><FlameKindling :size="18"
-            /></IconButton>
-          </template>
-          <template v-else>
+          <template v-if="!item.deleted_at">
             <IconButton variant="success" :title="t('common.actions.edit')" @click="edit(item)"
               ><SquarePen :size="18"
             /></IconButton>
-            <IconButton
-              :variant="item.is_published ? 'warning' : 'info'"
-              :title="
-                item.is_published ? t('common.actions.unpublish') : t('common.actions.publish')
-              "
-              @click="togglePublish(item)"
-            >
-              <component :is="item.is_published ? EyeOff : Eye" :size="18" />
-            </IconButton>
-            <IconButton
-              variant="info"
-              :title="t('previews.regenerate')"
-              @click="regeneratePreview(item)"
-              ><Camera :size="18"
-            /></IconButton>
-            <IconButton variant="danger" :title="t('common.actions.delete')" @click="del(item)"
-              ><Trash2 :size="18"
+            <IconButton variant="info" :title="t('common.actions.open')" @click="goSingle(item)"
+              ><ArrowRight :size="18"
             /></IconButton>
           </template>
         </template>
@@ -124,5 +106,27 @@ onMounted(init)
     </BaseGrid>
 
     <SchemeFormModal v-model="formOpen" :mode="formMode" :target-slug="formSlug" @saved="onSaved" />
+
+    <EntityPanel
+      :item="selected"
+      :name="selected ? tr(selected.title) : ''"
+      :kicker="t('schemes.panelTitle')"
+      :empty="t('schemes.panelEmpty')"
+      :has-preview="hasPreview"
+      @open="selected && goSingle(selected)"
+      @edit="selected && edit(selected)"
+      @toggle-publish="selected && togglePublish(selected)"
+      @regenerate="selected && regeneratePreview(selected)"
+      @del="selected && del(selected)"
+      @restore="selected && restore(selected)"
+      @force-delete="selected && forceDelete(selected)"
+    >
+      <template #meta>
+        <p v-if="selected" class="manager-detail__meta">
+          <strong>{{ t('schemes.fields.house') }}</strong> {{ tr(selected.house?.name) }} ·
+          <strong>{{ t('schemes.fields.cost') }}</strong> {{ selected.cost }}
+        </p>
+      </template>
+    </EntityPanel>
   </div>
 </template>

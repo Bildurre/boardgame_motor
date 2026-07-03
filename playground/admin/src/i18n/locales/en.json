@@ -55,6 +55,7 @@
     "fileTooLarge": "The file is too large.",
     "fileType": "Invalid file format.",
     "actions": {
+      "open": "Open",
       "edit": "Edit",
       "publish": "Publish",
       "unpublish": "Unpublish",
@@ -90,6 +91,8 @@
     "new": "New house",
     "edit": "Edit house",
     "newButton": "New house",
+    "panelTitle": "House",
+    "panelEmpty": "Pick a house to see its actions.",
     "tabs": {
       "published": "Published",
       "draft": "Draft",
@@ -131,6 +134,8 @@
     "new": "New scheme",
     "edit": "Edit scheme",
     "newButton": "New scheme",
+    "panelTitle": "Scheme",
+    "panelEmpty": "Pick a scheme to see its actions.",
     "tabs": {
       "published": "Published",
       "draft": "Draft",
@@ -173,6 +178,8 @@
     "new": "New character",
     "edit": "Edit character",
     "newButton": "New character",
+    "panelTitle": "Character",
+    "panelEmpty": "Pick a character to see its actions.",
     "tabs": {
       "published": "Published",
       "draft": "Draft",
@@ -323,10 +330,12 @@
       "common": "Common settings",
       "confirmDelete": "Delete this block?",
       "panelTitle": "Block",
-      "panelEmpty": "Pick a block to see its actions."
+      "panelEmpty": "Pick a block to see its actions.",
+      "panelContent": "Content"
     },
     "panelTitle": "Page",
     "panelEmpty": "Pick a page to see its actions.",
+    "panelBlocks": "Blocks",
     "open": "Open"
   },
   "blockTypes": {

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, onMounted, ref } from 'vue'
+import { computed, onMounted, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
 import { ArrowRight, House as HomeIcon, Plus, SquarePen, Trash2 } from '@lucide/vue'
@@ -12,7 +12,7 @@ import PageFormModal, { type PageRow } from '@/components/pages/PageFormModal.vu
 // el panel derecho trae las acciones (patrón kontuan, arriba del todo) y las
 // rápidas sin modal (publicar, imprimible, home). El título y la flecha
 // entran al single (bloques).
-const { t } = useI18n()
+const { t, te } = useI18n()
 const router = useRouter()
 const toast = useToast()
 const { confirm } = useConfirm()
@@ -27,6 +27,48 @@ const editing = ref<PageRow | null>(null)
 const selectedId = ref<number | null>(null)
 
 const selected = computed(() => pages.value.find((p) => p.id === selectedId.value) ?? null)
+
+// Bloques de la página seleccionada (solo tipo + resumen de una línea).
+interface BlockTypeInfo {
+  key: string
+  name: string
+  fields: { key: string; translatable: boolean }[]
+}
+const blockTypes = ref<BlockTypeInfo[]>([])
+const selectedBlocks = ref<{ id: number; type: string; settings: Record<string, unknown> }[]>([])
+
+function blockTypeName(key: string): string {
+  const fallback = blockTypes.value.find((t) => t.key === key)?.name ?? key
+  return te(`blockTypes.${key}`) ? t(`blockTypes.${key}`) : fallback
+}
+
+/** Primer texto traducible con valor, sin HTML (una línea en el panel). */
+function blockSummary(block: { type: string; settings: Record<string, unknown> }): string {
+  const type = blockTypes.value.find((t) => t.key === block.type)
+  for (const field of type?.fields ?? []) {
+    const value = block.settings?.[field.key]
+    if (field.translatable && value && typeof value === 'object') {
+      const text = Object.values(value as Record<string, string>).find(Boolean)
+      if (text) return text.replace(/<[^>]*>/g, '').slice(0, 90)
+    }
+  }
+  return ''
+}
+
+watch(selectedId, async (id) => {
+  selectedBlocks.value = []
+  if (!id) return
+  try {
+    if (!blockTypes.value.length) {
+      const { data } = await api.get('/admin/block-types')
+      blockTypes.value = data.data
+    }
+    const { data } = await api.get(`/admin/pages/${id}/blocks`)
+    selectedBlocks.value = data.data
+  } catch {
+    // la sección de bloques del panel es informativa: sin toast
+  }
+})
 
 async function load() {
   loading.value = true
@@ -191,6 +233,19 @@ onMounted(load)
           <p v-for="(slugValue, code) in selected.slug" :key="code" class="manager-detail__meta">
             <strong>{{ String(code).toUpperCase() }}</strong> /{{ slugValue }}
           </p>
+
+          <!-- Sus bloques: tipo + resumen de una línea -->
+          <div v-if="selectedBlocks.length" class="manager-detail">
+            <p class="manager-panel__kicker">{{ t('pages.panelBlocks') }}</p>
+            <ul class="manager-detail__rows">
+              <li v-for="block in selectedBlocks" :key="block.id" class="manager-detail__row-line">
+                <strong>{{ blockTypeName(block.type) }}</strong>
+                <span v-if="blockSummary(block)" class="manager-detail__row-text">{{
+                  blockSummary(block)
+                }}</span>
+              </li>
+            </ul>
+          </div>
         </template>
       </div>
     </Teleport>

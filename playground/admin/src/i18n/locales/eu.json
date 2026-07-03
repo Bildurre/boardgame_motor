@@ -55,6 +55,7 @@
     "fileTooLarge": "Fitxategia handiegia da.",
     "fileType": "Fitxategi-formatu baliogabea.",
     "actions": {
+      "open": "Ireki",
       "edit": "Editatu",
       "publish": "Argitaratu",
       "unpublish": "Argitaratzea kendu",
@@ -90,6 +91,8 @@
     "new": "Etxe berria",
     "edit": "Etxea editatu",
     "newButton": "Etxe berria",
+    "panelTitle": "Etxea",
+    "panelEmpty": "Aukeratu etxe bat bere ekintzak ikusteko.",
     "tabs": {
       "published": "Argitaratuak",
       "draft": "Zirriborroa",
@@ -131,6 +134,8 @@
     "new": "Argazi berria",
     "edit": "Argazia editatu",
     "newButton": "Argazi berria",
+    "panelTitle": "Argazia",
+    "panelEmpty": "Aukeratu argazi bat bere ekintzak ikusteko.",
     "tabs": {
       "published": "Argitaratuak",
       "draft": "Zirriborroa",
@@ -173,6 +178,8 @@
     "new": "Pertsonaia berria",
     "edit": "Pertsonaia editatu",
     "newButton": "Pertsonaia berria",
+    "panelTitle": "Pertsonaia",
+    "panelEmpty": "Aukeratu pertsonaia bat bere ekintzak ikusteko.",
     "tabs": {
       "published": "Argitaratuak",
       "draft": "Zirriborroa",
@@ -323,10 +330,12 @@
       "common": "Ezarpen komunak",
       "confirmDelete": "Bloke hau ezabatu?",
       "panelTitle": "Blokea",
-      "panelEmpty": "Aukeratu bloke bat bere ekintzak ikusteko."
+      "panelEmpty": "Aukeratu bloke bat bere ekintzak ikusteko.",
+      "panelContent": "Edukia"
     },
     "panelTitle": "Orria",
     "panelEmpty": "Aukeratu orri bat bere ekintzak ikusteko.",
+    "panelBlocks": "Blokeak",
     "open": "Ireki"
   },
   "blockTypes": {

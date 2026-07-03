@@ -55,6 +55,7 @@
     "fileTooLarge": "El archivo es demasiado grande.",
     "fileType": "Formato de archivo no válido.",
     "actions": {
+      "open": "Abrir",
       "edit": "Editar",
       "publish": "Publicar",
       "unpublish": "Despublicar",
@@ -90,6 +91,8 @@
     "new": "Nueva casa",
     "edit": "Editar casa",
     "newButton": "Nueva casa",
+    "panelTitle": "Casa",
+    "panelEmpty": "Selecciona una casa para ver sus acciones.",
     "tabs": {
       "published": "Publicadas",
       "draft": "Borrador",
@@ -131,6 +134,8 @@
     "new": "Nueva argucia",
     "edit": "Editar argucia",
     "newButton": "Nueva argucia",
+    "panelTitle": "Argucia",
+    "panelEmpty": "Selecciona una argucia para ver sus acciones.",
     "tabs": {
       "published": "Publicadas",
       "draft": "Borrador",
@@ -173,6 +178,8 @@
     "new": "Nuevo personaje",
     "edit": "Editar personaje",
     "newButton": "Nuevo personaje",
+    "panelTitle": "Personaje",
+    "panelEmpty": "Selecciona un personaje para ver sus acciones.",
     "tabs": {
       "published": "Publicados",
       "draft": "Borrador",
@@ -323,10 +330,12 @@
       "common": "Ajustes comunes",
       "confirmDelete": "¿Borrar este bloque?",
       "panelTitle": "Bloque",
-      "panelEmpty": "Selecciona un bloque para ver sus acciones."
+      "panelEmpty": "Selecciona un bloque para ver sus acciones.",
+      "panelContent": "Contenido"
     },
     "panelTitle": "Página",
     "panelEmpty": "Selecciona una página para ver sus acciones.",
+    "panelBlocks": "Bloques",
     "open": "Abrir"
   }
 }

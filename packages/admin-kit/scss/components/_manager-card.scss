@@ -244,4 +244,75 @@
     flex-wrap: wrap;
     gap: $space-2;
   }
+
+  // Listado compacto del panel (p.ej. bloques de la página seleccionada):
+  // cada fila es UNA línea, con el resto truncado.
+  &__rows {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: $space-2;
+  }
+
+  &__row-line {
+    display: flex;
+    align-items: baseline;
+    gap: $space-2;
+    min-width: 0;
+    font-size: $fs-13;
+
+    strong {
+      flex: 0 0 auto;
+      color: $text-1;
+    }
+  }
+
+  &__row-text {
+    color: $text-3;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  // Campos del bloque seleccionado: etiqueta + valor; los valores largos se
+  // recortan a unas pocas líneas.
+  &__field {
+    display: grid;
+    gap: 2px;
+    min-width: 0;
+    font-size: $fs-13;
+
+    dt {
+      color: $text-3;
+      font-size: $fs-12;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    dd {
+      margin: 0;
+      color: $text-2;
+      overflow-wrap: anywhere;
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 4;
+      line-clamp: 4;
+      overflow: hidden;
+    }
+  }
+
+  &__fields {
+    margin: 0;
+    display: grid;
+    gap: $space-2;
+  }
+
+  &__thumb {
+    max-width: 120px;
+    border-radius: $radius-sm;
+    border: 1px solid $border;
+    background: $surface-2;
+  }
 }

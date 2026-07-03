@@ -285,7 +285,7 @@ vista solo declara su template.
 ```ts
 const { t, items, loading, status, search, tabs, tr, init, formOpen, formMode,
   formSlug, openCreate, edit, goSingle, onSaved, togglePublish, del, restore,
-  forceDelete } = useEntityList<House>({
+  forceDelete, selectedId, selected, select, hasPreview } = useEntityList<House>({
   resource: '/admin/houses',
   ns: 'houses',                 // namespace i18n (tabs/confirm/toast del modelo)
   singleRoute: 'house-single',
@@ -299,22 +299,34 @@ onMounted(init)
 <BaseTabs v-model="status" :tabs="tabs" />                <!-- published/draft/trashed -->
 <EmptyState v-if="!loading && !items.length" :title="t('common.empty')" />
 <BaseGrid v-else preset="cards" gap="md">
-  <EntityCard v-for="item in items" :key="item.id" :title="tr(item.name)" :muted="!!item.deleted_at">
+  <EntityCard v-for="item in items" :key="item.id" :title="tr(item.name)"
+    :muted="!!item.deleted_at" :active="selectedId === item.id" clickable @view="select(item)">
     <template #media>…emblema…</template>
-    <template #actions>…IconButton editar/publicar/borrar (o restaurar/borrar-definitivo en papelera)…</template>
+    <template #actions>…IconButton editar + abrir (las básicas; el resto en el panel)…</template>
     <template #badges>…chip de estado…</template>
     <template #meta>…datos…</template>
   </EntityCard>
 </BaseGrid>
 <XFormModal v-model="formOpen" :mode="formMode" :target-slug="formSlug" @saved="onSaved" />
+<EntityPanel :item="selected" :name="selected ? tr(selected.name) : ''"
+  :kicker="t('houses.panelTitle')" :empty="t('houses.panelEmpty')" :has-preview="hasPreview"
+  @open="selected && goSingle(selected)" … />
 ```
 
 - `tr(obj)` = valor en el locale activo (con fallback al locale por defecto).
+- **Selección → panel derecho** (patrón kontuan): la tarjeta entera selecciona
+  (`select(item)` viene de `useEntityList`, que registra el sidebar con
+  `` t(`${ns}.panelTitle`) `` y hace `reveal()`); `EntityPanel`
+  (`admin/src/components/EntityPanel.vue`) pinta TODAS las acciones arriba del
+  todo (abrir, editar, publicar/despublicar, regenerar PNG si `previewKey`,
+  borrar — o restaurar/definitivo en papelera), la info del elemento (slot
+  `meta`) y las imágenes por idioma si la entidad es renderizable. Claves
+  i18n del modelo: `panelTitle` y `panelEmpty`.
 - Editar → abre el modal con el **slug del locale activo**.
 - Acciones por slug: borrar y `toggle-published`; restaurar/borrado
   definitivo por id. Todas confirman (las destructivas), avisan con toast y
   capturan errores (`common.errors.action` / `common.errors.load`).
-- Textos comunes en `common.actions.*` (editar/publicar/borrar/restaurar…);
+- Textos comunes en `common.actions.*` (abrir/editar/publicar/borrar/restaurar…);
   los específicos del modelo (tabs, toasts, confirmaciones) en su namespace.
 
 ### 4.5 Modal de alta/edición (`admin/src/components/<modelo>/XFormModal.vue`)

@@ -2,7 +2,7 @@ import { computed, onBeforeUnmount, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
 import { CircleCheck, FilePen, Trash } from '@lucide/vue'
-import { useResource } from '@bgm/admin-kit'
+import { useResource, useRightSidebar } from '@bgm/admin-kit'
 import { useConfirm, useToast } from '@bgm/ui'
 import { api } from '@/lib/api'
 import { useLocalesStore } from '@/stores/locales'
@@ -34,6 +34,18 @@ export function useEntityList<T extends EntityBase>(options: EntityListOptions<T
   const toast = useToast()
   const { confirm } = useConfirm()
   const { items, meta, loading, list, remove, action } = useResource<T>(api, options.resource)
+
+  // Selección → panel derecho (patrón kontuan): la tarjeta entera selecciona
+  // y el panel trae TODAS las acciones + info del elemento.
+  const sidebar = useRightSidebar()
+  sidebar.useRegister(t(`${options.ns}.panelTitle`))
+  const selectedId = ref<number | null>(null)
+  const selected = computed(() => items.value.find((i) => i.id === selectedId.value) ?? null)
+
+  function select(item: T) {
+    selectedId.value = item.id
+    sidebar.reveal()
+  }
 
   const status = ref('published')
   const search = ref('')
@@ -67,7 +79,10 @@ export function useEntityList<T extends EntityBase>(options: EntityListOptions<T
     load(meta.value?.current_page ?? 1)
   }
 
-  watch(status, () => load(1))
+  watch(status, () => {
+    selectedId.value = null
+    load(1)
+  })
 
   let timer: ReturnType<typeof setTimeout> | null = null
   watch(search, () => {
@@ -191,6 +206,10 @@ export function useEntityList<T extends EntityBase>(options: EntityListOptions<T
     slugFor,
     load,
     init,
+    selectedId,
+    selected,
+    select,
+    hasPreview: !!options.previewKey,
     formOpen,
     formMode,
     formSlug,

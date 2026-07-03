@@ -50,6 +50,7 @@ const blockLabels = computed<Partial<PageBlocksLabels>>(() => ({
   error: t('common.errors.action'),
   panelTitle: t('pages.blocks.panelTitle'),
   panelEmpty: t('pages.blocks.panelEmpty'),
+  panelContent: t('pages.blocks.panelContent'),
 }))
 
 async function load() {
