@@ -380,9 +380,10 @@ Para que una entidad se capture a PNG (base del PDF), doc `funcionalidades/01-re
 
 1. **Migración**: columna `->json('preview_image')->nullable()`.
 2. **Modelo**: `implements PreviewableContract` + `use HasPreviewImage`, y declara:
-   - `previewSize()` — px CSS del componente (la carta demo: 350×500 ≈ 88×126 mm),
+   - `previewSize($type)` — px CSS del componente (proporcional al layout de
+     impresión: regla 5 px/mm; la carta Magic: 315×440),
    - `previewTriggerFields()` — campos cuyo cambio regenera (is_published no),
-   - `renderData($locale)` — payload que consumirá el componente en `/_render`.
+   - `renderData($locale, $type)` — payload que consumirá el componente en `/_render`.
 3. **Registro backend** (`AppServiceProvider::boot`):
    `Previews::register('character', Character::class);`
 4. **Componente visual** en `packages/shared` del juego (fuente única web +
@@ -400,6 +401,26 @@ Para que una entidad se capture a PNG (base del PDF), doc `funcionalidades/01-re
 8. En marcha: la creación/edición encola los renders (worker de cola;
    `npm run dev` ya lo levanta). A mano: `php artisan preview:manage
    generate|regenerate|status|delete|clean [--type --id --locale --sync --dry-run]`.
+
+### 5.1 Varias previews por modelo
+
+**Una preview = una clave del registro.** Un modelo puede registrarse bajo
+varias claves para tener una preview por defecto y otras especiales (p. ej.
+para PDF distintos); la por defecto es la primera registrada:
+
+```php
+Previews::register('house', House::class);         // token 40 mm (por defecto)
+Previews::register('house-counter', House::class); // contador 25 mm
+```
+
+La clave llega a `previewSize($type)` y `renderData($locale, $type)` para
+variar tamaño o datos, y al `renderRegistry` de la app para elegir componente
+(puede ser el mismo a otra escala: dimensiona con unidades de contenedor,
+`cqw`). Cada clave tiene su carpeta (`previews/house-counter/...`), su sección
+en el gestor de imágenes del admin y su vida propia; la columna
+`preview_image` guarda `clave => (locale => ruta)`. Al crear/editar se
+regeneran TODAS las previews del modelo. En los PDF, el export elige cuál
+imprime (§6.1).
 
 Requisitos: `npm install` en `api/` (instala `puppeteer`) **y su navegador**
 (`npm run chrome:install` si npm saltó el postinstall — error "Could not find
@@ -484,7 +505,14 @@ primeras):
 
 Los ítems se declaran con `PrintableItem::preview($entidad, copies: N)` (usa el
 PNG del render, doc 01, **generándolo al vuelo si falta**) o
-`PrintableItem::image($rutaOUrl, copies: N)` para imágenes arbitrarias.
+`PrintableItem::image($rutaOUrl, copies: N)` para imágenes arbitrarias. Si el
+modelo tiene varias previews (§5.1), el export **elige cuál imprime** con
+`preview:`; en el playground, `house-counters` imprime la segunda preview de
+la casa en el layout `counter` del motor:
+
+```php
+PrintableItem::preview($casa, copies: 9, preview: 'house-counter');
+```
 
 Registro en `AppServiceProvider::boot` (la clave es el `type` de la API):
 
@@ -553,7 +581,11 @@ Magic (`SchemesExport` usa `card`) mientras los personajes se imprimen al doble
   ```
 
   Filas por idioma con estado (en cola / listo / error con mensaje) y botones
-  Generar / Regenerar / Descargar / Borrar. **Regenerar = un clic**: reutiliza
+  Generar / Regenerar / Descargar / Borrar. **Generar siempre genera todos los
+  idiomas** (el `?locale` que el admin añade a cada petición es el locale de
+  contenido, no un limitador; para limitar, `locale` en el cuerpo). Los errores
+  inesperados se muestran con un mensaje genérico — el detalle queda en los
+  logs del servidor. **Regenerar = un clic**: reutiliza
   el registro, versiona el fichero y borra el anterior. Añadir un export nuevo
   al juego = registrarlo + su etiqueta en `typeLabels`; la vista no se toca.
 - API: `GET /api/admin/pdfs/exports` (catálogo), `GET/POST /api/admin/pdfs[...]`

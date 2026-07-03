@@ -225,6 +225,10 @@
     "editHtml": "Edit HTML"
   },
   "previews": {
+    "types": {
+      "houseToken": "Houses — token (40 mm)",
+      "houseCounter": "Houses — counter (25 mm)"
+    },
     "title": "Generated PNGs",
     "empty": "No PNGs generated yet.",
     "regenerate": "Regenerate PNGs",
@@ -251,7 +255,7 @@
     "title": "Images (previews)"
   },
   "pdfs": {
-    "generate": "Generate (all languages)",
+    "generate": "Generate",
     "refresh": "Refresh",
     "download": "Download",
     "regenerate": "Regenerate",
@@ -266,7 +270,8 @@
       "characters": "All characters",
       "schemes": "All schemes",
       "houseSchemes": "Per house (its schemes)",
-      "houseTokens": "House tokens (x9)"
+      "houseTokens": "House tokens (x9, 40 mm)",
+      "houseCounters": "House counters (x9, 25 mm)"
     }
   }
 }

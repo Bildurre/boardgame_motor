@@ -6,6 +6,7 @@ use App\Models\Character;
 use App\Models\House;
 use App\Models\Scheme;
 use App\Pdf\CharactersExport;
+use App\Pdf\HouseCountersExport;
 use App\Pdf\HouseSchemesExport;
 use App\Pdf\HouseTokensExport;
 use App\Pdf\SchemesExport;
@@ -32,7 +33,10 @@ class AppServiceProvider extends ServiceProvider
         // /_render/:entity y debe casar con el renderRegistry de la app Vue.
         Previews::register('character', Character::class);
         Previews::register('scheme', Scheme::class);
-        Previews::register('house', House::class); // token redondo (HouseToken)
+        // La casa tiene DOS previews (mismo componente HouseToken, tamaños
+        // distintos): la por defecto es la primera registrada.
+        Previews::register('house', House::class);         // token 40 mm
+        Previews::register('house-counter', House::class); // contador 25 mm
 
         // Presets de impresión de ESTE juego (mm; lo no indicado usa los
         // valores por defecto). Cada export elige el suyo con layout().
@@ -57,5 +61,6 @@ class AppServiceProvider extends ServiceProvider
         Pdfs::register('schemes', SchemesExport::class);            // todas las argucias (card)
         Pdfs::register('house-schemes', HouseSchemesExport::class); // un PDF por casa (sus argucias)
         Pdfs::register('house-tokens', HouseTokensExport::class);   // 9 tokens por casa (token-40)
+        Pdfs::register('house-counters', HouseCountersExport::class); // 9 contadores por casa (counter, preview house-counter)
     }
 }

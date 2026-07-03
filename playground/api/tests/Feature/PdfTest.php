@@ -5,7 +5,10 @@ use App\Models\Scheme;
 use Bgm\Core\Pdf\Jobs\GeneratePdfJob;
 use Bgm\Core\Pdf\Models\GeneratedPdf;
 use Bgm\Core\Pdf\Models\PdfCollectionItem;
+use Bgm\Core\Pdf\PdfExport;
 use Bgm\Core\Pdf\PdfService;
+use Bgm\Core\Support\Facades\Pdfs;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Queue;
 use Illuminate\Support\Facades\Storage;
 
@@ -124,6 +127,45 @@ it('cada export imprime a su tamaño: personajes al doble (card-big)', function 
     expect(pdfPageCount(Storage::disk('public')->get($pdf->path)))->toBe(2);
 });
 
+it('el export elige qué preview imprime (house-counters usa house-counter)', function () {
+    $house = makeHouseWithSchemes(0);
+
+    $pdf = app(PdfService::class)->generate('house-counters', null, 'es', sync: true)->refresh();
+
+    // Se generó (o reutilizó) la preview 'house-counter', no la por defecto.
+    expect($pdf->status)->toBe(GeneratedPdf::STATUS_READY)
+        ->and($house->refresh()->hasPreview('es', 'house-counter'))->toBeTrue();
+});
+
+it('generar ignora el ?locale de la query (locale de contenido del admin)', function () {
+    Queue::fake();
+    makeCharacter(['is_published' => true]);
+    $admin = motorUser('admin');
+
+    // El admin añade ?locale=es a TODAS sus peticiones: aun así se generan
+    // los 3 idiomas. Solo un locale en el CUERPO limita.
+    $this->actingAs($admin)->postJson('/api/admin/pdfs/generate?locale=es', [
+        'type' => 'characters',
+    ])->assertAccepted()->assertJsonCount(3, 'data');
+
+    $this->actingAs($admin)->postJson('/api/admin/pdfs/generate?locale=es', [
+        'type' => 'characters', 'locale' => 'eu',
+    ])->assertAccepted()->assertJsonCount(1, 'data');
+});
+
+it('los errores inesperados no se filtran al frontend (mensaje genérico)', function () {
+    Pdfs::register('roto', RotoExport::class);
+
+    try {
+        app(PdfService::class)->generate('roto', null, 'es', sync: true);
+    } catch (LogicException) {
+        // el job relanza (el detalle va a los logs)
+    }
+
+    expect(GeneratedPdf::first()->error)->toBe(__('motor::motor.pdf_error_internal'))
+        ->and(GeneratedPdf::first()->error)->not->toContain('SQLSTATE');
+});
+
 it('marca el PDF como failed si no hay ítems', function () {
     $house = makeHouseWithSchemes(0);
 
@@ -133,7 +175,8 @@ it('marca el PDF como failed si no hay ítems', function () {
         // el job relanza para marcar el fallo en cola
     }
 
-    expect(GeneratedPdf::first()->status)->toBe(GeneratedPdf::STATUS_FAILED);
+    expect(GeneratedPdf::first()->status)->toBe(GeneratedPdf::STATUS_FAILED)
+        ->and(GeneratedPdf::first()->error)->toBe(__('motor::motor.pdf_no_items'));
 });
 
 // --- API de admin ---
@@ -186,7 +229,7 @@ it('el catálogo de exports lista los tipos con sus entidades dueñas', function
 
     $this->actingAs(motorUser('admin'))->getJson('/api/admin/pdfs/exports')
         ->assertOk()
-        ->assertJsonCount(4, 'data')
+        ->assertJsonCount(5, 'data')
         ->assertJsonPath('data.0.type', 'characters')
         ->assertJsonPath('data.0.global', true)
         ->assertJsonPath('data.0.layout', 'card-big')
@@ -197,7 +240,9 @@ it('el catálogo de exports lista los tipos con sus entidades dueñas', function
         ->assertJsonPath('data.2.sources.0.label', 'Casa Stark')
         ->assertJsonPath('data.3.type', 'house-tokens')
         ->assertJsonPath('data.3.global', true)
-        ->assertJsonPath('data.3.layout', 'token-40');
+        ->assertJsonPath('data.3.layout', 'token-40')
+        ->assertJsonPath('data.4.type', 'house-counters')
+        ->assertJsonPath('data.4.layout', 'counter');
 });
 
 it('regenera, borra y descarga desde la API', function () {
@@ -317,3 +362,17 @@ it('pdf:cleanup borra los temporales caducados', function () {
     Storage::disk('public')->assertExists($alive->path);
     expect(GeneratedPdf::count())->toBe(1);
 });
+
+/** Export deliberadamente roto para el test de errores saneados. */
+class RotoExport extends PdfExport
+{
+    public function sourceModel(): ?string
+    {
+        return null;
+    }
+
+    public function items(?Model $source, string $locale): array
+    {
+        throw new LogicException('SQLSTATE[42S22]: detalle interno que NO debe verse');
+    }
+}

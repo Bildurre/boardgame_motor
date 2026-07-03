@@ -51,7 +51,7 @@ class Scheme extends Model implements HasMedia, PreviewableContract
     // --- Render a PNG (doc 01) ---
 
     /** Tamaño del componente carta en px CSS (proporción Magic 63x88 mm). */
-    public function previewSize(): array
+    public function previewSize(?string $type = null): array
     {
         return ['width' => 315, 'height' => 440];
     }
@@ -68,7 +68,7 @@ class Scheme extends Model implements HasMedia, PreviewableContract
     }
 
     /** Payload que consume el componente SchemeCard en /_render. */
-    public function renderData(string $locale): array
+    public function renderData(string $locale, ?string $type = null): array
     {
         return [
             'id' => $this->id,

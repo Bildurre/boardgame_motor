@@ -178,6 +178,16 @@ POST   /api/v1/pdf-collection/generate    # → PDF temporal
   PDF temporal guarda un **snapshot** en `payload` (regenerable aunque la
   colección cambie). `pdf:cleanup` borra caducados (programar en el juego).
 - El estado del job queda en el registro (`pending/ready/failed` + `error`),
-  visible en el `PdfManager` del admin.
+  visible en el `PdfManager` del admin. Solo los `PdfCompositionException`
+  (errores deliberados, p. ej. sin ítems) exponen su mensaje; cualquier otra
+  excepción se guarda como **mensaje genérico** y el detalle va a los logs
+  (nada de SQL en el frontend).
+- Si el modelo tiene varias previews, el export elige cuál imprime:
+  `PrintableItem::preview($casa, copies: 9, preview: 'house-counter')`
+  (playground: `house-counters`, layout `counter`). En la colección temporal,
+  la clave de entidad elegida por el usuario ES la preview que se imprime.
+- Generar desde el admin encola SIEMPRE todos los locales; un `locale` en el
+  cuerpo limita a uno (el `?locale` de la query es el locale de contenido del
+  admin y se ignora en las acciones).
 - Los tests componen PDF **reales** con DomPDF (sin browser): se verifica hasta
   el número de páginas resultante.

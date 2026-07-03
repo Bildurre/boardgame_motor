@@ -21,8 +21,9 @@ use Spatie\Translatable\HasTranslations;
  * piezas del motor: campos traducibles, slug traducible, estado publicado,
  * filtros y soft-delete. Cada juego real tendrá las suyas.
  *
- * Su preview NO es una carta: es el token redondo (HouseToken en la app) que
- * imprime el export de PDF house-tokens.
+ * Sus previews NO son cartas: son el token redondo de 40 mm ('house', lo
+ * imprime house-tokens) y el contador de 25 mm ('house-counter', lo imprime
+ * house-counters). Mismo componente HouseToken, tamaños distintos.
  */
 class House extends Model implements HasMedia, PreviewableContract
 {
@@ -57,12 +58,15 @@ class House extends Model implements HasMedia, PreviewableContract
     // --- Render a PNG (doc 01): el token redondo de la casa ---
 
     /**
-     * Tamaño del componente en px CSS. El token se imprime a 40x40 mm
-     * (layout token-40): misma proporción 1:1 y los 5 px/mm de las cartas.
+     * Tamaño del componente en px CSS (5 px/mm, como las cartas). La casa
+     * tiene DOS previews: 'house' = token de 40x40 mm y 'house-counter' =
+     * contador de 25x25 mm (mismo componente, escala distinta).
      */
-    public function previewSize(): array
+    public function previewSize(?string $type = null): array
     {
-        return ['width' => 200, 'height' => 200];
+        return $type === 'house-counter'
+            ? ['width' => 125, 'height' => 125]
+            : ['width' => 200, 'height' => 200];
     }
 
     /** Etiqueta para el gestor de previews del admin. */
@@ -77,8 +81,8 @@ class House extends Model implements HasMedia, PreviewableContract
         return ['name', 'color'];
     }
 
-    /** Payload que consume el componente HouseToken en /_render. */
-    public function renderData(string $locale): array
+    /** Payload que consume el componente HouseToken en /_render (ambas previews). */
+    public function renderData(string $locale, ?string $type = null): array
     {
         return [
             'id' => $this->id,

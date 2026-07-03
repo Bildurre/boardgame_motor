@@ -7,5 +7,6 @@ import { CharacterCard, HouseToken, SchemeCard } from '@playground/shared'
 export const renderRegistry: Record<string, Component> = {
   character: CharacterCard,
   scheme: SchemeCard,
-  house: HouseToken,
+  house: HouseToken, // token 40 mm
+  'house-counter': HouseToken, // contador 25 mm (mismo componente, otra escala)
 }

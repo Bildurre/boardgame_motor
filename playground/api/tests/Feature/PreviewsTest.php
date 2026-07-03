@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\Character;
+use App\Models\House;
 use Bgm\Core\Previews\Jobs\GeneratePreviewJob;
 use Bgm\Core\Previews\RenderToken;
 use Illuminate\Support\Facades\Queue;
@@ -161,7 +162,7 @@ it('preview:manage generate solo rellena lo que falta', function () {
 
     // Deja al personaje sin las previews de eu y en.
     $character->refresh();
-    $character->preview_image = ['es' => $character->previewPath('es')];
+    $character->preview_image = ['character' => ['es' => $character->previewPath('es')]];
     $character->saveQuietly();
 
     $renderer = fakeRenderer();
@@ -170,6 +171,39 @@ it('preview:manage generate solo rellena lo que falta', function () {
     // Solo eu y en (es ya estaba).
     expect(count($renderer->captured))->toBe(2)
         ->and($character->refresh()->previewUrls())->toHaveKeys(['es', 'eu', 'en']);
+});
+
+it('un modelo puede tener varias previews: clave por clave', function () {
+    $renderer = fakeRenderer();
+
+    $house = new House;
+    $house->setTranslations('name', ['es' => 'Casa Stark']);
+    $house->save(); // encola (cola síncrona) house y house-counter, 3 locales cada una
+
+    $house->refresh();
+    expect($house->hasPreview('es'))->toBeTrue()                       // por defecto: 'house'
+        ->and($house->hasPreview('es', 'house-counter'))->toBeTrue()
+        ->and($house->previewPath('es'))->toContain('previews/house/')
+        ->and($house->previewPath('es', 'house-counter'))->toContain('previews/house-counter/');
+
+    // Cada preview con su tamaño (token 200, contador 125).
+    $widths = collect($renderer->captured)->pluck('width')->unique()->sort()->values()->all();
+    expect($widths)->toBe([125, 200]);
+
+    // El gestor las lista como tipos separados.
+    $this->actingAs(motorUser('admin'))->getJson('/api/admin/previews')
+        ->assertOk()
+        ->assertJsonPath('data.2.key', 'house')
+        ->assertJsonPath('data.2.complete', 1)
+        ->assertJsonPath('data.3.key', 'house-counter')
+        ->assertJsonPath('data.3.complete', 1);
+
+    // Borrar una clave no toca la otra.
+    $this->actingAs(motorUser('admin'))->deleteJson("/api/admin/previews/house-counter/{$house->id}")
+        ->assertOk();
+    $house->refresh();
+    expect($house->hasPreview('es', 'house-counter'))->toBeFalse()
+        ->and($house->hasPreview('es'))->toBeTrue();
 });
 
 // --- Gestor de previews del admin (lotes) ---
@@ -201,7 +235,7 @@ it('el gestor encola por lotes: pendientes y regenerar todo', function () {
     $character = makeCharacter();
     // Deja solo es generado.
     $character->refresh();
-    $character->preview_image = ['es' => $character->previewPath('es')];
+    $character->preview_image = ['character' => ['es' => $character->previewPath('es')]];
     $character->saveQuietly();
 
     $admin = motorUser('admin');
@@ -216,10 +250,15 @@ it('el gestor encola por lotes: pendientes y regenerar todo', function () {
         ->assertAccepted()->assertJsonPath('queued', 3);
     Queue::assertPushed(GeneratePreviewJob::class, 3);
 
-    // Limitado a un locale.
+    // Limitado a un locale (en el cuerpo).
+    Queue::fake();
+    $this->actingAs($admin)->postJson('/api/admin/previews/character/regenerate', ['locale' => 'eu'])
+        ->assertAccepted()->assertJsonPath('queued', 1);
+
+    // El ?locale de la query (locale de contenido del admin) NO limita.
     Queue::fake();
     $this->actingAs($admin)->postJson('/api/admin/previews/character/regenerate?locale=eu')
-        ->assertAccepted()->assertJsonPath('queued', 1);
+        ->assertAccepted()->assertJsonPath('queued', 3);
 });
 
 it('el gestor borra las previews de un tipo y de una entidad', function () {

@@ -12,7 +12,8 @@ const { t } = useI18n()
 const typeLabels = computed<Record<string, string>>(() => ({
   character: t('characters.title'),
   scheme: t('schemes.title'),
-  house: t('houses.title'),
+  house: t('previews.types.houseToken'),
+  'house-counter': t('previews.types.houseCounter'),
 }))
 
 const labels = computed<PreviewManagerLabels>(() => ({

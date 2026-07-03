@@ -151,3 +151,9 @@ actual, pero **declarativa**: la entidad lista qué campos disparan regeneració
   `chrome-headless-shell`, que puppeteer no descarga por defecto (error
   "Could not find chrome-headless-shell"). Si falta el chrome de puppeteer:
   `cd api && npx puppeteer browsers install chrome`.
+- **Varias previews por modelo**: una preview = una clave del PreviewRegistry;
+  el mismo modelo puede registrarse bajo varias claves (la primera es la por
+  defecto). `previewSize($type)` y `renderData($locale, $type)` reciben la
+  clave; `preview_image` guarda `clave => (locale => ruta)`. Playground:
+  `house` (token 40 mm) y `house-counter` (contador 25 mm) comparten el
+  componente HouseToken a dos escalas (unidades `cqw`). Guía §5.1.

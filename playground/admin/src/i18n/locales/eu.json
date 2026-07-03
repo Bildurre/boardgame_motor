@@ -225,6 +225,10 @@
     "editHtml": "HTML editatu"
   },
   "previews": {
+    "types": {
+      "houseToken": "Etxeak — fitxa (40 mm)",
+      "houseCounter": "Etxeak — kontagailua (25 mm)"
+    },
     "title": "Sortutako PNGak",
     "empty": "Oraindik ez dago PNGrik.",
     "regenerate": "PNGak birsortu",
@@ -251,7 +255,7 @@
     "title": "Irudiak (aurrebistak)"
   },
   "pdfs": {
-    "generate": "Sortu (hizkuntza guztiak)",
+    "generate": "Sortu",
     "refresh": "Eguneratu",
     "download": "Deskargatu",
     "regenerate": "Birsortu",
@@ -266,7 +270,8 @@
       "characters": "Pertsonaia guztiak",
       "schemes": "Argucia guztiak",
       "houseSchemes": "Etxeka (bere argukiak)",
-      "houseTokens": "Etxeen fitxak (x9)"
+      "houseTokens": "Etxeen fitxak (x9, 40 mm)",
+      "houseCounters": "Etxeen kontagailuak (x9, 25 mm)"
     }
   }
 }
