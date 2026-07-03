@@ -3,11 +3,12 @@
 import type { Component } from 'vue'
 import BlockCta from './BlockCta.vue'
 import BlockHeader from './BlockHeader.vue'
+import BlockIndex from './BlockIndex.vue'
 import BlockQuote from './BlockQuote.vue'
 import BlockText from './BlockText.vue'
 import BlockTextCard from './BlockTextCard.vue'
 
-export { BlockCta, BlockHeader, BlockQuote, BlockText, BlockTextCard }
+export { BlockCta, BlockHeader, BlockIndex, BlockQuote, BlockText, BlockTextCard }
 export { default as BlockShell } from './BlockShell.vue'
 
 /** Clave del BlockType => componente (los cinco de presentación). */
@@ -16,5 +17,6 @@ export const motorBlockComponents: Record<string, Component> = {
   text: BlockText,
   'text-card': BlockTextCard,
   quote: BlockQuote,
+  index: BlockIndex,
   cta: BlockCta,
 }

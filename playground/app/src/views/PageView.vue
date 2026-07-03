@@ -61,6 +61,7 @@ watch([slug, () => locales.current], load, { immediate: true })
       <component
         :is="blockRegistry[block.component]"
         v-for="block in page.blocks.filter((b) => blockRegistry[b.component])"
+        :id="`block-${block.id}`"
         :key="block.id"
         :settings="block.settings"
         :data="block.data"

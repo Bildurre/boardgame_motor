@@ -330,7 +330,8 @@
     "quote": "Aipua",
     "cta": "Ekintza-deia",
     "characters-grid": "Pertsonaien sareta",
-    "houses-schemes": "Etxeak eta argukiak"
+    "houses-schemes": "Etxeak eta argukiak",
+    "index": "Aurkibide automatikoa"
   },
   "blockFields": {
     "title": "Izenburua",
@@ -349,7 +350,8 @@
     "intro": "Sarrera",
     "show_empty": "Erakutsi argukirik gabeko etxeak",
     "align": "Lerrokatzea",
-    "background": "Atzeko kolorea"
+    "background": "Atzeko kolorea",
+    "numbered": "Zenbakituta"
   },
   "blockOptions": {
     "align": {

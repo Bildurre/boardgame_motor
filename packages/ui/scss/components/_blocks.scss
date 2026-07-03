@@ -70,3 +70,13 @@
   }
   &__author { margin-top: $space-2; color: $text-3; font-style: normal; font-size: $fs-14; }
 }
+
+.block__index {
+  margin: 0;
+  padding-left: 1.2em;
+  display: grid;
+  gap: $space-1;
+
+  a { color: $accent-500; text-decoration: none; }
+  a:hover { text-decoration: underline; }
+}

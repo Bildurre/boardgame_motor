@@ -615,6 +615,7 @@ La UI pública de esta colección llega con el andamiaje de la web (Fase 6).
 | Texto | `text` | `title` (texto, trad.), `body`* (richtext, trad.), `image` (imagen), `image_position` (select: top/left/right/bottom) |
 | Tarjeta de texto | `text-card` | `label` (texto, trad.), `title` (texto, trad.), `body`* (richtext, trad.) |
 | Cita | `quote` | `quote`* (richtext, trad.), `author` (texto, trad.) |
+| Índice automático | `index` | `title` (texto, trad.), `numbered` (boolean) — enlaza a los bloques posteriores indexables |
 | Llamada a la acción | `cta` | `title`, `body` (richtext), `button_text`*, `button_url`* (trad.), `button_variant` (select: primary/secondary) |
 
 (*) obligatorio en el locale por defecto. TODOS los bloques llevan además los

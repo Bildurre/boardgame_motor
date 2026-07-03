@@ -19,10 +19,10 @@ function makePage(array $attributes = []): Page
 it('la paleta lista los tipos del motor y los del juego con su esquema', function () {
     $response = $this->actingAs(motorUser('admin'))->getJson('/api/admin/block-types')
         ->assertOk()
-        ->assertJsonCount(7, 'data'); // 5 presentación (motor) + 2 con-datos (juego)
+        ->assertJsonCount(8, 'data'); // 6 presentación (motor) + 2 con-datos (juego)
 
     $keys = collect($response->json('data'))->pluck('key');
-    expect($keys)->toContain('header', 'text', 'text-card', 'quote', 'cta', 'characters-grid', 'houses-schemes');
+    expect($keys)->toContain('header', 'text', 'text-card', 'quote', 'cta', 'index', 'characters-grid', 'houses-schemes');
 
     // El esquema de campos viaja serializado (el BlockEditor se genera de aquí).
     $header = collect($response->json('data'))->firstWhere('key', 'header');
@@ -203,6 +203,33 @@ it('nav y home públicos con caché invalidada al cambiar bloques (DC-10)', func
     ])->assertOk();
 
     $this->getJson('/api/pages/home')->assertJsonPath('data.blocks.0.settings.title', 'Adiós');
+});
+
+it('el bloque índice enlaza a los bloques posteriores indexables', function () {
+    $admin = motorUser('admin');
+    $page = makePage();
+
+    // Antes del índice: no debe salir.
+    $this->actingAs($admin)->postJson("/api/admin/pages/{$page->id}/blocks", [
+        'type' => 'header', 'settings' => ['title' => ['es' => 'Antes']],
+    ]);
+    $this->actingAs($admin)->postJson("/api/admin/pages/{$page->id}/blocks", [
+        'type' => 'index', 'settings' => ['numbered' => true],
+    ]);
+    $after = $this->actingAs($admin)->postJson("/api/admin/pages/{$page->id}/blocks", [
+        'type' => 'header', 'settings' => ['title' => ['es' => 'Capítulo 1']],
+    ])->json('data.id');
+    // Posterior pero NO indexable: fuera.
+    $this->actingAs($admin)->postJson("/api/admin/pages/{$page->id}/blocks", [
+        'type' => 'header', 'settings' => ['title' => ['es' => 'Oculto']], 'is_indexable' => false,
+    ]);
+
+    $slug = $page->getTranslation('slug', 'es');
+    $this->getJson("/api/pages/{$slug}")
+        ->assertOk()
+        ->assertJsonCount(1, 'data.blocks.1.data.items')
+        ->assertJsonPath('data.blocks.1.data.items.0.id', $after)
+        ->assertJsonPath('data.blocks.1.data.items.0.label', 'Capítulo 1');
 });
 
 it('el CRM exige admin', function () {

@@ -330,7 +330,8 @@
     "quote": "Quote",
     "cta": "Call to action",
     "characters-grid": "Characters grid",
-    "houses-schemes": "Houses and schemes"
+    "houses-schemes": "Houses and schemes",
+    "index": "Automatic index"
   },
   "blockFields": {
     "title": "Title",
@@ -349,7 +350,8 @@
     "intro": "Intro",
     "show_empty": "Show houses without schemes",
     "align": "Alignment",
-    "background": "Background color"
+    "background": "Background color",
+    "numbered": "Numbered"
   },
   "blockOptions": {
     "align": {
