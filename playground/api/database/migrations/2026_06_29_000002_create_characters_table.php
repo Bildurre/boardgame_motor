@@ -25,6 +25,8 @@ return new class extends Migration
             $table->unsignedInteger('intrigue')->default(0);   // intriga
             $table->unsignedInteger('money')->default(0);      // dinero
             $table->boolean('is_published')->default(false);
+            // Previews PNG por clave y locale (HasPreviewImage, doc 01)
+            $table->json('preview_image')->nullable();
             $table->datetimes();
             $table->softDeletesDatetime();
         });

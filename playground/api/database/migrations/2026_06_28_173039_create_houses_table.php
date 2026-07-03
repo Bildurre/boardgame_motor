@@ -15,6 +15,8 @@ return new class extends Migration
             $table->json('slug');
             $table->string('color', 7)->nullable();
             $table->boolean('is_published')->default(false);
+            // Previews PNG por clave y locale (HasPreviewImage, doc 01)
+            $table->json('preview_image')->nullable();
             $table->datetimes();
             $table->softDeletesDatetime();
         });
