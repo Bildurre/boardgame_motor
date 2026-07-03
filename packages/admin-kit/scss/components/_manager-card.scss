@@ -39,6 +39,10 @@
   min-width: 0;
   cursor: pointer; // TODA la tarjeta selecciona (menos sus controles)
   transition: border-color 0.15s ease, box-shadow 0.15s ease;
+  // La tarjeta es su propio contenedor `content`: los botones con icono se
+  // apilan según el ancho de la TARJETA, no de la página (patrón kontuan).
+  container-name: content;
+  container-type: inline-size;
 
   &:hover {
     border-color: $border-strong;

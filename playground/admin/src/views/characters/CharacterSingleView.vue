@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted, ref, computed } from 'vue'
+import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRoute, useRouter } from 'vue-router'
 import { ArrowLeft, SquarePen } from '@lucide/vue'
@@ -8,6 +8,7 @@ import { BaseButton } from '@bgm/ui'
 import { api } from '@/lib/api'
 import PreviewPanel from '@/components/previews/PreviewPanel.vue'
 import { useLocalesStore } from '@/stores/locales'
+import { usePageCrumb } from '@/composables/usePageCrumb'
 import { type Character, CharacterCard } from '@playground/shared'
 import CharacterFormModal from '@/components/characters/CharacterFormModal.vue'
 
@@ -46,6 +47,18 @@ onMounted(async () => {
   await locales.load()
   await load()
 })
+
+// El nombre del single como último tramo de la breadcrumb (se actualiza si
+// cambia el locale de contenido) y fuera al salir de la vista.
+const crumb = usePageCrumb()
+watch(
+  [item, () => locales.current],
+  () => {
+    if (item.value) crumb.set(tr(item.value.name))
+  },
+  { immediate: true },
+)
+onBeforeUnmount(crumb.clear)
 </script>
 
 <!-- eslint-disable vue/no-v-html -- HTML del WYSIWYG propio (sanitización en servidor: DC-09) -->

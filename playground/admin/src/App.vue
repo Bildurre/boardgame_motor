@@ -16,6 +16,7 @@ import { AdminLayout } from '@bgm/admin-kit'
 import { ToastContainer, ConfirmDialog, type Crumb } from '@bgm/ui'
 import { useAuthStore } from '@/stores/auth'
 import { useLocalesStore } from '@/stores/locales'
+import { usePageCrumb } from '@/composables/usePageCrumb'
 
 const route = useRoute()
 const router = useRouter()
@@ -31,12 +32,16 @@ const homeCrumb = computed<Crumb>(() => ({
   label: t('breadcrumbs.home'),
   to: { name: 'dashboard' },
 }))
+const { tail } = usePageCrumb()
 const crumbs = computed<Crumb[]>(() => {
   const list = (route.meta.breadcrumbs as { key: string; to?: string }[] | undefined) ?? []
-  return list.map((c) => ({
+  const mapped: Crumb[] = list.map((c) => ({
     label: t(`breadcrumbs.${c.key}`),
     to: c.to ? { name: c.to } : undefined,
   }))
+  // Tramo dinámico (el nombre del single), fijado por la vista.
+  if (tail.value) mapped.push({ label: tail.value })
+  return mapped
 })
 
 // Carga los locales cuando entramos al área de admin (para el selector).
