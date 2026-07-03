@@ -22,6 +22,7 @@ export function usePdfLabels(): ComputedRef<PdfManagerLabels> {
     statusFailed: t('pdfs.statusFailed'),
     detailTitle: t('pdfs.detailTitle'),
     panelEmpty: t('pdfs.panelEmpty'),
+    selectSource: t('pdfs.selectSource'),
     searchPlaceholder: t('pdfs.searchPlaceholder'),
     noResults: t('pdfs.noResults'),
     generatedAt: t('pdfs.generatedAt'),

@@ -255,7 +255,8 @@
     "confirmDeleteItem": "Delete the PNGs of \"{'{'}name{'}'}\"?",
     "confirmClean": "Delete orphan preview files (not referenced by any entity)?",
     "confirm": "Confirm",
-    "title": "Images (previews)"
+    "title": "Images (previews)",
+    "selectItem": "Pick an item…"
   },
   "pdfs": {
     "generate": "Generate",
@@ -282,6 +283,7 @@
       "houseSchemes": "Per house (its schemes)",
       "houseTokens": "House tokens (x9, 40 mm)",
       "houseCounters": "House counters (x9, 25 mm)"
-    }
+    },
+    "selectSource": "Pick an item…"
   }
 }

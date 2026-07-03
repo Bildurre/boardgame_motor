@@ -255,7 +255,8 @@
     "confirmDeleteItem": "¿Borrar los PNG de \"{'{'}name{'}'}\"?",
     "confirmClean": "¿Eliminar los ficheros de preview huérfanos (no referenciados por ninguna entidad)?",
     "confirm": "Confirmar",
-    "title": "Imágenes (previews)"
+    "title": "Imágenes (previews)",
+    "selectItem": "Elige un elemento…"
   },
   "pdfs": {
     "generate": "Generar",
@@ -282,6 +283,7 @@
       "houseSchemes": "Por casa (sus argucias)",
       "houseTokens": "Tokens de casas (x9, 40 mm)",
       "houseCounters": "Contadores de casas (x9, 25 mm)"
-    }
+    },
+    "selectSource": "Elige un elemento…"
   }
 }

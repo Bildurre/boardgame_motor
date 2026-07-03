@@ -255,7 +255,8 @@
     "confirmDeleteItem": "\"{'{'}name{'}'}\"(r)en PNGak ezabatu?",
     "confirmClean": "Preview-fitxategi umezurtzak ezabatu (inongo entitatek erreferentziatu gabeak)?",
     "confirm": "Berretsi",
-    "title": "Irudiak (previewak)"
+    "title": "Irudiak (previewak)",
+    "selectItem": "Aukeratu elementu bat…"
   },
   "pdfs": {
     "generate": "Sortu",
@@ -282,6 +283,7 @@
       "houseSchemes": "Etxeka (bere argukiak)",
       "houseTokens": "Etxeen fitxak (x9, 40 mm)",
       "houseCounters": "Etxeen kontagailuak (x9, 25 mm)"
-    }
+    },
+    "selectSource": "Aukeratu elementu bat…"
   }
 }

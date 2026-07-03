@@ -23,6 +23,7 @@ const labels = computed<PreviewManagerLabels>(() => ({
   generateMissing: t('previewsManager.generateMissing'),
   regenerateAll: t('previewsManager.regenerateAll'),
   deleteAll: t('previewsManager.deleteAll'),
+  selectItem: t('previewsManager.selectItem'),
   searchPlaceholder: t('previewsManager.searchPlaceholder'),
   noResults: t('previewsManager.noResults'),
   loadMore: t('previewsManager.loadMore'),

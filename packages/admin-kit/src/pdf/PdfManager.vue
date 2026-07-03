@@ -2,7 +2,7 @@
 import { computed, onMounted, reactive, ref } from 'vue'
 import type { AxiosInstance } from 'axios'
 import { Download, FilePlus, RefreshCw, Trash2 } from '@lucide/vue'
-import { BaseButton, BaseInput, IconButton, useConfirm, useToast } from '@bgm/ui'
+import { BaseButton, IconButton, SearchSelect, useConfirm, useToast } from '@bgm/ui'
 import ManagerCard from '../components/ManagerCard.vue'
 import { useRightSidebar } from '../composables/useRightSidebar'
 
@@ -11,7 +11,8 @@ import { useRightSidebar } from '../composables/useRightSidebar'
 // idioma y generan con un botón; los por-entidad enseñan cuántas dueñas hay y
 // generan todas. Al seleccionar una tarjeta, el panel derecho (patrón
 // kontuan) muestra sus PDF por idioma con acciones — y, en los por-entidad,
-// un SELECTOR CON BUSCADOR de la entidad dueña. Toda la gestión de PDF vive
+// un COMBOBOX (select desplegable con buscador) de la entidad dueña. Toda
+// la gestión de PDF vive
 // aquí (no en los detalles de las entidades).
 // Agnóstico de i18n (DC-29): textos por prop, defaults en castellano.
 
@@ -31,6 +32,7 @@ export interface PdfManagerLabels {
   statusFailed: string
   detailTitle: string
   panelEmpty: string
+  selectSource: string
   searchPlaceholder: string
   noResults: string
   generatedAt: string
@@ -53,6 +55,7 @@ const defaultLabels: PdfManagerLabels = {
   statusFailed: 'Error',
   detailTitle: 'PDF',
   panelEmpty: 'Selecciona una tarjeta para gestionar sus PDF.',
+  selectSource: 'Elige un elemento…',
   searchPlaceholder: 'Buscar…',
   noResults: 'Sin resultados.',
   generatedAt: 'Generado',
@@ -341,27 +344,17 @@ defineExpose({ refreshAll })
         <template v-else>
           <p class="manager-panel__kicker">{{ typeName(activeExport) }}</p>
 
-          <!-- Por entidad: selector con buscador de la entidad dueña -->
-          <template v-if="!activeExport.global">
-            <BaseInput
-              v-model="sourceSearch"
-              class="manager-panel__search"
-              :placeholder="L.searchPlaceholder"
-            />
-            <p v-if="!filteredSources.length" class="manager-panel__empty">{{ L.noResults }}</p>
-            <ul v-else class="manager-panel__list">
-              <li v-for="source in filteredSources" :key="source.id">
-                <button
-                  type="button"
-                  class="manager-panel__option"
-                  :class="{ 'is-active': selectedSourceId === source.id }"
-                  @click="selectSource(source.id)"
-                >
-                  {{ source.label }}
-                </button>
-              </li>
-            </ul>
-          </template>
+          <!-- Por entidad: combobox (con buscador) de la entidad dueña -->
+          <SearchSelect
+            v-if="!activeExport.global"
+            :model-value="selectedSourceId"
+            :options="filteredSources"
+            :placeholder="L.selectSource"
+            :search-placeholder="L.searchPlaceholder"
+            :no-results="L.noResults"
+            @update:model-value="(id) => selectSource(Number(id))"
+            @search="(q) => (sourceSearch = q)"
+          />
 
           <div v-if="panelRows" class="manager-detail">
             <div v-if="!activeExport.global" class="manager-detail__actions">

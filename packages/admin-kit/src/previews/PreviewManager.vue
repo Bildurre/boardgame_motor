@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import { computed, onMounted, onUnmounted, reactive, ref, watch } from 'vue'
+import { computed, onMounted, reactive, ref } from 'vue'
 import type { AxiosInstance } from 'axios'
 import { Eraser, ImageOff, ImagePlus, RefreshCw, Trash2 } from '@lucide/vue'
-import { BaseButton, BaseInput, useConfirm, useToast } from '@bgm/ui'
+import { BaseButton, SearchSelect, useConfirm, useToast } from '@bgm/ui'
 import ManagerCard from '../components/ManagerCard.vue'
 import { useRightSidebar } from '../composables/useRightSidebar'
 
@@ -10,7 +10,8 @@ import { useRightSidebar } from '../composables/useRightSidebar'
 // (sin colapsar, sin listas interminables): estadísticas —total y generadas
 // por idioma— y los botones "de todas" (generar faltantes / regenerar todo /
 // borrar todo). Al seleccionar una tarjeta, el panel derecho (patrón kontuan)
-// muestra un SELECTOR CON BUSCADOR de sus elementos; el elegido enseña sus
+// muestra un COMBOBOX (select desplegable con buscador) de sus elementos —
+// las listas largas viven dentro del desplegable —; el elegido enseña sus
 // imágenes por idioma y sus acciones (generar faltantes / regenerar /
 // borrar). Endpoints /admin/previews del motor.
 // Agnóstico de i18n (DC-29): textos por prop, defaults en castellano.
@@ -22,6 +23,7 @@ export interface PreviewManagerLabels {
   generateMissing: string
   regenerateAll: string
   deleteAll: string
+  selectItem: string
   searchPlaceholder: string
   noResults: string
   loadMore: string
@@ -46,6 +48,7 @@ const defaultLabels: PreviewManagerLabels = {
   generateMissing: 'Generar faltantes',
   regenerateAll: 'Regenerar todo',
   deleteAll: 'Borrar todo',
+  selectItem: 'Elige un elemento…',
   searchPlaceholder: 'Buscar…',
   noResults: 'Sin resultados.',
   loadMore: 'Cargar más',
@@ -159,15 +162,11 @@ function select(type: TypeStatus) {
   sidebar.reveal()
 }
 
-// Buscador del selector: consulta al servidor con un pequeño debounce.
-let searchTimer: ReturnType<typeof setTimeout> | null = null
-watch(search, () => {
-  if (searchTimer) clearTimeout(searchTimer)
-  searchTimer = setTimeout(() => loadItems(), 300)
-})
-onUnmounted(() => {
-  if (searchTimer) clearTimeout(searchTimer)
-})
+/** Búsqueda del combobox (debounce en el componente): consulta al servidor. */
+function onSearch(q: string) {
+  search.value = q
+  loadItems()
+}
 
 async function refreshAll() {
   await loadStatus()
@@ -339,30 +338,18 @@ defineExpose({ refreshAll })
         <template v-else>
           <p class="manager-panel__kicker">{{ typeName(activeStatus) }}</p>
 
-          <BaseInput
-            v-model="search"
-            class="manager-panel__search"
-            :placeholder="L.searchPlaceholder"
+          <SearchSelect
+            :model-value="selectedId"
+            :options="items.map((i) => ({ id: i.id, label: i.label }))"
+            :placeholder="L.selectItem"
+            :search-placeholder="L.searchPlaceholder"
+            :no-results="L.noResults"
+            :load-more-label="L.loadMore"
+            :can-load-more="page.current < page.last"
+            @update:model-value="(id) => (selectedId = Number(id))"
+            @search="onSearch"
+            @load-more="loadItems(page.current + 1)"
           />
-
-          <p v-if="!items.length" class="manager-panel__empty">{{ L.noResults }}</p>
-          <ul v-else class="manager-panel__list">
-            <li v-for="item in items" :key="item.id">
-              <button
-                type="button"
-                class="manager-panel__option"
-                :class="{ 'is-active': selectedId === item.id }"
-                @click="selectedId = item.id"
-              >
-                {{ item.label }}
-              </button>
-            </li>
-            <li v-if="page.current < page.last" class="manager-panel__more">
-              <BaseButton variant="secondary" @click="loadItems(page.current + 1)">
-                {{ L.loadMore }}
-              </BaseButton>
-            </li>
-          </ul>
 
           <div v-if="selectedItem" class="manager-detail">
             <h3 class="manager-detail__title">{{ selectedItem.label }}</h3>
