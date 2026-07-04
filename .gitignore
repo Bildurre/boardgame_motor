@@ -29,3 +29,4 @@ playground/api/database/*.sqlite
 *.log
 .vscode/
 .idea/
+node_modules
