@@ -429,7 +429,10 @@
       "accentColorsHint": "Kolore hauetako bat zozketatzen da weba kargatzean eta nabigatzean.",
       "fontHeadings": "Izenburuen letra-tipoa",
       "fontBody": "Testuaren letra-tipoa",
-      "footerText": "Oinaren testua"
+      "footerText": "Oinaren testua",
+      "customFonts": "Letra-tipo propioak",
+      "fontName": "Letra-tipoaren izena",
+      "fontFileHint": "WOFF2/WOFF/TTF/OTF · Geh. 4 MB"
     },
     "accentModes": {
       "fixed": "Finkoa",
@@ -448,6 +451,7 @@
     "toast": {
       "saved": "Konfigurazioa gordeta.",
       "saveError": "Ezin izan da gorde."
-    }
+    },
+    "uploadFont": "Igo letra-tipoa"
   }
 }

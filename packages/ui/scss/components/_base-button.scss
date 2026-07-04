@@ -35,7 +35,7 @@
   // Con slot de icono (patrón kontuan): fila por defecto en todas partes;
   // SOLO cuando el contenedor `content` (el área de contenido) es estrecho,
   // el texto pasa a mini-etiqueta bajo el icono.
-  &--has-icon {
+  &--has-icon:not(.bgm-button--text):not(.bgm-button--text-danger) {
     @container content (max-width: #{$bp-sm - 1px}) {
       flex-direction: column;
       gap: 2px;
@@ -61,6 +61,27 @@
     color: $color-text;
 
     &:hover { border-color: $color-accent; }
+  }
+}
+
+// Botón tipo TEXTO (kontuan): sin fondo, sin borde ni padding; solo color.
+.bgm-button--text {
+  background: transparent;
+  border-color: transparent;
+  padding: 0;
+  color: $accent-500;
+
+  &:hover:not(:disabled) { color: $accent-700; background: transparent; }
+}
+.bgm-button--text-danger {
+  background: transparent;
+  border-color: transparent;
+  padding: 0;
+  color: $danger;
+
+  &:hover:not(:disabled) {
+    color: color-mix(in srgb, $danger 80%, black);
+    background: transparent;
   }
 }
 

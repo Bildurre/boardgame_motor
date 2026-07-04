@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import { computed, onMounted, ref } from 'vue'
+import { computed, onMounted, ref, watchEffect } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { Plus, Save, X } from '@lucide/vue'
+import { Plus, Save, Upload, X } from '@lucide/vue'
 import {
   BaseButton,
+  BaseInput,
   BaseSelect,
-  IconButton,
   ImageUpload,
   PaletteColorPicker,
   TranslatableInput,
@@ -34,14 +34,45 @@ const accentColors = ref<string[]>([])
 const fontHeadings = ref('system')
 const fontBody = ref('system')
 const footerText = ref<Record<string, string>>({})
-const fonts = ref<Record<string, string>>({})
+
+interface SiteFont {
+  label: string
+  stack: string
+  files: { family: string; src: string; weight: string; style: string }[]
+}
+interface CustomFont {
+  key: string
+  name: string
+  file: string
+}
+const fonts = ref<Record<string, SiteFont>>({})
+const customFonts = ref<CustomFont[]>([])
 
 const fontOptions = computed(() =>
-  Object.keys(fonts.value).map((key) => ({
+  Object.entries(fonts.value).map(([key, font]) => ({
     value: key,
-    label: te(`settings.fonts.${key}`) ? t(`settings.fonts.${key}`) : key,
+    label: te(`settings.fonts.${key}`) ? t(`settings.fonts.${key}`) : font.label,
   })),
 )
+
+// @font-face del catálogo, también aquí: así las vistas previas del select
+// se pintan con la fuente real (los ficheros llegan con CORS del API).
+watchEffect(() => {
+  let style = document.getElementById('site-fonts-preview')
+  if (!style) {
+    style = document.createElement('style')
+    style.id = 'site-fonts-preview'
+    document.head.appendChild(style)
+  }
+  style.textContent = Object.values(fonts.value)
+    .flatMap((font) => font.files)
+    .map(
+      (file) =>
+        `@font-face { font-family: '${file.family}'; src: url('${file.src}'); ` +
+        `font-weight: ${file.weight}; font-style: ${file.style}; font-display: swap; }`,
+    )
+    .join('\n')
+})
 
 /** Candidato del modo aleatorio elegido en el picker (se añade a la lista). */
 const candidate = ref('#22c55e')
@@ -52,6 +83,50 @@ function addColor() {
 
 function removeColor(index: number) {
   accentColors.value.splice(index, 1)
+}
+
+// --- Fuentes propias (font uploader) ---
+const fontName = ref('')
+const fontFile = ref<File | null>(null)
+const uploadingFont = ref(false)
+
+function onFontFile(event: Event) {
+  fontFile.value = (event.target as HTMLInputElement).files?.[0] ?? null
+}
+
+async function uploadFont() {
+  if (!fontName.value.trim() || !fontFile.value) return
+  uploadingFont.value = true
+  try {
+    const form = new FormData()
+    form.append('name', fontName.value.trim())
+    form.append('file', fontFile.value)
+    const { data } = await api.post('/admin/settings/fonts', form)
+    const font = data.data as CustomFont & { url: string }
+    customFonts.value = [...customFonts.value.filter((f) => f.key !== font.key), font]
+    // Disponible al momento en los selects y su vista previa.
+    fonts.value = {
+      ...fonts.value,
+      [font.key]: {
+        label: font.name,
+        stack: `'${font.name}', system-ui, sans-serif`,
+        files: [{ family: font.name, src: font.url, weight: '100 900', style: 'normal' }],
+      },
+    }
+    fontName.value = ''
+    fontFile.value = null
+  } catch {
+    toast.danger(t('common.errors.action'))
+  } finally {
+    uploadingFont.value = false
+  }
+}
+
+function removeCustomFont(font: CustomFont) {
+  customFonts.value = customFonts.value.filter((f) => f.key !== font.key)
+  fonts.value = Object.fromEntries(Object.entries(fonts.value).filter(([key]) => key !== font.key))
+  if (fontHeadings.value === font.key) fontHeadings.value = 'system'
+  if (fontBody.value === font.key) fontBody.value = 'system'
 }
 
 async function upload(file: File): Promise<string | null> {
@@ -90,6 +165,7 @@ async function load() {
     fontBody.value = s.font_body
     footerText.value = s.footer_text ?? {}
     fonts.value = s.fonts ?? {}
+    customFonts.value = s.custom_fonts ?? []
   } catch {
     toast.danger(t('common.errors.load'))
   } finally {
@@ -110,6 +186,7 @@ async function save() {
       accent_colors: accentColors.value,
       font_headings: fontHeadings.value,
       font_body: fontBody.value,
+      custom_fonts: customFonts.value.map(({ key, name, file }) => ({ key, name, file })),
       footer_text: footerText.value,
     })
     toast.success(t('settings.toast.saved'))
@@ -194,21 +271,24 @@ onMounted(async () => {
 
       <template v-else>
         <p class="settings-view__hint">{{ t('settings.fields.accentColorsHint') }}</p>
+        <!-- Candidatos como etiquetas en fila (con wrap) -->
         <ul v-if="accentColors.length" class="settings-view__colors">
           <li v-for="(color, index) in accentColors" :key="color">
             <span class="settings-view__swatch" :style="{ background: color }" />
             <code>{{ color }}</code>
-            <IconButton
-              variant="danger"
+            <button
+              type="button"
+              class="settings-view__chip-remove"
               :title="t('common.actions.delete')"
               @click="removeColor(index)"
-              ><X :size="14"
-            /></IconButton>
+            >
+              <X :size="12" />
+            </button>
           </li>
         </ul>
         <div class="settings-view__add-color">
           <PaletteColorPicker v-model="candidate" :label="t('settings.fields.accentColors')" />
-          <BaseButton variant="secondary" @click="addColor">
+          <BaseButton variant="text" @click="addColor">
             <template #icon><Plus :size="14" /></template>
             {{ t('settings.addColor') }}
           </BaseButton>
@@ -222,7 +302,10 @@ onMounted(async () => {
             :label="t('settings.fields.fontHeadings')"
             :options="fontOptions"
           />
-          <p class="settings-view__font-preview" :style="{ fontFamily: fonts[fontHeadings] }">
+          <p
+            class="settings-view__font-preview"
+            :style="{ fontFamily: fonts[fontHeadings]?.stack }"
+          >
             {{ t('settings.fontPreviewHeading') }}
           </p>
         </div>
@@ -232,9 +315,44 @@ onMounted(async () => {
             :label="t('settings.fields.fontBody')"
             :options="fontOptions"
           />
-          <p class="settings-view__font-preview" :style="{ fontFamily: fonts[fontBody] }">
+          <p class="settings-view__font-preview" :style="{ fontFamily: fonts[fontBody]?.stack }">
             {{ t('settings.fontPreviewBody') }}
           </p>
+        </div>
+      </div>
+
+      <!-- Fuentes propias: subir un fichero la hace elegible arriba -->
+      <div class="settings-view__custom-fonts">
+        <span class="form-field__label">{{ t('settings.fields.customFonts') }}</span>
+        <ul v-if="customFonts.length" class="settings-view__colors">
+          <li v-for="font in customFonts" :key="font.key">
+            <code>{{ font.name }}</code>
+            <button
+              type="button"
+              class="settings-view__chip-remove"
+              :title="t('common.actions.delete')"
+              @click="removeCustomFont(font)"
+            >
+              <X :size="12" />
+            </button>
+          </li>
+        </ul>
+        <div class="settings-view__font-upload">
+          <BaseInput v-model="fontName" :label="t('settings.fields.fontName')" />
+          <label class="settings-view__font-file">
+            <input type="file" accept=".woff2,.woff,.ttf,.otf" @change="onFontFile" />
+            <span class="settings-view__hint">{{
+              fontFile?.name || t('settings.fields.fontFileHint')
+            }}</span>
+          </label>
+          <BaseButton
+            variant="text"
+            :disabled="uploadingFont || !fontName.trim() || !fontFile"
+            @click="uploadFont"
+          >
+            <template #icon><Upload :size="14" /></template>
+            {{ t('settings.uploadFont') }}
+          </BaseButton>
         </div>
       </div>
     </section>

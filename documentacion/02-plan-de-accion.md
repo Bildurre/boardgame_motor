@@ -100,6 +100,7 @@
 - [x] Módulo de ajustes del motor: tabla `settings` (JSON por clave), servicio `SiteSettings` cacheado, `GET /api/site` público y `GET/PUT /api/admin/settings/site` (validación completa).
 - [x] Página **Configuración** en el admin: título y descripción (traducibles), logo SVG/PNG y favicon (subidos al momento), **acento fijo o ALEATORIO estilo CDL** (lista de colores candidatos), fuentes de títulos y de texto (catálogo `motor.site.fonts`, ampliable por juego) con vista previa, y texto del pie.
 - [x] Aplicación en la SPA pública (`stores/site.ts`): título del documento (`página · sitio`), favicon, fuentes por variable CSS (`--font-headings`/`--font-body`), footer, logo en la barra (el SVG viaja **inlineado** en el payload y hereda el acento vía currentColor) y acento con tonos derivados por `color-mix`. En modo aleatorio se sortea al cargar **y se re-sortea en cada navegación** (`router.afterEach`), recoloreando también el logo — el efecto logo-path de CDL.
+- [x] **Webfonts elegibles + font uploader**: 10 familias woff2 en `public/fonts` del API (catálogo `motor.site.fonts` con `{label, stack, files}`), servidas con CORS por `GET /api/site/fonts/{path}`; @font-face generados por la SPA (y por el admin para las vistas previas); subida de fuentes propias desde Configuración (`custom_fonts`).
 - **Hito:** ✅ cambiar título/logo/fuentes/acento desde el admin y verlo aplicado en la web al recargar; con el modo aleatorio, cada visita y cada navegación estrenan color.
 
 ### Fase 6 — Backup, web pública y panel de usuario extensible

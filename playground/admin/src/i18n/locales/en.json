@@ -429,7 +429,10 @@
       "accentColorsHint": "One of these colors is drawn on page load and while navigating.",
       "fontHeadings": "Headings font",
       "fontBody": "Body font",
-      "footerText": "Footer text"
+      "footerText": "Footer text",
+      "customFonts": "Custom fonts",
+      "fontName": "Font name",
+      "fontFileHint": "WOFF2/WOFF/TTF/OTF · Max 4 MB"
     },
     "accentModes": {
       "fixed": "Fixed",
@@ -448,6 +451,7 @@
     "toast": {
       "saved": "Settings saved.",
       "saveError": "Could not save."
-    }
+    },
+    "uploadFont": "Upload font"
   }
 }

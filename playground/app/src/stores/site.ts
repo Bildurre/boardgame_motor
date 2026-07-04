@@ -7,6 +7,13 @@ import { useLocalesStore } from '@/stores/locales'
 // fuentes y color de acento — fijo o ALEATORIO estilo CDL: se sortea uno de
 // los candidatos al cargar la página y se re-sortea al navegar (la SPA no
 // recarga, así que el disparador extra es router.afterEach → onNavigate()).
+export interface SiteFont {
+  label: string
+  stack: string
+  /** Ficheros @font-face (vacío en las pilas del sistema). */
+  files: { family: string; src: string; weight: string; style: string }[]
+}
+
 export interface SiteSettings {
   title: Record<string, string>
   description: Record<string, string>
@@ -18,9 +25,21 @@ export interface SiteSettings {
   font_headings: string
   font_body: string
   footer_text: Record<string, string>
-  fonts: Record<string, string>
+  fonts: Record<string, SiteFont>
   /** SVG del logo inlineado por la API (currentColor hereda el acento). */
   logo_inline: string | null
+}
+
+/** CSS @font-face de un catálogo de fuentes (los navegadores solo descargan las usadas). */
+export function fontFacesCss(fonts: Record<string, SiteFont>): string {
+  return Object.values(fonts)
+    .flatMap((font) => font.files)
+    .map(
+      (file) =>
+        `@font-face { font-family: '${file.family}'; src: url('${file.src}'); ` +
+        `font-weight: ${file.weight}; font-style: ${file.style}; font-display: swap; }`,
+    )
+    .join('\n')
 }
 
 export const useSiteStore = defineStore('site', () => {
@@ -65,10 +84,20 @@ export const useSiteStore = defineStore('site', () => {
 
   function applyFonts() {
     if (!settings.value) return
+    const fonts = settings.value.fonts ?? {}
+
+    // @font-face de todo el catálogo (solo se descargan las que se usan).
+    let style = document.getElementById('site-fonts')
+    if (!style) {
+      style = document.createElement('style')
+      style.id = 'site-fonts'
+      document.head.appendChild(style)
+    }
+    style.textContent = fontFacesCss(fonts)
+
     const root = document.documentElement.style
-    const stacks = settings.value.fonts ?? {}
-    root.setProperty('--font-headings', stacks[settings.value.font_headings] || 'inherit')
-    root.setProperty('--font-body', stacks[settings.value.font_body] || '')
+    root.setProperty('--font-headings', fonts[settings.value.font_headings]?.stack || 'inherit')
+    root.setProperty('--font-body', fonts[settings.value.font_body]?.stack || '')
   }
 
   function applyFavicon() {

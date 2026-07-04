@@ -86,7 +86,7 @@ onBeforeUnmount(crumb.clear)
 <template>
   <div v-if="page" class="single">
     <div class="single__bar">
-      <BaseButton variant="secondary" @click="router.push({ name: 'pages' })">
+      <BaseButton variant="text" @click="router.push({ name: 'pages' })">
         <template #icon><ArrowLeft :size="16" /></template>
         {{ t('pages.title') }}
       </BaseButton>

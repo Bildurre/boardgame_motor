@@ -2,7 +2,8 @@
 
 // Bloques públicos del CRM (doc 03): estilos base, cada juego los ajusta.
 .block {
-  padding: $space-6 0;
+  // Aire vertical entre bloques (CDL usa 4rem; aquí algo más contenido).
+  padding-block: $space-8 + $space-6; // 56px
   background: var(--block-bg, transparent);
 
   &__inner {
@@ -10,7 +11,7 @@
     margin: 0 auto;
     padding: 0 $space-4;
     display: grid;
-    gap: $space-3;
+    gap: $space-5; // separación entre los elementos del bloque
   }
 
   // Anchura del contenido (campo común `width`): coherente entre bloques.
@@ -42,9 +43,9 @@
     border: 1px solid $border;
     border-radius: $radius-lg;
     box-shadow: $shadow-sm;
-    padding: $space-6;
+    padding: $space-8;
     display: grid;
-    gap: $space-3;
+    gap: $space-4;
 
     .bgm-button { justify-self: start; text-decoration: none; }
   }

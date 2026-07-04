@@ -4,7 +4,7 @@
 // icono (ver _base-button.scss) y en anchos vuelve a la fila.
 withDefaults(
   defineProps<{
-    variant?: 'primary' | 'secondary' | 'danger' | 'success'
+    variant?: 'primary' | 'secondary' | 'danger' | 'success' | 'text' | 'text-danger'
     type?: 'button' | 'submit'
   }>(),
   { variant: 'primary', type: 'button' },

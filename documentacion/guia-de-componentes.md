@@ -31,9 +31,13 @@ Los estilos se importan vía SCSS:
 ### BaseButton
 
 - **Finalidad:** botón de acción principal del motor con variantes de color
-  coherentes con los tokens.
-- **Props:** `variant?: 'primary' | 'secondary' | 'danger' | 'success'` (def.
-  `primary`), `type?: 'button' | 'submit'` (def. `button`).
+  coherentes con los tokens. Las variantes `text` / `text-danger` (kontuan)
+  son el **botón tipo texto**: sin fondo, sin borde ni padding, solo color —
+  para acciones inline de baja jerarquía (añadir a una lista, subir fuente,
+  el "← volver" de los singles).
+- **Props:** `variant?: 'primary' | 'secondary' | 'danger' | 'success' |
+  'text' | 'text-danger'` (def. `primary`), `type?: 'button' | 'submit'`
+  (def. `button`).
 - **Slot:** contenido del botón (texto/icono).
 - **Uso:**
 

@@ -27,8 +27,8 @@ class SiteSettingsSeeder extends Seeder
             'favicon' => $this->favicon(),
             'accent_mode' => 'random',
             'accent_colors' => ['#29ab5f', '#f15959', '#408cfd'], // verde/rojo/azul de CDL
-            'font_headings' => 'serif',
-            'font_body' => 'system',
+            'font_headings' => 'ebgaramond', // webfont del juego (public/fonts)
+            'font_body' => 'lora',
             'footer_text' => [
                 'es' => 'Choque de Leyendas · un juego de mesa imprimible',
                 'eu' => 'Kondairen Talka · inprima daitekeen mahai-jokoa',

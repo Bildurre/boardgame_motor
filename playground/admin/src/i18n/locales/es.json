@@ -368,7 +368,10 @@
       "accentColorsHint": "Se sortea uno de estos colores al cargar la web y al navegar.",
       "fontHeadings": "Fuente de los títulos",
       "fontBody": "Fuente del texto",
-      "footerText": "Texto del pie"
+      "footerText": "Texto del pie",
+      "customFonts": "Fuentes propias",
+      "fontName": "Nombre de la fuente",
+      "fontFileHint": "WOFF2/WOFF/TTF/OTF · Máx. 4 MB"
     },
     "accentModes": {
       "fixed": "Fijo",
@@ -387,6 +390,7 @@
     "toast": {
       "saved": "Configuración guardada.",
       "saveError": "No se pudo guardar."
-    }
+    },
+    "uploadFont": "Subir fuente"
   }
 }

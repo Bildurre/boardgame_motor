@@ -727,9 +727,19 @@ de **`GET /api/site`** al arrancar):
   que necesita una SPA que no recarga). Los tonos 200–700 se derivan del HEX
   con `color-mix`; el logo SVG se recolorea con cada sorteo.
 - **Fuentes:** títulos y texto por separado, del catálogo
-  `motor.site.fonts` (pilas del sistema; un juego añade una webfont
-  registrando su clave en config y cargando la fuente en su SPA). La SPA las
-  aplica con `--font-headings` / `--font-body`.
+  `motor.site.fonts`. Una entrada puede ser una pila CSS a secas (pilas del
+  sistema) o `{label, stack, files}` — los `files` son woff2 en
+  `public/fonts` del API (el playground registra Inter, Open Sans,
+  Montserrat, Roboto, EB Garamond, Lora, Playfair, IM Fell, Italianno y
+  JetBrains Mono en su AppServiceProvider) y **se sirven por
+  `GET /api/site/fonts/{path}`**, que hereda el CORS del grupo api (los
+  webfonts cross-origin lo exigen). La SPA genera los `@font-face` del
+  payload (solo se descargan las usadas) y aplica las pilas con
+  `--font-headings` / `--font-body`; el admin hace lo mismo para que las
+  vistas previas del select se pinten con la fuente real. Además el admin
+  puede **subir fuentes propias** (`POST /api/admin/settings/fonts`,
+  woff2/woff/ttf/otf): quedan en `custom_fonts` y entran al catálogo como
+  una familia más.
 - **Pie:** texto del footer (traducible).
 
 En la app, todo vive en `stores/site.ts` (cargar + aplicar + sorteo).

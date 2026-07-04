@@ -55,32 +55,46 @@
     font-size: $fs-13;
   }
 
-  // Lista de colores del modo aleatorio.
+  // Candidatos del modo aleatorio: etiquetas compactas en fila con wrap.
   &__colors {
     list-style: none;
     margin: 0;
     padding: 0;
-    display: grid;
+    display: flex;
+    flex-wrap: wrap;
     gap: $space-2;
 
     li {
-      display: flex;
+      display: inline-flex;
       align-items: center;
-      gap: $space-3;
+      gap: $space-2;
       border: 1px solid $border;
-      border-radius: $radius-md;
-      padding: $space-2 $space-3;
+      border-radius: $radius-pill;
+      padding: 2px $space-2;
+      font-size: $fs-12;
 
-      code { flex: 1; color: $text-2; }
+      code { color: $text-2; }
     }
   }
 
   &__swatch {
-    width: 22px;
-    height: 22px;
-    border-radius: $radius-sm;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
     border: 1px solid $border-strong;
     flex: 0 0 auto;
+  }
+
+  &__chip-remove {
+    display: inline-flex;
+    align-items: center;
+    border: none;
+    background: none;
+    padding: 2px;
+    color: $text-3;
+    cursor: pointer;
+
+    &:hover { color: $danger; }
   }
 
   &__add-color {
@@ -102,5 +116,27 @@
     margin: $space-2 0 0;
     color: $text-2;
     font-size: $fs-16;
+  }
+
+  // Subida de fuentes propias.
+  &__custom-fonts {
+    display: grid;
+    gap: $space-2;
+    border-top: 1px dashed $border;
+    padding-top: $space-4;
+  }
+
+  &__font-upload {
+    display: grid;
+    gap: $space-3;
+    justify-items: start;
+  }
+
+  &__font-file {
+    display: grid;
+    gap: $space-1;
+    cursor: pointer;
+
+    input[type="file"] { font-size: $fs-13; color: $text-2; max-width: 100%; }
   }
 }
