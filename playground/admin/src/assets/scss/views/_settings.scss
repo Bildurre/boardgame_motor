@@ -1,23 +1,16 @@
 @use "tokens" as *;
 
-// Configuración de la web: tarjetas por sección, en rejilla de 2 columnas
-// cuando caben según el ancho del CONTENEDOR (container query, como los
-// gestores), y cada tarjeta es su propio contenedor `content` para que sus
-// interiores (uploads, fuentes) se adapten a la tarjeta.
+// Configuración de la web: tarjetas por sección en MASONRY (CSS columns):
+// 2 columnas cuando caben según el ancho del CONTENEDOR y cada tarjeta
+// pegada a la anterior de su columna (sin filas alineadas por alturas).
+// Cada tarjeta es su propio contenedor `content` para que sus interiores
+// (uploads, fuentes) se adapten a la tarjeta.
 .settings-view {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr);
-  gap: $space-5;
-  align-items: start;
-
-  @container content (min-width: #{$bp-md}) {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-
-  // La barra de acciones (Guardar) ocupa siempre la fila entera.
-  > .list-view__top {
-    grid-column: 1 / -1;
-    margin-bottom: 0;
+  &__masonry {
+    @container content (min-width: #{$bp-md}) {
+      columns: 2;
+      column-gap: $space-5;
+    }
   }
 
   &__section {
@@ -28,6 +21,8 @@
     display: grid;
     gap: $space-4;
     min-width: 0;
+    margin-bottom: $space-5;
+    break-inside: avoid; // una tarjeta nunca se parte entre columnas
     container-name: content;
     container-type: inline-size;
 
