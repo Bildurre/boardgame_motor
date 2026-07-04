@@ -1,9 +1,16 @@
 # 05 · Auth, usuarios y roles
 
-> **Estado: implementado (Fases 1–2 ✅), incluida la verificación de email (DC-14).**
-> Pendiente para más adelante: forgot/reset password (al montar el correo real
-> del juego) y el CRUD de usuarios del admin-kit (llegará con el gestor de
-> usuarios, Fase 6/7).
+> **Estado: implementado (Fases 1–2 y 5.6 ✅), incluida la verificación de
+> email (DC-14) y el gestor de usuarios con permisos.** Permisos del motor
+> (Spatie vía Gate): `manage-game` / `manage-web` / `manage-users`, reparto
+> por rol en config (`motor.auth.permissions` + `role_permissions`; admin
+> todo, editor solo el juego) y sincronía única en
+> `MotorAuth::syncRolesAndPermissions()` (instalador, seeder y tests). Rutas
+> protegidas con el middleware `can:`; CRUD de usuarios en
+> `/api/admin/users` (búsqueda, crear con rol, editar con contraseña
+> opcional, borrar; nadie se borra ni se cambia el rol a sí mismo); el
+> admin SPA filtra nav y rutas con los permisos de `/auth/me`. Pendiente:
+> forgot/reset password (al montar el correo real del juego).
 
 ## Qué hace
 

@@ -7,6 +7,7 @@ export interface User {
   name: string
   email: string
   roles: string[]
+  permissions: string[]
   can_access_admin: boolean
   email_verified: boolean
 }
@@ -16,6 +17,11 @@ export const useAuthStore = defineStore('auth', () => {
   const token = ref<string | null>(localStorage.getItem(TOKEN_KEY))
   const isAuthenticated = computed(() => !!token.value)
   const canAccessAdmin = computed(() => !!user.value?.can_access_admin)
+
+  /** Permiso del motor (manage-game / manage-web / manage-users). */
+  function can(permission: string): boolean {
+    return user.value?.permissions?.includes(permission) ?? false
+  }
 
   function setToken(value: string | null) {
     token.value = value
@@ -49,5 +55,5 @@ export const useAuthStore = defineStore('auth', () => {
     clearSession()
   }
 
-  return { user, token, isAuthenticated, canAccessAdmin, login, fetchMe, logout, clearSession }
+  return { user, token, isAuthenticated, canAccessAdmin, can, login, fetchMe, logout, clearSession }
 })

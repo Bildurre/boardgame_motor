@@ -47,6 +47,7 @@ export function createLocalizedRoutes(locale: string): RouteRecordRaw[] {
       meta: {
         admin: true,
         nav: 'houses',
+        permission: 'manage-game',
         titleKey: 'houses.title',
         breadcrumbs: [{ key: 'houses' }],
       },
@@ -60,6 +61,7 @@ export function createLocalizedRoutes(locale: string): RouteRecordRaw[] {
       meta: {
         admin: true,
         nav: 'houses',
+        permission: 'manage-game',
         titleKey: 'houses.title',
         breadcrumbs: [{ key: 'houses', to: 'houses' }],
       },
@@ -72,6 +74,7 @@ export function createLocalizedRoutes(locale: string): RouteRecordRaw[] {
       meta: {
         admin: true,
         nav: 'schemes',
+        permission: 'manage-game',
         titleKey: 'schemes.title',
         breadcrumbs: [{ key: 'schemes' }],
       },
@@ -84,6 +87,7 @@ export function createLocalizedRoutes(locale: string): RouteRecordRaw[] {
       meta: {
         admin: true,
         nav: 'schemes',
+        permission: 'manage-game',
         titleKey: 'schemes.title',
         breadcrumbs: [{ key: 'schemes', to: 'schemes' }],
       },
@@ -96,6 +100,7 @@ export function createLocalizedRoutes(locale: string): RouteRecordRaw[] {
       meta: {
         admin: true,
         nav: 'characters',
+        permission: 'manage-game',
         titleKey: 'characters.title',
         breadcrumbs: [{ key: 'characters' }],
       },
@@ -108,6 +113,7 @@ export function createLocalizedRoutes(locale: string): RouteRecordRaw[] {
       meta: {
         admin: true,
         nav: 'characters',
+        permission: 'manage-game',
         titleKey: 'characters.title',
         breadcrumbs: [{ key: 'characters', to: 'characters' }],
       },
@@ -117,7 +123,13 @@ export function createLocalizedRoutes(locale: string): RouteRecordRaw[] {
       name: 'icons',
       component: () => import('@/views/icons/IconsListView.vue'),
       alias: buildAliases((t) => `/${t.icons}`, locale),
-      meta: { admin: true, nav: 'icons', titleKey: 'icons.title', breadcrumbs: [{ key: 'icons' }] },
+      meta: {
+        admin: true,
+        nav: 'icons',
+        permission: 'manage-game',
+        titleKey: 'icons.title',
+        breadcrumbs: [{ key: 'icons' }],
+      },
     },
     {
       path: `/${p.previews}`,
@@ -127,6 +139,7 @@ export function createLocalizedRoutes(locale: string): RouteRecordRaw[] {
       meta: {
         admin: true,
         nav: 'previews',
+        permission: 'manage-game',
         titleKey: 'previewsManager.title',
         breadcrumbs: [{ key: 'previews' }],
       },
@@ -136,7 +149,13 @@ export function createLocalizedRoutes(locale: string): RouteRecordRaw[] {
       name: 'pages',
       component: () => import('@/views/pages/PagesListView.vue'),
       alias: buildAliases((t) => `/${t.pages}`, locale),
-      meta: { admin: true, nav: 'pages', titleKey: 'pages.title', breadcrumbs: [{ key: 'pages' }] },
+      meta: {
+        admin: true,
+        nav: 'pages',
+        permission: 'manage-web',
+        titleKey: 'pages.title',
+        breadcrumbs: [{ key: 'pages' }],
+      },
     },
     {
       path: `/${p.pages}/:id`,
@@ -146,6 +165,7 @@ export function createLocalizedRoutes(locale: string): RouteRecordRaw[] {
       meta: {
         admin: true,
         nav: 'pages',
+        permission: 'manage-web',
         titleKey: 'pages.title',
         breadcrumbs: [{ key: 'pages', to: 'pages' }],
       },
@@ -158,6 +178,7 @@ export function createLocalizedRoutes(locale: string): RouteRecordRaw[] {
       meta: {
         admin: true,
         nav: 'pdfs',
+        permission: 'manage-game',
         titleKey: 'pdfs.viewTitle',
         breadcrumbs: [{ key: 'pdfs' }],
       },
@@ -170,8 +191,22 @@ export function createLocalizedRoutes(locale: string): RouteRecordRaw[] {
       meta: {
         admin: true,
         nav: 'settings',
+        permission: 'manage-web',
         titleKey: 'settings.title',
         breadcrumbs: [{ key: 'settings' }],
+      },
+    },
+    {
+      path: `/${p.users}`,
+      name: 'users',
+      component: () => import('@/views/users/UsersView.vue'),
+      alias: buildAliases((t) => `/${t.users}`, locale),
+      meta: {
+        admin: true,
+        nav: 'users',
+        permission: 'manage-users',
+        titleKey: 'users.title',
+        breadcrumbs: [{ key: 'users' }],
       },
     },
     // URLs desconocidas: al dashboard (evita la página en blanco).

@@ -8,7 +8,8 @@
     "previews": "imagenes",
     "pdfs": "pdf",
     "pages": "paginas",
-    "settings": "configuracion"
+    "settings": "configuracion",
+    "users": "usuarios"
   },
   "breadcrumbs": {
     "home": "Inicio",
@@ -19,7 +20,8 @@
     "previews": "Imágenes",
     "pdfs": "PDF",
     "pages": "Páginas",
-    "settings": "Configuración"
+    "settings": "Configuración",
+    "users": "Usuarios"
   },
   "nav": {
     "dashboard": "Panel",
@@ -30,7 +32,8 @@
     "previews": "Imágenes",
     "pdfs": "PDF",
     "pages": "Páginas",
-    "settings": "Configuración"
+    "settings": "Configuración",
+    "users": "Usuarios"
   },
   "icons": {
     "title": "Iconos",
@@ -371,7 +374,8 @@
       "footerText": "Texto del pie",
       "customFonts": "Fuentes propias",
       "fontName": "Nombre de la fuente",
-      "fontFileHint": "WOFF2/WOFF/TTF/OTF · Máx. 4 MB"
+      "fontFileHint": "WOFF2/WOFF/TTF/OTF · Máx. 4 MB",
+      "fontDrag": "Arrastra una fuente o haz clic"
     },
     "accentModes": {
       "fixed": "Fijo",
@@ -392,5 +396,33 @@
       "saveError": "No se pudo guardar."
     },
     "uploadFont": "Subir fuente"
+  },
+  "users": {
+    "title": "Usuarios",
+    "new": "Nuevo usuario",
+    "edit": "Editar usuario",
+    "panelTitle": "Usuario",
+    "panelEmpty": "Selecciona un usuario para ver sus acciones.",
+    "unverified": "Sin verificar",
+    "verified": "Email verificado",
+    "selfHint": "Es tu propio usuario: no puedes borrarlo ni cambiarte el rol.",
+    "confirmDelete": "¿Borrar al usuario \"{name}\"?",
+    "fields": {
+      "name": "Nombre",
+      "email": "Email",
+      "password": "Contraseña",
+      "passwordOptional": "Contraseña (vacía = no cambiar)",
+      "role": "Rol"
+    },
+    "roles": {
+      "admin": "Admin",
+      "editor": "Editor",
+      "user": "Usuario"
+    },
+    "toast": {
+      "saved": "Usuario guardado.",
+      "deleted": "Usuario borrado.",
+      "saveError": "No se pudo guardar."
+    }
   }
 }

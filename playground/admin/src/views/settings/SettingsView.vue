@@ -6,6 +6,7 @@ import {
   BaseButton,
   BaseInput,
   BaseSelect,
+  FontUpload,
   ImageUpload,
   PaletteColorPicker,
   TranslatableInput,
@@ -89,10 +90,6 @@ function removeColor(index: number) {
 const fontName = ref('')
 const fontFile = ref<File | null>(null)
 const uploadingFont = ref(false)
-
-function onFontFile(event: Event) {
-  fontFile.value = (event.target as HTMLInputElement).files?.[0] ?? null
-}
 
 async function uploadFont() {
   if (!fontName.value.trim() || !fontFile.value) return
@@ -360,12 +357,13 @@ onMounted(async () => {
             </ul>
             <div class="settings-view__font-upload">
               <BaseInput v-model="fontName" :label="t('settings.fields.fontName')" />
-              <label class="settings-view__font-file">
-                <input type="file" accept=".woff2,.woff,.ttf,.otf" @change="onFontFile" />
-                <span class="settings-view__hint">{{
-                  fontFile?.name || t('settings.fields.fontFileHint')
-                }}</span>
-              </label>
+              <FontUpload
+                v-model="fontFile"
+                :drag-text="t('settings.fields.fontDrag')"
+                :hint-text="t('settings.fields.fontFileHint')"
+                :too-large-text="t('common.fileTooLarge')"
+                :invalid-type-text="t('common.fileType')"
+              />
               <BaseButton
                 variant="text"
                 :disabled="uploadingFont || !fontName.trim() || !fontFile"

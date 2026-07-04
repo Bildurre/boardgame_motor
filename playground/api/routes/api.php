@@ -16,8 +16,8 @@ use Illuminate\Support\Facades\Route;
 Route::get('houses', [PublicHouseController::class, 'index']);
 Route::get('houses/{slug}', [PublicHouseController::class, 'show']);
 
-// --- Admin (admin/editor) ---
-Route::middleware(['auth:sanctum', 'motor.admin'])->prefix('admin')->group(function () {
+// --- Admin (admin/editor): las entidades del juego exigen manage-game ---
+Route::middleware(['auth:sanctum', 'motor.admin', 'can:manage-game'])->prefix('admin')->group(function () {
     // Houses
     Route::get('houses/options', [HouseController::class, 'options']); // antes de {slug}
     Route::get('houses', [HouseController::class, 'index']);

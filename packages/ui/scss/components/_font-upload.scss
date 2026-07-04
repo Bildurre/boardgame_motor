@@ -1,0 +1,91 @@
+@use "tokens" as *;
+
+// Subida de fuente (hermano compacto de image-upload): una franja clicable
+// con drag-and-drop; el fichero elegido se muestra con nombre y tamaño.
+.font-upload {
+  display: grid;
+  gap: $space-1;
+
+  &__label {
+    font-size: $fs-13;
+    font-weight: $k-fw-medium;
+    color: $text-2;
+  }
+
+  &__zone {
+    display: flex;
+    align-items: center;
+    gap: $space-2;
+    min-height: 44px;
+    padding: $space-2 $space-3;
+    border: 1px dashed $border;
+    border-radius: $radius-md;
+    cursor: pointer;
+    transition: border-color 0.15s ease, background-color 0.15s ease;
+
+    &:hover {
+      border-color: $border-strong;
+      background-color: $surface-2;
+    }
+
+    &--dragging {
+      border-color: $accent-500;
+      background-color: color-mix(in srgb, $accent-500 8%, transparent);
+    }
+
+    &--has-file { border-style: solid; }
+    &--error { border-color: $danger; }
+  }
+
+  &__input { display: none; }
+
+  &__icon {
+    flex: 0 0 auto;
+    color: $text-3;
+  }
+
+  &__name {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: $fs-13;
+    color: $text-1;
+  }
+
+  &__size {
+    flex: 0 0 auto;
+    font-size: $fs-12;
+    color: $text-3;
+  }
+
+  &__remove {
+    flex: 0 0 auto;
+    display: inline-flex;
+    align-items: center;
+    border: none;
+    background: none;
+    padding: $space-1;
+    color: $text-3;
+    cursor: pointer;
+
+    &:hover { color: $danger; }
+  }
+
+  &__text {
+    font-size: $fs-13;
+    color: $text-2;
+  }
+
+  &__hint {
+    margin-left: auto;
+    font-size: $fs-12;
+    color: $text-3;
+  }
+
+  &__error {
+    margin: 0;
+    font-size: $fs-12;
+    color: $danger;
+  }
+}

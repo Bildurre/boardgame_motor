@@ -292,6 +292,22 @@ color. Úsalos siempre en formularios (en modal o donde sea).
   label="Imagen" :upload="uploadFn" />
 ```
 
+### FontUpload
+
+- **Finalidad:** subida de fuente (hermano compacto de ImageUpload): una
+  franja clicable ENTERA con **arrastrar-y-soltar**; el fichero elegido se
+  muestra con nombre y tamaño (y ✕ para quitarlo). Valida extensión
+  (woff2/woff/ttf/otf) y tamaño en cliente con feedback. Controlado por
+  `v-model` (`File | null`): la vista decide cuándo subirlo (en
+  Configuración, el botón "Subir fuente").
+- **Props:** `label?`, `accept?` (def. `.woff2,.woff,.ttf,.otf`),
+  `maxSize?` (MB, def. 4), `error?`, `dragText?`, `hintText?`,
+  `tooLargeText?`, `invalidTypeText?` (DC-29).
+
+```vue
+<FontUpload v-model="fontFile" :drag-text="t('…')" :hint-text="t('…')" />
+```
+
 ### ImageUpload
 
 - **Finalidad:** subida de imagen con **arrastrar-y-soltar o clic** (portado de

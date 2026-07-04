@@ -11,6 +11,7 @@ import {
   Shapes,
   ScrollText,
   Swords,
+  Users,
   LogOut,
 } from '@lucide/vue'
 import { AdminLayout } from '@bgm/admin-kit'
@@ -87,35 +88,83 @@ function navActive(section: string) {
           t('nav.dashboard')
         }}</span>
       </RouterLink>
-      <RouterLink class="nav-item" :class="navActive('houses')" :to="{ name: 'houses' }">
+      <RouterLink
+        v-if="auth.can('manage-game')"
+        class="nav-item"
+        :class="navActive('houses')"
+        :to="{ name: 'houses' }"
+      >
         <Home class="nav-icon" :size="20" /><span class="nav-label">{{ t('nav.houses') }}</span>
       </RouterLink>
-      <RouterLink class="nav-item" :class="navActive('schemes')" :to="{ name: 'schemes' }">
+      <RouterLink
+        v-if="auth.can('manage-game')"
+        class="nav-item"
+        :class="navActive('schemes')"
+        :to="{ name: 'schemes' }"
+      >
         <ScrollText class="nav-icon" :size="20" /><span class="nav-label">{{
           t('nav.schemes')
         }}</span>
       </RouterLink>
-      <RouterLink class="nav-item" :class="navActive('characters')" :to="{ name: 'characters' }">
+      <RouterLink
+        v-if="auth.can('manage-game')"
+        class="nav-item"
+        :class="navActive('characters')"
+        :to="{ name: 'characters' }"
+      >
         <Swords class="nav-icon" :size="20" /><span class="nav-label">{{
           t('nav.characters')
         }}</span>
       </RouterLink>
-      <RouterLink class="nav-item" :class="navActive('icons')" :to="{ name: 'icons' }">
+      <RouterLink
+        v-if="auth.can('manage-game')"
+        class="nav-item"
+        :class="navActive('icons')"
+        :to="{ name: 'icons' }"
+      >
         <Shapes class="nav-icon" :size="20" /><span class="nav-label">{{ t('nav.icons') }}</span>
       </RouterLink>
-      <RouterLink class="nav-item" :class="navActive('pages')" :to="{ name: 'pages' }">
+      <RouterLink
+        v-if="auth.can('manage-web')"
+        class="nav-item"
+        :class="navActive('pages')"
+        :to="{ name: 'pages' }"
+      >
         <FileText class="nav-icon" :size="20" /><span class="nav-label">{{ t('nav.pages') }}</span>
       </RouterLink>
-      <RouterLink class="nav-item" :class="navActive('previews')" :to="{ name: 'previews' }">
+      <RouterLink
+        v-if="auth.can('manage-game')"
+        class="nav-item"
+        :class="navActive('previews')"
+        :to="{ name: 'previews' }"
+      >
         <Images class="nav-icon" :size="20" /><span class="nav-label">{{ t('nav.previews') }}</span>
       </RouterLink>
-      <RouterLink class="nav-item" :class="navActive('pdfs')" :to="{ name: 'pdfs' }">
+      <RouterLink
+        v-if="auth.can('manage-game')"
+        class="nav-item"
+        :class="navActive('pdfs')"
+        :to="{ name: 'pdfs' }"
+      >
         <FileText class="nav-icon" :size="20" /><span class="nav-label">{{ t('nav.pdfs') }}</span>
       </RouterLink>
-      <RouterLink class="nav-item" :class="navActive('settings')" :to="{ name: 'settings' }">
+      <RouterLink
+        v-if="auth.can('manage-web')"
+        class="nav-item"
+        :class="navActive('settings')"
+        :to="{ name: 'settings' }"
+      >
         <Settings class="nav-icon" :size="20" /><span class="nav-label">{{
           t('nav.settings')
         }}</span>
+      </RouterLink>
+      <RouterLink
+        v-if="auth.can('manage-users')"
+        class="nav-item"
+        :class="navActive('users')"
+        :to="{ name: 'users' }"
+      >
+        <Users class="nav-icon" :size="20" /><span class="nav-label">{{ t('nav.users') }}</span>
       </RouterLink>
     </template>
 

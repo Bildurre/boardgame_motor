@@ -18,6 +18,7 @@ export {
   type RichTextLabels,
 } from './components/RichTextInput.vue'
 export { default as ImageUpload } from './components/ImageUpload.vue'
+export { default as FontUpload } from './components/FontUpload.vue'
 export { default as BaseModal } from './components/BaseModal.vue'
 export { default as EditModal } from './components/EditModal.vue'
 export { default as BaseTabs } from './components/BaseTabs.vue'

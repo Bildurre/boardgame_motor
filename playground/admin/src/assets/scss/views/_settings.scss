@@ -132,14 +132,7 @@
   &__font-upload {
     display: grid;
     gap: $space-3;
-    justify-items: start;
-  }
 
-  &__font-file {
-    display: grid;
-    gap: $space-1;
-    cursor: pointer;
-
-    input[type="file"] { font-size: $fs-13; color: $text-2; max-width: 100%; }
+    .bgm-button { justify-self: start; }
   }
 }

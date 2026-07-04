@@ -44,6 +44,11 @@ router.beforeEach(async (to) => {
       await auth.logout()
       return { name: 'login', query: { denied: '1' } }
     }
+    // Permisos del motor por sección (doc 05): p. ej. un editor no entra en
+    // páginas, configuración ni usuarios.
+    if (to.meta.permission && !auth.can(to.meta.permission as string)) {
+      return { name: 'dashboard' }
+    }
   }
   if (to.meta.guest && auth.isAuthenticated && auth.canAccessAdmin) return { name: 'dashboard' }
 })

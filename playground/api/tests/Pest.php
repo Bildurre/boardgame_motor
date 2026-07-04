@@ -2,9 +2,9 @@
 
 use App\Models\Character;
 use App\Models\User;
+use Bgm\Core\Auth\MotorAuth;
 use Bgm\Core\Previews\PreviewRenderer;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Spatie\Permission\Models\Role;
 use Tests\TestCase;
 
 pest()->extend(TestCase::class)
@@ -56,9 +56,8 @@ function makeCharacter(array $overrides = []): Character
 
 function motorUser(string $role = 'user'): User
 {
-    foreach (config('motor.auth.roles', ['admin', 'editor', 'user']) as $name) {
-        Role::findOrCreate($name, 'web');
-    }
+    // Roles + permisos con su reparto (los del config del motor).
+    MotorAuth::syncRolesAndPermissions();
 
     $user = User::factory()->create();
     $user->assignRole($role);

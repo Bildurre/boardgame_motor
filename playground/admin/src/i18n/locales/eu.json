@@ -8,7 +8,8 @@
     "previews": "irudiak",
     "pdfs": "pdfak",
     "pages": "orriak",
-    "settings": "konfigurazioa"
+    "settings": "konfigurazioa",
+    "users": "erabiltzaileak"
   },
   "breadcrumbs": {
     "home": "Hasiera",
@@ -19,7 +20,8 @@
     "previews": "Irudiak",
     "pdfs": "PDFak",
     "pages": "Orriak",
-    "settings": "Konfigurazioa"
+    "settings": "Konfigurazioa",
+    "users": "Erabiltzaileak"
   },
   "nav": {
     "dashboard": "Panela",
@@ -30,7 +32,8 @@
     "previews": "Irudiak",
     "pdfs": "PDFak",
     "pages": "Orriak",
-    "settings": "Konfigurazioa"
+    "settings": "Konfigurazioa",
+    "users": "Erabiltzaileak"
   },
   "icons": {
     "title": "Ikonoak",
@@ -432,7 +435,8 @@
       "footerText": "Oinaren testua",
       "customFonts": "Letra-tipo propioak",
       "fontName": "Letra-tipoaren izena",
-      "fontFileHint": "WOFF2/WOFF/TTF/OTF · Geh. 4 MB"
+      "fontFileHint": "WOFF2/WOFF/TTF/OTF · Geh. 4 MB",
+      "fontDrag": "Arrastatu letra-tipo bat edo egin klik"
     },
     "accentModes": {
       "fixed": "Finkoa",
@@ -453,5 +457,33 @@
       "saveError": "Ezin izan da gorde."
     },
     "uploadFont": "Igo letra-tipoa"
+  },
+  "users": {
+    "title": "Erabiltzaileak",
+    "new": "Erabiltzaile berria",
+    "edit": "Editatu erabiltzailea",
+    "panelTitle": "Erabiltzailea",
+    "panelEmpty": "Aukeratu erabiltzaile bat bere ekintzak ikusteko.",
+    "unverified": "Egiaztatu gabe",
+    "verified": "Email egiaztatua",
+    "selfHint": "Zure erabiltzailea da: ezin duzu ezabatu ez rola aldatu.",
+    "confirmDelete": "\"{name}\" erabiltzailea ezabatu?",
+    "fields": {
+      "name": "Izena",
+      "email": "Email",
+      "password": "Pasahitza",
+      "passwordOptional": "Pasahitza (hutsik = ez aldatu)",
+      "role": "Rola"
+    },
+    "roles": {
+      "admin": "Admin",
+      "editor": "Editorea",
+      "user": "Erabiltzailea"
+    },
+    "toast": {
+      "saved": "Erabiltzailea gordeta.",
+      "deleted": "Erabiltzailea ezabatuta.",
+      "saveError": "Ezin izan da gorde."
+    }
   }
 }

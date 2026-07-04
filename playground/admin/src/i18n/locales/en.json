@@ -8,7 +8,8 @@
     "previews": "previews",
     "pdfs": "pdfs",
     "pages": "pages",
-    "settings": "settings"
+    "settings": "settings",
+    "users": "users"
   },
   "breadcrumbs": {
     "home": "Home",
@@ -19,7 +20,8 @@
     "previews": "Images",
     "pdfs": "PDFs",
     "pages": "Pages",
-    "settings": "Settings"
+    "settings": "Settings",
+    "users": "Users"
   },
   "nav": {
     "dashboard": "Dashboard",
@@ -30,7 +32,8 @@
     "previews": "Images",
     "pdfs": "PDFs",
     "pages": "Pages",
-    "settings": "Settings"
+    "settings": "Settings",
+    "users": "Users"
   },
   "icons": {
     "title": "Icons",
@@ -432,7 +435,8 @@
       "footerText": "Footer text",
       "customFonts": "Custom fonts",
       "fontName": "Font name",
-      "fontFileHint": "WOFF2/WOFF/TTF/OTF · Max 4 MB"
+      "fontFileHint": "WOFF2/WOFF/TTF/OTF · Max 4 MB",
+      "fontDrag": "Drag a font or click"
     },
     "accentModes": {
       "fixed": "Fixed",
@@ -453,5 +457,33 @@
       "saveError": "Could not save."
     },
     "uploadFont": "Upload font"
+  },
+  "users": {
+    "title": "Users",
+    "new": "New user",
+    "edit": "Edit user",
+    "panelTitle": "User",
+    "panelEmpty": "Pick a user to see their actions.",
+    "unverified": "Unverified",
+    "verified": "Email verified",
+    "selfHint": "It's your own user: you can't delete it or change your role.",
+    "confirmDelete": "Delete user \"{name}\"?",
+    "fields": {
+      "name": "Name",
+      "email": "Email",
+      "password": "Password",
+      "passwordOptional": "Password (empty = keep)",
+      "role": "Role"
+    },
+    "roles": {
+      "admin": "Admin",
+      "editor": "Editor",
+      "user": "User"
+    },
+    "toast": {
+      "saved": "User saved.",
+      "deleted": "User deleted.",
+      "saveError": "Could not save."
+    }
   }
 }

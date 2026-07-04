@@ -103,6 +103,14 @@
 - [x] **Webfonts elegibles + font uploader**: 10 familias woff2 en `public/fonts` del API (catálogo `motor.site.fonts` con `{label, stack, files}`), servidas con CORS por `GET /api/site/fonts/{path}`; @font-face generados por la SPA (y por el admin para las vistas previas); subida de fuentes propias desde Configuración (`custom_fonts`).
 - **Hito:** ✅ cambiar título/logo/fuentes/acento desde el admin y verlo aplicado en la web al recargar; con el modo aleatorio, cada visita y cada navegación estrenan color.
 
+### Fase 5.6 — Gestión de usuarios y permisos ✅
+**Meta:** crear usuarios (editores y demás) desde el admin y separar lo que ve cada rol.
+
+- [x] **Permisos del motor** (Spatie vía Gate, doc 05): `manage-game` (entidades del juego, iconos, PNG, PDF), `manage-web` (CRM + configuración) y `manage-users`; reparto por rol en config (`admin` todo, `editor` solo `manage-game`) y sincronía única en `MotorAuth::syncRolesAndPermissions()` (instalador, seeder y tests). Rutas protegidas con `can:` en el motor y en el juego.
+- [x] **CRUD de usuarios** en el motor (`/api/admin/users`): listar con búsqueda, crear con rol, editar (contraseña opcional) y borrar; guardas de no borrarse ni cambiarse el rol a uno mismo.
+- [x] **Admin SPA**: vista Usuarios (filas + panel derecho kontuan + modal), nav y rutas filtradas por permiso (`auth.can()` + guard del router), permisos en el payload de `/auth/me`.
+- **Hito:** ✅ un editor entra al panel y solo ve/gestiona el juego (casas, argucias, personajes, iconos, imágenes, PDF); páginas, configuración y usuarios son solo de admin — verificado en API (403) y en SPA (nav + redirección).
+
 ### Fase 6 — Backup, web pública y panel de usuario extensible
 **Meta:** rematar lo transversal y dejar ganchos de extensión por juego.
 > Plan: `funcionalidades/06-backup-bbdd.md`, `10-web-publica-y-panel-usuario.md`.

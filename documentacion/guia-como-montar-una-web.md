@@ -758,6 +758,33 @@ En la app, todo vive en `stores/site.ts` (cargar + aplicar + sorteo).
 - Las **tarjetas** de los bloques (text-card, cta) también son
   semitransparentes (`color-mix($surface 65%)` + `backdrop-filter: blur`).
 
+## 6ter. Usuarios y permisos (Fase 5.6)
+
+El motor separa qué ve cada rol DENTRO del admin con tres **permisos**
+(Spatie, entran por el Gate → middleware `can:`):
+
+- **`manage-game`** — entidades del juego, iconos, imágenes PNG y PDF.
+- **`manage-web`** — CRM de páginas y Configuración de la web.
+- **`manage-users`** — gestión de usuarios.
+
+Reparto por rol en config (`motor.auth.permissions` +
+`motor.auth.role_permissions`): admin lleva los tres, **editor solo
+`manage-game`**. La sincronía vive en `MotorAuth::syncRolesAndPermissions()`
+(la usan `motor:install`, el seeder y los tests — si cambias el reparto,
+re-ejecuta `php artisan motor:install`).
+
+Qué protege cada capa:
+- **API**: las rutas del motor ya llevan su `can:`; las rutas de TUS
+  entidades deben llevar `can:manage-game` (mira `routes/api.php` del
+  playground: el grupo admin entero).
+- **Admin SPA**: `/auth/me` incluye `permissions`; la nav se filtra con
+  `auth.can('manage-…')` y las rutas llevan `meta.permission` (el guard
+  redirige al panel si no toca).
+
+**Gestor de usuarios** (`/api/admin/users`, vista Usuarios del admin): listar
+con búsqueda, crear con rol, editar (contraseña vacía = no cambiar) y borrar.
+Guardas: nadie se borra a sí mismo ni se cambia su propio rol.
+
 ## 7. Checklist para una entidad nueva
 
 Backend:
