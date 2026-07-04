@@ -32,6 +32,10 @@ class DatabaseSeeder extends Seeder
                 ['email' => $email],
                 ['name' => $name, 'password' => Hash::make('password')],
             );
+            // Verificados de fábrica: son cuentas de demo, sin correo real.
+            if (! $user->hasVerifiedEmail()) {
+                $user->forceFill(['email_verified_at' => now()])->save();
+            }
             $user->syncRoles([$role]);
         }
 

@@ -781,9 +781,13 @@ Qué protege cada capa:
   `auth.can('manage-…')` y las rutas llevan `meta.permission` (el guard
   redirige al panel si no toca).
 
-**Gestor de usuarios** (`/api/admin/users`, vista Usuarios del admin): listar
-con búsqueda, crear con rol, editar (contraseña vacía = no cambiar) y borrar.
-Guardas: nadie se borra a sí mismo ni se cambia su propio rol.
+**Gestor de usuarios** (`/api/admin/users`, vista Usuarios del admin): tarjetas
+en grid (patrón `ManagerCard`, la tarjeta entera selecciona → panel derecho),
+listar con búsqueda, crear con rol, editar (contraseña vacía = no cambiar),
+verificar/desverificar el email desde el panel (`POST
+/admin/users/{id}/toggle-verified`) y borrar. Chips de rol por color: admin
+verde, editor azul (`locale-chip is-info`), usuario neutro. Guardas: nadie se
+borra a sí mismo ni se cambia su propio rol.
 
 ## 7. Checklist para una entidad nueva
 

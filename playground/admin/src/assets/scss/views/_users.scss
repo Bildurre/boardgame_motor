@@ -1,6 +1,7 @@
 @use "tokens" as *;
 
-// Gestión de usuarios: filas reutilizando el patrón de la lista de páginas.
+// Gestión de usuarios: tarjetas ManagerCard en .manager-grid (1-2 columnas
+// según el contenedor). Aquí solo van los retoques propios de la vista.
 .users-view {
   display: grid;
   gap: $space-4;
@@ -10,11 +11,9 @@
     margin: 0;
   }
 
-  &__name {
-    color: $text-1;
-  }
-
+  // El email ocupa su línea dentro del meta de la tarjeta.
   &__email {
+    flex: 1 1 100%;
     color: $text-3;
     font-size: $fs-13;
     min-width: 0;

@@ -2,15 +2,15 @@
 import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { Plus, SquarePen, Trash2 } from '@lucide/vue'
-import { BaseButton, useConfirm, useToast } from '@bgm/ui'
-import { FilterBar, useRightSidebar } from '@bgm/admin-kit'
+import { BaseButton, BaseCheckbox, useConfirm, useToast } from '@bgm/ui'
+import { FilterBar, ManagerCard, useRightSidebar } from '@bgm/admin-kit'
 import { api } from '@/lib/api'
 import { useAuthStore } from '@/stores/auth'
 import UserFormModal, { type UserRow } from '@/components/users/UserFormModal.vue'
 
 // Gestión de usuarios (doc 05), lo típico y básico: listar con búsqueda,
-// crear (con rol), editar y borrar. Patrón kontuan: la fila entera
-// selecciona y el panel derecho trae las acciones + info.
+// crear (con rol), editar y borrar. Patrón kontuan: tarjetas en grid, la
+// tarjeta entera selecciona y el panel derecho trae las acciones + info.
 const { t, te } = useI18n()
 const toast = useToast()
 const { confirm } = useConfirm()
@@ -50,10 +50,7 @@ onBeforeUnmount(() => {
   if (timer) clearTimeout(timer)
 })
 
-/** Toda la fila selecciona, salvo sus controles interiores. */
-function select(user: UserRow, event: MouseEvent) {
-  const target = event.target as HTMLElement | null
-  if (target?.closest('button, a, input, label')) return
+function select(user: UserRow) {
   selectedId.value = user.id
   sidebar.reveal()
 }
@@ -66,6 +63,18 @@ function openCreate() {
 function openEdit(user: UserRow) {
   editing.value = user
   formOpen.value = true
+}
+
+/** Acción rápida del panel: marca/desmarca el email como verificado. */
+async function toggleVerified(value: boolean) {
+  if (!selected.value) return
+  try {
+    await api.post(`/admin/users/${selected.value.id}/toggle-verified`)
+    selected.value.email_verified = value
+    toast.success(t('users.toast.saved'))
+  } catch {
+    toast.danger(t('common.errors.action'))
+  }
 }
 
 async function remove(user: UserRow) {
@@ -94,6 +103,13 @@ function roleLabel(user: UserRow): string {
   )
 }
 
+/** Color del chip de rol: admin en verde, editor en azul, resto neutro. */
+function roleChipClass(user: UserRow): string {
+  if (user.roles.includes('admin')) return 'is-ok'
+  if (user.roles.includes('editor')) return 'is-info'
+  return ''
+}
+
 onMounted(load)
 </script>
 
@@ -110,25 +126,22 @@ onMounted(load)
 
     <p v-if="!loading && !users.length" class="users-view__empty">{{ t('common.empty') }}</p>
 
-    <div class="pages-view__list">
-      <article
+    <div class="manager-grid">
+      <ManagerCard
         v-for="user in users"
         :key="user.id"
-        class="pages-view__item"
-        :class="{ 'is-active': selectedId === user.id }"
-        @click="(e) => select(user, e)"
+        :title="user.name"
+        :active="selectedId === user.id"
+        @select="select(user)"
       >
-        <strong class="users-view__name">{{ user.name }}</strong>
-        <span class="users-view__email">{{ user.email }}</span>
-        <span class="pages-view__chips">
-          <span class="locale-chip" :class="{ 'is-ok': user.roles.includes('admin') }">
-            {{ roleLabel(user) }}
-          </span>
+        <template #meta>
+          <span class="users-view__email">{{ user.email }}</span>
+          <span class="locale-chip" :class="roleChipClass(user)">{{ roleLabel(user) }}</span>
           <span v-if="!user.email_verified" class="locale-chip is-missing">
             {{ t('users.unverified') }}
           </span>
-        </span>
-      </article>
+        </template>
+      </ManagerCard>
     </div>
 
     <UserFormModal v-model="formOpen" :user="editing" @saved="load" />
@@ -152,15 +165,18 @@ onMounted(load)
             </BaseButton>
           </div>
 
+          <!-- Acción rápida sin modal (patrón páginas) -->
+          <BaseCheckbox
+            :model-value="selected.email_verified"
+            :label="t('users.verified')"
+            @update:model-value="toggleVerified"
+          />
+
           <p class="manager-detail__meta">
             <strong>{{ t('users.fields.email') }}</strong> {{ selected.email }}
           </p>
           <p class="manager-detail__meta">
             <strong>{{ t('users.fields.role') }}</strong> {{ roleLabel(selected) }}
-          </p>
-          <p class="manager-detail__meta">
-            <strong>{{ t('users.verified') }}</strong>
-            {{ selected.email_verified ? '✓' : '✗' }}
           </p>
           <p v-if="isSelf" class="manager-panel__empty">{{ t('users.selfHint') }}</p>
         </template>

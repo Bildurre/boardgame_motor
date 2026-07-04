@@ -8,7 +8,9 @@
 > `MotorAuth::syncRolesAndPermissions()` (instalador, seeder y tests). Rutas
 > protegidas con el middleware `can:`; CRUD de usuarios en
 > `/api/admin/users` (búsqueda, crear con rol, editar con contraseña
-> opcional, borrar; nadie se borra ni se cambia el rol a sí mismo); el
+> opcional, verificar/desverificar email con `POST
+> {id}/toggle-verified`, borrar; nadie se borra ni se cambia el rol a sí
+> mismo); el
 > admin SPA filtra nav y rutas con los permisos de `/auth/me`. Pendiente:
 > forgot/reset password (al montar el correo real del juego).
 

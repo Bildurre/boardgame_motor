@@ -45,6 +45,24 @@ it('el admin crea, edita y borra usuarios', function () {
     expect(User::find($id))->toBeNull();
 });
 
+it('el admin verifica y desverifica el email de un usuario', function () {
+    $admin = motorUser('admin');
+    $user = motorUser('user');
+    expect($user->email_verified_at)->not->toBeNull();
+
+    // Desverifica…
+    $this->actingAs($admin)->postJson("/api/admin/users/{$user->id}/toggle-verified")
+        ->assertOk()
+        ->assertJsonPath('data.email_verified', false);
+    expect($user->fresh()->email_verified_at)->toBeNull();
+
+    // …y vuelve a verificar.
+    $this->actingAs($admin)->postJson("/api/admin/users/{$user->id}/toggle-verified")
+        ->assertOk()
+        ->assertJsonPath('data.email_verified', true);
+    expect($user->fresh()->email_verified_at)->not->toBeNull();
+});
+
 it('nadie se borra a sí mismo ni se cambia su propio rol', function () {
     $admin = motorUser('admin');
 

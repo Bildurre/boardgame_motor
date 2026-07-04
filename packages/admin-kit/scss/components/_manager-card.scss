@@ -142,6 +142,7 @@
   white-space: nowrap;
 
   &.is-ok { color: $success; border-color: color-mix(in srgb, $success 45%, transparent); }
+  &.is-info { color: $info; border-color: color-mix(in srgb, $info 45%, transparent); }
   &.is-missing { color: $warning; border-color: color-mix(in srgb, $warning 45%, transparent); }
   &.is-failed { color: $danger; border-color: color-mix(in srgb, $danger 45%, transparent); }
 }
