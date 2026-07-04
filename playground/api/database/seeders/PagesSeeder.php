@@ -28,17 +28,19 @@ class PagesSeeder extends Seeder
             'background_image' => $this->demoBackground(),
         ])->save();
         $this->blocks($home, [
+            // Anchura por bloque (campo común `width`): full / wide / narrow.
             ['header', ['title' => ['es' => 'Choque de Leyendas', 'eu' => 'Kondairen Talka', 'en' => 'Clash of Legends'],
                 'subtitle' => ['es' => 'El juego de cartas de las grandes casas', 'en' => 'The card game of the great houses'],
-                'align' => 'center']],
+                'align' => 'center', 'width' => 'full']],
             ['text', ['body' => ['es' => '<p>Un juego de <strong>intriga y poder</strong> donde cada casa lucha por el trono. Imprime tus cartas y juega.</p>'],
-                'align' => 'center']],
-            ['characters-grid', ['title' => ['es' => 'Los personajes', 'en' => 'The characters'], 'limit' => 6, 'order' => 'name']],
+                'align' => 'center', 'width' => 'narrow']],
+            ['characters-grid', ['title' => ['es' => 'Los personajes', 'en' => 'The characters'], 'limit' => 6, 'order' => 'name',
+                'width' => 'full']],
             // Con color de fondo: se aplica como tinte semitransparente.
             ['quote', ['quote' => ['es' => '<p>Cuando juegas al juego de tronos, solo puedes ganar o morir.</p>'],
                 'author' => ['es' => 'Cersei Lannister'], 'background' => '#6c5ce7']],
             ['cta', ['title' => ['es' => '¿Listo para jugar?'], 'button_text' => ['es' => 'Crea tu cuenta'],
-                'button_url' => ['es' => '/registro'], 'align' => 'center']],
+                'button_url' => ['es' => '/registro'], 'align' => 'center', 'width' => 'narrow']],
         ]);
 
         // --- Las casas (bloque con-datos del juego) ---
@@ -68,7 +70,8 @@ class PagesSeeder extends Seeder
                 'image_position' => 'clear-left',
             ])],
             ['text', ['title' => ['es' => 'Turno de juego'], 'body' => ['es' => '<p>En tu turno: roba una carta, juega hasta <strong>una argucia</strong> y ataca con tus personajes.</p>']]],
-            ['text-card', ['label' => ['es' => 'Regla de oro'], 'body' => ['es' => '<p>Cuando el texto de una carta contradiga estas reglas, <strong>manda la carta</strong>.</p>']]],
+            ['text-card', ['label' => ['es' => 'Regla de oro'], 'body' => ['es' => '<p>Cuando el texto de una carta contradiga estas reglas, <strong>manda la carta</strong>.</p>'],
+                'width' => 'narrow']],
         ]);
     }
 

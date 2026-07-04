@@ -375,6 +375,7 @@
     "intro": "Sarrera",
     "show_empty": "Erakutsi argukirik gabeko etxeak",
     "align": "Lerrokatzea",
+    "width": "Edukiaren zabalera",
     "background": "Atzeko kolorea",
     "numbered": "Zenbakituta"
   },
@@ -389,6 +390,11 @@
       "recent": "Berrienak",
       "cost": "Kostuaren arabera",
       "name": "Izenaren arabera"
+    },
+    "width": {
+      "wide": "Zabala",
+      "full": "Zabalera osoa",
+      "narrow": "Estua"
     },
     "image_position": {
       "top": "Goian",
@@ -422,7 +428,8 @@
       "accentColors": "Gehitu kolore hautagaia",
       "accentColorsHint": "Kolore hauetako bat zozketatzen da weba kargatzean eta nabigatzean.",
       "fontHeadings": "Izenburuen letra-tipoa",
-      "fontBody": "Testuaren letra-tipoa"
+      "fontBody": "Testuaren letra-tipoa",
+      "footerText": "Oinaren testua"
     },
     "accentModes": {
       "fixed": "Finkoa",

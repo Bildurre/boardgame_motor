@@ -367,7 +367,8 @@
       "accentColors": "Añadir color candidato",
       "accentColorsHint": "Se sortea uno de estos colores al cargar la web y al navegar.",
       "fontHeadings": "Fuente de los títulos",
-      "fontBody": "Fuente del texto"
+      "fontBody": "Fuente del texto",
+      "footerText": "Texto del pie"
     },
     "accentModes": {
       "fixed": "Fijo",

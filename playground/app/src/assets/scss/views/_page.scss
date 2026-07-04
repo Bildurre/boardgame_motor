@@ -13,11 +13,10 @@
     padding: $space-8 0;
   }
 
-  // Plantilla "landing": los bloques a lo ancho de la ventana (el interior
-  // de .block deja de limitarse a la columna de lectura).
-  &--landing .block__inner {
-    max-width: none;
-    padding-inline: $space-6;
+  // Plantilla "landing": la anchura ya la decide CADA bloque (campo común
+  // `width`); la plantilla solo da aire de portada al primer bloque.
+  &--landing .block:first-child {
+    padding-block: $space-8;
   }
 }
 

@@ -6,12 +6,16 @@
   background: var(--block-bg, transparent);
 
   &__inner {
-    max-width: 960px;
+    max-width: 960px; // 'wide' (por defecto)
     margin: 0 auto;
     padding: 0 $space-4;
     display: grid;
     gap: $space-3;
   }
+
+  // Anchura del contenido (campo común `width`): coherente entre bloques.
+  &--w-narrow .block__inner { max-width: 680px; }
+  &--w-full .block__inner { max-width: none; padding-inline: $space-6; }
 
   &__title { margin: 0; }
   &__subtitle { margin: 0; color: $text-2; font-size: $fs-18; }

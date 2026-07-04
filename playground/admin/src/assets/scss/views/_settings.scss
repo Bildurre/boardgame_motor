@@ -1,10 +1,24 @@
 @use "tokens" as *;
 
-// Configuración de la web: secciones apiladas con tarjeta.
+// Configuración de la web: tarjetas por sección, en rejilla de 2 columnas
+// cuando caben según el ancho del CONTENEDOR (container query, como los
+// gestores), y cada tarjeta es su propio contenedor `content` para que sus
+// interiores (uploads, fuentes) se adapten a la tarjeta.
 .settings-view {
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   gap: $space-5;
-  max-width: 720px;
+  align-items: start;
+
+  @container content (min-width: #{$bp-md}) {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  // La barra de acciones (Guardar) ocupa siempre la fila entera.
+  > .list-view__top {
+    grid-column: 1 / -1;
+    margin-bottom: 0;
+  }
 
   &__section {
     background: $surface;
@@ -13,6 +27,9 @@
     padding: $space-5;
     display: grid;
     gap: $space-4;
+    min-width: 0;
+    container-name: content;
+    container-type: inline-size;
 
     h2 {
       margin: 0;

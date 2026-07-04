@@ -27,7 +27,7 @@ it('la paleta lista los tipos del motor y los del juego con su esquema', functio
     // El esquema de campos viaja serializado (el BlockEditor se genera de aquí).
     $header = collect($response->json('data'))->firstWhere('key', 'header');
     expect($header['fields'][0])->toMatchArray(['key' => 'title', 'type' => 'text', 'translatable' => true, 'required' => true])
-        ->and($header['common'])->toHaveCount(2); // align + background
+        ->and($header['common'])->toHaveCount(3); // align + width + background
 });
 
 // --- CRUD de páginas ---
@@ -218,6 +218,7 @@ it('sirve la página publicada por slug con settings localizados y datos resuelt
             ->assertJsonPath('data.blocks.0.component', 'characters-grid')
             ->assertJsonPath('data.blocks.0.settings.title', 'Todas las cartas')
             ->assertJsonPath('data.blocks.0.settings.align', 'left') // default del común
+            ->assertJsonPath('data.blocks.0.settings.width', 'wide') // default de anchura
             ->assertJsonPath('data.blocks.0.data.characters.0.name.es', $character->getTranslation('name', 'es'));
     }
 

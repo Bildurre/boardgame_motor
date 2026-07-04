@@ -375,6 +375,7 @@
     "intro": "Intro",
     "show_empty": "Show houses without schemes",
     "align": "Alignment",
+    "width": "Content width",
     "background": "Background color",
     "numbered": "Numbered"
   },
@@ -389,6 +390,11 @@
       "recent": "Most recent",
       "cost": "By cost",
       "name": "By name"
+    },
+    "width": {
+      "wide": "Wide",
+      "full": "Full width",
+      "narrow": "Narrow"
     },
     "image_position": {
       "top": "Top",
@@ -422,7 +428,8 @@
       "accentColors": "Add candidate color",
       "accentColorsHint": "One of these colors is drawn on page load and while navigating.",
       "fontHeadings": "Headings font",
-      "fontBody": "Body font"
+      "fontBody": "Body font",
+      "footerText": "Footer text"
     },
     "accentModes": {
       "fixed": "Fixed",

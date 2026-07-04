@@ -633,8 +633,11 @@ La UI pública de esta colección llega con el andamiaje de la web (Fase 6).
 (*) obligatorio en el locale por defecto. Todas las `image` son
 **multilingües** (`->translatable()`: una URL por locale, con fallback al
 default). TODOS los bloques llevan además los **campos comunes** que añade el
-motor: `align` (select: left/center/right/justify) y `background` (color),
-aplicados por el envoltorio `BlockShell`.
+motor, aplicados por el envoltorio `BlockShell`: `align` (select:
+left/center/right/justify), **`width`** (anchura del contenido — `wide`
+960px por defecto / `full` ancho completo / `narrow` 680px; da coherencia
+entre bloques y entre páginas) y `background` (color, aplicado como tinte
+semitransparente).
 
 `image_position` es el campo estándar `BlockType::imagePositionField()`
 (reutilizable por los bloques del juego): `top` / `left` / `right` / `bottom`
@@ -701,8 +704,11 @@ layout con esa clave. Añadir una plantilla son tres piezas:
    cae en `default` si la clave no está. `PageView` y `HomeView` envuelven
    los bloques con la plantilla del payload (`data.template`).
 
-El playground trae `landing` (bloques a lo ancho de la ventana; la usa la
-home demo del seeder).
+El playground trae `landing` (la usa la home demo del seeder): la anchura
+del contenido ya la decide **cada bloque** con su campo común `width`, así
+que la plantilla solo aporta el aire de portada (más padding vertical en el
+primer bloque). Una plantilla es el sitio para diferencias de LAYOUT; la
+anchura es cosa de los bloques.
 
 ### 6bis.1b Configuración de la web (Fase 5.5)
 
