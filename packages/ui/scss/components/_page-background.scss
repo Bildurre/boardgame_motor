@@ -1,0 +1,22 @@
+@use "tokens" as *;
+
+// Imagen de fondo de la página del CRM (patrón CDL): capa fija a toda la
+// ventana tras el contenido; la intensidad la decide el tema activo
+// (--page-bg-opacity: 0.2 en claro, 0.1 en oscuro) y un grayscale suave
+// evita que compita con el contenido.
+.page-background {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh; // fallback
+  height: 100lvh; // altura SIN la barra del navegador móvil
+  background-size: cover;
+  background-position: top;
+  background-repeat: no-repeat;
+  z-index: -1;
+  pointer-events: none;
+  opacity: var(--page-bg-opacity, 0.15);
+  filter: grayscale(60%);
+  transition: opacity 0.3s ease;
+}

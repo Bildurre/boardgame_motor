@@ -578,6 +578,23 @@ vive en el composable `useEntityList` (ver la guía de montar una web, §4.4).
 />
 ```
 
+### PageBackground
+
+- **Finalidad:** imagen de fondo de una página del CRM (patrón CDL): capa
+  fija a toda la ventana detrás del contenido (`position: fixed`, cover,
+  `z-index: -1`, `grayscale(60%)`), atenuada según el tema con
+  `--page-bg-opacity` (0.2 claro / 0.1 oscuro, en `_theme.scss`). Sin imagen
+  no pinta nada. Casa con los fondos de bloque **semitransparentes**: el
+  color de un bloque se aplica como tinte `color-mix` con `--block-tint`
+  (20% claro / 12% oscuro) en BlockShell, y las tarjetas de bloque llevan
+  `color-mix($surface 65%) + backdrop-filter`, así la imagen se ve a través.
+- **Props:** `image?: string | null` (URL; la de `data.background_image` del
+  payload público).
+
+```vue
+<PageBackground :image="page.background_image" />
+```
+
 ### PreviewManager
 
 - **Finalidad:** gestor de las previews PNG (doc 01), **mobile-first** sobre

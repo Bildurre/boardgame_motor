@@ -148,8 +148,11 @@ it('localiza la imagen multilingüe con fallback al locale por defecto', functio
     $admin = motorUser('admin');
     $page = makePage();
 
-    // La plantilla del payload viaja también en el render público.
-    $page->update(['template' => 'landing']);
+    // Plantilla e imagen de fondo viajan también en el render público.
+    $this->actingAs($admin)->putJson("/api/admin/pages/{$page->id}", [
+        'template' => 'landing',
+        'background_image' => '/storage/content/fondo.png',
+    ])->assertOk();
 
     $this->actingAs($admin)->postJson("/api/admin/pages/{$page->id}/blocks", [
         'type' => 'text',
@@ -165,6 +168,7 @@ it('localiza la imagen multilingüe con fallback al locale por defecto', functio
     $this->getJson("/api/pages/{$slug}?locale=eu")
         ->assertOk()
         ->assertJsonPath('data.template', 'landing')
+        ->assertJsonPath('data.background_image', '/storage/content/fondo.png')
         ->assertJsonPath('data.blocks.0.settings.image', '/storage/eu.png');
 
     $this->getJson("/api/pages/{$slug}?locale=en")

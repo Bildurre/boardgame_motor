@@ -311,6 +311,8 @@
       "description": "Descripción",
       "parent": "Página madre",
       "template": "Plantilla",
+      "backgroundImage": "Imagen de fondo",
+      "backgroundImageHint": "Capa fija tras el contenido, atenuada según el tema",
       "metaTitle": "Meta título (SEO)",
       "metaDescription": "Meta descripción (SEO)",
       "published": "Publicada",

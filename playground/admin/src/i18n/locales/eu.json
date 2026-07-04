@@ -311,6 +311,8 @@
       "description": "Deskribapena",
       "parent": "Orri gurasoa",
       "template": "Txantiloia",
+      "backgroundImage": "Atzeko irudia",
+      "backgroundImageHint": "Edukiaren atzeko geruza finkoa, gaiaren arabera leunduta",
       "metaTitle": "Meta izenburua (SEO)",
       "metaDescription": "Meta deskribapena (SEO)",
       "published": "Argitaratuta",

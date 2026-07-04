@@ -31,7 +31,10 @@
   }
 
   &__card {
-    background: $surface;
+    // Semitransparente: la imagen de fondo de la página se ve a través
+    // (patrón CDL, rgba(surface, .5)); el blur mantiene el texto legible.
+    background: color-mix(in srgb, $surface 65%, transparent);
+    backdrop-filter: blur(8px);
     border: 1px solid $border;
     border-radius: $radius-lg;
     box-shadow: $shadow-sm;

@@ -10,6 +10,7 @@ import BlockTextCard from './BlockTextCard.vue'
 
 export { BlockCta, BlockHeader, BlockIndex, BlockQuote, BlockText, BlockTextCard }
 export { default as BlockShell } from './BlockShell.vue'
+export { default as PageBackground } from './PageBackground.vue'
 
 /** Clave del BlockType => componente (los cinco de presentación). */
 export const motorBlockComponents: Record<string, Component> = {

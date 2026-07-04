@@ -37,6 +37,12 @@
   --toast-warning-bg: #fffbeb;
   --toast-danger-bg: #fef2f2;
   --toast-info-bg: #eff6ff;
+
+  // CRM público (patrón CDL): el fondo de color de un bloque es un TINTE
+  // semitransparente del color elegido, y la imagen de fondo de la página
+  // va atenuada — en claro admiten más presencia que en oscuro.
+  --block-tint: 20%;
+  --page-bg-opacity: 0.2;
 }
 
 [data-theme="dark"] {
@@ -62,4 +68,7 @@
   --toast-warning-bg: #2a2008;
   --toast-danger-bg: #2a0e0e;
   --toast-info-bg: #0e1a2e;
+
+  --block-tint: 12%;
+  --page-bg-opacity: 0.1;
 }

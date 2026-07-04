@@ -311,6 +311,8 @@
       "description": "Description",
       "parent": "Parent page",
       "template": "Template",
+      "backgroundImage": "Background image",
+      "backgroundImageHint": "Fixed layer behind the content, dimmed per theme",
       "metaTitle": "Meta title (SEO)",
       "metaDescription": "Meta description (SEO)",
       "published": "Published",

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { onMounted, ref, watch } from 'vue'
 import { LogIn, User } from '@lucide/vue'
-import { MotorBadge, BaseButton } from '@bgm/ui'
+import { MotorBadge, BaseButton, PageBackground } from '@bgm/ui'
 import { api } from '@/lib/api'
 import { blockRegistry } from '@/blocks/registry'
 import { templateFor } from '@/templates/registry'
@@ -12,6 +12,7 @@ import { useLocalesStore } from '@/stores/locales'
 // contenido de siempre queda de fallback mientras no la haya.
 interface HomePage {
   template: string | null
+  background_image: string | null
   meta: { title: string; description: string }
   blocks: {
     id: number
@@ -60,16 +61,19 @@ onMounted(async () => {
 </script>
 
 <template>
-  <!-- Home del CRM (si la hay), con su plantilla -->
-  <component :is="templateFor(homePage.template)" v-if="homePage">
-    <component
-      :is="blockRegistry[block.component]"
-      v-for="block in homePage.blocks.filter((b) => blockRegistry[b.component])"
-      :key="block.id"
-      :settings="block.settings"
-      :data="block.data"
-    />
-  </component>
+  <!-- Home del CRM (si la hay), con su plantilla y su imagen de fondo -->
+  <template v-if="homePage">
+    <PageBackground :image="homePage.background_image" />
+    <component :is="templateFor(homePage.template)">
+      <component
+        :is="blockRegistry[block.component]"
+        v-for="block in homePage.blocks.filter((b) => blockRegistry[b.component])"
+        :key="block.id"
+        :settings="block.settings"
+        :data="block.data"
+      />
+    </component>
+  </template>
 
   <main v-else class="home">
     <MotorBadge label="BGM" :version="ping?.version ?? ''" />

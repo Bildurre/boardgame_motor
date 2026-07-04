@@ -704,6 +704,20 @@ layout con esa clave. Añadir una plantilla son tres piezas:
 El playground trae `landing` (bloques a lo ancho de la ventana; la usa la
 home demo del seeder).
 
+### 6bis.2 Colores e imagen de fondo (patrón CDL)
+
+- **Imagen de fondo por página** (columna `background_image`, subida desde el
+  modal de página): la SPA pinta `<PageBackground>` (@bgm/ui) — una capa FIJA
+  a toda la ventana tras el contenido (`z-index: -1`, cover, `grayscale(60%)`)
+  cuya intensidad decide el tema: `--page-bg-opacity` = **0.2 en claro, 0.1
+  en oscuro** (variables de `_theme.scss`, el juego puede recalibrarlas).
+- **El color de fondo de un bloque NO es opaco**: BlockShell lo aplica como
+  tinte `color-mix(in srgb, <color> var(--block-tint), transparent)` con
+  `--block-tint` = **20% en claro, 12% en oscuro** — así la imagen de fondo
+  se ve a través y el mismo HEX funciona en ambos temas.
+- Las **tarjetas** de los bloques (text-card, cta) también son
+  semitransparentes (`color-mix($surface 65%)` + `backdrop-filter: blur`).
+
 ## 7. Checklist para una entidad nueva
 
 Backend:

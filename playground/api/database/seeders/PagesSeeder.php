@@ -20,9 +20,13 @@ class PagesSeeder extends Seeder
             return;
         }
 
-        // --- Home (plantilla landing: ancho completo) ---
+        // --- Home (plantilla landing: ancho completo, con imagen de fondo) ---
         $home = $this->page(['es' => 'Bienvenida', 'eu' => 'Ongi etorri', 'en' => 'Welcome']);
-        $home->forceFill(['is_home' => true, 'template' => 'landing'])->save();
+        $home->forceFill([
+            'is_home' => true,
+            'template' => 'landing',
+            'background_image' => $this->demoBackground(),
+        ])->save();
         $this->blocks($home, [
             ['header', ['title' => ['es' => 'Choque de Leyendas', 'eu' => 'Kondairen Talka', 'en' => 'Clash of Legends'],
                 'subtitle' => ['es' => 'El juego de cartas de las grandes casas', 'en' => 'The card game of the great houses'],
@@ -30,8 +34,9 @@ class PagesSeeder extends Seeder
             ['text', ['body' => ['es' => '<p>Un juego de <strong>intriga y poder</strong> donde cada casa lucha por el trono. Imprime tus cartas y juega.</p>'],
                 'align' => 'center']],
             ['characters-grid', ['title' => ['es' => 'Los personajes', 'en' => 'The characters'], 'limit' => 6, 'order' => 'name']],
+            // Con color de fondo: se aplica como tinte semitransparente.
             ['quote', ['quote' => ['es' => '<p>Cuando juegas al juego de tronos, solo puedes ganar o morir.</p>'],
-                'author' => ['es' => 'Cersei Lannister']]],
+                'author' => ['es' => 'Cersei Lannister'], 'background' => '#6c5ce7']],
             ['cta', ['title' => ['es' => '¿Listo para jugar?'], 'button_text' => ['es' => 'Crea tu cuenta'],
                 'button_url' => ['es' => '/registro'], 'align' => 'center']],
         ]);
@@ -48,7 +53,10 @@ class PagesSeeder extends Seeder
 
         // --- Reglamento (imprimible, con índice: PDF de página incluido) ---
         $reglas = $this->page(['es' => 'Reglamento', 'eu' => 'Araudia', 'en' => 'Rulebook']);
-        $reglas->forceFill(['is_printable' => true])->save();
+        $reglas->forceFill([
+            'is_printable' => true,
+            'background_image' => $this->demoBackground(),
+        ])->save();
         $this->blocks($reglas, [
             ['header', ['title' => ['es' => 'Reglamento', 'en' => 'Rulebook']]],
             ['index', ['title' => ['es' => 'Contenido'], 'numbered' => true]],
@@ -62,6 +70,30 @@ class PagesSeeder extends Seeder
             ['text', ['title' => ['es' => 'Turno de juego'], 'body' => ['es' => '<p>En tu turno: roba una carta, juega hasta <strong>una argucia</strong> y ataca con tus personajes.</p>']]],
             ['text-card', ['label' => ['es' => 'Regla de oro'], 'body' => ['es' => '<p>Cuando el texto de una carta contradiga estas reglas, <strong>manda la carta</strong>.</p>']]],
         ]);
+    }
+
+    /** Genera un PNG decorativo de fondo de página (GD), o null sin GD. */
+    protected function demoBackground(): ?string
+    {
+        if (! function_exists('imagecreatetruecolor')) {
+            return null;
+        }
+
+        if (! Storage::disk('public')->exists('content/demo-background.png')) {
+            $image = imagecreatetruecolor(1600, 900);
+            imagefill($image, 0, 0, imagecolorallocate($image, 26, 29, 36));
+            // Círculos concéntricos suaves: la capa pública lo atenúa por tema.
+            foreach ([[300, 250, 500], [1250, 650, 700], [900, 150, 350]] as [$x, $y, $d]) {
+                imagefilledellipse($image, $x, $y, $d, $d, imagecolorallocate($image, 108, 92, 231));
+                imagefilledellipse($image, $x, $y, (int) ($d * 0.6), (int) ($d * 0.6), imagecolorallocate($image, 26, 29, 36));
+            }
+
+            ob_start();
+            imagepng($image);
+            Storage::disk('public')->put('content/demo-background.png', (string) ob_get_clean());
+        }
+
+        return Storage::disk('public')->url('content/demo-background.png');
     }
 
     /** Genera un PNG de muestra (GD) y devuelve la imagen traducible, o null sin GD. */

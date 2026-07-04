@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
+import { PageBackground } from '@bgm/ui'
 import { api } from '@/lib/api'
 import { blockRegistry } from '@/blocks/registry'
 import { templateFor } from '@/templates/registry'
@@ -14,6 +15,7 @@ interface PagePayload {
   id: number
   title: string
   template: string | null
+  background_image: string | null
   meta: { title: string; description: string }
   slugs: Record<string, string>
   blocks: {
@@ -61,14 +63,17 @@ watch([slug, () => locales.current], load, { immediate: true })
   <main v-if="failed" class="page-view">
     <p class="page-view__missing">404</p>
   </main>
-  <component :is="templateFor(page.template)" v-else-if="page">
-    <component
-      :is="blockRegistry[block.component]"
-      v-for="block in page.blocks.filter((b) => blockRegistry[b.component])"
-      :id="`block-${block.id}`"
-      :key="block.id"
-      :settings="block.settings"
-      :data="block.data"
-    />
-  </component>
+  <template v-else-if="page">
+    <PageBackground :image="page.background_image" />
+    <component :is="templateFor(page.template)">
+      <component
+        :is="blockRegistry[block.component]"
+        v-for="block in page.blocks.filter((b) => blockRegistry[b.component])"
+        :id="`block-${block.id}`"
+        :key="block.id"
+        :settings="block.settings"
+        :data="block.data"
+      />
+    </component>
+  </template>
 </template>

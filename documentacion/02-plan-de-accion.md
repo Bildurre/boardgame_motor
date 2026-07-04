@@ -90,6 +90,7 @@
 - [x] Panel derecho en todo el admin (patrón kontuan): páginas (acciones + toggles + **sus bloques resumidos**), bloques (acciones + **contenido por campo**) y listados de entidades (`EntityPanel`: todas las acciones, info y PNG por idioma; en la tarjeta solo editar + abrir).
 - [x] **Plantillas de página por juego**: catálogo en `motor.content.templates` (el juego añade las suyas en su AppServiceProvider), select en el modal del admin (`GET /admin/pages/templates`) y `templateRegistry` en la SPA (la clave viaja en el payload; demo `landing` a lo ancho en el playground).
 - [x] **Imagen multilingüe**: `Field::image()->translatable()` en todos los bloques del motor — una URL por locale con fallback al default en el render (`localizeSettings`); editor `TranslatableImage` (ui-kit) con el selector de locale de kontuan.
+- [x] **Colores e imagen de fondo del CRM público** (patrón CDL): `background_image` por página (capa fija `PageBackground` atenuada por tema, 0.2 claro / 0.1 oscuro + grayscale), color de bloque como **tinte semitransparente** (`--block-tint` 20%/12% vía color-mix) y tarjetas de bloque translúcidas con blur.
 - [ ] Flecos a futuro: repeater/group/entity-ref del DSL.
 - **Hito:** ✅ página con bloques (incluidos los con-datos del playground: rejilla de personajes y casas-argucias), reordenable, traducible, publicada y visible en público con URL traducible. **Añadir un bloque = una clase + un componente Vue.**
 

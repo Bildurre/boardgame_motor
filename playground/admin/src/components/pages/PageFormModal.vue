@@ -1,7 +1,14 @@
 <script setup lang="ts">
 import { ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { BaseCheckbox, BaseSelect, EditModal, TranslatableInput, useToast } from '@bgm/ui'
+import {
+  BaseCheckbox,
+  BaseSelect,
+  EditModal,
+  ImageUpload,
+  TranslatableInput,
+  useToast,
+} from '@bgm/ui'
 import { api } from '@/lib/api'
 import { useLocalesStore } from '@/stores/locales'
 
@@ -15,6 +22,7 @@ export interface PageRow {
   meta_description: Record<string, string>
   parent_id: number | null
   template: string | null
+  background_image: string | null
   is_published: boolean
   is_home: boolean
   is_printable: boolean
@@ -41,8 +49,25 @@ const metaTitle = ref<Record<string, string>>({})
 const metaDescription = ref<Record<string, string>>({})
 const parentId = ref<string>('')
 const template = ref('default')
+const backgroundImage = ref<string | null>(null)
 const isPublished = ref(false)
 const isPrintable = ref(false)
+
+/** Sube la imagen de fondo al momento (misma ruta que las de los bloques). */
+async function uploadBackground(file: File | null) {
+  if (!file) {
+    backgroundImage.value = null
+    return
+  }
+  try {
+    const form = new FormData()
+    form.append('image', file)
+    const { data } = await api.post('/admin/content/uploads', form)
+    backgroundImage.value = data.url
+  } catch {
+    toast.danger(t('common.errors.action'))
+  }
+}
 
 // Plantillas del juego (config del motor): el select solo aparece si hay más
 // de una. Etiquetas localizables por convención (pages.templates.{clave}).
@@ -62,6 +87,7 @@ watch(
     metaDescription.value = { ...(props.page?.meta_description ?? {}) }
     parentId.value = props.page?.parent_id ? String(props.page.parent_id) : ''
     template.value = props.page?.template ?? 'default'
+    backgroundImage.value = props.page?.background_image ?? null
     isPublished.value = props.page?.is_published ?? false
     isPrintable.value = props.page?.is_printable ?? false
     if (!templates.value.length) {
@@ -85,6 +111,7 @@ async function save() {
       meta_description: metaDescription.value,
       parent_id: parentId.value ? Number(parentId.value) : null,
       template: template.value,
+      background_image: backgroundImage.value,
       is_published: isPublished.value,
       is_printable: isPrintable.value,
     }
@@ -141,6 +168,15 @@ async function save() {
       v-model="template"
       :label="t('pages.fields.template')"
       :options="templates.map((tpl) => ({ value: tpl.key, label: templateLabel(tpl) }))"
+    />
+    <ImageUpload
+      :model-value="null"
+      :current-url="backgroundImage"
+      :label="t('pages.fields.backgroundImage')"
+      :drag-text="t('common.imageDrag')"
+      :hint-text="t('pages.fields.backgroundImageHint')"
+      @update:model-value="uploadBackground"
+      @remove="backgroundImage = null"
     />
     <TranslatableInput
       v-model="metaTitle"

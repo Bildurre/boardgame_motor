@@ -17,5 +17,5 @@
     border-radius: $radius-lg;
     background: $color-surface;
   }
-  .error { color: #ff6b6b; }
+  .error { color: $danger; }
 }
