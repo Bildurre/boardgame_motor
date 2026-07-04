@@ -704,6 +704,30 @@ layout con esa clave. Añadir una plantilla son tres piezas:
 El playground trae `landing` (bloques a lo ancho de la ventana; la usa la
 home demo del seeder).
 
+### 6bis.1b Configuración de la web (Fase 5.5)
+
+El admin trae una página **Configuración** (`GET/PUT /api/admin/settings/site`;
+se guarda en la tabla `settings` bajo la clave 'site' y la SPA pública lo lee
+de **`GET /api/site`** al arrancar):
+
+- **Identidad:** título del sitio (traducible; el `document.title` sale como
+  `página · sitio`), descripción (meta por defecto), **logo** (SVG/PNG) y
+  **favicon**. El logo SVG viaja **inlineado** en el payload (`logo_inline`) y
+  se pinta con `currentColor`: hereda el acento activo (un fichero
+  cross-origin no valdría — fetch/mask exigen CORS).
+- **Acento:** fijo (un color) o **ALEATORIO estilo CDL**: una lista de colores
+  candidatos de la que la SPA sortea uno al cargar **y re-sortea en cada
+  navegación** (`router.afterEach` → `site.onNavigate()`, el disparador extra
+  que necesita una SPA que no recarga). Los tonos 200–700 se derivan del HEX
+  con `color-mix`; el logo SVG se recolorea con cada sorteo.
+- **Fuentes:** títulos y texto por separado, del catálogo
+  `motor.site.fonts` (pilas del sistema; un juego añade una webfont
+  registrando su clave en config y cargando la fuente en su SPA). La SPA las
+  aplica con `--font-headings` / `--font-body`.
+- **Pie:** texto del footer (traducible).
+
+En la app, todo vive en `stores/site.ts` (cargar + aplicar + sorteo).
+
 ### 6bis.2 Colores e imagen de fondo (patrón CDL)
 
 - **Imagen de fondo por página** (columna `background_image`, subida desde el

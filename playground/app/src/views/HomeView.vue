@@ -7,6 +7,7 @@ import { blockRegistry } from '@/blocks/registry'
 import { templateFor } from '@/templates/registry'
 import { useAuthStore } from '@/stores/auth'
 import { useLocalesStore } from '@/stores/locales'
+import { useSiteStore } from '@/stores/site'
 
 // Si el CRM tiene una home publicada, la home ES esa página (doc 03); el
 // contenido de siempre queda de fallback mientras no la haya.
@@ -23,13 +24,14 @@ interface HomePage {
 }
 
 const locales = useLocalesStore()
+const site = useSiteStore()
 const homePage = ref<HomePage | null>(null)
 
 async function loadHome() {
   try {
     const { data } = await api.get('/pages/home')
     homePage.value = data.data
-    document.title = homePage.value?.meta.title ?? document.title
+    document.title = site.documentTitle(homePage.value?.meta.title)
   } catch {
     homePage.value = null // sin home del CRM: fallback
   }

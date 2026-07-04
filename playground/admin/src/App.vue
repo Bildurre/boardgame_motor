@@ -7,6 +7,7 @@ import {
   LayoutDashboard,
   Home,
   Images,
+  Settings,
   Shapes,
   ScrollText,
   Swords,
@@ -110,6 +111,11 @@ function navActive(section: string) {
       </RouterLink>
       <RouterLink class="nav-item" :class="navActive('pdfs')" :to="{ name: 'pdfs' }">
         <FileText class="nav-icon" :size="20" /><span class="nav-label">{{ t('nav.pdfs') }}</span>
+      </RouterLink>
+      <RouterLink class="nav-item" :class="navActive('settings')" :to="{ name: 'settings' }">
+        <Settings class="nav-icon" :size="20" /><span class="nav-label">{{
+          t('nav.settings')
+        }}</span>
       </RouterLink>
     </template>
 

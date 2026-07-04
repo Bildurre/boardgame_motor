@@ -7,7 +7,8 @@
     "characters": "personajes",
     "previews": "imagenes",
     "pdfs": "pdf",
-    "pages": "paginas"
+    "pages": "paginas",
+    "settings": "configuracion"
   },
   "breadcrumbs": {
     "home": "Inicio",
@@ -17,7 +18,8 @@
     "characters": "Personajes",
     "previews": "Imágenes",
     "pdfs": "PDF",
-    "pages": "Páginas"
+    "pages": "Páginas",
+    "settings": "Configuración"
   },
   "nav": {
     "dashboard": "Panel",
@@ -27,7 +29,8 @@
     "characters": "Personajes",
     "previews": "Imágenes",
     "pdfs": "PDF",
-    "pages": "Páginas"
+    "pages": "Páginas",
+    "settings": "Configuración"
   },
   "icons": {
     "title": "Iconos",
@@ -344,5 +347,45 @@
     "panelEmpty": "Selecciona una página para ver sus acciones.",
     "panelBlocks": "Bloques",
     "open": "Abrir"
+  },
+  "settings": {
+    "title": "Configuración",
+    "sections": {
+      "identity": "Identidad",
+      "appearance": "Apariencia",
+      "footer": "Pie de página"
+    },
+    "fields": {
+      "title": "Título del sitio",
+      "description": "Descripción (meta por defecto)",
+      "logo": "Logo (SVG/PNG)",
+      "logoHint": "Se muestra en la barra de la web pública",
+      "favicon": "Favicon (PNG/SVG)",
+      "faviconHint": "Icono de la pestaña del navegador",
+      "accentMode": "Color de acento",
+      "accentColor": "Color",
+      "accentColors": "Añadir color candidato",
+      "accentColorsHint": "Se sortea uno de estos colores al cargar la web y al navegar.",
+      "fontHeadings": "Fuente de los títulos",
+      "fontBody": "Fuente del texto"
+    },
+    "accentModes": {
+      "fixed": "Fijo",
+      "random": "Aleatorio (estilo CDL)"
+    },
+    "addColor": "Añadir",
+    "fontPreviewHeading": "Los siete reinos — Título de ejemplo",
+    "fontPreviewBody": "Baraja el mazo y reparte cinco cartas a cada jugador.",
+    "fonts": {
+      "system": "Del sistema",
+      "serif": "Serif clásica",
+      "humanist": "Humanista",
+      "rounded": "Redondeada",
+      "mono": "Monoespaciada"
+    },
+    "toast": {
+      "saved": "Configuración guardada.",
+      "saveError": "No se pudo guardar."
+    }
   }
 }

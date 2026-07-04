@@ -6,6 +6,7 @@ import { api } from '@/lib/api'
 import { blockRegistry } from '@/blocks/registry'
 import { templateFor } from '@/templates/registry'
 import { useLocalesStore } from '@/stores/locales'
+import { useSiteStore } from '@/stores/site'
 
 // Página pública del CRM (doc 03): pide el payload por slug (resuelto en
 // cualquier locale), redirige a la URL canónica del idioma activo (DC-12),
@@ -29,6 +30,7 @@ interface PagePayload {
 const route = useRoute()
 const router = useRouter()
 const locales = useLocalesStore()
+const site = useSiteStore()
 
 const page = ref<PagePayload | null>(null)
 const failed = ref(false)
@@ -48,7 +50,7 @@ async function load() {
       return
     }
 
-    document.title = page.value?.meta.title ?? ''
+    document.title = site.documentTitle(page.value?.meta.title)
     const meta = document.querySelector('meta[name="description"]')
     if (meta && page.value) meta.setAttribute('content', page.value.meta.description)
   } catch {

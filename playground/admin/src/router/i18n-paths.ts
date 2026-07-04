@@ -162,6 +162,18 @@ export function createLocalizedRoutes(locale: string): RouteRecordRaw[] {
         breadcrumbs: [{ key: 'pdfs' }],
       },
     },
+    {
+      path: `/${p.settings}`,
+      name: 'settings',
+      component: () => import('@/views/settings/SettingsView.vue'),
+      alias: buildAliases((t) => `/${t.settings}`, locale),
+      meta: {
+        admin: true,
+        nav: 'settings',
+        titleKey: 'settings.title',
+        breadcrumbs: [{ key: 'settings' }],
+      },
+    },
     // URLs desconocidas: al dashboard (evita la página en blanco).
     {
       path: '/:pathMatch(.*)*',

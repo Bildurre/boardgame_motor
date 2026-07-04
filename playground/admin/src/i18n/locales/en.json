@@ -7,7 +7,8 @@
     "characters": "characters",
     "previews": "previews",
     "pdfs": "pdfs",
-    "pages": "pages"
+    "pages": "pages",
+    "settings": "settings"
   },
   "breadcrumbs": {
     "home": "Home",
@@ -17,7 +18,8 @@
     "characters": "Characters",
     "previews": "Images",
     "pdfs": "PDFs",
-    "pages": "Pages"
+    "pages": "Pages",
+    "settings": "Settings"
   },
   "nav": {
     "dashboard": "Dashboard",
@@ -27,7 +29,8 @@
     "characters": "Characters",
     "previews": "Images",
     "pdfs": "PDFs",
-    "pages": "Pages"
+    "pages": "Pages",
+    "settings": "Settings"
   },
   "icons": {
     "title": "Icons",
@@ -398,6 +401,46 @@
     "button_variant": {
       "primary": "Primary",
       "secondary": "Secondary"
+    }
+  },
+  "settings": {
+    "title": "Settings",
+    "sections": {
+      "identity": "Identity",
+      "appearance": "Appearance",
+      "footer": "Footer"
+    },
+    "fields": {
+      "title": "Site title",
+      "description": "Description (default meta)",
+      "logo": "Logo (SVG/PNG)",
+      "logoHint": "Shown in the public site bar",
+      "favicon": "Favicon (PNG/SVG)",
+      "faviconHint": "Browser tab icon",
+      "accentMode": "Accent color",
+      "accentColor": "Color",
+      "accentColors": "Add candidate color",
+      "accentColorsHint": "One of these colors is drawn on page load and while navigating.",
+      "fontHeadings": "Headings font",
+      "fontBody": "Body font"
+    },
+    "accentModes": {
+      "fixed": "Fixed",
+      "random": "Random (CDL style)"
+    },
+    "addColor": "Add",
+    "fontPreviewHeading": "The seven kingdoms — Sample heading",
+    "fontPreviewBody": "Shuffle the deck and deal five cards to each player.",
+    "fonts": {
+      "system": "System",
+      "serif": "Classic serif",
+      "humanist": "Humanist",
+      "rounded": "Rounded",
+      "mono": "Monospace"
+    },
+    "toast": {
+      "saved": "Settings saved.",
+      "saveError": "Could not save."
     }
   }
 }

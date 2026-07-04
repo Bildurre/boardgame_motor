@@ -5,10 +5,12 @@ import { LocaleSelector, MotorBadge, ThemeSelector } from '@bgm/ui'
 import { api } from '@/lib/api'
 import { useAuthStore } from '@/stores/auth'
 import { useLocalesStore } from '@/stores/locales'
+import { useSiteStore } from '@/stores/site'
 
 const auth = useAuthStore()
 const router = useRouter()
 const locales = useLocalesStore()
+const site = useSiteStore()
 
 // Menú público: páginas raíz publicadas del CRM (título y slug por locale).
 interface NavPage {
@@ -48,7 +50,24 @@ onMounted(async () => {
 
 <template>
   <nav class="nav">
-    <RouterLink to="/" class="nav__brand"><MotorBadge label="BGM" /></RouterLink>
+    <RouterLink to="/" class="nav__brand" :title="site.title || 'BGM'">
+      <!-- Logo SVG inlineado desde el payload: currentColor hereda el
+           acento y el modo aleatorio lo recolorea (logo-path de CDL) -->
+      <!-- eslint-disable vue/no-v-html -- SVG subido por el admin -->
+      <span
+        v-if="site.settings?.logo_inline"
+        class="nav__logo nav__logo--svg"
+        v-html="site.settings.logo_inline"
+      />
+      <!-- eslint-enable vue/no-v-html -->
+      <img
+        v-else-if="site.settings?.logo"
+        class="nav__logo"
+        :src="site.settings.logo"
+        :alt="site.title || 'logo'"
+      />
+      <MotorBadge v-else :label="site.title || 'BGM'" />
+    </RouterLink>
     <div class="nav__links">
       <RouterLink to="/">Inicio</RouterLink>
       <RouterLink

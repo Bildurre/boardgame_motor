@@ -94,6 +94,14 @@
 - [ ] Flecos a futuro: repeater/group/entity-ref del DSL.
 - **Hito:** ✅ página con bloques (incluidos los con-datos del playground: rejilla de personajes y casas-argucias), reordenable, traducible, publicada y visible en público con URL traducible. **Añadir un bloque = una clase + un componente Vue.**
 
+### Fase 5.5 — Configuración de la web ✅
+**Meta:** que el admin configure la identidad y apariencia de la web pública sin tocar código.
+
+- [x] Módulo de ajustes del motor: tabla `settings` (JSON por clave), servicio `SiteSettings` cacheado, `GET /api/site` público y `GET/PUT /api/admin/settings/site` (validación completa).
+- [x] Página **Configuración** en el admin: título y descripción (traducibles), logo SVG/PNG y favicon (subidos al momento), **acento fijo o ALEATORIO estilo CDL** (lista de colores candidatos), fuentes de títulos y de texto (catálogo `motor.site.fonts`, ampliable por juego) con vista previa, y texto del pie.
+- [x] Aplicación en la SPA pública (`stores/site.ts`): título del documento (`página · sitio`), favicon, fuentes por variable CSS (`--font-headings`/`--font-body`), footer, logo en la barra (el SVG viaja **inlineado** en el payload y hereda el acento vía currentColor) y acento con tonos derivados por `color-mix`. En modo aleatorio se sortea al cargar **y se re-sortea en cada navegación** (`router.afterEach`), recoloreando también el logo — el efecto logo-path de CDL.
+- **Hito:** ✅ cambiar título/logo/fuentes/acento desde el admin y verlo aplicado en la web al recargar; con el modo aleatorio, cada visita y cada navegación estrenan color.
+
 ### Fase 6 — Backup, web pública y panel de usuario extensible
 **Meta:** rematar lo transversal y dejar ganchos de extensión por juego.
 > Plan: `funcionalidades/06-backup-bbdd.md`, `10-web-publica-y-panel-usuario.md`.

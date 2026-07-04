@@ -7,7 +7,8 @@
     "characters": "pertsonaiak",
     "previews": "irudiak",
     "pdfs": "pdfak",
-    "pages": "orriak"
+    "pages": "orriak",
+    "settings": "konfigurazioa"
   },
   "breadcrumbs": {
     "home": "Hasiera",
@@ -17,7 +18,8 @@
     "characters": "Pertsonaiak",
     "previews": "Irudiak",
     "pdfs": "PDFak",
-    "pages": "Orriak"
+    "pages": "Orriak",
+    "settings": "Konfigurazioa"
   },
   "nav": {
     "dashboard": "Panela",
@@ -27,7 +29,8 @@
     "characters": "Pertsonaiak",
     "previews": "Irudiak",
     "pdfs": "PDFak",
-    "pages": "Orriak"
+    "pages": "Orriak",
+    "settings": "Konfigurazioa"
   },
   "icons": {
     "title": "Ikonoak",
@@ -398,6 +401,46 @@
     "button_variant": {
       "primary": "Nagusia",
       "secondary": "Bigarren mailakoa"
+    }
+  },
+  "settings": {
+    "title": "Konfigurazioa",
+    "sections": {
+      "identity": "Identitatea",
+      "appearance": "Itxura",
+      "footer": "Orri-oina"
+    },
+    "fields": {
+      "title": "Gunearen izenburua",
+      "description": "Deskribapena (meta lehenetsia)",
+      "logo": "Logoa (SVG/PNG)",
+      "logoHint": "Web publikoaren barran agertzen da",
+      "favicon": "Favicon-a (PNG/SVG)",
+      "faviconHint": "Nabigatzailearen fitxako ikonoa",
+      "accentMode": "Azentu-kolorea",
+      "accentColor": "Kolorea",
+      "accentColors": "Gehitu kolore hautagaia",
+      "accentColorsHint": "Kolore hauetako bat zozketatzen da weba kargatzean eta nabigatzean.",
+      "fontHeadings": "Izenburuen letra-tipoa",
+      "fontBody": "Testuaren letra-tipoa"
+    },
+    "accentModes": {
+      "fixed": "Finkoa",
+      "random": "Ausazkoa (CDL erakoa)"
+    },
+    "addColor": "Gehitu",
+    "fontPreviewHeading": "Zazpi erresumak — Adibide izenburua",
+    "fontPreviewBody": "Nahastu sorta eta banatu bost karta jokalari bakoitzari.",
+    "fonts": {
+      "system": "Sistemakoa",
+      "serif": "Serif klasikoa",
+      "humanist": "Humanista",
+      "rounded": "Biribildua",
+      "mono": "Monoespaziatua"
+    },
+    "toast": {
+      "saved": "Konfigurazioa gordeta.",
+      "saveError": "Ezin izan da gorde."
     }
   }
 }
