@@ -1,12 +1,17 @@
 # 03 · CRM de páginas y bloques
 
-> **Estado: núcleo implementado (Fase 5 ✅).** Notas: los valores de TODOS los
-> campos de un bloque viven en `settings` JSON (sin columnas title/subtitle/
-> content); los campos comunes (align, background) los añade el motor a cada
-> tipo; el DSL v1 cubre text/textarea/richtext/number/boolean/select/color/
-> image (repeater/group/entity-ref, pendientes); imágenes de bloque por URL
-> (POST /admin/content/uploads). Flecos: plantillas por juego en la SPA,
-> bloque índice, PDF de páginas imprimibles.
+> **Estado: implementado (Fase 5 ✅ + flecos ✅).** Notas: los valores de
+> TODOS los campos de un bloque viven en `settings` JSON (sin columnas
+> title/subtitle/content); los campos comunes (align, **width**
+> full/wide/narrow y background como **tinte semitransparente** por tema)
+> los añade el motor a cada tipo; el DSL v1 cubre text/textarea/richtext/
+> number/boolean/select/color/image — la **imagen es multilingüe**
+> (`->translatable()`, editor TranslatableImage) y sube por
+> POST /admin/content/uploads. Hechos también: bloque índice automático,
+> PDF de páginas imprimibles (export `pages`), plantillas por juego en la
+> SPA (`templateRegistry`), `background_image` por página (capa
+> PageBackground atenuada por tema) y posición de imagen "el texto la
+> rodea" (clear-left/right). Pendiente del DSL: repeater/group/entity-ref.
 
 ## Qué hace
 

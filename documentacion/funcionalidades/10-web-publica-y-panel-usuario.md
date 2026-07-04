@@ -1,5 +1,19 @@
 # 10 · Web pública y panel de usuario
 
+> **Estado: parcial.** Hecho (Fase 5/5.5): shell básico de la `app` (nav con
+> las páginas del CRM + logo del sitio, footer, selectores provisionales de
+> idioma y tema), `PageView`/home del CRM con plantillas por juego, ruta
+> `/_render` aislada, y la **Configuración de la web** completa: tabla
+> `settings` + servicio `SiteSettings` cacheado, `GET /api/site` público y
+> `GET/PUT /api/admin/settings/site`; título/descripción (traducibles), logo
+> SVG (inlineado en el payload, recoloreado por el acento) y favicon,
+> **acento fijo o ALEATORIO estilo CDL** (re-sorteo en cada navegación),
+> **fuentes** de títulos/texto con catálogo `motor.site.fonts` (webfonts
+> woff2 servidas con CORS por `GET /api/site/fonts/{path}`) + **subida de
+> fuentes propias**, y texto del pie. Pendiente: prefijo de locale en el
+> router, SEO/prerender/sitemap (DC-18), listados de entidades genéricos y
+> el panel de usuario extensible (Fase 6).
+
 ## Qué hace
 
 El andamiaje de la SPA `app`: la **web pública** (el expositor: home, navegación
