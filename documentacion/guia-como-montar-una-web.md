@@ -869,6 +869,34 @@ hosting estático debe servir esos ficheros antes del fallback a
 > listados (p. ej. una página con slug EU `etxeak` taparía el listado de
 > casas): el router da prioridad a las secciones.
 
+## 6sexies. Panel de usuario extensible (Fase 6)
+
+El panel (`/:locale/cuenta`) es un layout con menú lateral
+(`AccountLayout`) y **una child route por sección** registrada en
+`src/account/registry.ts`. El motor aporta las secciones base — Mis datos y
+Contraseña (doc 05) — y cada juego cuelga las suyas añadiendo entradas a
+`gameSections`:
+
+```ts
+const gameSections: AccountSection[] = [
+  {
+    key: 'print',
+    path: 'imprimir',          // segmento bajo cuenta/
+    name: 'account-print',      // nombre de ruta
+    titleKey: 'account.sections.print', // etiqueta del menú (i18n)
+    component: PrintSection,    // el componente ES la sección
+  },
+]
+```
+
+El router monta las children automáticamente (todas con `meta.auth`). El
+playground trae de ejemplo **"Para imprimir"** (doc 02): añade personajes a
+la colección temporal (`POST /pdf-collection/items` con `{entity, id,
+copies}`), la lista con miniaturas (previews), genera el PDF en cola
+(`POST /pdf-collection/generate`, sondeo de `GET /pdf-collection/pdfs/{id}`
+hasta `ready`) y lo descarga por su `url`. Recuerda un worker de colas en
+producción (`php artisan queue:work`).
+
 ## 7. Checklist para una entidad nueva
 
 Backend:

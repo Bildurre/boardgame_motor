@@ -18,5 +18,72 @@
   },
   "page": {
     "notFound": "Orri hau ez da existitzen (edo ez dago argitaratuta jada)."
+  },
+  "auth": {
+    "login": {
+      "title": "Sartu",
+      "email": "Emaila",
+      "password": "Pasahitza",
+      "submit": "Sartu",
+      "submitting": "Sartzen…",
+      "noAccount": "Ez duzu konturik?",
+      "register": "Eman izena",
+      "error": "Ezin izan da saioa hasi."
+    },
+    "register": {
+      "title": "Sortu kontua",
+      "name": "Izena",
+      "password2": "Errepikatu pasahitza",
+      "submit": "Sortu kontua",
+      "submitting": "Sortzen…",
+      "hasAccount": "Baduzu kontua?",
+      "login": "Sartu",
+      "error": "Ezin izan da izen-ematea osatu."
+    }
+  },
+  "account": {
+    "title": "Nire kontua",
+    "sections": {
+      "profile": "Nire datuak",
+      "security": "Pasahitza",
+      "print": "Inprimatzeko"
+    },
+    "profile": {
+      "role": "Rola",
+      "justVerified": "Zure emaila egiaztatuta geratu da. Eskerrik asko!",
+      "unverified": "{email} emaila oraindik ez dago egiaztatuta. Begiratu posta edo eskatu esteka berriro.",
+      "resend": "Birbidali egiaztapen-mezua",
+      "resendOk": "Egiaztapen-mezu bat bidali dizugu.",
+      "resendError": "Ezin izan da mezua bidali.",
+      "name": "Izena",
+      "email": "Emaila",
+      "save": "Gorde",
+      "saved": "Datuak gordeta.",
+      "saveError": "Ezin izan da gorde."
+    },
+    "security": {
+      "current": "Oraingo pasahitza",
+      "new": "Pasahitz berria",
+      "repeat": "Errepikatu berria",
+      "submit": "Eguneratu",
+      "ok": "Pasahitza eguneratuta.",
+      "error": "Ezin izan da pasahitza aldatu."
+    },
+    "print": {
+      "intro": "Aukeratu kartak, sortu haien behin-behineko PDFa eta inprimatu (02 dok.). Bilduma berez iraungitzen da.",
+      "empty": "Zure bilduma hutsik dago: gehitu kartak beheko zerrendatik.",
+      "collection": "Zure bilduma",
+      "copies": "kopia",
+      "remove": "Kendu",
+      "clear": "Hustu",
+      "generate": "Sortu PDFa",
+      "generating": "Sortzen…",
+      "download": "Deskargatu PDFa",
+      "failed": "Ezin izan da PDFa sortu.",
+      "pick": "Gehitu pertsonaiak",
+      "add": "Gehitu",
+      "added": "Bildumara gehituta.",
+      "error": "Ezin izan da bilduma eguneratu."
+    }
   }
 }

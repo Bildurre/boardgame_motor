@@ -2,11 +2,13 @@
 import { ref } from 'vue'
 import { LogIn } from '@lucide/vue'
 import { useRouter } from 'vue-router'
+import { useI18n } from 'vue-i18n'
 import { BaseButton } from '@bgm/ui'
 import { useAuthStore } from '@/stores/auth'
 import { useLocalesStore } from '@/stores/locales'
 import { apiMessage } from '@/lib/apiError'
 
+const { t } = useI18n()
 const auth = useAuthStore()
 const router = useRouter()
 const locales = useLocalesStore()
@@ -22,7 +24,7 @@ async function submit() {
     await auth.login(email.value, password.value)
     router.push({ name: 'account', params: { locale: locales.current } })
   } catch (e) {
-    error.value = apiMessage(e, 'No se pudo iniciar sesión.')
+    error.value = apiMessage(e, t('auth.login.error'))
   } finally {
     loading.value = false
   }
@@ -31,26 +33,27 @@ async function submit() {
 
 <template>
   <main class="auth">
-    <h1>Entrar</h1>
+    <h1>{{ t('auth.login.title') }}</h1>
     <form class="form" @submit.prevent="submit">
       <div class="field">
-        <label>Email</label>
+        <label>{{ t('auth.login.email') }}</label>
         <input v-model="email" type="email" required autocomplete="email" />
       </div>
       <div class="field">
-        <label>Contraseña</label>
+        <label>{{ t('auth.login.password') }}</label>
         <input v-model="password" type="password" required autocomplete="current-password" />
       </div>
       <p v-if="error" class="error">{{ error }}</p>
       <BaseButton type="submit">
         <template #icon><LogIn :size="16" /></template>
-        {{ loading ? 'Entrando…' : 'Entrar' }}
+        {{ loading ? t('auth.login.submitting') : t('auth.login.submit') }}
       </BaseButton>
     </form>
     <p class="hint">
-      ¿No tienes cuenta?
-      <RouterLink :to="{ name: 'register', params: { locale: locales.current } }"
-        >Regístrate</RouterLink
+      {{ t('auth.login.noAccount') }}
+      <RouterLink :to="{ name: 'register', params: { locale: locales.current } }">{{
+        t('auth.login.register')
+      }}</RouterLink
       >.
     </p>
   </main>

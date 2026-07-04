@@ -18,5 +18,72 @@
   },
   "page": {
     "notFound": "This page does not exist (or is no longer published)."
+  },
+  "auth": {
+    "login": {
+      "title": "Log in",
+      "email": "Email",
+      "password": "Password",
+      "submit": "Log in",
+      "submitting": "Logging in…",
+      "noAccount": "Don't have an account?",
+      "register": "Sign up",
+      "error": "Could not log in."
+    },
+    "register": {
+      "title": "Create account",
+      "name": "Name",
+      "password2": "Repeat the password",
+      "submit": "Create account",
+      "submitting": "Creating…",
+      "hasAccount": "Already have an account?",
+      "login": "Log in",
+      "error": "Could not complete the registration."
+    }
+  },
+  "account": {
+    "title": "My account",
+    "sections": {
+      "profile": "My details",
+      "security": "Password",
+      "print": "To print"
+    },
+    "profile": {
+      "role": "Role",
+      "justVerified": "Your email has been verified. Thanks!",
+      "unverified": "Your email {email} is not verified yet. Check your inbox or request the link again.",
+      "resend": "Resend verification email",
+      "resendOk": "We have sent you a verification email.",
+      "resendError": "Could not send the email.",
+      "name": "Name",
+      "email": "Email",
+      "save": "Save",
+      "saved": "Details saved.",
+      "saveError": "Could not save."
+    },
+    "security": {
+      "current": "Current password",
+      "new": "New password",
+      "repeat": "Repeat the new one",
+      "submit": "Update",
+      "ok": "Password updated.",
+      "error": "Could not change the password."
+    },
+    "print": {
+      "intro": "Pick cards, generate their temporary PDF and print them (doc 02). The collection expires on its own.",
+      "empty": "Your collection is empty: add cards from the list below.",
+      "collection": "Your collection",
+      "copies": "copies",
+      "remove": "Remove",
+      "clear": "Clear",
+      "generate": "Generate PDF",
+      "generating": "Generating…",
+      "download": "Download PDF",
+      "failed": "Could not generate the PDF.",
+      "pick": "Add characters",
+      "add": "Add",
+      "added": "Added to the collection.",
+      "error": "Could not update the collection."
+    }
   }
 }

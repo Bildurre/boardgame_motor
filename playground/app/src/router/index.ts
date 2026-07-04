@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import { i18n } from '@/i18n'
+import { accountSections } from '@/account/registry'
 import { sectionPattern } from '@/entities/registry'
 import { useAuthStore } from '@/stores/auth'
 import { useLocalesStore } from '@/stores/locales'
@@ -44,17 +45,18 @@ const router = createRouter({
           component: () => import('@/views/RegisterView.vue'),
           meta: { guest: true },
         },
+        // Panel de usuario (doc 10): una child route por sección registrada
+        // (base del motor + las del juego, ver src/account/registry.ts).
         {
           path: 'cuenta',
-          name: 'account',
-          component: () => import('@/views/account/AccountView.vue'),
+          component: () => import('@/views/account/AccountLayout.vue'),
           meta: { auth: true },
-        },
-        {
-          path: 'cuenta/seguridad',
-          name: 'security',
-          component: () => import('@/views/account/SecurityView.vue'),
-          meta: { auth: true },
+          children: accountSections.map((section) => ({
+            path: section.path,
+            name: section.name,
+            component: section.component,
+            meta: { auth: true },
+          })),
         },
         // Listados de entidades del juego (doc 10): el segmento (en cualquier
         // locale) decide la sección; van ANTES que la página por slug.

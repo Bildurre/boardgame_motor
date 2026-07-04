@@ -18,5 +18,72 @@
   },
   "page": {
     "notFound": "Esta página no existe (o ya no está publicada)."
+  },
+  "auth": {
+    "login": {
+      "title": "Entrar",
+      "email": "Email",
+      "password": "Contraseña",
+      "submit": "Entrar",
+      "submitting": "Entrando…",
+      "noAccount": "¿No tienes cuenta?",
+      "register": "Regístrate",
+      "error": "No se pudo iniciar sesión."
+    },
+    "register": {
+      "title": "Crear cuenta",
+      "name": "Nombre",
+      "password2": "Repite la contraseña",
+      "submit": "Crear cuenta",
+      "submitting": "Creando…",
+      "hasAccount": "¿Ya tienes cuenta?",
+      "login": "Entra",
+      "error": "No se pudo completar el registro."
+    }
+  },
+  "account": {
+    "title": "Mi cuenta",
+    "sections": {
+      "profile": "Mis datos",
+      "security": "Contraseña",
+      "print": "Para imprimir"
+    },
+    "profile": {
+      "role": "Rol",
+      "justVerified": "Tu email ha quedado verificado. ¡Gracias!",
+      "unverified": "Tu email {email} aún no está verificado. Revisa tu correo o vuelve a pedir el enlace.",
+      "resend": "Reenviar correo de verificación",
+      "resendOk": "Te hemos enviado un correo de verificación.",
+      "resendError": "No se pudo enviar el correo.",
+      "name": "Nombre",
+      "email": "Email",
+      "save": "Guardar",
+      "saved": "Datos guardados.",
+      "saveError": "No se pudo guardar."
+    },
+    "security": {
+      "current": "Contraseña actual",
+      "new": "Nueva contraseña",
+      "repeat": "Repite la nueva",
+      "submit": "Actualizar",
+      "ok": "Contraseña actualizada.",
+      "error": "No se pudo cambiar la contraseña."
+    },
+    "print": {
+      "intro": "Elige cartas, genera su PDF temporal y imprímelas (doc 02). La colección caduca sola.",
+      "empty": "Tu colección está vacía: añade cartas de la lista de abajo.",
+      "collection": "Tu colección",
+      "copies": "copias",
+      "remove": "Quitar",
+      "clear": "Vaciar",
+      "generate": "Generar PDF",
+      "generating": "Generando…",
+      "download": "Descargar PDF",
+      "failed": "No se pudo generar el PDF.",
+      "pick": "Añadir personajes",
+      "add": "Añadir",
+      "added": "Añadido a la colección.",
+      "error": "No se pudo actualizar la colección."
+    }
   }
 }

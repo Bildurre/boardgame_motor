@@ -1,13 +1,13 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { KeyRound } from '@lucide/vue'
+import { useI18n } from 'vue-i18n'
 import { BaseButton } from '@bgm/ui'
 import { api } from '@/lib/api'
 import { apiMessage } from '@/lib/apiError'
-import { useLocalesStore } from '@/stores/locales'
 
-const locales = useLocalesStore()
-
+// Sección base del panel (doc 05): cambio de contraseña.
+const { t } = useI18n()
 const currentPassword = ref('')
 const password = ref('')
 const passwordConfirmation = ref('')
@@ -22,39 +22,36 @@ async function save() {
       password: password.value,
       password_confirmation: passwordConfirmation.value,
     })
-    message.value = 'Contraseña actualizada.'
+    message.value = t('account.security.ok')
     currentPassword.value = password.value = passwordConfirmation.value = ''
   } catch (e) {
-    error.value = apiMessage(e, 'No se pudo cambiar la contraseña.')
+    error.value = apiMessage(e, t('account.security.error'))
   }
 }
 </script>
 
 <template>
-  <main class="auth">
-    <h1>Cambiar contraseña</h1>
+  <div class="auth auth--section">
+    <h2>{{ t('account.sections.security') }}</h2>
     <form class="form" @submit.prevent="save">
       <div class="field">
-        <label>Contraseña actual</label><input v-model="currentPassword" type="password" required />
+        <label>{{ t('account.security.current') }}</label
+        ><input v-model="currentPassword" type="password" required />
       </div>
       <div class="field">
-        <label>Nueva contraseña</label><input v-model="password" type="password" required />
+        <label>{{ t('account.security.new') }}</label
+        ><input v-model="password" type="password" required />
       </div>
       <div class="field">
-        <label>Repite la nueva</label
+        <label>{{ t('account.security.repeat') }}</label
         ><input v-model="passwordConfirmation" type="password" required />
       </div>
       <p v-if="message" class="ok">{{ message }}</p>
       <p v-if="error" class="error">{{ error }}</p>
       <BaseButton type="submit">
         <template #icon><KeyRound :size="16" /></template>
-        Actualizar
+        {{ t('account.security.submit') }}
       </BaseButton>
     </form>
-    <p class="hint">
-      <RouterLink :to="{ name: 'account', params: { locale: locales.current } }"
-        >Volver a mi cuenta</RouterLink
-      >
-    </p>
-  </main>
+  </div>
 </template>

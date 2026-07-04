@@ -2,15 +2,16 @@
 import { computed, onMounted, ref } from 'vue'
 import { MailCheck, Save } from '@lucide/vue'
 import { useRoute } from 'vue-router'
+import { useI18n } from 'vue-i18n'
 import { BaseButton } from '@bgm/ui'
 import { api } from '@/lib/api'
 import { useAuthStore } from '@/stores/auth'
-import { useLocalesStore } from '@/stores/locales'
 import { apiMessage } from '@/lib/apiError'
 
+// Sección base del panel (doc 05): nombre y email + verificación (DC-14).
+const { t } = useI18n()
 const auth = useAuthStore()
 const route = useRoute()
-const locales = useLocalesStore()
 const name = ref('')
 const email = ref('')
 const message = ref<string | null>(null)
@@ -32,9 +33,9 @@ async function save() {
   try {
     const { data } = await api.put('/account', { name: name.value, email: email.value })
     auth.user = data.data
-    message.value = 'Datos guardados.'
+    message.value = t('account.profile.saved')
   } catch (e) {
-    error.value = apiMessage(e, 'No se pudo guardar.')
+    error.value = apiMessage(e, t('account.profile.saveError'))
   }
 }
 
@@ -44,9 +45,9 @@ async function resendVerification() {
   resending.value = true
   try {
     const { data } = await api.post('/auth/email/verification-notification')
-    message.value = data.message ?? 'Te hemos enviado un correo de verificación.'
+    message.value = data.message ?? t('account.profile.resendOk')
   } catch (e) {
-    error.value = apiMessage(e, 'No se pudo enviar el correo.')
+    error.value = apiMessage(e, t('account.profile.resendError'))
   } finally {
     resending.value = false
   }
@@ -54,41 +55,38 @@ async function resendVerification() {
 </script>
 
 <template>
-  <main class="auth">
-    <h1>Mi cuenta</h1>
+  <div class="auth auth--section">
+    <h2>{{ t('account.sections.profile') }}</h2>
     <p v-if="auth.user" class="roles">
-      Rol: <strong>{{ auth.user.roles.join(', ') }}</strong>
+      {{ t('account.profile.role') }}: <strong>{{ auth.user.roles.join(', ') }}</strong>
     </p>
 
     <p v-if="justVerified && auth.user?.email_verified" class="ok">
-      Tu email ha quedado verificado. ¡Gracias!
+      {{ t('account.profile.justVerified') }}
     </p>
     <div v-else-if="needsVerification" class="verify-notice">
-      <p>
-        Tu email <strong>{{ auth.user?.email }}</strong> aún no está verificado. Revisa tu correo o
-        vuelve a pedir el enlace.
-      </p>
+      <p>{{ t('account.profile.unverified', { email: auth.user?.email }) }}</p>
       <BaseButton variant="secondary" :disabled="resending" @click="resendVerification">
         <template #icon><MailCheck :size="16" /></template>
-        Reenviar correo de verificación
+        {{ t('account.profile.resend') }}
       </BaseButton>
     </div>
 
     <form class="form" @submit.prevent="save">
-      <div class="field"><label>Nombre</label><input v-model="name" type="text" required /></div>
-      <div class="field"><label>Email</label><input v-model="email" type="email" required /></div>
+      <div class="field">
+        <label>{{ t('account.profile.name') }}</label
+        ><input v-model="name" type="text" required />
+      </div>
+      <div class="field">
+        <label>{{ t('account.profile.email') }}</label
+        ><input v-model="email" type="email" required />
+      </div>
       <p v-if="message" class="ok">{{ message }}</p>
       <p v-if="error" class="error">{{ error }}</p>
       <BaseButton type="submit">
         <template #icon><Save :size="16" /></template>
-        Guardar
+        {{ t('account.profile.save') }}
       </BaseButton>
     </form>
-
-    <p class="hint">
-      <RouterLink :to="{ name: 'security', params: { locale: locales.current } }"
-        >Cambiar contraseña</RouterLink
-      >
-    </p>
-  </main>
+  </div>
 </template>

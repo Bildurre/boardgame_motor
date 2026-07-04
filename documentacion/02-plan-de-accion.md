@@ -117,8 +117,8 @@
 
 - [x] Backup BBDD (doc 06, DC-16): `spatie/laravel-backup` configurado por el motor (`MotorBackup::applyConfig()` desde `motor.backup`; SQLite como fichero en el zip, media opcional), API `/api/admin/backups` (crear/listar/descargar/borrar, `manage-web`), vista **Copias** en el admin y programación diaria con retención en `routes/console.php`.
 - [x] Andamiaje de la web pública (doc 10): router con **prefijo de locale** (`/es`·`/eu`·`/en`, el cambio de idioma conserva la entidad y redirige a la canónica, DC-12), vue-i18n para los textos de la interfaz, **SEO** con `useHead` de @bgm/ui (title/description/canonical/hreflang), **sitemap.xml** del motor (páginas del CRM + entidades registradas con la facade `Sitemap`), **prerender en build** (`npm run prerender`, DC-18) y **listados de entidades genéricos** (patrón índice+detalle por slug configurado en el `entityRegistry` de la app; playground: personajes y casas).
-- [ ] Panel de usuario extensible (puntos de extensión para que el juego cuelgue lo suyo).
-- **Hito:** backup descargable desde admin; web pública navegable; un "slot" de panel de usuario rellenado por el playground.
+- [x] Panel de usuario extensible (doc 10): `AccountLayout` con menú lateral y una child route por sección registrada en `src/account/registry.ts` — el motor aporta Mis datos y Contraseña (doc 05) y el juego cuelga las suyas; el playground engancha **"Para imprimir"** (colección PDF temporal del doc 02: añadir cartas, copias, generar y descargar). Vistas de auth/cuenta traducidas (vue-i18n).
+- **Hito:** ✅ backup descargable desde admin; web pública navegable con locale/SEO/sitemap/prerender; el playground rellena un "slot" del panel de usuario (Para imprimir) — PDF generado y descargado de punta a punta.
 
 ### Fase 7 — Publicación de paquetes y endurecido
 **Meta:** dejar el motor consumible por versión y documentado.

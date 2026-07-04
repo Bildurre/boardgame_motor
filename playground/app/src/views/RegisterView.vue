@@ -2,11 +2,13 @@
 import { ref } from 'vue'
 import { UserPlus } from '@lucide/vue'
 import { useRouter } from 'vue-router'
+import { useI18n } from 'vue-i18n'
 import { BaseButton } from '@bgm/ui'
 import { useAuthStore } from '@/stores/auth'
 import { useLocalesStore } from '@/stores/locales'
 import { apiMessage } from '@/lib/apiError'
 
+const { t } = useI18n()
 const auth = useAuthStore()
 const router = useRouter()
 const locales = useLocalesStore()
@@ -29,7 +31,7 @@ async function submit() {
     })
     router.push({ name: 'account', params: { locale: locales.current } })
   } catch (e) {
-    error.value = apiMessage(e, 'No se pudo completar el registro.')
+    error.value = apiMessage(e, t('auth.register.error'))
   } finally {
     loading.value = false
   }
@@ -38,22 +40,22 @@ async function submit() {
 
 <template>
   <main class="auth">
-    <h1>Crear cuenta</h1>
+    <h1>{{ t('auth.register.title') }}</h1>
     <form class="form" @submit.prevent="submit">
       <div class="field">
-        <label>Nombre</label>
+        <label>{{ t('auth.register.name') }}</label>
         <input v-model="name" type="text" required />
       </div>
       <div class="field">
-        <label>Email</label>
+        <label>{{ t('auth.login.email') }}</label>
         <input v-model="email" type="email" required autocomplete="email" />
       </div>
       <div class="field">
-        <label>Contraseña</label>
+        <label>{{ t('auth.login.password') }}</label>
         <input v-model="password" type="password" required autocomplete="new-password" />
       </div>
       <div class="field">
-        <label>Repite la contraseña</label>
+        <label>{{ t('auth.register.password2') }}</label>
         <input
           v-model="passwordConfirmation"
           type="password"
@@ -64,12 +66,15 @@ async function submit() {
       <p v-if="error" class="error">{{ error }}</p>
       <BaseButton type="submit">
         <template #icon><UserPlus :size="16" /></template>
-        {{ loading ? 'Creando…' : 'Crear cuenta' }}
+        {{ loading ? t('auth.register.submitting') : t('auth.register.submit') }}
       </BaseButton>
     </form>
     <p class="hint">
-      ¿Ya tienes cuenta?
-      <RouterLink :to="{ name: 'login', params: { locale: locales.current } }">Entra</RouterLink>.
+      {{ t('auth.register.hasAccount') }}
+      <RouterLink :to="{ name: 'login', params: { locale: locales.current } }">{{
+        t('auth.register.login')
+      }}</RouterLink
+      >.
     </p>
   </main>
 </template>

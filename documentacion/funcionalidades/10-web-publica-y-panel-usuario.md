@@ -12,8 +12,12 @@
 > Chromium y escribe dist/<ruta>/index.html, DC-18) y **listados de
 > entidades genéricos** (`entityRegistry` + `EntityIndexView`/
 > `EntityDetailView`; playground: personajes y casas con sus cartas).
-> Pendiente: panel de usuario extensible (Fase 6c) y, tras él, i18n completa
-> de las vistas de cuenta.
+> Y el **panel de usuario extensible**: `AccountLayout` (menú lateral) con
+> una child route por sección registrada en `src/account/registry.ts` — el
+> motor aporta Mis datos y Contraseña (doc 05) y el juego cuelga las suyas;
+> el playground engancha "Para imprimir" (colección PDF del doc 02: añadir
+> cartas, copias, generar en cola y descargar). Vistas de auth y cuenta
+> traducidas con vue-i18n. **Doc completado.**
 
 ## Qué hace
 
