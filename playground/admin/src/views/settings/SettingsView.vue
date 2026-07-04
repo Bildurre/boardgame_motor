@@ -212,165 +212,172 @@ onMounted(async () => {
       </BaseButton>
     </div>
 
-    <!-- Tarjetas en masonry (CSS columns): cada una pegada a la anterior
-         de su columna, sin filas alineadas por alturas -->
-    <div class="settings-view__masonry">
-      <!-- Identidad -->
-      <section class="settings-view__section">
-        <h2>{{ t('settings.sections.identity') }}</h2>
-        <TranslatableInput
-          v-model="title"
-          :locales="locales.locales"
-          :label="t('settings.fields.title')"
-        />
-        <TranslatableInput
-          v-model="description"
-          :locales="locales.locales"
-          :label="t('settings.fields.description')"
-          type="textarea"
-          :rows="2"
-        />
-        <div class="settings-view__uploads">
-          <ImageUpload
-            :model-value="null"
-            :current-url="logo"
-            :label="t('settings.fields.logo')"
-            accept=".svg,.png,.webp"
-            :drag-text="t('common.imageDrag')"
-            :hint-text="t('settings.fields.logoHint')"
-            @update:model-value="uploadLogo"
-            @remove="logo = null"
+    <!-- Dos columnas explícitas (masonry determinista): cada columna apila
+         sus tarjetas pegadas, sin filas alineadas por alturas -->
+    <div class="settings-view__columns">
+      <div class="settings-view__col">
+        <!-- Identidad -->
+        <section class="settings-view__section">
+          <h2>{{ t('settings.sections.identity') }}</h2>
+          <TranslatableInput
+            v-model="title"
+            :locales="locales.locales"
+            :label="t('settings.fields.title')"
           />
-          <ImageUpload
-            :model-value="null"
-            :current-url="favicon"
-            :label="t('settings.fields.favicon')"
-            accept=".png,.svg"
-            :drag-text="t('common.imageDrag')"
-            :hint-text="t('settings.fields.faviconHint')"
-            @update:model-value="uploadFavicon"
-            @remove="favicon = null"
+          <TranslatableInput
+            v-model="description"
+            :locales="locales.locales"
+            :label="t('settings.fields.description')"
+            type="textarea"
+            :rows="2"
           />
-        </div>
-      </section>
-
-      <!-- Apariencia -->
-      <section class="settings-view__section">
-        <h2>{{ t('settings.sections.appearance') }}</h2>
-        <BaseSelect
-          v-model="accentMode"
-          :label="t('settings.fields.accentMode')"
-          :options="[
-            { value: 'fixed', label: t('settings.accentModes.fixed') },
-            { value: 'random', label: t('settings.accentModes.random') },
-          ]"
-        />
-
-        <PaletteColorPicker
-          v-if="accentMode === 'fixed'"
-          v-model="accentColor"
-          :label="t('settings.fields.accentColor')"
-        />
-
-        <template v-else>
-          <p class="settings-view__hint">{{ t('settings.fields.accentColorsHint') }}</p>
-          <!-- Candidatos como etiquetas en fila (con wrap) -->
-          <ul v-if="accentColors.length" class="settings-view__colors">
-            <li v-for="(color, index) in accentColors" :key="color">
-              <span class="settings-view__swatch" :style="{ background: color }" />
-              <code>{{ color }}</code>
-              <button
-                type="button"
-                class="settings-view__chip-remove"
-                :title="t('common.actions.delete')"
-                @click="removeColor(index)"
-              >
-                <X :size="12" />
-              </button>
-            </li>
-          </ul>
-          <div class="settings-view__add-color">
-            <PaletteColorPicker v-model="candidate" :label="t('settings.fields.accentColors')" />
-            <BaseButton variant="text" @click="addColor">
-              <template #icon><Plus :size="14" /></template>
-              {{ t('settings.addColor') }}
-            </BaseButton>
-          </div>
-        </template>
-
-        <div class="settings-view__fonts">
-          <div>
-            <BaseSelect
-              v-model="fontHeadings"
-              :label="t('settings.fields.fontHeadings')"
-              :options="fontOptions"
+          <div class="settings-view__uploads">
+            <ImageUpload
+              :model-value="null"
+              :current-url="logo"
+              :label="t('settings.fields.logo')"
+              accept=".svg,.png,.webp"
+              :drag-text="t('common.imageDrag')"
+              :hint-text="t('settings.fields.logoHint')"
+              @update:model-value="uploadLogo"
+              @remove="logo = null"
             />
-            <p
-              class="settings-view__font-preview"
-              :style="{ fontFamily: fonts[fontHeadings]?.stack }"
-            >
-              {{ t('settings.fontPreviewHeading') }}
-            </p>
-          </div>
-          <div>
-            <BaseSelect
-              v-model="fontBody"
-              :label="t('settings.fields.fontBody')"
-              :options="fontOptions"
+            <ImageUpload
+              :model-value="null"
+              :current-url="favicon"
+              :label="t('settings.fields.favicon')"
+              accept=".png,.svg"
+              :drag-text="t('common.imageDrag')"
+              :hint-text="t('settings.fields.faviconHint')"
+              @update:model-value="uploadFavicon"
+              @remove="favicon = null"
             />
-            <p class="settings-view__font-preview" :style="{ fontFamily: fonts[fontBody]?.stack }">
-              {{ t('settings.fontPreviewBody') }}
-            </p>
           </div>
-        </div>
+        </section>
 
-        <!-- Fuentes propias: subir un fichero la hace elegible arriba -->
-        <div class="settings-view__custom-fonts">
-          <span class="form-field__label">{{ t('settings.fields.customFonts') }}</span>
-          <ul v-if="customFonts.length" class="settings-view__colors">
-            <li v-for="font in customFonts" :key="font.key">
-              <code>{{ font.name }}</code>
-              <button
-                type="button"
-                class="settings-view__chip-remove"
-                :title="t('common.actions.delete')"
-                @click="removeCustomFont(font)"
+        <!-- Pie -->
+        <section class="settings-view__section">
+          <h2>{{ t('settings.sections.footer') }}</h2>
+          <TranslatableInput
+            v-model="footerText"
+            :locales="locales.locales"
+            :label="t('settings.fields.footerText')"
+            type="textarea"
+            :rows="2"
+          />
+        </section>
+      </div>
+
+      <div class="settings-view__col">
+        <!-- Apariencia -->
+        <section class="settings-view__section">
+          <h2>{{ t('settings.sections.appearance') }}</h2>
+          <BaseSelect
+            v-model="accentMode"
+            :label="t('settings.fields.accentMode')"
+            :options="[
+              { value: 'fixed', label: t('settings.accentModes.fixed') },
+              { value: 'random', label: t('settings.accentModes.random') },
+            ]"
+          />
+
+          <PaletteColorPicker
+            v-if="accentMode === 'fixed'"
+            v-model="accentColor"
+            :label="t('settings.fields.accentColor')"
+          />
+
+          <template v-else>
+            <p class="settings-view__hint">{{ t('settings.fields.accentColorsHint') }}</p>
+            <!-- Candidatos como etiquetas en fila (con wrap) -->
+            <ul v-if="accentColors.length" class="settings-view__colors">
+              <li v-for="(color, index) in accentColors" :key="color">
+                <span class="settings-view__swatch" :style="{ background: color }" />
+                <code>{{ color }}</code>
+                <button
+                  type="button"
+                  class="settings-view__chip-remove"
+                  :title="t('common.actions.delete')"
+                  @click="removeColor(index)"
+                >
+                  <X :size="12" />
+                </button>
+              </li>
+            </ul>
+            <div class="settings-view__add-color">
+              <PaletteColorPicker v-model="candidate" :label="t('settings.fields.accentColors')" />
+              <BaseButton variant="text" @click="addColor">
+                <template #icon><Plus :size="14" /></template>
+                {{ t('settings.addColor') }}
+              </BaseButton>
+            </div>
+          </template>
+
+          <div class="settings-view__fonts">
+            <div>
+              <BaseSelect
+                v-model="fontHeadings"
+                :label="t('settings.fields.fontHeadings')"
+                :options="fontOptions"
+              />
+              <p
+                class="settings-view__font-preview"
+                :style="{ fontFamily: fonts[fontHeadings]?.stack }"
               >
-                <X :size="12" />
-              </button>
-            </li>
-          </ul>
-          <div class="settings-view__font-upload">
-            <BaseInput v-model="fontName" :label="t('settings.fields.fontName')" />
-            <label class="settings-view__font-file">
-              <input type="file" accept=".woff2,.woff,.ttf,.otf" @change="onFontFile" />
-              <span class="settings-view__hint">{{
-                fontFile?.name || t('settings.fields.fontFileHint')
-              }}</span>
-            </label>
-            <BaseButton
-              variant="text"
-              :disabled="uploadingFont || !fontName.trim() || !fontFile"
-              @click="uploadFont"
-            >
-              <template #icon><Upload :size="14" /></template>
-              {{ t('settings.uploadFont') }}
-            </BaseButton>
+                {{ t('settings.fontPreviewHeading') }}
+              </p>
+            </div>
+            <div>
+              <BaseSelect
+                v-model="fontBody"
+                :label="t('settings.fields.fontBody')"
+                :options="fontOptions"
+              />
+              <p
+                class="settings-view__font-preview"
+                :style="{ fontFamily: fonts[fontBody]?.stack }"
+              >
+                {{ t('settings.fontPreviewBody') }}
+              </p>
+            </div>
           </div>
-        </div>
-      </section>
 
-      <!-- Pie -->
-      <section class="settings-view__section">
-        <h2>{{ t('settings.sections.footer') }}</h2>
-        <TranslatableInput
-          v-model="footerText"
-          :locales="locales.locales"
-          :label="t('settings.fields.footerText')"
-          type="textarea"
-          :rows="2"
-        />
-      </section>
+          <!-- Fuentes propias: subir un fichero la hace elegible arriba -->
+          <div class="settings-view__custom-fonts">
+            <span class="form-field__label">{{ t('settings.fields.customFonts') }}</span>
+            <ul v-if="customFonts.length" class="settings-view__colors">
+              <li v-for="font in customFonts" :key="font.key">
+                <code>{{ font.name }}</code>
+                <button
+                  type="button"
+                  class="settings-view__chip-remove"
+                  :title="t('common.actions.delete')"
+                  @click="removeCustomFont(font)"
+                >
+                  <X :size="12" />
+                </button>
+              </li>
+            </ul>
+            <div class="settings-view__font-upload">
+              <BaseInput v-model="fontName" :label="t('settings.fields.fontName')" />
+              <label class="settings-view__font-file">
+                <input type="file" accept=".woff2,.woff,.ttf,.otf" @change="onFontFile" />
+                <span class="settings-view__hint">{{
+                  fontFile?.name || t('settings.fields.fontFileHint')
+                }}</span>
+              </label>
+              <BaseButton
+                variant="text"
+                :disabled="uploadingFont || !fontName.trim() || !fontFile"
+                @click="uploadFont"
+              >
+                <template #icon><Upload :size="14" /></template>
+                {{ t('settings.uploadFont') }}
+              </BaseButton>
+            </div>
+          </div>
+        </section>
+      </div>
     </div>
   </div>
 </template>

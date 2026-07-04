@@ -1,16 +1,26 @@
 @use "tokens" as *;
 
-// Configuración de la web: tarjetas por sección en MASONRY (CSS columns):
-// 2 columnas cuando caben según el ancho del CONTENEDOR y cada tarjeta
-// pegada a la anterior de su columna (sin filas alineadas por alturas).
-// Cada tarjeta es su propio contenedor `content` para que sus interiores
-// (uploads, fuentes) se adapten a la tarjeta.
+// Configuración de la web: dos columnas EXPLÍCITAS (masonry determinista):
+// cada columna apila sus tarjetas pegadas (sin filas alineadas por alturas)
+// y el reparto lo decide la vista (Identidad + Pie | Apariencia), no el
+// navegador. En estrecho las columnas se apilan. Cada tarjeta es su propio
+// contenedor `content` para que sus interiores se adapten a la tarjeta.
 .settings-view {
-  &__masonry {
+  &__columns {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: $space-5;
+    align-items: start;
+
     @container content (min-width: #{$bp-md}) {
-      columns: 2;
-      column-gap: $space-5;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
     }
+  }
+
+  &__col {
+    display: grid;
+    gap: $space-5;
+    min-width: 0;
   }
 
   &__section {
@@ -21,8 +31,6 @@
     display: grid;
     gap: $space-4;
     min-width: 0;
-    margin-bottom: $space-5;
-    break-inside: avoid; // una tarjeta nunca se parte entre columnas
     container-name: content;
     container-type: inline-size;
 
