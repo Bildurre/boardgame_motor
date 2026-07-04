@@ -115,7 +115,7 @@
 **Meta:** rematar lo transversal y dejar ganchos de extensión por juego.
 > Plan: `funcionalidades/06-backup-bbdd.md`, `10-web-publica-y-panel-usuario.md`.
 
-- [ ] Backup BBDD (dump + zip + descarga) desde admin; programado.
+- [x] Backup BBDD (doc 06, DC-16): `spatie/laravel-backup` configurado por el motor (`MotorBackup::applyConfig()` desde `motor.backup`; SQLite como fichero en el zip, media opcional), API `/api/admin/backups` (crear/listar/descargar/borrar, `manage-web`), vista **Copias** en el admin y programación diaria con retención en `routes/console.php`.
 - [ ] Andamiaje de la web pública (home, navegación por páginas del CRM, listados de entidades genéricos extensibles).
 - [ ] Panel de usuario extensible (puntos de extensión para que el juego cuelgue lo suyo).
 - **Hito:** backup descargable desde admin; web pública navegable; un "slot" de panel de usuario rellenado por el playground.

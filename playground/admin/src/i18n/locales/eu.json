@@ -9,6 +9,7 @@
     "pdfs": "pdfak",
     "pages": "orriak",
     "settings": "konfigurazioa",
+    "backups": "kopiak",
     "users": "erabiltzaileak"
   },
   "breadcrumbs": {
@@ -21,6 +22,7 @@
     "pdfs": "PDFak",
     "pages": "Orriak",
     "settings": "Konfigurazioa",
+    "backups": "Segurtasun-kopiak",
     "users": "Erabiltzaileak"
   },
   "nav": {
@@ -33,6 +35,7 @@
     "pdfs": "PDFak",
     "pages": "Orriak",
     "settings": "Konfigurazioa",
+    "backups": "Kopiak",
     "users": "Erabiltzaileak"
   },
   "icons": {
@@ -457,6 +460,24 @@
       "saveError": "Ezin izan da gorde."
     },
     "uploadFont": "Igo letra-tipoa"
+  },
+  "backups": {
+    "title": "Segurtasun-kopiak",
+    "create": "Sortu kopia",
+    "hint": "Eskuzko kopiez gain, gauero bat programatuta dago; zaharrak berez garbitzen dira atxikipenaren arabera.",
+    "empty": "Oraindik ez dago kopiarik.",
+    "panelTitle": "Kopia",
+    "panelEmpty": "Hautatu kopia bat bere ekintzak ikusteko.",
+    "download": "Deskargatu",
+    "fields": {
+      "date": "Data",
+      "size": "Tamaina"
+    },
+    "confirmDelete": "\"{name}\" kopia ezabatu?",
+    "toast": {
+      "created": "Kopia sortuta.",
+      "deleted": "Kopia ezabatuta."
+    }
   },
   "users": {
     "title": "Erabiltzaileak",

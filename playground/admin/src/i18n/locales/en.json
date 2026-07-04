@@ -9,6 +9,7 @@
     "pdfs": "pdfs",
     "pages": "pages",
     "settings": "settings",
+    "backups": "backups",
     "users": "users"
   },
   "breadcrumbs": {
@@ -21,6 +22,7 @@
     "pdfs": "PDFs",
     "pages": "Pages",
     "settings": "Settings",
+    "backups": "Backups",
     "users": "Users"
   },
   "nav": {
@@ -33,6 +35,7 @@
     "pdfs": "PDFs",
     "pages": "Pages",
     "settings": "Settings",
+    "backups": "Backups",
     "users": "Users"
   },
   "icons": {
@@ -457,6 +460,24 @@
       "saveError": "Could not save."
     },
     "uploadFont": "Upload font"
+  },
+  "backups": {
+    "title": "Backups",
+    "create": "Create backup",
+    "hint": "Besides manual backups, one is scheduled every night; old ones are cleaned up automatically per retention.",
+    "empty": "No backups yet.",
+    "panelTitle": "Backup",
+    "panelEmpty": "Select a backup to see its actions.",
+    "download": "Download",
+    "fields": {
+      "date": "Date",
+      "size": "Size"
+    },
+    "confirmDelete": "Delete backup \"{name}\"?",
+    "toast": {
+      "created": "Backup created.",
+      "deleted": "Backup deleted."
+    }
   },
   "users": {
     "title": "Users",

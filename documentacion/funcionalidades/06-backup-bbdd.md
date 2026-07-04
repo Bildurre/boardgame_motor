@@ -1,5 +1,16 @@
 # 06 · Backup de BBDD
 
+> **Estado: implementado (Fase 6 ✅).** `spatie/laravel-backup` (DC-16)
+> con la config derivada de `motor.backup` en
+> `Bgm\Core\Backup\MotorBackup::applyConfig()` (disco `backups` local por
+> defecto, retención `keep_days`, media opcional; SQLite entra como fichero
+> en el zip — el dump exige el binario `sqlite3`). API en
+> `/api/admin/backups` (listar/crear/descargar/borrar, solo `manage-web`) +
+> vista **Copias** en el admin (crear con un clic, panel derecho con
+> descargar/borrar). Programado en `routes/console.php` del juego
+> (`backup:run` + `backup:clean` diarios). Pendiente: creación en cola para
+> BBDD grandes; restore guiado.
+
 ## Qué hace
 
 Exporta la base de datos del juego a un `.sql` (opcionalmente comprimido en `.zip`)

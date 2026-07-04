@@ -3,6 +3,7 @@ import { computed, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import {
+  DatabaseBackup,
   FileText,
   LayoutDashboard,
   Home,
@@ -156,6 +157,16 @@ function navActive(section: string) {
       >
         <Settings class="nav-icon" :size="20" /><span class="nav-label">{{
           t('nav.settings')
+        }}</span>
+      </RouterLink>
+      <RouterLink
+        v-if="auth.can('manage-web')"
+        class="nav-item"
+        :class="navActive('backups')"
+        :to="{ name: 'backups' }"
+      >
+        <DatabaseBackup class="nav-icon" :size="20" /><span class="nav-label">{{
+          t('nav.backups')
         }}</span>
       </RouterLink>
       <RouterLink

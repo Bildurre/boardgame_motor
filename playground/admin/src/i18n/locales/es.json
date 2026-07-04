@@ -9,6 +9,7 @@
     "pdfs": "pdf",
     "pages": "paginas",
     "settings": "configuracion",
+    "backups": "copias",
     "users": "usuarios"
   },
   "breadcrumbs": {
@@ -21,6 +22,7 @@
     "pdfs": "PDF",
     "pages": "Páginas",
     "settings": "Configuración",
+    "backups": "Copias de seguridad",
     "users": "Usuarios"
   },
   "nav": {
@@ -33,6 +35,7 @@
     "pdfs": "PDF",
     "pages": "Páginas",
     "settings": "Configuración",
+    "backups": "Copias",
     "users": "Usuarios"
   },
   "icons": {
@@ -396,6 +399,24 @@
       "saveError": "No se pudo guardar."
     },
     "uploadFont": "Subir fuente"
+  },
+  "backups": {
+    "title": "Copias de seguridad",
+    "create": "Crear copia",
+    "hint": "Además de las copias manuales, hay una programada cada noche; las viejas se limpian solas según la retención.",
+    "empty": "Todavía no hay copias.",
+    "panelTitle": "Copia",
+    "panelEmpty": "Selecciona una copia para ver sus acciones.",
+    "download": "Descargar",
+    "fields": {
+      "date": "Fecha",
+      "size": "Tamaño"
+    },
+    "confirmDelete": "¿Borrar la copia \"{name}\"?",
+    "toast": {
+      "created": "Copia creada.",
+      "deleted": "Copia borrada."
+    }
   },
   "users": {
     "title": "Usuarios",

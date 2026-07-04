@@ -197,6 +197,19 @@ export function createLocalizedRoutes(locale: string): RouteRecordRaw[] {
       },
     },
     {
+      path: `/${p.backups}`,
+      name: 'backups',
+      component: () => import('@/views/backups/BackupsView.vue'),
+      alias: buildAliases((t) => `/${t.backups}`, locale),
+      meta: {
+        admin: true,
+        nav: 'backups',
+        permission: 'manage-web',
+        titleKey: 'backups.title',
+        breadcrumbs: [{ key: 'backups' }],
+      },
+    },
+    {
       path: `/${p.users}`,
       name: 'users',
       component: () => import('@/views/users/UsersView.vue'),

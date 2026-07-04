@@ -789,6 +789,45 @@ verificar/desverificar el email desde el panel (`POST
 verde, editor azul (`locale-chip is-info`), usuario neutro. Guardas: nadie se
 borra a sí mismo ni se cambia su propio rol.
 
+## 6quater. Copias de seguridad (Fase 6)
+
+El motor trae `spatie/laravel-backup` (DC-16) ya configurado: NO hace falta
+publicar `config/backup.php`. `MotorBackup::applyConfig()` (lo llama el
+provider del motor) deriva todo de `motor.backup`:
+
+```php
+'backup' => [
+    'disk' => env('MOTOR_BACKUP_DISK', 'backups'), // si no existe en filesystems, se crea local en storage/app/backups
+    'keep_days' => env('MOTOR_BACKUP_KEEP_DAYS', 14), // retención de backup:clean
+    'include_media' => env('MOTOR_BACKUP_MEDIA', true), // mete storage/app/public en el zip
+],
+```
+
+Detalles que resuelve el motor:
+- **SQLite**: el fichero de la BBDD entra en el zip tal cual (el dump de
+  spatie exige el binario `sqlite3`, que no siempre está); mysql/pgsql usan
+  el dump normal (necesitan `mysqldump`/`pg_dump` en el servidor).
+- **Sin notificaciones por correo** y `backup:list`/`backup:monitor`
+  apuntando al disco del motor.
+
+**API + admin** (solo `manage-web`): `GET/POST /api/admin/backups`,
+`GET /api/admin/backups/{file}/download`, `DELETE /api/admin/backups/{file}`.
+La vista **Copias** del admin crea con un clic, lista con fecha y tamaño, y
+descarga/borra desde el panel derecho (descarga autenticada por la API, con
+blob).
+
+**Programación** (en `routes/console.php` del juego):
+
+```php
+Schedule::command('backup:run --disable-notifications')->dailyAt('03:00');
+Schedule::command('backup:clean --disable-notifications')->dailyAt('03:30');
+Schedule::command('pdf:cleanup')->hourly(); // ya que estás: PDFs temporales (doc 02)
+```
+
+**Restore** (DC-16, manual por ahora): descomprime el zip; con SQLite basta
+con reponer el fichero de la BBDD y `storage/app/public`; con MySQL,
+`mysql base < dump.sql`. BBDD muy grandes → mover la creación a cola.
+
 ## 7. Checklist para una entidad nueva
 
 Backend:
