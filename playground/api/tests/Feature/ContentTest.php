@@ -79,6 +79,25 @@ it('solo puede haber una home y el borrado pasa las hijas a raíz', function () 
     expect($second->refresh()->deleted_at)->toBeNull();
 });
 
+it('expone el catálogo de plantillas y valida la plantilla de la página', function () {
+    $admin = motorUser('admin');
+
+    // Catálogo: la del motor + la registrada por el juego (AppServiceProvider).
+    $keys = collect($this->actingAs($admin)->getJson('/api/admin/pages/templates')
+        ->assertOk()
+        ->json('data'))->pluck('key');
+    expect($keys)->toContain('default', 'landing');
+
+    // La clave viaja al guardar… y una desconocida es 422.
+    $this->actingAs($admin)->postJson('/api/admin/pages', [
+        'title' => ['es' => 'Portada'], 'template' => 'landing',
+    ])->assertCreated()->assertJsonPath('data.template', 'landing');
+
+    $this->actingAs($admin)->postJson('/api/admin/pages', [
+        'title' => ['es' => 'Rota'], 'template' => 'nope',
+    ])->assertUnprocessable();
+});
+
 // --- Bloques ---
 
 it('valida los bloques con las reglas derivadas del esquema', function () {
@@ -123,6 +142,34 @@ it('sanea el texto rico en servidor (DC-09)', function () {
         ->and($saved)->not->toContain('onclick')
         ->and($saved)->toContain('<strong>mundo</strong>')
         ->and($saved)->toContain('rt-icon'); // los iconos del juego sobreviven
+});
+
+it('localiza la imagen multilingüe con fallback al locale por defecto', function () {
+    $admin = motorUser('admin');
+    $page = makePage();
+
+    // La plantilla del payload viaja también en el render público.
+    $page->update(['template' => 'landing']);
+
+    $this->actingAs($admin)->postJson("/api/admin/pages/{$page->id}/blocks", [
+        'type' => 'text',
+        'settings' => [
+            'body' => ['es' => '<p>Hola</p>'],
+            'image' => ['es' => '/storage/es.png', 'eu' => '/storage/eu.png'],
+        ],
+    ])->assertCreated();
+
+    $slug = $page->getTranslation('slug', 'es');
+
+    // Locale con imagen propia; locale sin ella cae al default (es).
+    $this->getJson("/api/pages/{$slug}?locale=eu")
+        ->assertOk()
+        ->assertJsonPath('data.template', 'landing')
+        ->assertJsonPath('data.blocks.0.settings.image', '/storage/eu.png');
+
+    $this->getJson("/api/pages/{$slug}?locale=en")
+        ->assertOk()
+        ->assertJsonPath('data.blocks.0.settings.image', '/storage/es.png');
 });
 
 it('reordena los bloques con la lista de ids', function () {

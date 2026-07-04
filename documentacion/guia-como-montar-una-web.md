@@ -630,9 +630,11 @@ La UI pública de esta colección llega con el andamiaje de la web (Fase 6).
 | Índice automático | `index` | `title` (texto, trad.), `numbered` (boolean) — enlaza a los bloques posteriores indexables |
 | Llamada a la acción | `cta` | `title`, `body` (richtext), `button_text`*, `button_url`* (trad.), `button_variant` (select: primary/secondary), `image`, `image_position` |
 
-(*) obligatorio en el locale por defecto. TODOS los bloques llevan además los
-**campos comunes** que añade el motor: `align` (select: left/center/right/
-justify) y `background` (color), aplicados por el envoltorio `BlockShell`.
+(*) obligatorio en el locale por defecto. Todas las `image` son
+**multilingües** (`->translatable()`: una URL por locale, con fallback al
+default). TODOS los bloques llevan además los **campos comunes** que añade el
+motor: `align` (select: left/center/right/justify) y `background` (color),
+aplicados por el envoltorio `BlockShell`.
 
 `image_position` es el campo estándar `BlockType::imagePositionField()`
 (reutilizable por los bloques del juego): `top` / `left` / `right` / `bottom`
@@ -650,8 +652,10 @@ locale), `->required()` (exige el locale por defecto), `->default(v)`,
 De cada campo salen: el input del formulario (SchemaFields), la validación
 en servidor y la localización del valor en el render. `richtext` se sanea
 en servidor (HtmlSanitizer, DC-09). `image` sube al momento
-(`POST /admin/content/uploads`) y guarda la URL. Pendientes del DSL:
-`repeater`, `group`, `entity-ref`, imagen multilingüe.
+(`POST /admin/content/uploads`) y guarda la URL; con `->translatable()` es
+**multilingüe** (una URL por locale, editor `TranslatableImage` y fallback
+al locale por defecto en el render) — así van todas las de los bloques del
+motor. Pendientes del DSL: `repeater`, `group`, `entity-ref`.
 
 El motor pone TODO el CRM (páginas jerárquicas traducibles con SEO y home
 única, bloques reordenables, editor generado, render público con caché); el
@@ -680,6 +684,25 @@ En público: `PageView` pide `/api/pages/{slug}` (slug resuelto en cualquier
 locale, redirige a la canónica DC-12), la nav sale de `/api/pages/nav` y la
 home del CRM manda si existe. El texto rico se sanea en servidor (DC-09) y el
 payload se cachea por (página, locale) con invalidación al editar (DC-10).
+
+### 6bis.1 Plantillas de página
+
+Cada página tiene una **plantilla** (columna `template`); la SPA decide el
+layout con esa clave. Añadir una plantilla son tres piezas:
+
+1. **Catálogo** (API): el juego amplía `motor.content.templates` en su
+   AppServiceProvider (`config([...templates + ['landing' => 'Portada']])`).
+   Con eso ya sale en el select del modal de página del admin
+   (`GET /api/admin/pages/templates`; etiqueta localizable por convención
+   `pages.templates.{clave}`) y la validación la acepta.
+2. **El componente Vue** en `app/src/templates/` (envuelve los bloques por
+   slot: `<main class="page-view page-view--landing"><slot /></main>`).
+3. **Su entrada** en `app/src/templates/registry.ts`; `templateFor(clave)`
+   cae en `default` si la clave no está. `PageView` y `HomeView` envuelven
+   los bloques con la plantilla del payload (`data.template`).
+
+El playground trae `landing` (bloques a lo ancho de la ventana; la usa la
+home demo del seeder).
 
 ## 7. Checklist para una entidad nueva
 

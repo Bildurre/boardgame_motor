@@ -9,6 +9,7 @@ import {
   NumericInput,
   PaletteColorPicker,
   RichTextInput,
+  TranslatableImage,
   TranslatableInput,
   type RichIcon,
   type RichTextLabels,
@@ -60,7 +61,10 @@ function set(key: string, value: unknown) {
 }
 
 function translations(field: FieldSchema): Record<string, string> {
-  return (props.modelValue[field.key] as Record<string, string>) ?? {}
+  const value = props.modelValue[field.key]
+  // Guarda ante datos antiguos guardados como cadena única (no traducible).
+  if (!value || typeof value !== 'object') return {}
+  return value as Record<string, string>
 }
 
 function selectOptions(field: FieldSchema): SelectOption[] {
@@ -70,16 +74,16 @@ function selectOptions(field: FieldSchema): SelectOption[] {
   }))
 }
 
-/** Las imágenes se suben al momento y en settings queda la URL pública. */
-async function uploadImage(field: FieldSchema, file: File | null) {
-  if (!file) {
-    set(field.key, null)
-    return
-  }
+/** Sube la imagen al momento; en settings queda la URL pública. */
+async function upload(file: File): Promise<string> {
   const form = new FormData()
   form.append('image', file)
   const { data } = await props.api.post('/admin/content/uploads', form)
-  set(field.key, data.url)
+  return data.url
+}
+
+async function uploadImage(field: FieldSchema, file: File | null) {
+  set(field.key, file ? await upload(file) : null)
 }
 </script>
 
@@ -155,6 +159,17 @@ async function uploadImage(field: FieldSchema, file: File | null) {
           @update:model-value="(v) => set(field.key, v)"
         />
       </div>
+
+      <!-- Imagen traducible: una URL por locale (fallback al default al renderizar) -->
+      <TranslatableImage
+        v-else-if="field.type === 'image' && field.translatable"
+        :model-value="translations(field)"
+        :locales="locales"
+        :label="label(field)"
+        :required="field.required"
+        :upload="upload"
+        @update:model-value="(v) => set(field.key, v)"
+      />
 
       <div v-else-if="field.type === 'image'" class="schema-fields__image">
         <span class="form-field__label">{{ label(field) }}</span>

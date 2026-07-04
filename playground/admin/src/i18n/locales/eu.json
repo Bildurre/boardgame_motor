@@ -310,10 +310,15 @@
       "title": "Izenburua",
       "description": "Deskribapena",
       "parent": "Orri gurasoa",
+      "template": "Txantiloia",
       "metaTitle": "Meta izenburua (SEO)",
       "metaDescription": "Meta deskribapena (SEO)",
       "published": "Argitaratuta",
       "printable": "Inprimagarria (PDF)"
+    },
+    "templates": {
+      "default": "Lehenetsia",
+      "landing": "Azala (zabalera osoa)"
     },
     "toast": {
       "saved": "Orria gordeta.",

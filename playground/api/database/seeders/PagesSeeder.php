@@ -20,9 +20,9 @@ class PagesSeeder extends Seeder
             return;
         }
 
-        // --- Home ---
+        // --- Home (plantilla landing: ancho completo) ---
         $home = $this->page(['es' => 'Bienvenida', 'eu' => 'Ongi etorri', 'en' => 'Welcome']);
-        $home->forceFill(['is_home' => true])->save();
+        $home->forceFill(['is_home' => true, 'template' => 'landing'])->save();
         $this->blocks($home, [
             ['header', ['title' => ['es' => 'Choque de Leyendas', 'eu' => 'Kondairen Talka', 'en' => 'Clash of Legends'],
                 'subtitle' => ['es' => 'El juego de cartas de las grandes casas', 'en' => 'The card game of the great houses'],
@@ -64,8 +64,8 @@ class PagesSeeder extends Seeder
         ]);
     }
 
-    /** Genera un PNG de muestra (GD) y devuelve su URL pública, o null sin GD. */
-    protected function demoImage(): ?string
+    /** Genera un PNG de muestra (GD) y devuelve la imagen traducible, o null sin GD. */
+    protected function demoImage(): ?array
     {
         if (! function_exists('imagecreatetruecolor')) {
             return null;
@@ -80,7 +80,8 @@ class PagesSeeder extends Seeder
         imagepng($image);
         Storage::disk('public')->put('content/demo-block.png', (string) ob_get_clean());
 
-        return Storage::disk('public')->url('content/demo-block.png');
+        // Imagen multilingüe: misma para todos los idiomas vía fallback al default.
+        return ['es' => Storage::disk('public')->url('content/demo-block.png')];
     }
 
     protected function page(array $title, array $meta = []): Page

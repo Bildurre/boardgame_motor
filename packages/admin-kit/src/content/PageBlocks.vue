@@ -140,6 +140,7 @@ function typeName(key: string): string {
 function summary(block: BlockRow): string {
   const type = types.value.find((t) => t.key === block.type)
   for (const field of type?.fields ?? []) {
+    if (!['text', 'textarea', 'richtext'].includes(field.type)) continue
     const value = block.settings?.[field.key]
     if (field.translatable && value && typeof value === 'object') {
       const text = Object.values(value as Record<string, string>).find(Boolean)
@@ -147,6 +148,15 @@ function summary(block: BlockRow): string {
     }
   }
   return ''
+}
+
+/** URL de un campo imagen (traducible o no): la primera con valor. */
+function imageUrl(field: FieldSchema, block: BlockRow): string {
+  const raw = block.settings?.[field.key]
+  if (raw && typeof raw === 'object') {
+    return Object.values(raw as Record<string, string>).find(Boolean) ?? ''
+  }
+  return raw ? String(raw) : ''
 }
 
 /** Etiqueta de un campo del esquema (misma convención que SchemaFields). */
@@ -182,7 +192,7 @@ const selectedFields = computed(() => {
       field,
       value:
         field.type === 'image'
-          ? String(selected.value?.settings?.[field.key] ?? '')
+          ? imageUrl(field, selected.value!)
           : fieldValue(field, selected.value!),
     }))
     .filter((entry) => entry.value)

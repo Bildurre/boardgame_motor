@@ -32,7 +32,7 @@ const selected = computed(() => pages.value.find((p) => p.id === selectedId.valu
 interface BlockTypeInfo {
   key: string
   name: string
-  fields: { key: string; translatable: boolean }[]
+  fields: { key: string; type: string; translatable: boolean }[]
 }
 const blockTypes = ref<BlockTypeInfo[]>([])
 const selectedBlocks = ref<{ id: number; type: string; settings: Record<string, unknown> }[]>([])
@@ -46,6 +46,7 @@ function blockTypeName(key: string): string {
 function blockSummary(block: { type: string; settings: Record<string, unknown> }): string {
   const type = blockTypes.value.find((t) => t.key === block.type)
   for (const field of type?.fields ?? []) {
+    if (!['text', 'textarea', 'richtext'].includes(field.type)) continue
     const value = block.settings?.[field.key]
     if (field.translatable && value && typeof value === 'object') {
       const text = Object.values(value as Record<string, string>).find(Boolean)

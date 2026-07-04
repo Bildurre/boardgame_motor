@@ -11,6 +11,7 @@ export { default as BaseCheckbox } from './components/BaseCheckbox.vue'
 export { default as NumericInput } from './components/NumericInput.vue'
 export { default as PaletteColorPicker } from './components/PaletteColorPicker.vue'
 export { default as TranslatableInput } from './components/TranslatableInput.vue'
+export { default as TranslatableImage } from './components/TranslatableImage.vue'
 export {
   default as RichTextInput,
   type RichIcon,

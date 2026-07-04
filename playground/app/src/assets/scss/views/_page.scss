@@ -12,6 +12,13 @@
     font-size: $fs-24;
     padding: $space-8 0;
   }
+
+  // Plantilla "landing": los bloques a lo ancho de la ventana (el interior
+  // de .block deja de limitarse a la columna de lectura).
+  &--landing .block__inner {
+    max-width: none;
+    padding-inline: $space-6;
+  }
 }
 
 .block__cards {

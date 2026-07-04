@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
-import { LocaleSelector, MotorBadge } from '@bgm/ui'
+import { LocaleSelector, MotorBadge, ThemeSelector } from '@bgm/ui'
 import { api } from '@/lib/api'
 import { useAuthStore } from '@/stores/auth'
 import { useLocalesStore } from '@/stores/locales'
@@ -64,11 +64,14 @@ onMounted(async () => {
       <template v-else>
         <RouterLink to="/login">Entrar</RouterLink>
       </template>
+      <!-- Selectores provisionales de idioma y tema (el diseño final llega
+           con el andamiaje de la web pública, Fase 6) -->
       <LocaleSelector
         :model-value="locales.current"
         :locales="locales.locales"
         @update:model-value="locales.setCurrent"
       />
+      <ThemeSelector />
     </div>
   </nav>
 </template>

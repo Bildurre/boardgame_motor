@@ -3,14 +3,17 @@ import { computed, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { api } from '@/lib/api'
 import { blockRegistry } from '@/blocks/registry'
+import { templateFor } from '@/templates/registry'
 import { useLocalesStore } from '@/stores/locales'
 
 // Página pública del CRM (doc 03): pide el payload por slug (resuelto en
-// cualquier locale), redirige a la URL canónica del idioma activo (DC-12) y
+// cualquier locale), redirige a la URL canónica del idioma activo (DC-12),
+// envuelve los bloques en la plantilla de la página (templateRegistry) y
 // monta el componente de cada bloque desde el blockRegistry.
 interface PagePayload {
   id: number
   title: string
+  template: string | null
   meta: { title: string; description: string }
   slugs: Record<string, string>
   blocks: {
@@ -55,17 +58,17 @@ watch([slug, () => locales.current], load, { immediate: true })
 </script>
 
 <template>
-  <main class="page-view">
-    <p v-if="failed" class="page-view__missing">404</p>
-    <template v-else-if="page">
-      <component
-        :is="blockRegistry[block.component]"
-        v-for="block in page.blocks.filter((b) => blockRegistry[b.component])"
-        :id="`block-${block.id}`"
-        :key="block.id"
-        :settings="block.settings"
-        :data="block.data"
-      />
-    </template>
+  <main v-if="failed" class="page-view">
+    <p class="page-view__missing">404</p>
   </main>
+  <component :is="templateFor(page.template)" v-else-if="page">
+    <component
+      :is="blockRegistry[block.component]"
+      v-for="block in page.blocks.filter((b) => blockRegistry[b.component])"
+      :id="`block-${block.id}`"
+      :key="block.id"
+      :settings="block.settings"
+      :data="block.data"
+    />
+  </component>
 </template>

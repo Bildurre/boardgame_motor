@@ -14,6 +14,7 @@ export interface PageRow {
   meta_title: Record<string, string>
   meta_description: Record<string, string>
   parent_id: number | null
+  template: string | null
   is_published: boolean
   is_home: boolean
   is_printable: boolean
@@ -29,7 +30,7 @@ const props = defineProps<{
 
 const emit = defineEmits<{ 'update:modelValue': [boolean]; saved: [] }>()
 
-const { t } = useI18n()
+const { t, te } = useI18n()
 const toast = useToast()
 const locales = useLocalesStore()
 
@@ -39,20 +40,38 @@ const description = ref<Record<string, string>>({})
 const metaTitle = ref<Record<string, string>>({})
 const metaDescription = ref<Record<string, string>>({})
 const parentId = ref<string>('')
+const template = ref('default')
 const isPublished = ref(false)
 const isPrintable = ref(false)
 
+// Plantillas del juego (config del motor): el select solo aparece si hay más
+// de una. Etiquetas localizables por convención (pages.templates.{clave}).
+const templates = ref<{ key: string; label: string }[]>([])
+
+function templateLabel(tpl: { key: string; label: string }): string {
+  return te(`pages.templates.${tpl.key}`) ? t(`pages.templates.${tpl.key}`) : tpl.label
+}
+
 watch(
   () => props.modelValue,
-  (open) => {
+  async (open) => {
     if (!open) return
     title.value = { ...(props.page?.title ?? {}) }
     description.value = { ...(props.page?.description ?? {}) }
     metaTitle.value = { ...(props.page?.meta_title ?? {}) }
     metaDescription.value = { ...(props.page?.meta_description ?? {}) }
     parentId.value = props.page?.parent_id ? String(props.page.parent_id) : ''
+    template.value = props.page?.template ?? 'default'
     isPublished.value = props.page?.is_published ?? false
     isPrintable.value = props.page?.is_printable ?? false
+    if (!templates.value.length) {
+      try {
+        const { data } = await api.get('/admin/pages/templates')
+        templates.value = data.data
+      } catch {
+        // sin catálogo: el campo no se muestra
+      }
+    }
   },
 )
 
@@ -65,6 +84,7 @@ async function save() {
       meta_title: metaTitle.value,
       meta_description: metaDescription.value,
       parent_id: parentId.value ? Number(parentId.value) : null,
+      template: template.value,
       is_published: isPublished.value,
       is_printable: isPrintable.value,
     }
@@ -115,6 +135,12 @@ async function save() {
             label: p.title[locales.current] ?? p.title.es ?? String(p.id),
           })),
       ]"
+    />
+    <BaseSelect
+      v-if="templates.length > 1"
+      v-model="template"
+      :label="t('pages.fields.template')"
+      :options="templates.map((tpl) => ({ value: tpl.key, label: templateLabel(tpl) }))"
     />
     <TranslatableInput
       v-model="metaTitle"

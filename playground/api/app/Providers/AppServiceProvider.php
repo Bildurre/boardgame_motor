@@ -64,6 +64,13 @@ class AppServiceProvider extends ServiceProvider
         Blocks::register(CharactersGridBlock::class);
         Blocks::register(HousesSchemesBlock::class);
 
+        // Plantillas de página de ESTE juego (doc 03): la clave viaja en el
+        // payload público y la SPA elige el layout en su templateRegistry.
+        config(['motor.content.templates' => [
+            ...config('motor.content.templates', []),
+            'landing' => 'Portada (ancho completo)',
+        ]]);
+
         // Catálogo de PDF de ESTE juego (doc 02): qué se puede generar y qué
         // contiene cada uno. Todo se gestiona desde la sección PDF del admin.
         Pdfs::register('characters', CharactersExport::class);      // todos los personajes (card-big)

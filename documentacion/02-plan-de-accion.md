@@ -88,7 +88,9 @@
 - [x] Render público en `app`: nav de páginas publicadas, home del CRM, `PageView` por slug traducible con redirección a la canónica (DC-12); `blockRegistry` = componentes del motor (@bgm/ui) + los del juego.
 - [x] Bloque índice automático (`index`) y **PDF de páginas imprimibles** (export `pages` del motor con vista `motor::pdf.page`).
 - [x] Panel derecho en todo el admin (patrón kontuan): páginas (acciones + toggles + **sus bloques resumidos**), bloques (acciones + **contenido por campo**) y listados de entidades (`EntityPanel`: todas las acciones, info y PNG por idioma; en la tarjeta solo editar + abrir).
-- [ ] Flecos a futuro: plantillas por juego en la SPA, repeater/group/entity-ref del DSL, imagen multilingüe.
+- [x] **Plantillas de página por juego**: catálogo en `motor.content.templates` (el juego añade las suyas en su AppServiceProvider), select en el modal del admin (`GET /admin/pages/templates`) y `templateRegistry` en la SPA (la clave viaja en el payload; demo `landing` a lo ancho en el playground).
+- [x] **Imagen multilingüe**: `Field::image()->translatable()` en todos los bloques del motor — una URL por locale con fallback al default en el render (`localizeSettings`); editor `TranslatableImage` (ui-kit) con el selector de locale de kontuan.
+- [ ] Flecos a futuro: repeater/group/entity-ref del DSL.
 - **Hito:** ✅ página con bloques (incluidos los con-datos del playground: rejilla de personajes y casas-argucias), reordenable, traducible, publicada y visible en público con URL traducible. **Añadir un bloque = una clase + un componente Vue.**
 
 ### Fase 6 — Backup, web pública y panel de usuario extensible

@@ -310,10 +310,15 @@
       "title": "Title",
       "description": "Description",
       "parent": "Parent page",
+      "template": "Template",
       "metaTitle": "Meta title (SEO)",
       "metaDescription": "Meta description (SEO)",
       "published": "Published",
       "printable": "Printable (PDF)"
+    },
+    "templates": {
+      "default": "Default",
+      "landing": "Landing (full width)"
     },
     "toast": {
       "saved": "Page saved.",

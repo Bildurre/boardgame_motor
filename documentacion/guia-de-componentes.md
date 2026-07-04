@@ -270,6 +270,24 @@ color. Úsalos siempre en formularios (en modal o donde sea).
 > En `type="wysiwyg"` acepta también `icons` y `richLabels` (se pasan tal cual
 > al `RichTextInput` interno).
 
+### TranslatableImage
+
+- **Finalidad:** imagen **multi-idioma** (una URL por locale): mismo selector
+  desplegable de locale que TranslatableInput (contador `ES 1/3`) con un
+  `ImageUpload` para el idioma activo. Edita `{ es: url, eu: url, … }`; el
+  render del motor localiza con fallback al locale por defecto
+  (`localizeSettings`). Lo usa `SchemaFields` para los campos
+  `Field::image()->translatable()` de los bloques.
+- **Modelo:** `v-model` (`Record<string, string>`).
+- **Props:** `locales: { code, name }[]`, `label?`, `required?`, `error?` y
+  `upload: (file: File) => Promise<string>` — la subida la pone quien lo usa
+  (SchemaFields la manda a `POST /admin/content/uploads`).
+
+```vue
+<TranslatableImage v-model="form.image" :locales="locales.locales"
+  label="Imagen" :upload="uploadFn" />
+```
+
 ### ImageUpload
 
 - **Finalidad:** subida de imagen con **arrastrar-y-soltar o clic** (portado de

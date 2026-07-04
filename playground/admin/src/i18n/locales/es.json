@@ -310,10 +310,15 @@
       "title": "Título",
       "description": "Descripción",
       "parent": "Página madre",
+      "template": "Plantilla",
       "metaTitle": "Meta título (SEO)",
       "metaDescription": "Meta descripción (SEO)",
       "published": "Publicada",
       "printable": "Imprimible (PDF)"
+    },
+    "templates": {
+      "default": "Por defecto",
+      "landing": "Portada (ancho completo)"
     },
     "toast": {
       "saved": "Página guardada.",
