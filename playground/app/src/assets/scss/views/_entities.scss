@@ -1,0 +1,123 @@
+@use "tokens" as *;
+
+// Listados públicos de entidades (doc 10): índice en rejilla de tarjetas y
+// detalle con la carta + el texto. Mobile-first.
+.entity-index {
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: $space-6;
+  display: grid;
+  gap: $space-5;
+
+  &__title { margin: 0; }
+
+  &__empty { color: $text-3; margin: 0; }
+
+  &__grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: $space-4;
+    justify-content: center;
+  }
+
+  // El enlace no debe teñir la tarjeta (la carta manda en su color).
+  &__slot {
+    flex: 0 0 auto;
+    color: inherit;
+    text-decoration: none;
+    transition: transform 0.15s ease;
+
+    &:hover { transform: translateY(-3px); }
+  }
+}
+
+.entity-detail {
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: $space-6;
+  display: grid;
+  gap: $space-5;
+
+  &__missing {
+    text-align: center;
+    color: $text-3;
+    font-size: $fs-24;
+    padding: $space-8 0;
+  }
+
+  &__back {
+    display: inline-flex;
+    align-items: center;
+    gap: $space-1;
+    color: $accent-500;
+    text-decoration: none;
+    justify-self: start;
+
+    &:hover { text-decoration: underline; }
+  }
+
+  &__layout {
+    display: grid;
+    gap: $space-6;
+    align-items: start;
+
+    // Carta + texto en dos columnas cuando cabe.
+    @media (min-width: 720px) {
+      &:not(&--house) { grid-template-columns: auto minmax(0, 1fr); }
+    }
+  }
+
+  &__card { justify-self: center; }
+
+  &__body {
+    display: grid;
+    gap: $space-4;
+    min-width: 0;
+  }
+
+  &__title {
+    margin: 0;
+    border-left: 4px solid var(--c, $accent-500);
+    padding-left: $space-3;
+  }
+
+  &__image {
+    max-width: 220px;
+    border-radius: $radius-lg;
+  }
+
+  &__text { color: $text-2; }
+
+  &__related {
+    display: grid;
+    gap: $space-4;
+
+    h2 { margin: 0; }
+  }
+}
+
+// Tarjeta de casa en el índice (no es una carta del juego: presentación web).
+.house-item {
+  width: 260px;
+  border: 1px solid $border;
+  border-top: 4px solid var(--c, $accent-500);
+  border-radius: $radius-lg;
+  background: $surface;
+  padding: $space-4;
+  display: grid;
+  gap: $space-2;
+  justify-items: start;
+
+  &__image {
+    max-width: 96px;
+    border-radius: $radius-sm;
+  }
+
+  &__name { margin: 0; }
+
+  &__excerpt {
+    margin: 0;
+    color: $text-3;
+    font-size: $fs-13;
+  }
+}

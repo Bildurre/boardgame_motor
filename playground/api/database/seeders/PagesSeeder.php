@@ -44,8 +44,10 @@ class PagesSeeder extends Seeder
         ]);
 
         // --- Las casas (bloque con-datos del juego) ---
+        // Ojo con el título EU: su slug no debe chocar con el segmento del
+        // listado público de casas ('etxeak', entityRegistry de la app).
         $casas = $this->page(
-            ['es' => 'Las casas', 'eu' => 'Etxeak', 'en' => 'The houses'],
+            ['es' => 'Las casas', 'eu' => 'Etxeak jokoan', 'en' => 'The houses'],
             meta: ['es' => 'Las grandes casas y sus argucias.']
         );
         $this->blocks($casas, [

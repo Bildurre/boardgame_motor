@@ -116,7 +116,7 @@
 > Plan: `funcionalidades/06-backup-bbdd.md`, `10-web-publica-y-panel-usuario.md`.
 
 - [x] Backup BBDD (doc 06, DC-16): `spatie/laravel-backup` configurado por el motor (`MotorBackup::applyConfig()` desde `motor.backup`; SQLite como fichero en el zip, media opcional), API `/api/admin/backups` (crear/listar/descargar/borrar, `manage-web`), vista **Copias** en el admin y programación diaria con retención en `routes/console.php`.
-- [ ] Andamiaje de la web pública (home, navegación por páginas del CRM, listados de entidades genéricos extensibles).
+- [x] Andamiaje de la web pública (doc 10): router con **prefijo de locale** (`/es`·`/eu`·`/en`, el cambio de idioma conserva la entidad y redirige a la canónica, DC-12), vue-i18n para los textos de la interfaz, **SEO** con `useHead` de @bgm/ui (title/description/canonical/hreflang), **sitemap.xml** del motor (páginas del CRM + entidades registradas con la facade `Sitemap`), **prerender en build** (`npm run prerender`, DC-18) y **listados de entidades genéricos** (patrón índice+detalle por slug configurado en el `entityRegistry` de la app; playground: personajes y casas).
 - [ ] Panel de usuario extensible (puntos de extensión para que el juego cuelgue lo suyo).
 - **Hito:** backup descargable desde admin; web pública navegable; un "slot" de panel de usuario rellenado por el playground.
 

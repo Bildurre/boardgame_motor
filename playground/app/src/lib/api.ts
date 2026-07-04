@@ -12,7 +12,8 @@ export const api = createApi({
     useAuthStore().clearSession()
     const { default: router } = await import('@/router')
     if (router.currentRoute.value.meta.auth) {
-      router.push({ name: 'login' })
+      const locale = String(router.currentRoute.value.params.locale ?? 'es')
+      router.push({ name: 'login', params: { locale } })
     }
   },
 })

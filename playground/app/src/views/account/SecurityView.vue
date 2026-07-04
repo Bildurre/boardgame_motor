@@ -4,6 +4,9 @@ import { KeyRound } from '@lucide/vue'
 import { BaseButton } from '@bgm/ui'
 import { api } from '@/lib/api'
 import { apiMessage } from '@/lib/apiError'
+import { useLocalesStore } from '@/stores/locales'
+
+const locales = useLocalesStore()
 
 const currentPassword = ref('')
 const password = ref('')
@@ -48,6 +51,10 @@ async function save() {
         Actualizar
       </BaseButton>
     </form>
-    <p class="hint"><RouterLink to="/cuenta">Volver a mi cuenta</RouterLink></p>
+    <p class="hint">
+      <RouterLink :to="{ name: 'account', params: { locale: locales.current } }"
+        >Volver a mi cuenta</RouterLink
+      >
+    </p>
   </main>
 </template>

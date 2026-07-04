@@ -1,0 +1,22 @@
+{
+  "nav": {
+    "home": "Hasiera",
+    "account": "Nire kontua",
+    "login": "Sartu",
+    "logout": "Irten"
+  },
+  "entities": {
+    "characters": "Pertsonaiak",
+    "houses": "Etxeak"
+  },
+  "list": {
+    "empty": "Ez dago ezer erakusteko oraindik."
+  },
+  "detail": {
+    "back": "Itzuli",
+    "schemes": "Etxearen amarruak"
+  },
+  "page": {
+    "notFound": "Orri hau ez da existitzen (edo ez dago argitaratuta jada)."
+  }
+}

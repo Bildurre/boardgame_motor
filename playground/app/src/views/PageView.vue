@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import { computed, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { PageBackground } from '@bgm/ui'
+import { useI18n } from 'vue-i18n'
+import { PageBackground, useHead } from '@bgm/ui'
 import { api } from '@/lib/api'
 import { blockRegistry } from '@/blocks/registry'
 import { templateFor } from '@/templates/registry'
@@ -29,6 +30,7 @@ interface PagePayload {
 
 const route = useRoute()
 const router = useRouter()
+const { t } = useI18n()
 const locales = useLocalesStore()
 const site = useSiteStore()
 
@@ -46,13 +48,24 @@ async function load() {
     // Canónica: si el slug de la URL no es el del idioma activo, se sustituye.
     const canonical = page.value?.slugs?.[locales.current]
     if (canonical && canonical !== slug.value) {
-      router.replace({ name: 'page', params: { slug: canonical } })
+      router.replace({ name: 'page', params: { ...route.params, slug: canonical } })
       return
     }
 
-    document.title = site.documentTitle(page.value?.meta.title)
-    const meta = document.querySelector('meta[name="description"]')
-    if (meta && page.value) meta.setAttribute('content', page.value.meta.description)
+    // SEO (doc 10): título/description de la página + canonical y hreflang
+    // desde sus slugs por locale.
+    const origin = window.location.origin
+    useHead({
+      title: site.documentTitle(page.value?.meta.title),
+      description: page.value?.meta.description || site.description || undefined,
+      canonical: `${origin}/${locales.current}/${slug.value}`,
+      alternates: Object.fromEntries(
+        Object.entries(page.value?.slugs ?? {}).map(([code, s]) => [
+          code,
+          `${origin}/${code}/${s}`,
+        ]),
+      ),
+    })
   } catch {
     failed.value = true
   }
@@ -63,7 +76,7 @@ watch([slug, () => locales.current], load, { immediate: true })
 
 <template>
   <main v-if="failed" class="page-view">
-    <p class="page-view__missing">404</p>
+    <p class="page-view__missing">{{ t('page.notFound') }}</p>
   </main>
   <template v-else-if="page">
     <PageBackground :image="page.background_image" />

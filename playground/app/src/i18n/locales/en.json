@@ -1,0 +1,22 @@
+{
+  "nav": {
+    "home": "Home",
+    "account": "My account",
+    "login": "Log in",
+    "logout": "Log out"
+  },
+  "entities": {
+    "characters": "Characters",
+    "houses": "Houses"
+  },
+  "list": {
+    "empty": "Nothing to show yet."
+  },
+  "detail": {
+    "back": "Back",
+    "schemes": "House schemes"
+  },
+  "page": {
+    "notFound": "This page does not exist (or is no longer published)."
+  }
+}

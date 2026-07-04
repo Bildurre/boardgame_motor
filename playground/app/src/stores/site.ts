@@ -57,6 +57,11 @@ export const useSiteStore = defineStore('site', () => {
     return map[locales.current] || map[locales.defaultLocale] || Object.values(map)[0] || ''
   })
 
+  const description = computed(() => {
+    const map = settings.value?.description ?? {}
+    return map[locales.current] || map[locales.defaultLocale] || Object.values(map)[0] || ''
+  })
+
   /** Título del documento: "página · sitio" (o solo una de las partes). */
   function documentTitle(pageTitle?: string): string {
     return [pageTitle, title.value].filter(Boolean).join(' · ')
@@ -140,5 +145,5 @@ export const useSiteStore = defineStore('site', () => {
     if (settings.value?.accent_mode === 'random') pickAccent()
   }
 
-  return { settings, title, footerText, documentTitle, load, onNavigate }
+  return { settings, title, footerText, description, documentTitle, load, onNavigate }
 })

@@ -828,6 +828,47 @@ Schedule::command('pdf:cleanup')->hourly(); // ya que estás: PDFs temporales (d
 con reponer el fichero de la BBDD y `storage/app/public`; con MySQL,
 `mysql base < dump.sql`. BBDD muy grandes → mover la creación a cola.
 
+## 6quinquies. Web pública: locale, SEO y listados (Fase 6)
+
+**Prefijo de locale (doc 04, DC-03).** El router de la `app` cuelga todo de
+`/:locale(es|eu|en)` (más `/_render` a pelo). El guard sincroniza el prefijo
+con `stores/locales` (que añade `?locale` a la API) y con vue-i18n (textos de
+la propia interfaz, `src/i18n/`). Las URL sin prefijo redirigen al locale
+persistido. El `LocaleSelector` cambia de idioma **navegando** (misma ruta,
+otro prefijo) y cada vista redirige después a su canónica (DC-12): slug de
+página, segmento de sección y slug de entidad en el idioma activo.
+
+**Listados de entidades genéricos.** En `src/entities/registry.ts` cada
+sección declara: `endpoint` público, `paths` por locale (segmento de URL),
+`titleKey` (i18n) y los componentes `item` (tarjeta del índice) y `detail`
+(cuerpo del detalle), ambos con props `{ item, locale }`. Las vistas
+genéricas `EntityIndexView`/`EntityDetailView` hacen fetch, canónica y SEO.
+El backend expone los endpoints públicos (solo publicados, slug resoluble en
+cualquier locale, payload con el mapa `slug` por locale — mismo shape que los
+bloques con-datos, p. ej. `renderData($locale) + slugs`).
+
+**SEO.** `useHead` (de `@bgm/ui`) fija title, meta description, canonical y
+alternates hreflang por ruta (sin dependencias). El **sitemap** lo sirve la
+API en `GET /sitemap.xml`: el motor mete las páginas publicadas del CRM y el
+juego añade sus entidades en el provider:
+
+```php
+Sitemap::add(fn () => self::sitemapEntries(
+    Character::published()->get(),
+    ['es' => 'personajes', 'eu' => 'pertsonaiak', 'en' => 'characters'], // = entityRegistry
+));
+```
+
+**Prerender (DC-18).** `npm run build && npm run prerender` (con la API
+levantada): el script recorre el sitemap con Chromium y escribe
+`dist/<ruta>/index.html` con el HTML ya renderizado (head incluido). El
+hosting estático debe servir esos ficheros antes del fallback a
+`index.html`. Env: `VITE_API_URL` y `MOTOR_CHROME_PATH`.
+
+> Ojo: los slugs de páginas del CRM no deben chocar con los segmentos de los
+> listados (p. ej. una página con slug EU `etxeak` taparía el listado de
+> casas): el router da prioridad a las secciones.
+
 ## 7. Checklist para una entidad nueva
 
 Backend:

@@ -24,6 +24,22 @@ export default [
   ...vueTsConfig(),
   vuePrettierConfig,
   {
+    // Scripts de build en Node (p. ej. el prerender de la app): globals de
+    // Node en vez de las del navegador.
+    name: 'bgm/node-scripts',
+    files: ['**/scripts/**/*.mjs'],
+    languageOptions: {
+      globals: {
+        process: 'readonly',
+        console: 'readonly',
+        fetch: 'readonly',
+        URL: 'readonly',
+        setTimeout: 'readonly',
+        document: 'readonly', // dentro de page.evaluate (contexto del navegador)
+      },
+    },
+  },
+  {
     rules: {
       'vue/multi-word-component-names': 'off',
       // Con props tipadas de script setup, `label?: string` ya declara el default

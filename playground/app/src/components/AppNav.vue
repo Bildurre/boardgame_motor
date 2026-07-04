@@ -1,14 +1,18 @@
 <script setup lang="ts">
 import { computed, onMounted, ref } from 'vue'
-import { useRouter } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
+import { useI18n } from 'vue-i18n'
 import { LocaleSelector, MotorBadge, ThemeSelector } from '@bgm/ui'
 import { api } from '@/lib/api'
+import { entitySections } from '@/entities/registry'
 import { useAuthStore } from '@/stores/auth'
 import { useLocalesStore } from '@/stores/locales'
 import { useSiteStore } from '@/stores/site'
 
 const auth = useAuthStore()
+const route = useRoute()
 const router = useRouter()
+const { t } = useI18n()
 const locales = useLocalesStore()
 const site = useSiteStore()
 
@@ -32,9 +36,30 @@ const navPages = computed(() =>
     })),
 )
 
+// Listados de entidades del juego (doc 10): enlace por sección, con el
+// segmento del locale activo.
+const navSections = computed(() =>
+  entitySections.map((s) => ({
+    key: s.key,
+    label: t(s.titleKey),
+    section: s.paths[locales.current] || s.paths.es,
+  })),
+)
+
+/** Cambia el idioma NAVEGANDO: el prefijo de la URL es la fuente del locale.
+ *  Las vistas de detalle redirigen luego a su slug canónico (DC-12). */
+function switchLocale(code: string) {
+  if (code === locales.current) return
+  router.push({
+    name: (route.name as string) || 'home',
+    params: { ...route.params, locale: code },
+    query: route.query,
+  })
+}
+
 async function logout() {
   await auth.logout()
-  router.push({ name: 'home' })
+  router.push({ name: 'home', params: { locale: locales.current } })
 }
 
 onMounted(async () => {
@@ -50,7 +75,11 @@ onMounted(async () => {
 
 <template>
   <nav class="nav">
-    <RouterLink to="/" class="nav__brand" :title="site.title || 'BGM'">
+    <RouterLink
+      :to="{ name: 'home', params: { locale: locales.current } }"
+      class="nav__brand"
+      :title="site.title || 'BGM'"
+    >
       <!-- Logo SVG inlineado desde el payload: currentColor hereda el
            acento y el modo aleatorio lo recolorea (logo-path de CDL) -->
       <!-- eslint-disable vue/no-v-html -- SVG subido por el admin -->
@@ -69,26 +98,39 @@ onMounted(async () => {
       <MotorBadge v-else :label="site.title || 'BGM'" />
     </RouterLink>
     <div class="nav__links">
-      <RouterLink to="/">Inicio</RouterLink>
+      <RouterLink :to="{ name: 'home', params: { locale: locales.current } }">{{
+        t('nav.home')
+      }}</RouterLink>
       <RouterLink
         v-for="page in navPages"
         :key="page.id"
-        :to="{ name: 'page', params: { slug: page.slug } }"
+        :to="{ name: 'page', params: { locale: locales.current, slug: page.slug } }"
         >{{ page.label }}</RouterLink
       >
+      <RouterLink
+        v-for="section in navSections"
+        :key="section.key"
+        :to="{
+          name: 'entity-index',
+          params: { locale: locales.current, section: section.section },
+        }"
+        >{{ section.label }}</RouterLink
+      >
       <template v-if="auth.isAuthenticated">
-        <RouterLink to="/cuenta">Mi cuenta</RouterLink>
-        <button class="nav__logout" @click="logout">Salir</button>
+        <RouterLink :to="{ name: 'account', params: { locale: locales.current } }">{{
+          t('nav.account')
+        }}</RouterLink>
+        <button class="nav__logout" @click="logout">{{ t('nav.logout') }}</button>
       </template>
       <template v-else>
-        <RouterLink to="/login">Entrar</RouterLink>
+        <RouterLink :to="{ name: 'login', params: { locale: locales.current } }">{{
+          t('nav.login')
+        }}</RouterLink>
       </template>
-      <!-- Selectores provisionales de idioma y tema (el diseño final llega
-           con el andamiaje de la web pública, Fase 6) -->
       <LocaleSelector
         :model-value="locales.current"
         :locales="locales.locales"
-        @update:model-value="locales.setCurrent"
+        @update:model-value="switchLocale"
       />
       <ThemeSelector />
     </div>

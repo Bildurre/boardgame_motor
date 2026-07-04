@@ -32,6 +32,7 @@ export { createApi, type CreateApiOptions } from './lib/createApi'
 export { useToast, type Toast } from './composables/useToast'
 export { useConfirm, type ConfirmOptions } from './composables/useConfirm'
 export { useTheme, type ThemeMode } from './composables/useTheme'
+export { useHead, type HeadInput } from './composables/useHead'
 
 // Bloques de presentación del CRM (doc 03).
 export * from './blocks'

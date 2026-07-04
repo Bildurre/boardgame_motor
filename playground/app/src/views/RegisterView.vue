@@ -4,10 +4,12 @@ import { UserPlus } from '@lucide/vue'
 import { useRouter } from 'vue-router'
 import { BaseButton } from '@bgm/ui'
 import { useAuthStore } from '@/stores/auth'
+import { useLocalesStore } from '@/stores/locales'
 import { apiMessage } from '@/lib/apiError'
 
 const auth = useAuthStore()
 const router = useRouter()
+const locales = useLocalesStore()
 const name = ref('')
 const email = ref('')
 const password = ref('')
@@ -25,7 +27,7 @@ async function submit() {
       password: password.value,
       password_confirmation: passwordConfirmation.value,
     })
-    router.push({ name: 'account' })
+    router.push({ name: 'account', params: { locale: locales.current } })
   } catch (e) {
     error.value = apiMessage(e, 'No se pudo completar el registro.')
   } finally {
@@ -65,6 +67,9 @@ async function submit() {
         {{ loading ? 'Creando…' : 'Crear cuenta' }}
       </BaseButton>
     </form>
-    <p class="hint">¿Ya tienes cuenta? <RouterLink to="/login">Entra</RouterLink>.</p>
+    <p class="hint">
+      ¿Ya tienes cuenta?
+      <RouterLink :to="{ name: 'login', params: { locale: locales.current } }">Entra</RouterLink>.
+    </p>
   </main>
 </template>

@@ -15,6 +15,7 @@ use App\Pdf\SchemesExport;
 use Bgm\Core\Support\Facades\Blocks;
 use Bgm\Core\Support\Facades\Pdfs;
 use Bgm\Core\Support\Facades\Previews;
+use Bgm\Core\Support\Facades\Sitemap;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -79,6 +80,17 @@ class AppServiceProvider extends ServiceProvider
             ...self::webfonts(),
         ]]);
 
+        // Sitemap (doc 10): entidades públicas de ESTE juego. Los segmentos
+        // por locale deben casar con el entityRegistry de la app Vue.
+        Sitemap::add(fn () => self::sitemapEntries(
+            Character::published()->get(),
+            ['es' => 'personajes', 'eu' => 'pertsonaiak', 'en' => 'characters'],
+        ));
+        Sitemap::add(fn () => self::sitemapEntries(
+            House::published()->get(),
+            ['es' => 'casas', 'eu' => 'etxeak', 'en' => 'houses'],
+        ));
+
         // Catálogo de PDF de ESTE juego (doc 02): qué se puede generar y qué
         // contiene cada uno. Todo se gestiona desde la sección PDF del admin.
         Pdfs::register('characters', CharactersExport::class);      // todos los personajes (card-big)
@@ -86,6 +98,22 @@ class AppServiceProvider extends ServiceProvider
         Pdfs::register('house-schemes', HouseSchemesExport::class); // un PDF por casa (sus argucias)
         Pdfs::register('house-tokens', HouseTokensExport::class);   // 9 tokens por casa (token-40)
         Pdfs::register('house-counters', HouseCountersExport::class); // 9 contadores por casa (counter, preview house-counter)
+    }
+
+    /** URLs del sitemap para una colección publicada: índice + un detalle por slug. */
+    protected static function sitemapEntries($models, array $sections): array
+    {
+        $entries = [['slugs' => $sections]];
+        foreach ($models as $model) {
+            $entries[] = [
+                'slugs' => collect($model->getTranslations('slug'))
+                    ->map(fn (string $slug, string $locale) => ($sections[$locale] ?? $sections['es'])."/{$slug}")
+                    ->all(),
+                'updated_at' => $model->updated_at?->toDateString(),
+            ];
+        }
+
+        return $entries;
     }
 
     /** Catálogo de webfonts (regular + cursiva; variables donde las hay). */

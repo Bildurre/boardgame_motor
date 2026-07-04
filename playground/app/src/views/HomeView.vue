@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { onMounted, ref, watch } from 'vue'
 import { LogIn, User } from '@lucide/vue'
-import { MotorBadge, BaseButton, PageBackground } from '@bgm/ui'
+import { MotorBadge, BaseButton, PageBackground, useHead } from '@bgm/ui'
 import { api } from '@/lib/api'
 import { blockRegistry } from '@/blocks/registry'
 import { templateFor } from '@/templates/registry'
@@ -31,10 +31,18 @@ async function loadHome() {
   try {
     const { data } = await api.get('/pages/home')
     homePage.value = data.data
-    document.title = site.documentTitle(homePage.value?.meta.title)
   } catch {
     homePage.value = null // sin home del CRM: fallback
   }
+
+  // SEO (doc 10): la home canónica es la raíz de cada locale.
+  const origin = window.location.origin
+  useHead({
+    title: site.documentTitle(homePage.value?.meta.title),
+    description: homePage.value?.meta.description || site.description || undefined,
+    canonical: `${origin}/${locales.current}`,
+    alternates: Object.fromEntries(locales.locales.map((l) => [l.code, `${origin}/${l.code}`])),
+  })
 }
 
 watch(() => locales.current, loadHome)
@@ -101,13 +109,15 @@ onMounted(async () => {
     </section>
     <p v-else-if="error" class="error">No conecta con la API: {{ error }}</p>
 
-    <RouterLink v-if="!auth.isAuthenticated" to="/login"
+    <RouterLink
+      v-if="!auth.isAuthenticated"
+      :to="{ name: 'login', params: { locale: locales.current } }"
       ><BaseButton>
         <template #icon><LogIn :size="16" /></template>
         Entrar
       </BaseButton></RouterLink
     >
-    <RouterLink v-else to="/cuenta"
+    <RouterLink v-else :to="{ name: 'account', params: { locale: locales.current } }"
       ><BaseButton>
         <template #icon><User :size="16" /></template>
         Ir a mi cuenta

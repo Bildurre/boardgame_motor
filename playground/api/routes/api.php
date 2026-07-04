@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\CharacterController;
 use App\Http\Controllers\HouseController;
+use App\Http\Controllers\Public\CharacterController as PublicCharacterController;
 use App\Http\Controllers\Public\HouseController as PublicHouseController;
 use App\Http\Controllers\SchemeController;
 use Illuminate\Support\Facades\Route;
@@ -15,6 +16,8 @@ use Illuminate\Support\Facades\Route;
 // --- Público (solo entidades publicadas) ---
 Route::get('houses', [PublicHouseController::class, 'index']);
 Route::get('houses/{slug}', [PublicHouseController::class, 'show']);
+Route::get('characters', [PublicCharacterController::class, 'index']);
+Route::get('characters/{slug}', [PublicCharacterController::class, 'show']);
 
 // --- Admin (admin/editor): las entidades del juego exigen manage-game ---
 Route::middleware(['auth:sanctum', 'motor.admin', 'can:manage-game'])->prefix('admin')->group(function () {

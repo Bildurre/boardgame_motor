@@ -1,0 +1,22 @@
+{
+  "nav": {
+    "home": "Inicio",
+    "account": "Mi cuenta",
+    "login": "Entrar",
+    "logout": "Salir"
+  },
+  "entities": {
+    "characters": "Personajes",
+    "houses": "Casas"
+  },
+  "list": {
+    "empty": "No hay nada que mostrar todavía."
+  },
+  "detail": {
+    "back": "Volver",
+    "schemes": "Argucias de la casa"
+  },
+  "page": {
+    "notFound": "Esta página no existe (o ya no está publicada)."
+  }
+}

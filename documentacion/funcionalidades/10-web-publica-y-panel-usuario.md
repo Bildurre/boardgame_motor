@@ -1,18 +1,19 @@
 # 10 · Web pública y panel de usuario
 
-> **Estado: parcial.** Hecho (Fase 5/5.5): shell básico de la `app` (nav con
-> las páginas del CRM + logo del sitio, footer, selectores provisionales de
-> idioma y tema), `PageView`/home del CRM con plantillas por juego, ruta
-> `/_render` aislada, y la **Configuración de la web** completa: tabla
-> `settings` + servicio `SiteSettings` cacheado, `GET /api/site` público y
-> `GET/PUT /api/admin/settings/site`; título/descripción (traducibles), logo
-> SVG (inlineado en el payload, recoloreado por el acento) y favicon,
-> **acento fijo o ALEATORIO estilo CDL** (re-sorteo en cada navegación),
-> **fuentes** de títulos/texto con catálogo `motor.site.fonts` (webfonts
-> woff2 servidas con CORS por `GET /api/site/fonts/{path}`) + **subida de
-> fuentes propias**, y texto del pie. Pendiente: prefijo de locale en el
-> router, SEO/prerender/sitemap (DC-18), listados de entidades genéricos y
-> el panel de usuario extensible (Fase 6).
+> **Estado: web pública implementada (Fases 5/5.5/6 ✅).** Además de lo de
+> las Fases 5/5.5 (shell, `PageView`/home con plantillas, `/_render`,
+> Configuración de la web completa con acento aleatorio y webfonts), la
+> Fase 6 añade: **prefijo de locale** en el router (`/es`·`/eu`·`/en`; el
+> guard sincroniza el store y vue-i18n, el cambio de idioma navega y cada
+> vista redirige a su canónica, DC-12), **SEO** con `useHead` de @bgm/ui
+> (title/description/canonical/hreflang), **sitemap.xml** servido por la API
+> (páginas del CRM del motor + entidades del juego vía facade `Sitemap`),
+> **prerender en build** (`npm run prerender` recorre el sitemap con
+> Chromium y escribe dist/<ruta>/index.html, DC-18) y **listados de
+> entidades genéricos** (`entityRegistry` + `EntityIndexView`/
+> `EntityDetailView`; playground: personajes y casas con sus cartas).
+> Pendiente: panel de usuario extensible (Fase 6c) y, tras él, i18n completa
+> de las vistas de cuenta.
 
 ## Qué hace
 

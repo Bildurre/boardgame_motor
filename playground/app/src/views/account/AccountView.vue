@@ -5,10 +5,12 @@ import { useRoute } from 'vue-router'
 import { BaseButton } from '@bgm/ui'
 import { api } from '@/lib/api'
 import { useAuthStore } from '@/stores/auth'
+import { useLocalesStore } from '@/stores/locales'
 import { apiMessage } from '@/lib/apiError'
 
 const auth = useAuthStore()
 const route = useRoute()
+const locales = useLocalesStore()
 const name = ref('')
 const email = ref('')
 const message = ref<string | null>(null)
@@ -83,6 +85,10 @@ async function resendVerification() {
       </BaseButton>
     </form>
 
-    <p class="hint"><RouterLink to="/cuenta/seguridad">Cambiar contraseña</RouterLink></p>
+    <p class="hint">
+      <RouterLink :to="{ name: 'security', params: { locale: locales.current } }"
+        >Cambiar contraseña</RouterLink
+      >
+    </p>
   </main>
 </template>
