@@ -344,6 +344,84 @@ it('el usuario arma su colección y genera un PDF temporal', function () {
     $this->actingAs($user)->postJson('/api/pdf-collection/generate')->assertUnprocessable();
 });
 
+// --- Colección de INVITADO (token en X-Collection-Token, como en CDL) ---
+
+it('un invitado arma su colección con token y genera su PDF temporal', function () {
+    $character = makeCharacter(['is_published' => true]);
+    $token = 'guest-0123456789abcdef';
+    $headers = ['X-Collection-Token' => $token];
+
+    // Sin sesión ni token -> 401.
+    $this->postJson('/api/pdf-collection/items', [
+        'entity' => 'character', 'id' => $character->id,
+    ])->assertUnauthorized();
+
+    // Con token: añadir, listar, generar.
+    $this->postJson('/api/pdf-collection/items', [
+        'entity' => 'character', 'id' => $character->id, 'copies' => 2,
+    ], $headers)->assertCreated();
+    $this->getJson('/api/pdf-collection', $headers)
+        ->assertOk()
+        ->assertJsonCount(1, 'data');
+
+    // Otro token no ve la colección.
+    $this->getJson('/api/pdf-collection', ['X-Collection-Token' => 'otro-9876543210fedcba'])
+        ->assertOk()
+        ->assertJsonCount(0, 'data');
+
+    $pdf = null;
+    Queue::fake();
+    $response = $this->postJson('/api/pdf-collection/generate', [], $headers)->assertAccepted();
+    $pdf = GeneratedPdf::findOrFail($response->json('data.id'));
+    expect($pdf->owner_id)->toBeNull()
+        ->and($pdf->guest_token)->toBe($token);
+
+    // El sondeo del estado también va por token.
+    $this->getJson("/api/pdf-collection/pdfs/{$pdf->id}", $headers)->assertOk();
+    $this->getJson("/api/pdf-collection/pdfs/{$pdf->id}")->assertUnauthorized();
+});
+
+it('el PDF temporal de un invitado solo se descarga con su token', function () {
+    $character = makeCharacter(['is_published' => true]);
+    $token = 'guest-0123456789abcdef';
+
+    $pdf = app(PdfService::class)->generateCollection(
+        null,
+        [['entity' => 'character', 'id' => $character->id, 'copies' => 1]],
+        'es',
+        sync: true,
+        guestToken: $token,
+    )->refresh();
+
+    $this->get("/api/pdfs/{$pdf->id}/download")->assertForbidden();
+    $this->get("/api/pdfs/{$pdf->id}/download", ['X-Collection-Token' => 'otro-9876543210fedcba'])
+        ->assertForbidden();
+    $this->get("/api/pdfs/{$pdf->id}/download", ['X-Collection-Token' => $token])->assertOk();
+    $this->actingAs(motorUser('admin'))->get("/api/pdfs/{$pdf->id}/download")->assertOk();
+});
+
+// --- Apartado público de Descargas (permanentes, sin auth) ---
+
+it('las descargas públicas listan los PDF permanentes listos, agrupados por tipo', function () {
+    $character = makeCharacter(['is_published' => true]);
+    $service = app(PdfService::class);
+
+    // Un permanente listo, y un temporal que NO debe salir.
+    $service->generate('characters', null, 'es', sync: true);
+    $service->generateCollection(
+        motorUser(),
+        [['entity' => 'character', 'id' => $character->id, 'copies' => 1]],
+        'es',
+        sync: true,
+    );
+
+    $response = $this->getJson('/api/downloads')->assertOk();
+    expect($response->json('data'))->toHaveCount(1)
+        ->and($response->json('data.0.type'))->toBe('characters')
+        ->and($response->json('data.0.items.0.url'))->toContain('/download')
+        ->and($response->json('data.0.items.0.size'))->toBeGreaterThan(0);
+});
+
 it('el PDF temporal solo lo descarga su dueño (o un admin)', function () {
     $character = makeCharacter(['is_published' => true]);
     $owner = motorUser();
