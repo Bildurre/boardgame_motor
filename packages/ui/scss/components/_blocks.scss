@@ -136,3 +136,27 @@
   a { color: $accent-500; text-decoration: none; }
   a:hover { text-decoration: underline; }
 }
+
+// FAQ (doc 03): acordeón nativo details/summary del bloque `faq`.
+.block__faq-item {
+  border: 1px solid $border;
+  border-radius: $radius-md;
+  background: color-mix(in srgb, $surface 65%, transparent);
+
+  & + & { margin-top: $space-2; }
+
+  &[open] .block__faq-question { color: $accent-500; }
+}
+
+.block__faq-question {
+  padding: $space-3 $space-4;
+  font-weight: 600;
+  cursor: pointer;
+
+  &:hover { color: $accent-500; }
+}
+
+.block__faq-answer {
+  padding: 0 $space-4 $space-3;
+  color: $text-2;
+}

@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Blocks\CharactersGridBlock;
+use App\Blocks\FeaturedHouseBlock;
 use App\Blocks\HousesSchemesBlock;
 use App\Models\Character;
 use App\Models\House;
@@ -64,6 +65,7 @@ class AppServiceProvider extends ServiceProvider
         // Vue vive en la app (blockRegistry).
         Blocks::register(CharactersGridBlock::class);
         Blocks::register(HousesSchemesBlock::class);
+        Blocks::register(FeaturedHouseBlock::class);
 
         // Plantillas de página de ESTE juego (doc 03): la clave viaja en el
         // payload público y la SPA elige el layout en su templateRegistry.

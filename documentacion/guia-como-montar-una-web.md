@@ -658,7 +658,18 @@ en servidor (HtmlSanitizer, DC-09). `image` sube al momento
 (`POST /admin/content/uploads`) y guarda la URL; con `->translatable()` es
 **multilingüe** (una URL por locale, editor `TranslatableImage` y fallback
 al locale por defecto en el render) — así van todas las de los bloques del
-motor. Pendientes del DSL: `repeater`, `group`, `entity-ref`.
+motor.
+
+**Anidados**: `Field::group('clave')->fields([...])` (objeto de subcampos),
+`Field::repeater('clave')->fields([...])->min(n)->max(n)` (lista de filas
+con los mismos subcampos; el editor añade/quita/reordena) y
+`Field::entity('clave', '/admin/xxx/options')` (referencia por id a una
+entidad del juego: buscador en el admin sobre el endpoint de opciones —
+shape `{data: [{id, name: {locale}}]}` — y el `resolveData` del bloque
+carga el modelo al renderizar). La validación, el saneado del richtext y la
+localización funcionan RECURSIVAMENTE dentro de group/repeater. Demos: el
+bloque `faq` del motor (repeater) y `featured-house` del playground
+(entity).
 
 El motor pone TODO el CRM (páginas jerárquicas traducibles con SEO y home
 única, bloques reordenables, editor generado, render público con caché); el

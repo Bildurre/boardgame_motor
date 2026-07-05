@@ -465,5 +465,8 @@
       "deleted": "Usuario borrado.",
       "saveError": "No se pudo guardar."
     }
+  },
+  "blockEditor": {
+    "addRow": "Añadir"
   }
 }

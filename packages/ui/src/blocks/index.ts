@@ -2,13 +2,14 @@
 // La app del juego los mezcla con los suyos en su blockRegistry.
 import type { Component } from 'vue'
 import BlockCta from './BlockCta.vue'
+import BlockFaq from './BlockFaq.vue'
 import BlockHeader from './BlockHeader.vue'
 import BlockIndex from './BlockIndex.vue'
 import BlockQuote from './BlockQuote.vue'
 import BlockText from './BlockText.vue'
 import BlockTextCard from './BlockTextCard.vue'
 
-export { BlockCta, BlockHeader, BlockIndex, BlockQuote, BlockText, BlockTextCard }
+export { BlockCta, BlockFaq, BlockHeader, BlockIndex, BlockQuote, BlockText, BlockTextCard }
 export { default as BlockShell } from './BlockShell.vue'
 export { default as PageBackground } from './PageBackground.vue'
 
@@ -20,4 +21,5 @@ export const motorBlockComponents: Record<string, Component> = {
   quote: BlockQuote,
   index: BlockIndex,
   cta: BlockCta,
+  faq: BlockFaq,
 }

@@ -1,5 +1,7 @@
 <?php
 
+use App\Models\House;
+use Bgm\Core\Content\BlockTypeRegistry;
 use Bgm\Core\Content\Models\Block;
 use Bgm\Core\Content\Models\Page;
 use Bgm\Core\Content\PageService;
@@ -19,10 +21,10 @@ function makePage(array $attributes = []): Page
 it('la paleta lista los tipos del motor y los del juego con su esquema', function () {
     $response = $this->actingAs(motorUser('admin'))->getJson('/api/admin/block-types')
         ->assertOk()
-        ->assertJsonCount(8, 'data'); // 6 presentación (motor) + 2 con-datos (juego)
+        ->assertJsonCount(10, 'data'); // 7 presentación (motor) + 3 con-datos (juego)
 
     $keys = collect($response->json('data'))->pluck('key');
-    expect($keys)->toContain('header', 'text', 'text-card', 'quote', 'cta', 'index', 'characters-grid', 'houses-schemes');
+    expect($keys)->toContain('header', 'text', 'text-card', 'quote', 'cta', 'index', 'faq', 'characters-grid', 'houses-schemes', 'featured-house');
 
     // El esquema de campos viaja serializado (el BlockEditor se genera de aquí).
     $header = collect($response->json('data'))->firstWhere('key', 'header');
@@ -124,6 +126,63 @@ it('valida los bloques con las reglas derivadas del esquema', function () {
         'type' => 'header',
         'settings' => ['title' => ['es' => 'Hola'], 'align' => 'center'],
     ])->assertCreated();
+});
+
+it('el DSL anidado valida, sanea y localiza (repeater y entity)', function () {
+    $admin = motorUser('admin');
+    $page = makePage();
+
+    // repeater con min:1 -> vacío es 422; una fila sin question (required) -> 422.
+    $this->actingAs($admin)->postJson("/api/admin/pages/{$page->id}/blocks", [
+        'type' => 'faq',
+        'settings' => ['items' => []],
+    ])->assertUnprocessable();
+    $this->actingAs($admin)->postJson("/api/admin/pages/{$page->id}/blocks", [
+        'type' => 'faq',
+        'settings' => ['items' => [['answer' => ['es' => '<p>Sin pregunta</p>']]]],
+    ])->assertUnprocessable();
+
+    // Filas válidas: el richtext anidado se sanea (DC-09).
+    $response = $this->actingAs($admin)->postJson("/api/admin/pages/{$page->id}/blocks", [
+        'type' => 'faq',
+        'settings' => ['items' => [
+            [
+                'question' => ['es' => '¿Jugadores?', 'eu' => 'Jokalariak?'],
+                'answer' => ['es' => '<p>De <script>alert(1)</script><strong>2 a 4</strong>.</p>'],
+            ],
+        ]],
+    ])->assertCreated();
+
+    $block = Block::find($response->json('data.id'));
+    expect($block->settings['items'][0]['answer']['es'])->not->toContain('<script')
+        ->and($block->settings['items'][0]['answer']['es'])->toContain('<strong>2 a 4</strong>');
+
+    // localizeSettings localiza DENTRO de cada fila (eu con fallback a es).
+    $localized = app(BlockTypeRegistry::class)->get('faq')
+        ->localizeSettings($block->settings, 'eu');
+    expect($localized['items'][0]['question'])->toBe('Jokalariak?')
+        ->and($localized['items'][0]['answer'])->toContain('2 a 4');
+
+    // entity: guarda el id y resolveData carga el modelo publicado.
+    $house = House::create([
+        'name' => ['es' => 'Casa Testa'], 'color' => '#123456', 'is_published' => true,
+    ]);
+    $response = $this->actingAs($admin)->postJson("/api/admin/pages/{$page->id}/blocks", [
+        'type' => 'featured-house',
+        'settings' => ['house_id' => $house->id],
+    ])->assertCreated();
+
+    $block = Block::find($response->json('data.id'));
+    $data = app(BlockTypeRegistry::class)->get('featured-house')
+        ->resolveData($block, 'es');
+    expect($data['house']['id'])->toBe($house->id)
+        ->and($data['house']['name']['es'])->toBe('Casa Testa');
+
+    // Un id que no es entero -> 422.
+    $this->actingAs($admin)->postJson("/api/admin/pages/{$page->id}/blocks", [
+        'type' => 'featured-house',
+        'settings' => ['house_id' => 'stark'],
+    ])->assertUnprocessable();
 });
 
 it('sanea el texto rico en servidor (DC-09)', function () {

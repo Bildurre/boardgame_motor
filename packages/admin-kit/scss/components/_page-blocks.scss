@@ -119,6 +119,47 @@
     display: grid;
     gap: $space-1;
   }
+
+  // Anidados del DSL: group (fieldset) y repeater (filas numeradas con
+  // añadir/quitar/reordenar).
+  &__group,
+  &__row {
+    margin: 0;
+    border: 1px dashed $border;
+    border-radius: $radius-md;
+    padding: $space-3;
+    display: grid;
+    gap: $space-3;
+    min-width: 0;
+
+    legend {
+      padding: 0 $space-1;
+    }
+  }
+
+  &__repeater {
+    display: grid;
+    gap: $space-2;
+    justify-items: start;
+
+    > .form-field__label { justify-self: stretch; }
+  }
+
+  &__row { width: 100%; }
+
+  &__row-bar {
+    display: flex;
+    align-items: center;
+    gap: $space-1;
+    justify-content: flex-end;
+  }
+
+  &__row-index {
+    margin-right: auto;
+    color: $text-3;
+    font-size: $fs-12;
+    font-weight: 600;
+  }
 }
 
 // Item fantasma del drag (vue-draggable-plus / SortableJS).

@@ -180,6 +180,14 @@ function fieldValue(field: FieldSchema, block: BlockRow): string {
     const text = field.options[String(raw)] ?? String(raw)
     return props.translate?.(`blockOptions.${field.key}.${String(raw)}`, text) ?? text
   }
+  // Anidados del DSL: un resumen, no el volcado del objeto.
+  if (field.type === 'repeater' && Array.isArray(raw)) {
+    return `× ${raw.length}`
+  }
+  if (field.type === 'group' && typeof raw === 'object') {
+    return `{ ${Object.keys(raw as object).join(', ')} }`
+  }
+  if (field.type === 'entity') return `#${String(raw)}`
   return String(raw)
 }
 

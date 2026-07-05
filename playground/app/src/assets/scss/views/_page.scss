@@ -38,3 +38,28 @@
   border-left: 4px solid var(--c, $accent-500);
   padding-left: $space-3;
 }
+
+// Casa destacada (campo entity del DSL): escudo + texto con su color.
+.block__house-feature {
+  display: flex;
+  gap: $space-4;
+  align-items: flex-start;
+  border-left: 4px solid var(--c, $accent-500);
+  padding-left: $space-4;
+}
+
+.block__house-shield {
+  max-width: 96px;
+  border-radius: $radius-sm;
+  flex: 0 0 auto;
+}
+
+.block__house-body {
+  display: grid;
+  gap: $space-2;
+  min-width: 0;
+
+  h3 { margin: 0; }
+  a { color: var(--c, $accent-500); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+}

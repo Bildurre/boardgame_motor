@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\House;
 use Bgm\Core\Content\Models\Block;
 use Bgm\Core\Content\Models\Page;
 use Illuminate\Database\Seeder;
@@ -74,7 +75,35 @@ class PagesSeeder extends Seeder
             ['text', ['title' => ['es' => 'Turno de juego'], 'body' => ['es' => '<p>En tu turno: roba una carta, juega hasta <strong>una argucia</strong> y ataca con tus personajes.</p>']]],
             ['text-card', ['label' => ['es' => 'Regla de oro'], 'body' => ['es' => '<p>Cuando el texto de una carta contradiga estas reglas, <strong>manda la carta</strong>.</p>'],
                 'width' => 'narrow']],
+            // FAQ: la demo del campo repeater del DSL (filas traducibles).
+            ['faq', [
+                'title' => ['es' => 'Preguntas frecuentes', 'en' => 'FAQ'],
+                'items' => [
+                    [
+                        'question' => ['es' => '¿Cuántos jugadores?', 'en' => 'How many players?'],
+                        'answer' => ['es' => '<p>De <strong>2 a 4</strong>; brilla a 2.</p>'],
+                    ],
+                    [
+                        'question' => ['es' => '¿Puedo imprimir las cartas en casa?'],
+                        'answer' => ['es' => '<p>Sí: descarga los PDF del apartado <em>Descargas</em> (o monta el tuyo a la carta).</p>'],
+                    ],
+                ],
+                'width' => 'narrow',
+            ]],
         ]);
+
+        // --- Casa destacada en la home (demo del campo entity del DSL) ---
+        $stark = House::query()->where('name->es', 'like', '%Stark%')->first() ?? House::query()->first();
+        if ($stark && $home = Page::query()->where('is_home', true)->first()) {
+            $this->blocks($home, [
+                ['featured-house', [
+                    'title' => ['es' => 'La casa del mes', 'en' => 'House of the month'],
+                    'house_id' => $stark->id,
+                    'show_schemes' => true,
+                    'width' => 'narrow',
+                ]],
+            ]);
+        }
     }
 
     /** Genera un PNG decorativo de fondo de página (GD), o null sin GD. */
@@ -137,11 +166,14 @@ class PagesSeeder extends Seeder
     /** @param array<int, array{0: string, 1: array}> $definitions */
     protected function blocks(Page $page, array $definitions): void
     {
-        foreach ($definitions as $order => [$type, $settings]) {
+        // Continúa tras los bloques que la página ya tenga (llamadas sucesivas).
+        $start = (int) (Block::query()->where('page_id', $page->id)->max('order') ?? -1) + 1;
+
+        foreach (array_values($definitions) as $index => [$type, $settings]) {
             Block::create([
                 'page_id' => $page->id,
                 'type' => $type,
-                'order' => $order,
+                'order' => $start + $index,
                 'settings' => $settings,
             ]);
         }

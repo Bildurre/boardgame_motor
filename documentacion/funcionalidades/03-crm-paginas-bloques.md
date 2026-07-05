@@ -11,7 +11,11 @@
 > PDF de páginas imprimibles (export `pages`), plantillas por juego en la
 > SPA (`templateRegistry`), `background_image` por página (capa
 > PageBackground atenuada por tema) y posición de imagen "el texto la
-> rodea" (clear-left/right). Pendiente del DSL: repeater/group/entity-ref.
+> rodea" (clear-left/right). DSL anidado: **group / repeater / entity**
+> (validación, saneado y localización recursivos; editor con filas
+> añadir/quitar/reordenar y buscador de entidad sobre el endpoint de
+> opciones del juego; demos: bloque `faq` del motor y `featured-house` del
+> playground). **Doc completado.**
 
 ## Qué hace
 

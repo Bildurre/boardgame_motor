@@ -383,7 +383,12 @@
     "align": "Alignment",
     "width": "Content width",
     "background": "Background color",
-    "numbered": "Numbered"
+    "numbered": "Numbered",
+    "items": "Questions",
+    "question": "Question",
+    "answer": "Answer",
+    "house_id": "House",
+    "show_schemes": "Show its schemes"
   },
   "blockOptions": {
     "align": {
@@ -526,5 +531,8 @@
       "deleted": "User deleted.",
       "saveError": "Could not save."
     }
+  },
+  "blockEditor": {
+    "addRow": "Add"
   }
 }

@@ -383,7 +383,12 @@
     "align": "Lerrokatzea",
     "width": "Edukiaren zabalera",
     "background": "Atzeko kolorea",
-    "numbered": "Zenbakituta"
+    "numbered": "Zenbakituta",
+    "items": "Galderak",
+    "question": "Galdera",
+    "answer": "Erantzuna",
+    "house_id": "Etxea",
+    "show_schemes": "Erakutsi bere amarruak"
   },
   "blockOptions": {
     "align": {
@@ -526,5 +531,8 @@
       "deleted": "Erabiltzailea ezabatuta.",
       "saveError": "Ezin izan da gorde."
     }
+  },
+  "blockEditor": {
+    "addRow": "Gehitu"
   }
 }
