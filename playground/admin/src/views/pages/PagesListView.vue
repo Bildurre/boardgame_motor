@@ -172,11 +172,11 @@ onMounted(load)
         </button>
         <span class="pages-view__slug">/{{ page.slug.es ?? '' }}</span>
         <span class="pages-view__chips">
-          <span v-if="page.is_home" class="locale-chip is-ok">{{ t('pages.homeChip') }}</span>
-          <span :class="['locale-chip', page.is_published ? 'is-ok' : 'is-missing']">
+          <span v-if="page.is_home" class="chip is-ok">{{ t('pages.homeChip') }}</span>
+          <span :class="['chip', page.is_published ? 'is-ok' : 'is-missing']">
             {{ page.is_published ? t('pages.published') : t('pages.draft') }}
           </span>
-          <span class="locale-chip">{{ page.blocks_count ?? 0 }} ▤</span>
+          <span class="chip">{{ page.blocks_count ?? 0 }} ▤</span>
         </span>
         <span class="pages-view__buttons">
           <button type="button" class="card-enter" @click="open(page)">

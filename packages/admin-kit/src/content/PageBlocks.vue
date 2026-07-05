@@ -344,8 +344,8 @@ defineExpose({ reload: load })
         <span class="page-blocks__type">{{ typeName(block.type) }}</span>
         <span class="page-blocks__summary">{{ summary(block) }}</span>
         <span class="page-blocks__flags">
-          <span v-if="block.is_printable" class="locale-chip is-ok">PDF</span>
-          <span v-if="block.is_indexable" class="locale-chip">IDX</span>
+          <span v-if="block.is_printable" class="chip is-ok">PDF</span>
+          <span v-if="block.is_indexable" class="chip">IDX</span>
         </span>
       </article>
     </VueDraggable>

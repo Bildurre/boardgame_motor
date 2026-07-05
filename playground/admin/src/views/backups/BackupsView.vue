@@ -228,7 +228,7 @@ onMounted(load)
         <strong class="backups-view__name">{{ backup.file }}</strong>
         <span class="backups-view__date">{{ formatDate(backup.date) }}</span>
         <span class="pages-view__chips">
-          <span class="locale-chip">{{ formatSize(backup.size) }}</span>
+          <span class="chip">{{ formatSize(backup.size) }}</span>
         </span>
       </article>
     </div>

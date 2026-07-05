@@ -73,7 +73,14 @@ function toggleSidebar() {
 </script>
 
 <template>
-  <div class="app-layout" :class="{ 'sidebar-collapsed': sidebarCollapsed, 'is-mobile': isMobile }">
+  <div
+    class="app-layout"
+    :class="{
+      'sidebar-collapsed': sidebarCollapsed,
+      'is-mobile': isMobile,
+      'left-drawer-open': isMobile && sidebarMobileOpen,
+    }"
+  >
     <div
       v-if="isMobile && sidebarMobileOpen"
       class="sidebar-overlay"

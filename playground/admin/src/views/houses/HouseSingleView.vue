@@ -126,7 +126,7 @@ onBeforeUnmount(() => {
           </div>
         </template>
         <template #badges>
-          <span class="chip chip--cost">{{ t('schemes.fields.cost') }}: {{ s.cost }}</span>
+          <span class="chip">{{ t('schemes.fields.cost') }}: {{ s.cost }}</span>
         </template>
       </EntityCard>
     </BaseGrid>

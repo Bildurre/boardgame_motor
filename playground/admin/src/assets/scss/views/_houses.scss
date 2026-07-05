@@ -28,17 +28,3 @@
   vertical-align: middle;
   border: 1px solid $border;
 }
-
-// Chip de estado (badge). Nunca muted: sin color explícito, va en el ACENTO.
-.chip {
-  display: inline-block;
-  padding: 1px 8px;
-  border-radius: $radius-pill;
-  font-size: 0.9em; // ~1pt menos que el texto base
-  background: $surface-2;
-  border: 1px solid color-mix(in srgb, $accent-500 40%, transparent);
-  color: $accent-500;
-
-  &--pub { color: $success; border-color: color-mix(in srgb, $success 40%, transparent); }
-  &--trashed { color: $danger; border-color: color-mix(in srgb, $danger 40%, transparent); }
-}

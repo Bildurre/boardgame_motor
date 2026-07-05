@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue'
-import { Check, Plus } from '@lucide/vue'
+import { Check, FilePlus } from '@lucide/vue'
 import { useI18n } from 'vue-i18n'
 import { useCollectionStore } from '@/stores/collection'
 
@@ -37,7 +37,8 @@ async function add() {
     @click.prevent.stop="add"
   >
     <Check v-if="added" :size="16" />
-    <Plus v-else :size="16" />
+    <!-- "pdf-add": añadir el elemento a tu PDF personalizado -->
+    <FilePlus v-else :size="16" />
     <span v-if="label">{{ added ? t('collection.inCollection') : t('collection.add') }}</span>
   </button>
 </template>

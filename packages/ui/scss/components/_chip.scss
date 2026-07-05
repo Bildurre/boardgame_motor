@@ -1,0 +1,22 @@
+@use "tokens" as *;
+
+// El chip ÚNICO del motor (etiquetas de estado, idioma, contadores…), para
+// app y admin. Píldora con contorno, NUNCA gris: sin estado explícito va en
+// el color de ACENTO; los estados lo tiñen. Tamaño fijo $fs-12.
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  padding: 1px $space-2;
+  border-radius: $radius-pill;
+  font-size: $fs-12;
+  font-weight: 600;
+  white-space: nowrap;
+  border: 1px solid color-mix(in srgb, $accent-500 45%, transparent);
+  color: $accent-500;
+
+  &.is-ok { color: $success; border-color: color-mix(in srgb, $success 45%, transparent); }
+  &.is-info { color: $info; border-color: color-mix(in srgb, $info 45%, transparent); }
+  &.is-missing { color: $warning; border-color: color-mix(in srgb, $warning 45%, transparent); }
+  &.is-failed { color: $danger; border-color: color-mix(in srgb, $danger 45%, transparent); }
+}

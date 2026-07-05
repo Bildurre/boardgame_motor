@@ -136,8 +136,8 @@ onMounted(load)
       >
         <template #meta>
           <span class="users-view__email">{{ user.email }}</span>
-          <span class="locale-chip" :class="roleChipClass(user)">{{ roleLabel(user) }}</span>
-          <span v-if="!user.email_verified" class="locale-chip is-missing">
+          <span class="chip" :class="roleChipClass(user)">{{ roleLabel(user) }}</span>
+          <span v-if="!user.email_verified" class="chip is-missing">
             {{ t('users.unverified') }}
           </span>
         </template>

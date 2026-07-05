@@ -85,14 +85,14 @@ onMounted(init)
         </template>
 
         <template #badges>
-          <span v-if="item.deleted_at" class="chip chip--trashed">{{
+          <span v-if="item.deleted_at" class="chip is-failed">{{
             t('characters.state.trashed')
           }}</span>
-          <span v-else-if="item.is_published" class="chip chip--pub">{{
+          <span v-else-if="item.is_published" class="chip is-ok">{{
             t('characters.state.published')
           }}</span>
           <span v-else class="chip">{{ t('characters.state.draft') }}</span>
-          <span class="chip chip--cost">{{ t('characters.fields.cost') }}: {{ item.cost }}</span>
+          <span class="chip">{{ t('characters.fields.cost') }}: {{ item.cost }}</span>
         </template>
 
         <template #meta>

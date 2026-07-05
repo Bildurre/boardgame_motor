@@ -130,7 +130,7 @@ function formatSize(bytes: number | null): string {
         <li v-for="item in group.items" :key="item.id" class="downloads__item">
           <span class="downloads__name">{{ item.filename }}</span>
           <span class="downloads__meta">
-            <span class="downloads__chip">{{ item.locale.toUpperCase() }}</span>
+            <span class="chip">{{ item.locale.toUpperCase() }}</span>
             <span v-if="item.size" class="downloads__size">{{ formatSize(item.size) }}</span>
           </span>
           <a class="downloads__link" :href="item.url" :title="t('collection.download')">

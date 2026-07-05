@@ -38,13 +38,6 @@
   &:hover { background: color-mix(in srgb, $accent-500 12%, transparent); }
 }
 
-// Chip de coste.
-.chip--cost {
-  background: $accent-100;
-  color: $accent-600;
-  border-color: color-mix(in srgb, $accent-500 35%, transparent);
-}
-
 // Línea de estadísticas en la meta de las tarjetas de personaje.
 .stat-line {
   display: flex;

@@ -38,7 +38,7 @@ function onClick(event: MouseEvent) {
   >
     <div class="manager-card__head">
       <span class="manager-card__title">{{ title }}</span>
-      <span v-if="chip" class="manager-card__chip">{{ chip }}</span>
+      <span v-if="chip" class="chip manager-card__chip">{{ chip }}</span>
       <PanelRight :size="16" class="manager-card__hint" />
     </div>
 

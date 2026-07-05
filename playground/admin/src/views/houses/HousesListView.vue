@@ -83,10 +83,8 @@ onMounted(init)
         </template>
 
         <template #badges>
-          <span v-if="item.deleted_at" class="chip chip--trashed">{{
-            t('houses.state.trashed')
-          }}</span>
-          <span v-else-if="item.is_published" class="chip chip--pub">{{
+          <span v-if="item.deleted_at" class="chip is-failed">{{ t('houses.state.trashed') }}</span>
+          <span v-else-if="item.is_published" class="chip is-ok">{{
             t('houses.state.published')
           }}</span>
           <span v-else class="chip">{{ t('houses.state.draft') }}</span>

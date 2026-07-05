@@ -309,7 +309,7 @@ defineExpose({ refreshAll })
           <span
             v-for="(count, locale) in type.locales"
             :key="locale"
-            :class="['locale-chip', count === type.total ? 'is-ok' : 'is-missing']"
+            :class="['chip', count === type.total ? 'is-ok' : 'is-missing']"
             >{{ String(locale).toUpperCase() }} {{ count }}/{{ type.total }}</span
           >
         </template>

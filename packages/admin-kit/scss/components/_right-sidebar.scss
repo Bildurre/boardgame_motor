@@ -5,6 +5,16 @@
 // por AdminLayout. El comportamiento móvil usa la clase `is-mobile` que el
 // layout pone en su raíz.
 
+// En estrecho, con el drawer IZQUIERDO abierto, la barra derecha (panel,
+// asa y overlay) se esconde: nunca conviven los dos laterales superpuestos.
+.app-layout.left-drawer-open {
+  .right-sidebar,
+  .right-sidebar-handle,
+  .right-sidebar-overlay {
+    display: none;
+  }
+}
+
 .right-sidebar {
   width: 320px;
   flex-shrink: 0;

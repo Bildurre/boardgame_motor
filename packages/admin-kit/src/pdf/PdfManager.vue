@@ -313,7 +313,7 @@ defineExpose({ refreshAll })
           <span
             v-for="(ready, locale) in exp.stats.locales"
             :key="locale"
-            :class="['locale-chip', ready === exp.stats.total ? 'is-ok' : 'is-missing']"
+            :class="['chip', ready === exp.stats.total ? 'is-ok' : 'is-missing']"
             >{{ String(locale).toUpperCase() }} {{ ready }}/{{ exp.stats.total }}</span
           >
         </template>
@@ -373,7 +373,7 @@ defineExpose({ refreshAll })
             <div v-for="pdf in panelRows" :key="pdf.id" class="pdf-entry">
               <div class="pdf-entry__head">
                 <span class="pdf-entry__locale">{{ pdf.locale.toUpperCase() }}</span>
-                <span :class="['locale-chip', statusClass(pdf)]">{{ statusLabel(pdf) }}</span>
+                <span :class="['chip', statusClass(pdf)]">{{ statusLabel(pdf) }}</span>
                 <span class="pdf-entry__buttons">
                   <a
                     v-if="pdf.url"
