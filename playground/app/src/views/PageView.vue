@@ -42,6 +42,9 @@ const slug = computed(() => String(route.params.slug ?? ''))
 async function load() {
   failed.value = false
   try {
+    // La config del sitio entra en el head (documentTitle): esperarla evita
+    // títulos sin el sufijo del sitio en el prerender.
+    await site.load()
     const { data } = await api.get(`/pages/${slug.value}`)
     page.value = data.data
 

@@ -39,6 +39,7 @@ async function load() {
   failed.value = false
 
   try {
+    await site.load() // el head usa documentTitle: sin carreras en el prerender
     const { data } = await api.get(`${current.endpoint}/${slug.value}`)
     item.value = data.data
   } catch {

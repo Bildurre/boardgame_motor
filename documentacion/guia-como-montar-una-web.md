@@ -869,9 +869,13 @@ Sitemap::add(fn () => self::sitemapEntries(
 
 **Prerender (DC-18).** `npm run build && npm run prerender` (con la API
 levantada): el script recorre el sitemap con Chromium y escribe
-`dist/<ruta>/index.html` con el HTML ya renderizado (head incluido). El
-hosting estático debe servir esos ficheros antes del fallback a
-`index.html`. Env: `VITE_API_URL` y `MOTOR_CHROME_PATH`.
+`dist/<ruta>/index.html` con el HTML ya renderizado (head incluido), y
+remata `dist/robots.txt` con la línea `Sitemap:` absoluta (el
+`public/robots.txt` base permite todo menos `/_render/`). El hosting
+estático debe servir esos ficheros antes del fallback a `index.html`. Env:
+`VITE_API_URL` y `MOTOR_CHROME_PATH`. Las vistas esperan `site.load()`
+antes de fijar el head: los títulos prerenderizados llevan siempre el
+sufijo del sitio.
 
 > Ojo: los slugs de páginas del CRM no deben chocar con los segmentos de los
 > listados (p. ej. una página con slug EU `etxeak` taparía el listado de

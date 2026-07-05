@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { onMounted, ref, watch } from 'vue'
 import { LogIn, User } from '@lucide/vue'
+import { useI18n } from 'vue-i18n'
 import { MotorBadge, BaseButton, PageBackground, useHead } from '@bgm/ui'
 import { api } from '@/lib/api'
 import { blockRegistry } from '@/blocks/registry'
@@ -23,12 +24,14 @@ interface HomePage {
   }[]
 }
 
+const { t } = useI18n()
 const locales = useLocalesStore()
 const site = useSiteStore()
 const homePage = ref<HomePage | null>(null)
 
 async function loadHome() {
   try {
+    await site.load() // el head usa documentTitle: sin carreras en el prerender
     const { data } = await api.get('/pages/home')
     homePage.value = data.data
   } catch {
@@ -114,13 +117,13 @@ onMounted(async () => {
       :to="{ name: 'login', params: { locale: locales.current } }"
       ><BaseButton>
         <template #icon><LogIn :size="16" /></template>
-        Entrar
+        {{ t('nav.login') }}
       </BaseButton></RouterLink
     >
     <RouterLink v-else :to="{ name: 'account', params: { locale: locales.current } }"
       ><BaseButton>
         <template #icon><User :size="16" /></template>
-        Ir a mi cuenta
+        {{ t('nav.account') }}
       </BaseButton></RouterLink
     >
   </main>

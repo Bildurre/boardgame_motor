@@ -9,7 +9,7 @@
 //       MOTOR_CHROME_PATH (binario de Chromium para puppeteer-core)
 
 import { spawn } from 'node:child_process'
-import { mkdir, writeFile } from 'node:fs/promises'
+import { appendFile, mkdir, writeFile } from 'node:fs/promises'
 import { dirname, join } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import puppeteer from 'puppeteer-core'
@@ -78,6 +78,9 @@ try {
     server.kill()
   }
 }
+
+// robots.txt: la URL absoluta del sitemap (SEO, doc 10).
+await appendFile(join(root, 'dist', 'robots.txt'), `\nSitemap: ${apiUrl}/sitemap.xml\n`)
 
 console.log(failed ? `prerender: ${failed} rutas fallidas` : 'prerender: todo generado')
 process.exit(failed ? 1 : 0)
