@@ -207,8 +207,11 @@ los componentes del motor (`@bgm/ui`, `@bgm/admin-kit`) no llevan i18n: exponen 
 textos como props y la app los traduce.
 **Por qué:** SEO y UX multilingües reales; el motor se mantiene agnóstico de idioma y
 reutilizable. Ver `documentacion/guia-de-componentes.md` (sección i18n).
-**Pendiente:** al cambiar de idioma estando en un detalle, el `:slug` se conserva (la
-URL resuelve igual); localizar también el slug en caliente queda como mejora (DC-11).
+**Resuelto (DC-11):** al cambiar de idioma estando en un detalle, el `:slug` también
+se localiza en caliente: el single registra el mapa de slugs de la entidad cargada
+(`setActiveSlugMap`, en `router/index.ts` del admin) y `onLocaleChange` redirige con
+el slug del idioma nuevo (si no hay mapa, se conserva el slug: resuelve igual). En la
+web pública ya lo hacía la redirección a la canónica (DC-12).
 
 ### DC-30 · Index de entidades: grid de tarjetas, nunca tablas
 **Decisión:** las vistas de listado (index) **no usan tablas**: siempre **grid de
@@ -244,6 +247,21 @@ suben imágenes arbitrarias en el texto: solo iconos del set preparado.
 **Por qué:** contenido de juego consistente (mismos símbolos reutilizables) y
 gestionable por cada juego sin tocar el motor. La primera feature del motor con
 modelo + migración propios (no en el playground), por ser building block común.
+
+### DC-33 · Distribución: monorepo etiquetado + versión de tren
+**Decisión:** el motor se distribuye como **monorepo etiquetado** (`vX.Y.Z`):
+`bgm/core`, `@bgm/ui` y `@bgm/admin-kit` comparten versión (de tren) y
+CHANGELOG por paquete. El juego **clona o añade como submódulo** el motor
+fijado al tag y consume: `bgm/core` por Composer con repositorio `path` y
+versión exigida; `@bgm/ui` / `@bgm/admin-kit` por npm `file:` como **paquetes
+fuente** (los compila el Vite del juego, que aporta `sass-embedded` y
+`@vitejs/plugin-vue`, con `loadPaths` de SCSS al paquete). Actualizar =
+mover el tag + `composer update bgm/core` + `npm install`. Prueba de consumo
+reproducible en `tools/consumo-externo/probar-consumo.sh`; guía en
+`guia-arrancar-un-juego-nuevo.md`.
+**Por qué:** cero infraestructura (sin registry) manteniendo instalación por
+versión y actualización deliberada; un registry privado (Satis/Verdaccio)
+puede sustituir el clon después cambiando solo `repositories`/especificadores.
 
 ### DC-26 · Mobile-first + 4 tiers responsivos
 **Decisión:** CSS **mobile-first** (base móvil, `@media (min-width: …)` para ampliar).
@@ -305,3 +323,4 @@ incluido), con **`es`** por defecto. Configurable por juego en `config/motor.php
 | DC-24 | Migraciones | `datetimes()`/`softDeletesDatetime()` (no TIMESTAMP, año 2038); código en inglés |
 | DC-25 | Iconos | Lucide (`lucide-vue-next`), siempre, en admin y app |
 | DC-26 | Mobile-first | CSS mobile-first + breakpoints en tokens; sidebar admin = drawer/hamburguesa |
+| DC-33 | Distribución | monorepo etiquetado, versión de tren; composer path + npm file: al tag |

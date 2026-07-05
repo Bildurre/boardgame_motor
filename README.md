@@ -6,9 +6,11 @@ PDF/PNG, CRM de páginas y bloques, i18n, auth y backup reutilizables. Cada jueg
 consume el motor y programa solo sus entidades.
 
 > Diseño y decisiones en [`documentacion/`](documentacion/README.md).
-> **Estado: Fases 0–4 completadas** (andamiaje · auth con verificación de
-> email · traits/media/i18n · render a PNG · generación de PDF). Plan en
-> [`documentacion/02-plan-de-accion.md`](documentacion/02-plan-de-accion.md).
+> **Estado: Fases 0–7 completadas** (andamiaje · auth · traits/media/i18n ·
+> PNG · PDF · CRM de páginas y bloques · configuración/usuarios · backup +
+> web pública + panel de usuario · publicación **v0.1.0** con CI). Plan en
+> [`documentacion/02-plan-de-accion.md`](documentacion/02-plan-de-accion.md);
+> cambios en [`CHANGELOG.md`](CHANGELOG.md).
 
 ## Estructura
 
@@ -29,9 +31,14 @@ boardgame_motor/                 # monorepo donde se desarrolla el motor
 ```
 
 Durante el desarrollo, el `playground` consume los paquetes por **enlace local**
-(Composer `path` repository + npm workspaces). La publicación versionada (npm a
-GitHub Packages + subtree-split del paquete Composer) llega en la Fase 7. Ver
-`documentacion/03-decisiones-cerradas.md` (DC-02).
+(Composer `path` repository + npm workspaces). La distribución versionada (DC-33)
+es el **monorepo etiquetado** (`vX.Y.Z`, versión de tren para los tres paquetes):
+un juego externo clona/submodula el motor al tag y consume `bgm/core` por
+Composer (`path`) y `@bgm/ui`/`@bgm/admin-kit` por npm (`file:`). Guía:
+[`documentacion/guia-arrancar-un-juego-nuevo.md`](documentacion/guia-arrancar-un-juego-nuevo.md);
+prueba de consumo externa: `tools/consumo-externo/probar-consumo.sh`. CI en
+GitHub Actions (`.github/workflows/ci.yml`): ESLint + vue-tsc + build y
+Pint + Pest en cada push/PR.
 
 ## Requisitos
 

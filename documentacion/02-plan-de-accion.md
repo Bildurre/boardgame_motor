@@ -120,13 +120,13 @@
 - [x] Panel de usuario extensible (doc 10): `AccountLayout` con menú lateral y una child route por sección registrada en `src/account/registry.ts` — el motor aporta Mis datos y Contraseña (doc 05) y el juego cuelga las suyas; el playground engancha **"Para imprimir"** (colección PDF temporal del doc 02: añadir cartas, copias, generar y descargar). Vistas de auth/cuenta traducidas (vue-i18n).
 - **Hito:** ✅ backup descargable desde admin; web pública navegable con locale/SEO/sitemap/prerender; el playground rellena un "slot" del panel de usuario (Para imprimir) — PDF generado y descargado de punta a punta.
 
-### Fase 7 — Publicación de paquetes y endurecido
+### Fase 7 — Publicación de paquetes y endurecido ✅
 **Meta:** dejar el motor consumible por versión y documentado.
 
-- [ ] Distribución (Git + tags / registry privado) y prueba de consumo desde un repo externo.
-- [ ] Versionado, CHANGELOGs, guía de "cómo arrancar un juego nuevo".
-- [ ] Cobertura de tests y CI.
-- **Hito:** crear un repo de juego nuevo que instale el motor por versión y tenga admin + público funcionando en < 1 día.
+- [x] Distribución (DC-33): monorepo etiquetado (`vX.Y.Z`, versión de tren para los 3 paquetes), consumo por clon/submódulo al tag — Composer con repositorio `path` (`bgm/core` por versión) y npm con `file:` (paquetes fuente compilados por el Vite del juego). **Prueba de consumo desde un repo externo**: `tools/consumo-externo/probar-consumo.sh` (composer install real + vite build de una app externa con @bgm/ui y @bgm/admin-kit).
+- [x] Versionado **0.1.0** en los 4 manifiestos, `CHANGELOG.md` en raíz + por paquete (Keep a Changelog), y guía nueva `guia-arrancar-un-juego-nuevo.md` (esqueleto, backend, frontends, checklist del primer día, cómo etiquetar).
+- [x] CI en GitHub Actions (`.github/workflows/ci.yml`): job frontend (npm ci + eslint + vue-tsc + build app/admin) y job backend (PHP 8.4 + Pint api/core + Pest con SQLite en memoria); corre en push a main, tags `v*` y PRs. La suite Pest (111 tests) cubre auth/roles, entidades, previews, PDF (catálogo + colección usuario/invitado), CRM, settings, backups y web pública.
+- **Hito:** ✅ el consumo por versión desde un proyecto externo está probado con script reproducible; con el playground de plantilla y la guía nueva, un juego nuevo arranca en < 1 día.
 
 ### Fase 8 (posterior) — Migración de choque
 Fuera del alcance inicial. Cuando el motor esté terminado, choque pasa a ser el

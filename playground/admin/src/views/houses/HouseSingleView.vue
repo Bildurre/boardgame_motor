@@ -2,6 +2,7 @@
 import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRoute, useRouter } from 'vue-router'
+import { setActiveSlugMap } from '@/router'
 import { ArrowLeft, SquarePen } from '@lucide/vue'
 import { useResource, BaseGrid, EntityCard, EmptyState } from '@bgm/admin-kit'
 import { BaseButton } from '@bgm/ui'
@@ -35,6 +36,7 @@ async function load() {
   loading.value = true
   try {
     item.value = await find(slug.value)
+    setActiveSlugMap(item.value?.slug ?? null) // DC-11: slug localizado al cambiar idioma
   } catch {
     item.value = null
   } finally {
@@ -63,7 +65,10 @@ watch(
   },
   { immediate: true },
 )
-onBeforeUnmount(crumb.clear)
+onBeforeUnmount(() => {
+  crumb.clear()
+  setActiveSlugMap(null)
+})
 </script>
 
 <!-- eslint-disable vue/no-v-html -- HTML del WYSIWYG propio (sanitización en servidor: DC-09) -->

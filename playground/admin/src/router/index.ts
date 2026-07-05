@@ -12,6 +12,15 @@ const router = createRouter({
   routes: createLocalizedRoutes(currentLocale()),
 })
 
+// Mapa de slugs por locale de la entidad abierta en un single (DC-11): la
+// vista lo registra al cargar y lo limpia al salir, y el cambio de idioma
+// redirige también el :slug (no solo los segmentos de la ruta).
+let activeSlugMap: Record<string, string> | null = null
+
+export function setActiveSlugMap(map: Record<string, string> | null) {
+  activeSlugMap = map
+}
+
 /**
  * Al cambiar de idioma: reconstruye las rutas con los segmentos traducidos y
  * redirige a la misma ruta (por nombre) para que la URL pase al nuevo idioma.
@@ -25,7 +34,9 @@ export function onLocaleChange(newLocale: string) {
   for (const route of createLocalizedRoutes(newLocale)) router.addRoute(route)
 
   if (from.name) {
-    router.replace({ name: from.name, params: from.params, query: from.query })
+    const params = { ...from.params }
+    if (params.slug && activeSlugMap?.[newLocale]) params.slug = activeSlugMap[newLocale]
+    router.replace({ name: from.name, params, query: from.query })
   }
 }
 
