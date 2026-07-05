@@ -19,8 +19,8 @@ defineProps<{ settings: Record<string, unknown>; data?: Record<string, unknown> 
           <div v-if="settings.body" class="block__text rich-content" v-html="settings.body" />
           <a
             v-if="settings.button_text && settings.button_url"
-            class="bgm-button"
-            :class="`bgm-button--${settings.button_variant || 'primary'}`"
+            class="block-button"
+            :class="`block-button--${settings.button_variant || 'primary'}`"
             :href="String(settings.button_url)"
           >
             {{ settings.button_text }}

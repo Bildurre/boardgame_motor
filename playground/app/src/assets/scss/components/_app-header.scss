@@ -125,20 +125,21 @@ $header-row2: 46px;
   }
 
   // Entrar / usuario (patrón kontuan: avatar + nombre; logout al lado).
+  // Entrar tipo botón-texto: sin fondo, sin borde ni padding.
   &__login {
     display: inline-flex;
     align-items: center;
     gap: $space-2;
-    padding: $space-2 $space-4;
-    background: $accent-500;
-    color: #fff;
-    border-radius: $radius-md;
+    padding: 0;
+    background: none;
+    border: none;
+    color: $accent-500;
     font-weight: 600;
     font-size: $fs-14;
     text-decoration: none;
-    transition: background-color 0.15s ease;
+    transition: color 0.15s ease;
 
-    &:hover { background: color-mix(in srgb, $accent-500 72%, black); }
+    &:hover { color: $accent-400; }
   }
 
   &__user {
@@ -235,19 +236,19 @@ $header-row2: 46px;
     cursor: pointer;
     transition: background-color 0.15s ease, color 0.15s ease;
 
-    &:hover {
-      background: color-mix(in srgb, $accent-500 10%, transparent);
-      color: $text-1;
-    }
+    // En la barra ancha el hover solo colorea el texto (la píldora con
+    // fondo queda para la barra lateral).
+    &:hover { color: $accent-500; }
 
     &.router-link-active {
-      background: color-mix(in srgb, $accent-500 16%, transparent);
       color: $accent-500;
       font-weight: 600;
     }
 
     &--downloads {
       color: $accent-500;
+
+      &:hover { color: $accent-400; }
     }
   }
 }
@@ -300,12 +301,30 @@ $header-row2: 46px;
       display: flex;
       width: 100%;
       padding: $space-2 $space-3;
+
+      // Aquí sí: píldora con fondo al pasar y en activo.
+      &:hover {
+        background: color-mix(in srgb, $accent-500 10%, transparent);
+        color: $text-1;
+      }
+
+      &.router-link-active {
+        background: color-mix(in srgb, $accent-500 16%, transparent);
+        color: $accent-500;
+      }
     }
 
     .site-header__collection-count {
       position: static;
       margin-left: auto;
     }
+  }
+
+  // El desplegable del idioma se ancla a la IZQUIERDA del trigger: anclado
+  // a la derecha se salía de la pantalla.
+  .locale-dropdown {
+    left: 0;
+    right: auto;
   }
 
   &__user {
@@ -317,7 +336,7 @@ $header-row2: 46px;
     padding: $space-2;
 
     .site-header__user { flex: 1; }
-    .site-header__login { width: 100%; justify-content: center; }
+    .site-header__login { padding: $space-2; }
   }
 }
 

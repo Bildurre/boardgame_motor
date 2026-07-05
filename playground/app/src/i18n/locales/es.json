@@ -16,7 +16,17 @@
   },
   "detail": {
     "back": "Volver",
-    "schemes": "Argucias de la casa"
+    "schemes": "Argucias de la casa",
+    "info": "Ficha",
+    "color": "Color",
+    "stats": {
+      "cost": "Coste",
+      "power": "Poder",
+      "prestige": "Prestigio",
+      "intrigue": "Intriga",
+      "money": "Dinero",
+      "defense": "Defensa"
+    }
   },
   "page": {
     "notFound": "Esta página no existe (o ya no está publicada)."

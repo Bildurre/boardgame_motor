@@ -608,6 +608,11 @@ Magic (`SchemesExport` usa `card`) mientras los personajes se imprimen al doble
 - API: `GET /api/admin/pdfs/exports` (catálogo), `GET/POST /api/admin/pdfs[...]`
   (gestión), `GET /api/pdfs/{id}/download` (permanentes públicos; temporales
   solo dueño/admin).
+- **Nombre del archivo**: siempre por el **nombre de la entidad**, nunca por
+  su id — `slug(nombre)-locale.pdf` (usa `previewLabel()` si el modelo lo
+  tiene; si no, `name`/`title` traducidos). La unicidad la garantiza el
+  sufijo aleatorio de la ruta de almacenamiento. Los de colección van como
+  `collection-slug(nombre del dueño|invitado)-locale.pdf`.
 
 ### 6.5 Colección temporal del usuario
 
@@ -634,6 +639,11 @@ La UI pública de esta colección llega con el andamiaje de la web (Fase 6).
 | Cita | `quote` | `quote`* (richtext, trad.), `author` (texto, trad.), `image` (retrato del autor) |
 | Índice automático | `index` | `title` (texto, trad.), `numbered` (boolean) — enlaza a los bloques posteriores indexables |
 | Llamada a la acción | `cta` | `title`, `body` (richtext), `button_text`*, `button_url`* (trad.), `button_variant` (select: primary/secondary), `image`, `image_position` |
+
+El botón del CTA usa `.block-button` (`@bgm/ui`), con dos variantes de
+**hover cruzado**: `primary` ("Normal") = fondo de acento y texto del color
+del texto, que en hover pasa a fondo del color de fondo con texto de acento;
+`secondary` ("Inverso") = exactamente al revés. Ambas llevan borde de acento.
 
 (*) obligatorio en el locale por defecto. Todas las `image` son
 **multilingües** (`->translatable()`: una URL por locale, con fallback al
@@ -868,6 +878,17 @@ sección declara: `endpoint` público, `paths` por locale (segmento de URL),
 `titleKey` (i18n) y los componentes `item` (tarjeta del índice) y `detail`
 (cuerpo del detalle), ambos con props `{ item, locale }`. Las vistas
 genéricas `EntityIndexView`/`EntityDetailView` hacen fetch, canónica y SEO.
+
+**Single estándar (plantilla CDL).** `EntityDetailView` pone la imagen de la
+entidad de **fondo de página** (`PageBackground`), un **banner** tintado a lo
+ancho (enlace Volver, `h1` con el nombre, subtítulo = descripción sin HTML
+recortada, y el botón "Añadir a tu PDF" si la sección es coleccionable) y
+debajo monta el componente `detail` de la sección. Ese componente solo pinta
+la **ficha**: `.entity-single__layout` (preview | panel con `.entity-single__info`
+— filas `dt/dd` — y la descripción rich). Si no hay preview (entidad sin
+imagen), el panel ocupa todo el ancho. Ver `CharacterDetail.vue` (carta +
+estadísticas) y `HouseDetail.vue` (escudo + color + rejilla de argucias con
+su botón de añadir).
 El backend expone los endpoints públicos (solo publicados, slug resoluble en
 cualquier locale, payload con el mapa `slug` por locale — mismo shape que los
 bloques con-datos, p. ej. `renderData($locale) + slugs`).

@@ -16,7 +16,17 @@
   },
   "detail": {
     "back": "Back",
-    "schemes": "House schemes"
+    "schemes": "House schemes",
+    "info": "Details",
+    "color": "Color",
+    "stats": {
+      "cost": "Cost",
+      "power": "Power",
+      "prestige": "Prestige",
+      "intrigue": "Intrigue",
+      "money": "Money",
+      "defense": "Defense"
+    }
   },
   "page": {
     "notFound": "This page does not exist (or is no longer published)."

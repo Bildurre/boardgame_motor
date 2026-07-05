@@ -170,3 +170,40 @@
   padding: 0 $space-4 $space-3;
   color: $text-2;
 }
+
+
+// Botón de los bloques (CTA, doc 03): dos tipos con hover CRUZADO.
+// Normal: fondo de acento + texto del color del texto; al pasar, fondo del
+// color de fondo + texto de acento. Inverso: exactamente al revés.
+.block-button {
+  display: inline-flex;
+  align-items: center;
+  gap: $space-2;
+  padding: $space-2 $space-5;
+  border: 1px solid $accent-500;
+  border-radius: $radius-md;
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+
+  &--primary {
+    background: $accent-500;
+    color: $text-1;
+
+    &:hover {
+      background: $bg;
+      color: $accent-500;
+    }
+  }
+
+  &--secondary {
+    background: $bg;
+    color: $accent-500;
+
+    &:hover {
+      background: $accent-500;
+      color: $text-1;
+    }
+  }
+}

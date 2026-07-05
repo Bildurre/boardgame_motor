@@ -3,19 +3,23 @@ import { computed, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { ArrowLeft } from '@lucide/vue'
-import { useHead } from '@bgm/ui'
+import { PageBackground, useHead } from '@bgm/ui'
 import { api } from '@/lib/api'
 import { sectionFor } from '@/entities/registry'
+import AddToCollection from '@/components/AddToCollection.vue'
 import { useLocalesStore } from '@/stores/locales'
 import { useSiteStore } from '@/stores/site'
 
-// Detalle público genérico por slug (doc 10): resuelve la sección por el
-// segmento, pide el detalle (el slug vale en cualquier locale) y redirige a
-// la URL canónica del idioma activo (DC-12). El cuerpo lo pinta el
-// componente de detalle que la sección declara.
+// Single público estándar (doc 10), inspirado en CDL: la imagen de la
+// entidad de fondo de página, un BANNER con el nombre + subtítulo y la
+// acción de añadir a la colección, y debajo la ficha (el componente de
+// detalle de la sección). El slug vale en cualquier locale y se redirige a
+// la canónica (DC-12).
 interface EntityPayload {
   id: number
   name?: Record<string, string>
+  description?: Record<string, string>
+  image?: string | null
   slug: Record<string, string>
   [key: string]: unknown
 }
@@ -32,6 +36,22 @@ const failed = ref(false)
 const segment = computed(() => String(route.params.section ?? ''))
 const slug = computed(() => String(route.params.slug ?? ''))
 const section = computed(() => sectionFor(segment.value))
+
+const name = computed(() => {
+  const map = item.value?.name ?? {}
+  return map[locales.current] || Object.values(map)[0] || ''
+})
+
+/** Subtítulo del banner: la descripción sin HTML, recortada. */
+const subtitle = computed(() => {
+  const map = item.value?.description ?? {}
+  const html = map[locales.current] || Object.values(map)[0] || ''
+  const text = html
+    .replace(/<[^>]*>/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim()
+  return text.length > 180 ? `${text.slice(0, 180)}…` : text
+})
 
 async function load() {
   if (!section.value) return
@@ -58,9 +78,9 @@ async function load() {
   }
 
   const origin = window.location.origin
-  const name = item.value?.name?.[locales.current] || Object.values(item.value?.name ?? {})[0]
   useHead({
-    title: site.documentTitle(name),
+    title: site.documentTitle(name.value),
+    description: subtitle.value || site.description || undefined,
     canonical: `${origin}/${locales.current}/${canonicalSection}/${canonicalSlug}`,
     alternates: Object.fromEntries(
       Object.entries(current.paths)
@@ -74,16 +94,39 @@ watch([segment, slug, () => locales.current], load, { immediate: true })
 </script>
 
 <template>
-  <main v-if="section" class="entity-detail">
-    <p v-if="failed" class="entity-detail__missing">404</p>
+  <div v-if="section" class="entity-single">
+    <p v-if="failed" class="entity-single__missing">{{ t('page.notFound') }}</p>
     <template v-else-if="item">
-      <RouterLink
-        class="entity-detail__back"
-        :to="{ name: 'entity-index', params: { locale: locales.current, section: segment } }"
-      >
-        <ArrowLeft :size="16" /> {{ t('detail.back') }}
-      </RouterLink>
-      <component :is="section.detail" :item="item" :locale="locales.current" />
+      <!-- La imagen de la entidad, de fondo de página (patrón CDL) -->
+      <PageBackground :image="(item.image as string) ?? null" />
+
+      <!-- Banner: volver + nombre + subtítulo, y la acción de añadir -->
+      <header class="entity-single__banner">
+        <div class="entity-single__banner-inner">
+          <div class="entity-single__heading">
+            <RouterLink
+              class="entity-single__back"
+              :to="{ name: 'entity-index', params: { locale: locales.current, section: segment } }"
+            >
+              <ArrowLeft :size="14" /> {{ t('detail.back') }}
+            </RouterLink>
+            <h1 class="entity-single__title">{{ name }}</h1>
+            <p v-if="subtitle" class="entity-single__subtitle">{{ subtitle }}</p>
+          </div>
+          <AddToCollection
+            v-if="section.collectible"
+            :id="item.id"
+            class="entity-single__action"
+            :entity="section.collectible"
+            label
+          />
+        </div>
+      </header>
+
+      <!-- La ficha: el componente de detalle de la sección -->
+      <main class="entity-single__body">
+        <component :is="section.detail" :item="item" :locale="locales.current" />
+      </main>
     </template>
-  </main>
+  </div>
 </template>

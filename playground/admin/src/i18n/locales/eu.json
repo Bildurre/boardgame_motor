@@ -416,8 +416,8 @@
       "clear-right": "Eskuinean (testuak inguratzen du)"
     },
     "button_variant": {
-      "primary": "Nagusia",
-      "secondary": "Bigarren mailakoa"
+      "primary": "Arrunta (azentu-hondoa)",
+      "secondary": "Alderantzizkoa (hondoaren kolorea)"
     }
   },
   "settings": {

@@ -16,7 +16,17 @@
   },
   "detail": {
     "back": "Itzuli",
-    "schemes": "Etxearen amarruak"
+    "schemes": "Etxearen amarruak",
+    "info": "Fitxa",
+    "color": "Kolorea",
+    "stats": {
+      "cost": "Kostua",
+      "power": "Boterea",
+      "prestige": "Ospea",
+      "intrigue": "Azpijokoa",
+      "money": "Dirua",
+      "defense": "Defentsa"
+    }
   },
   "page": {
     "notFound": "Orri hau ez da existitzen (edo ez dago argitaratuta jada)."

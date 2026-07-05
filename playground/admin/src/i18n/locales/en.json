@@ -416,8 +416,8 @@
       "clear-right": "Right (text wraps around)"
     },
     "button_variant": {
-      "primary": "Primary",
-      "secondary": "Secondary"
+      "primary": "Normal (accent background)",
+      "secondary": "Inverse (page background)"
     }
   },
   "settings": {
