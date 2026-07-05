@@ -5,7 +5,8 @@
     "login": "Log in",
     "logout": "Log out",
     "downloads": "Downloads",
-    "menu": "Menu"
+    "menu": "Menu",
+    "admin": "Admin"
   },
   "entities": {
     "characters": "Characters",
@@ -51,7 +52,9 @@
       "submitting": "Creating…",
       "hasAccount": "Already have an account?",
       "login": "Log in",
-      "error": "Could not complete the registration."
+      "error": "Could not complete the registration.",
+      "privacyNote": "Your data (name and email) is used only to manage your account: it is never shared with third parties and you can request its deletion at any time.",
+      "privacyAccept": "I accept the processing of my data to manage my account."
     },
     "forgot": {
       "title": "Recover password",
@@ -110,7 +113,8 @@
       "house-tokens": "House tokens",
       "house-counters": "House counters",
       "pages": "Documents"
-    }
+    },
+    "language": "Language"
   },
   "collection": {
     "title": "Your collection",
@@ -126,5 +130,10 @@
     "error": "Could not update the collection.",
     "add": "Add to your PDF",
     "inCollection": "In your collection"
+  },
+  "consent": {
+    "text": "This site uses no cookies. It only stores functional preferences (language, theme), your session and, if you use it, your PDF collection in your browser. No tracking, no third parties. If you decline, everything still works but nothing is remembered after a reload.",
+    "accept": "Accept",
+    "reject": "Memory only"
   }
 }

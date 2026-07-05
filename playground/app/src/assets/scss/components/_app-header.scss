@@ -216,7 +216,69 @@ $header-row2: 46px;
     height: 100%;
     display: flex;
     align-items: center;
+    justify-content: center; // nav centrada
     gap: $space-2;
+  }
+
+  // Ítem con posible submenú (páginas con hijas, patrón CDL): el desplegable
+  // aparece al hover / focus-within y el chevron se voltea.
+  &__item {
+    position: relative;
+    height: 100%;
+    display: inline-flex;
+    align-items: center;
+
+    &.has-children:hover,
+    &.has-children:focus-within {
+      .site-header__dropdown {
+        visibility: visible;
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      .site-header__chevron { transform: rotateX(180deg); }
+    }
+  }
+
+  &__chevron {
+    transition: transform 0.2s ease;
+  }
+
+  &__dropdown {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    z-index: 10;
+    min-width: 200px;
+    list-style: none;
+    margin: 0;
+    padding: $space-1 0;
+    background: $surface;
+    border: 1px solid $border;
+    border-radius: $radius-md;
+    box-shadow: $shadow-md;
+    visibility: hidden;
+    opacity: 0;
+    transform: translateY(-8px);
+    transition: visibility 0.15s ease, opacity 0.15s ease, transform 0.15s ease;
+  }
+
+  &__dropdown-link {
+    display: block;
+    padding: $space-2 $space-4;
+    color: $text-2;
+    text-decoration: none;
+    font-size: $fs-14;
+
+    &:hover {
+      background: color-mix(in srgb, $accent-500 10%, transparent);
+      color: $accent-500;
+    }
+
+    &.router-link-active {
+      color: $accent-500;
+      font-weight: 600;
+    }
   }
 
   // Ítems de nav estilo kontuan (píldora al hover, activo con acento) y un
@@ -244,12 +306,6 @@ $header-row2: 46px;
       color: $accent-500;
       font-weight: 600;
     }
-
-    &--downloads {
-      color: $accent-500;
-
-      &:hover { color: $accent-400; }
-    }
   }
 }
 
@@ -260,6 +316,13 @@ $header-row2: 46px;
   left: 0;
   width: 300px;
   max-width: 84vw;
+
+  // En el tier más estrecho ocupa TODA la pantalla (patrón kontuan).
+  @media (max-width: #{$bp-sm}) {
+    width: 100%;
+    max-width: 100%;
+  }
+
   height: calc(100vh - #{$header-row1});
   background: $surface;
   border-right: 1px solid $border;
@@ -318,6 +381,17 @@ $header-row2: 46px;
       position: static;
       margin-left: auto;
     }
+  }
+
+  // Hijas de una página: siempre desplegadas, con indentación (CDL móvil).
+  &__children {
+    list-style: none;
+    margin: 0;
+    padding: 0 0 0 $space-5;
+    display: grid;
+    gap: 2px;
+
+    .site-header__link { font-size: $fs-14; }
   }
 
   // El desplegable del idioma se ancla a la IZQUIERDA del trigger: anclado

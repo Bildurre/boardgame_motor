@@ -56,9 +56,8 @@ const locales = useLocalesStore()
       <p v-if="!item" class="manager-panel__empty">{{ empty }}</p>
       <template v-else>
         <p class="manager-panel__kicker">{{ kicker }}</p>
-        <h3 class="manager-detail__title">{{ name }}</h3>
 
-        <!-- Acciones arriba del todo -->
+        <!-- Acciones PRIMERO; después, secciones separadas (patrón panel) -->
         <div class="manager-detail__actions">
           <template v-if="item.deleted_at">
             <BaseButton variant="secondary" @click="$emit('restore')">
@@ -96,9 +95,13 @@ const locales = useLocalesStore()
           </template>
         </div>
 
+        <hr class="manager-panel__divider" />
+
+        <h3 class="manager-detail__title">{{ name }}</h3>
         <slot name="meta" />
 
         <!-- PNG por idioma (solo entidades renderizables) -->
+        <hr v-if="hasPreview" class="manager-panel__divider" />
         <div v-if="hasPreview" class="manager-detail__figures">
           <figure
             v-for="locale in locales.locales"

@@ -39,6 +39,6 @@ class DatabaseSeeder extends Seeder
             $user->syncRoles([$role]);
         }
 
-        $this->call([GameSeeder::class, PagesSeeder::class, SiteSettingsSeeder::class]);
+        $this->call([GameSeeder::class, IconsSeeder::class, PagesSeeder::class, SiteSettingsSeeder::class]);
     }
 }

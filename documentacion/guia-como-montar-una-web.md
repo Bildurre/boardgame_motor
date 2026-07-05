@@ -597,16 +597,24 @@ Magic (`SchemesExport` usa `card`) mientras los personajes se imprimen al doble
   <PdfManager :api="api" :labels="pdfLabels" :type-labels="typeLabels" />
   ```
 
-  Filas por idioma con estado (en cola / listo / error con mensaje) y botones
-  Generar / Regenerar / Descargar / Borrar. **Generar siempre genera todos los
-  idiomas** (el `?locale` que el admin añade a cada petición es el locale de
-  contenido, no un limitador; para limitar, `locale` en el cuerpo). Los errores
-  inesperados se muestran con un mensaje genérico — el detalle queda en los
-  logs del servidor. **Regenerar = un clic**: reutiliza
-  el registro, versiona el fichero y borra el anterior. Añadir un export nuevo
-  al juego = registrarlo + su etiqueta en `typeLabels`; la vista no se toca.
-- API: `GET /api/admin/pdfs/exports` (catálogo), `GET/POST /api/admin/pdfs[...]`
-  (gestión), `GET /api/pdfs/{id}/download` (permanentes públicos; temporales
+  Las tarjetas resumen como las de Imágenes — **total de piezas y listas por
+  idioma** (`stats` del catálogo) — y las acciones "de todas" son las mismas
+  de las previews: **Generar faltantes** (tarjeta y panel; solo los combos
+  entidad×idioma sin PDF o fallidos), **Regenerar todo** y **Borrar todo**
+  (panel, con confirmación). En el panel, filas por idioma con estado (en
+  cola / listo / error con mensaje) y botones Generar / Regenerar /
+  Descargar / Borrar. **Generar siempre genera todos los idiomas** (el
+  `?locale` que el admin añade a cada petición es el locale de contenido, no
+  un limitador; para limitar, `locale` en el cuerpo). Los errores inesperados
+  se muestran con un mensaje genérico — el detalle queda en los logs del
+  servidor. **Regenerar = un clic**: reutiliza el registro, versiona el
+  fichero y borra el anterior. Añadir un export nuevo al juego = registrarlo
+  + su etiqueta en `typeLabels`; la vista no se toca.
+- API: `GET /api/admin/pdfs/exports` (catálogo con `stats`),
+  `GET/POST /api/admin/pdfs[...]` (gestión),
+  `POST /api/admin/pdfs/generate-missing` / `regenerate-all` y
+  `DELETE /api/admin/pdfs?type=x` (acciones "de todas"),
+  `GET /api/pdfs/{id}/download` (permanentes públicos; temporales
   solo dueño/admin).
 - **Nombre del archivo**: siempre por el **nombre de la entidad**, nunca por
   su id — `slug(nombre)-locale.pdf` (usa `previewLabel()` si el modelo lo
@@ -713,6 +721,9 @@ En público: `PageView` pide `/api/pages/{slug}` (slug resuelto en cualquier
 locale, redirige a la canónica DC-12), la nav sale de `/api/pages/nav` y la
 home del CRM manda si existe. El texto rico se sanea en servidor (DC-09) y el
 payload se cachea por (página, locale) con invalidación al editar (DC-10).
+`/api/pages/nav` incluye las **hijas publicadas** de cada página raíz: el nav
+de la app las pinta como **submenú al hover** (chevron, patrón CDL) en
+escritorio y **indentadas** (siempre visibles) en la barra lateral móvil.
 
 ### 6bis.1 Plantillas de página
 
@@ -918,6 +929,35 @@ sufijo del sitio.
 > Ojo: los slugs de páginas del CRM no deben chocar con los segmentos de los
 > listados (p. ej. una página con slug EU `etxeak` taparía el listado de
 > casas): el router da prioridad a las secciones.
+
+**Cabecera pública (dos líneas, patrón kontuan + CDL).** Línea 1: marca a la
+izquierda y, a la derecha, en este orden — enlace a **administración** (icono,
+solo si `can_access_admin`; URL en `VITE_ADMIN_URL`), icono de **Descargas**
+con el contador de la colección, **Entrar** (botón-texto) o chip de usuario,
+selector de **idioma** y **tema**. Línea 2: la nav **centrada** — páginas raíz
+del CRM (las que tienen hijas publicadas llevan chevron y submenú al hover),
+secciones de entidades y Descargas (sin color fijo: hover/activo como el
+resto). En móvil todo (salvo el logo) pasa a la barra lateral off-canvas
+(hijas indentadas; **100 % de ancho** por debajo de `$bp-sm`). El admin tiene
+el enlace inverso, **"Ver la web"**, en su barra superior (`VITE_APP_URL`).
+La página ocupa siempre al menos el alto de la ventana (columna flex): el
+footer queda pegado abajo.
+
+**Privacidad.** La web **no usa cookies**: solo localStorage (idioma, tema,
+sesión, token de la colección). Un **banner de consentimiento** (componente
+`ConsentBanner` + `lib/consent.ts`) bloquea TODA persistencia hasta aceptar:
+sin aceptar (o rechazando) todo funciona igual pero en memoria — se pierde al
+recargar — y al aceptar se persisten las preferencias actuales. El tema pasa
+por `setThemePersistence()` (`@bgm/ui`). En el **registro**, un aviso breve de
+protección de datos con **checkbox obligatorio**: el backend exige
+`privacy` aceptado (`'privacy' => ['accepted']` en el register del motor).
+
+**Correos en el idioma del usuario (DC-14).** El registro guarda el locale
+activo en `users.locale` (y el login lo actualiza); el User implementa
+`HasLocalePreference` (el trait `IsMotorUser` aporta `preferredLocale()`) y
+las notificaciones de Laravel (verificación, reset…) salen traducidas — las
+cadenas es/eu viven en `packages/core/lang/{es,eu}.json`
+(`loadJsonTranslationsFrom`).
 
 ## 6sexies. Panel de usuario extensible (Fase 6)
 

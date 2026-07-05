@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
 import { api } from '@/lib/api'
+import { persist } from '@/lib/consent'
 
 export interface Locale {
   code: string
@@ -39,7 +40,7 @@ export const useLocalesStore = defineStore('locales', () => {
 
   function setCurrent(code: string) {
     current.value = code
-    localStorage.setItem(LOCALE_KEY, code)
+    persist(LOCALE_KEY, code) // solo si el banner de almacenamiento se aceptó
     applyToApi(code)
   }
 

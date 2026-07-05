@@ -7,23 +7,27 @@ import ManagerCard from '../components/ManagerCard.vue'
 import { useRightSidebar } from '../composables/useRightSidebar'
 
 // Gestor de PDF del juego (doc 02), mobile-first. Una tarjeta FIJA por export
-// del catálogo (GET /admin/pdfs/exports): los globales resumen el estado por
-// idioma y generan con un botón; los por-entidad enseñan cuántas dueñas hay y
-// generan todas. Al seleccionar una tarjeta, el panel derecho (patrón
-// kontuan) muestra sus PDF por idioma con acciones — y, en los por-entidad,
-// un COMBOBOX (select desplegable con buscador) de la entidad dueña. Toda
-// la gestión de PDF vive
-// aquí (no en los detalles de las entidades).
+// del catálogo (GET /admin/pdfs/exports) con las MISMAS estadísticas que las
+// previews: total de piezas y listas por idioma. Las acciones "de todas" son
+// las de las previews — generar faltantes (tarjeta y panel), regenerar todo
+// y borrar todo (panel) — y el panel añade, en los exports por entidad, un
+// COMBOBOX (select con buscador) de la entidad dueña con sus PDF por idioma.
+// Toda la gestión de PDF vive aquí (no en los detalles de las entidades).
 // Agnóstico de i18n (DC-29): textos por prop, defaults en castellano.
 
 export interface PdfManagerLabels {
   refresh: string
   generate: string
-  generateAll: string
+  generateMissing: string
+  regenerateAll: string
+  deleteAll: string
   download: string
   regenerate: string
   delete: string
   confirmDelete: string
+  confirmRegenerateAll: string
+  confirmDeleteAll: string
+  confirm: string
   cancel: string
   empty: string
   error: string
@@ -36,17 +40,22 @@ export interface PdfManagerLabels {
   searchPlaceholder: string
   noResults: string
   generatedAt: string
-  sourcesCount: string
+  total: string
 }
 
 const defaultLabels: PdfManagerLabels = {
   refresh: 'Actualizar',
   generate: 'Generar',
-  generateAll: 'Generar todo',
+  generateMissing: 'Generar faltantes',
+  regenerateAll: 'Regenerar todo',
+  deleteAll: 'Borrar todo',
   download: 'Descargar',
   regenerate: 'Regenerar',
   delete: 'Borrar',
   confirmDelete: '¿Borrar el PDF de "{name}"?',
+  confirmRegenerateAll: '¿Regenerar TODOS los PDF de {type}?',
+  confirmDeleteAll: '¿Borrar TODOS los PDF de {type}?',
+  confirm: 'Confirmar',
   cancel: 'Cancelar',
   empty: 'Aún no hay PDF generados.',
   error: 'No se ha podido completar la acción.',
@@ -59,7 +68,7 @@ const defaultLabels: PdfManagerLabels = {
   searchPlaceholder: 'Buscar…',
   noResults: 'Sin resultados.',
   generatedAt: 'Generado',
-  sourcesCount: '{count} elementos',
+  total: 'Total',
 }
 
 const props = withDefaults(
@@ -86,6 +95,7 @@ interface ExportInfo {
   global: boolean
   layout: string
   sources: { id: number; label: string }[]
+  stats: { total: number; locales: Record<string, number> }
 }
 
 interface PdfRow {
@@ -115,6 +125,11 @@ function keyOf(type: string, sourceId: number | null): string {
 
 function typeName(exp: ExportInfo): string {
   return props.typeLabels[exp.type] ?? exp.type
+}
+
+/** Quedan piezas por generar (algún idioma por debajo del total). */
+function hasMissing(exp: ExportInfo): boolean {
+  return Object.values(exp.stats.locales).some((ready) => ready < exp.stats.total)
 }
 
 const activeExport = computed(() => exports.value.find((e) => e.type === activeType.value) ?? null)
@@ -152,7 +167,7 @@ async function loadCatalog() {
   try {
     const { data } = await props.api.get('/admin/pdfs/exports')
     exports.value = data.data
-    // Los globales cargan sus filas ya (alimentan el resumen de la tarjeta).
+    // Los globales cargan sus filas ya (el panel las pinta directamente).
     await Promise.all(exports.value.filter((e) => e.global).map((e) => loadRows(e.type, null)))
   } catch {
     toast.danger(L.error)
@@ -184,16 +199,13 @@ async function refreshAll() {
   }
 }
 
-async function run(
-  action: () => Promise<{ data: { message?: string } }>,
-  type: string,
-  sourceId: number | null,
-) {
+/** Envuelve una acción: bloquea botones, toast y refresco del catálogo. */
+async function run(action: () => Promise<{ data: { message?: string } }>) {
   busy.value = true
   try {
     const { data } = await action()
     if (data.message) toast.success(data.message)
-    await loadRows(type, sourceId)
+    await refreshAll()
   } catch {
     toast.danger(L.error)
   } finally {
@@ -201,57 +213,50 @@ async function run(
   }
 }
 
+// --- Acciones "de todas" del export (espejo de las previews) ---
+
+function generateMissing(exp: ExportInfo) {
+  run(() => props.api.post('/admin/pdfs/generate-missing', { type: exp.type }))
+}
+
+async function regenerateAll(exp: ExportInfo) {
+  const ok = await confirm({
+    message: L.confirmRegenerateAll.replace('{type}', typeName(exp)),
+    confirmLabel: L.confirm,
+    cancelLabel: L.cancel,
+    variant: 'primary',
+  })
+  if (!ok) return
+  run(() => props.api.post('/admin/pdfs/regenerate-all', { type: exp.type }))
+}
+
+async function deleteAll(exp: ExportInfo) {
+  const ok = await confirm({
+    message: L.confirmDeleteAll.replace('{type}', typeName(exp)),
+    confirmLabel: L.deleteAll,
+    cancelLabel: L.cancel,
+    variant: 'danger',
+  })
+  if (!ok) return
+  run(() => props.api.delete('/admin/pdfs', { params: { type: exp.type } }))
+}
+
+// --- Acciones del elemento del panel ---
+
 function generate(type: string, sourceId: number | null) {
-  run(
-    () =>
-      props.api.post('/admin/pdfs/generate', {
-        type,
-        source_id: sourceId ?? undefined,
-      }),
-    type,
-    sourceId,
+  run(() =>
+    props.api.post('/admin/pdfs/generate', {
+      type,
+      source_id: sourceId ?? undefined,
+    }),
   )
 }
 
-/** Genera el PDF de TODAS las entidades dueñas de un export por entidad. */
-async function generateAllSources(exp: ExportInfo) {
-  busy.value = true
-  let message: string | undefined
-  try {
-    for (const source of exp.sources) {
-      const { data } = await props.api.post('/admin/pdfs/generate', {
-        type: exp.type,
-        source_id: source.id,
-      })
-      message = data.message ?? message
-      if (rows[keyOf(exp.type, source.id)]) await loadRows(exp.type, source.id)
-    }
-    if (message) toast.success(message)
-  } catch {
-    toast.danger(L.error)
-  } finally {
-    busy.value = false
-  }
-}
-
-/** (type, sourceId) del contexto visible en el panel. */
-function panelContext(): { type: string; sourceId: number | null } | null {
-  if (!activeExport.value) return null
-  return {
-    type: activeExport.value.type,
-    sourceId: activeExport.value.global ? null : selectedSourceId.value,
-  }
-}
-
 function regenerate(pdf: PdfRow) {
-  const ctx = panelContext()
-  if (!ctx) return
-  run(() => props.api.post(`/admin/pdfs/${pdf.id}/regenerate`), ctx.type, ctx.sourceId)
+  run(() => props.api.post(`/admin/pdfs/${pdf.id}/regenerate`))
 }
 
 async function del(pdf: PdfRow) {
-  const ctx = panelContext()
-  if (!ctx) return
   const ok = await confirm({
     message: L.confirmDelete.replace('{name}', `${pdf.filename} (${pdf.locale.toUpperCase()})`),
     confirmLabel: L.delete,
@@ -259,7 +264,7 @@ async function del(pdf: PdfRow) {
     variant: 'danger',
   })
   if (!ok) return
-  run(() => props.api.delete(`/admin/pdfs/${pdf.id}`), ctx.type, ctx.sourceId)
+  run(() => props.api.delete(`/admin/pdfs/${pdf.id}`))
 }
 
 function statusLabel(pdf: PdfRow): string {
@@ -300,69 +305,56 @@ defineExpose({ refreshAll })
         :active="activeType === exp.type"
         @select="select(exp)"
       >
-        <!-- Resumen: estado por idioma (globales) o nº de dueñas -->
+        <!-- Resumen como el de las previews: total + listos por idioma -->
         <template #meta>
-          <template v-if="exp.global">
-            <span
-              v-for="pdf in rows[keyOf(exp.type, null)] ?? []"
-              :key="pdf.id"
-              :class="['locale-chip', statusClass(pdf)]"
-              >{{ pdf.locale.toUpperCase() }}</span
-            >
-            <span
-              v-if="rows[keyOf(exp.type, null)] && !rows[keyOf(exp.type, null)].length"
-              class="manager-stat"
-              >{{ L.empty }}</span
-            >
-          </template>
-          <span v-else class="manager-stat">
-            {{ L.sourcesCount.replace('{count}', String(exp.sources.length)) }}
-          </span>
+          <span class="manager-stat"
+            >{{ L.total }} <strong>{{ exp.stats.total }}</strong></span
+          >
+          <span
+            v-for="(ready, locale) in exp.stats.locales"
+            :key="locale"
+            :class="['locale-chip', ready === exp.stats.total ? 'is-ok' : 'is-missing']"
+            >{{ String(locale).toUpperCase() }} {{ ready }}/{{ exp.stats.total }}</span
+          >
         </template>
 
+        <!-- Solo la acción principal; el resto vive en el panel derecho -->
         <template #actions>
-          <BaseButton v-if="exp.global" :disabled="busy" @click="generate(exp.type, null)">
+          <BaseButton :disabled="busy || !hasMissing(exp)" @click="generateMissing(exp)">
             <template #icon><FilePlus :size="16" /></template>
-            {{ L.generate }}
-          </BaseButton>
-          <BaseButton
-            v-else
-            :disabled="busy || !exp.sources.length"
-            @click="generateAllSources(exp)"
-          >
-            <template #icon><FilePlus :size="16" /></template>
-            {{ L.generateAll }}
+            {{ L.generateMissing }}
           </BaseButton>
         </template>
       </ManagerCard>
     </div>
 
-    <!-- Panel derecho: PDF del export activo (con selector en los por-entidad) -->
+    <!-- Panel derecho: acciones | separador | PDF del export activo -->
     <Teleport defer to="#right-sidebar-target">
       <div class="manager-panel">
         <p v-if="!activeExport" class="manager-panel__empty">{{ L.panelEmpty }}</p>
         <template v-else>
           <p class="manager-panel__kicker">{{ typeName(activeExport) }}</p>
 
-          <!-- TODAS las acciones del export, arriba del todo (patrón kontuan) -->
+          <!-- Acciones del export, PRIMERO (mismas que las previews) -->
           <div class="manager-detail__actions">
             <BaseButton
-              v-if="activeExport.global"
-              :disabled="busy"
-              @click="generate(activeExport.type, null)"
+              :disabled="busy || !hasMissing(activeExport)"
+              @click="generateMissing(activeExport)"
             >
               <template #icon><FilePlus :size="14" /></template>
-              {{ L.generate }}
+              {{ L.generateMissing }}
             </BaseButton>
-            <BaseButton
-              v-else
-              :disabled="busy || !activeExport.sources.length"
-              @click="generateAllSources(activeExport)"
-            >
-              <template #icon><FilePlus :size="14" /></template>
-              {{ L.generateAll }}
+            <BaseButton variant="secondary" :disabled="busy" @click="regenerateAll(activeExport)">
+              <template #icon><RefreshCw :size="14" /></template>
+              {{ L.regenerateAll }}
+            </BaseButton>
+            <BaseButton variant="danger" :disabled="busy" @click="deleteAll(activeExport)">
+              <template #icon><Trash2 :size="14" /></template>
+              {{ L.deleteAll }}
             </BaseButton>
           </div>
+
+          <hr class="manager-panel__divider" />
 
           <!-- Por entidad: combobox (con buscador) de la entidad dueña -->
           <SearchSelect

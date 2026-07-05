@@ -36,7 +36,8 @@
     "pages": "Páginas",
     "settings": "Configuración",
     "backups": "Copias",
-    "users": "Usuarios"
+    "users": "Usuarios",
+    "viewSite": "Ver la web"
   },
   "icons": {
     "title": "Iconos",
@@ -51,8 +52,11 @@
     "toast": {
       "created": "Icono creado",
       "deleted": "Icono borrado",
-      "saveError": "No se pudo guardar."
-    }
+      "saveError": "No se pudo guardar.",
+      "updated": "Icono actualizado."
+    },
+    "edit": "Editar icono",
+    "imageReplaceLabel": "Imagen nueva (opcional)"
   },
   "common": {
     "save": "Guardar",
@@ -78,7 +82,8 @@
     },
     "imageDrag": "Arrastra una imagen o haz clic",
     "close": "Cerrar",
-    "imageHint": "Máx. 4 MB"
+    "imageHint": "Máx. 4 MB",
+    "confirm": "Confirmar"
   },
   "login": {
     "title": "Acceso al panel",
@@ -279,7 +284,6 @@
   },
   "pdfs": {
     "generate": "Generar",
-    "generateAll": "Generar todo",
     "refresh": "Actualizar",
     "download": "Descargar",
     "regenerate": "Regenerar",
@@ -295,7 +299,6 @@
     "searchPlaceholder": "Buscar…",
     "noResults": "Sin resultados.",
     "generatedAt": "Generado",
-    "sourcesCount": "{'{'}count{'}'} elementos",
     "types": {
       "characters": "Todos los personajes",
       "schemes": "Todas las argucias",
@@ -304,7 +307,12 @@
       "houseCounters": "Contadores de casas (x9, 25 mm)",
       "pages": "Páginas imprimibles"
     },
-    "selectSource": "Elige un elemento…"
+    "selectSource": "Elige un elemento…",
+    "generateMissing": "Generar faltantes",
+    "regenerateAll": "Regenerar todo",
+    "deleteAll": "Borrar todo",
+    "confirmRegenerateAll": "¿Regenerar TODOS los PDF de {type}?",
+    "confirmDeleteAll": "¿Borrar TODOS los PDF de {type}?"
   },
   "pages": {
     "title": "Páginas",

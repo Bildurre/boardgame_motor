@@ -16,6 +16,7 @@ const name = ref('')
 const email = ref('')
 const password = ref('')
 const passwordConfirmation = ref('')
+const privacy = ref(false)
 const error = ref<string | null>(null)
 const loading = ref(false)
 
@@ -28,6 +29,7 @@ async function submit() {
       email: email.value,
       password: password.value,
       password_confirmation: passwordConfirmation.value,
+      privacy: privacy.value,
     })
     router.push({ name: 'account', params: { locale: locales.current } })
   } catch (e) {
@@ -63,8 +65,17 @@ async function submit() {
           autocomplete="new-password"
         />
       </div>
+      <!-- Protección de datos: sin aceptar no hay registro (backend igual) -->
+      <div class="field field--privacy">
+        <p class="privacy-note">{{ t('auth.register.privacyNote') }}</p>
+        <label class="privacy-check">
+          <input v-model="privacy" type="checkbox" required />
+          {{ t('auth.register.privacyAccept') }}
+        </label>
+      </div>
+
       <p v-if="error" class="error">{{ error }}</p>
-      <BaseButton type="submit">
+      <BaseButton type="submit" :disabled="!privacy">
         <template #icon><UserPlus :size="16" /></template>
         {{ loading ? t('auth.register.submitting') : t('auth.register.submit') }}
       </BaseButton>

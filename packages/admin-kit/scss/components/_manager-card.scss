@@ -132,13 +132,14 @@
 }
 
 // Chip de estado por locale (ES/EU/EN), compartido por previews y PDF.
+// Nunca "muted": sin color explícito, el chip va en el ACENTO.
 .locale-chip {
-  font-size: $fs-12;
+  font-size: 0.7rem;
   font-weight: $k-fw-semibold;
   padding: 1px $space-2;
   border-radius: $radius-sm;
-  border: 1px solid $border;
-  color: $text-3;
+  border: 1px solid color-mix(in srgb, $accent-500 45%, transparent);
+  color: $accent-500;
   white-space: nowrap;
 
   &.is-ok { color: $success; border-color: color-mix(in srgb, $success 45%, transparent); }
@@ -170,6 +171,14 @@
     margin: 0;
   }
 
+  // Separador entre bloques del panel (acciones | sección | sección…):
+  // TODOS los paneles derechos siguen el mismo orden.
+  &__divider {
+    border: none;
+    border-top: 1px solid $border;
+    margin: $space-1 0;
+    width: 100%;
+  }
 }
 
 .manager-detail {

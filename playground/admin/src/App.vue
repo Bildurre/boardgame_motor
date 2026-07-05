@@ -5,6 +5,7 @@ import { useI18n } from 'vue-i18n'
 import {
   DatabaseBackup,
   FileText,
+  Globe,
   LayoutDashboard,
   Home,
   Images,
@@ -63,6 +64,9 @@ async function logout() {
   router.push({ name: 'login' })
 }
 
+// Enlace a la web pública (espejo del enlace a admin del header público).
+const appUrl = (import.meta.env.VITE_APP_URL as string | undefined) || 'http://localhost:5173'
+
 // Resalta el ítem del menú también en las vistas hijas (single de heroe →
 // Personajes; single de página → Páginas): cada ruta declara su sección en
 // meta.nav y aquí se aplica la clase `active` (mismo estilo que
@@ -83,12 +87,16 @@ function navActive(section: string) {
     :breadcrumbs="crumbs"
     @update:locale="locales.setCurrent"
   >
+    <!-- Menú agrupado: inicio | juego | generados | web | sistema -->
     <template #nav>
       <RouterLink class="nav-item" :class="navActive('dashboard')" :to="{ name: 'dashboard' }">
         <LayoutDashboard class="nav-icon" :size="20" /><span class="nav-label">{{
           t('nav.dashboard')
         }}</span>
       </RouterLink>
+
+      <!-- Entidades del juego -->
+      <hr v-if="auth.can('manage-game')" class="sidebar-divider" />
       <RouterLink
         v-if="auth.can('manage-game')"
         class="nav-item"
@@ -125,14 +133,9 @@ function navActive(section: string) {
       >
         <Shapes class="nav-icon" :size="20" /><span class="nav-label">{{ t('nav.icons') }}</span>
       </RouterLink>
-      <RouterLink
-        v-if="auth.can('manage-web')"
-        class="nav-item"
-        :class="navActive('pages')"
-        :to="{ name: 'pages' }"
-      >
-        <FileText class="nav-icon" :size="20" /><span class="nav-label">{{ t('nav.pages') }}</span>
-      </RouterLink>
+
+      <!-- Generados: imágenes PNG y PDF -->
+      <hr v-if="auth.can('manage-game')" class="sidebar-divider" />
       <RouterLink
         v-if="auth.can('manage-game')"
         class="nav-item"
@@ -149,6 +152,17 @@ function navActive(section: string) {
       >
         <FileText class="nav-icon" :size="20" /><span class="nav-label">{{ t('nav.pdfs') }}</span>
       </RouterLink>
+
+      <!-- La web: CRM y configuración -->
+      <hr v-if="auth.can('manage-web')" class="sidebar-divider" />
+      <RouterLink
+        v-if="auth.can('manage-web')"
+        class="nav-item"
+        :class="navActive('pages')"
+        :to="{ name: 'pages' }"
+      >
+        <FileText class="nav-icon" :size="20" /><span class="nav-label">{{ t('nav.pages') }}</span>
+      </RouterLink>
       <RouterLink
         v-if="auth.can('manage-web')"
         class="nav-item"
@@ -159,6 +173,9 @@ function navActive(section: string) {
           t('nav.settings')
         }}</span>
       </RouterLink>
+
+      <!-- Sistema: copias y usuarios -->
+      <hr v-if="auth.can('manage-web') || auth.can('manage-users')" class="sidebar-divider" />
       <RouterLink
         v-if="auth.can('manage-web')"
         class="nav-item"
@@ -177,6 +194,14 @@ function navActive(section: string) {
       >
         <Users class="nav-icon" :size="20" /><span class="nav-label">{{ t('nav.users') }}</span>
       </RouterLink>
+    </template>
+
+    <!-- Barra superior: ir a la web pública (espejo del enlace del header) -->
+    <template #actions>
+      <a class="navbar-viewsite" :href="appUrl" :title="t('nav.viewSite')">
+        <Globe :size="16" />
+        <span>{{ t('nav.viewSite') }}</span>
+      </a>
     </template>
 
     <template #user="{ collapsed }">

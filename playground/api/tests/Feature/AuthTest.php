@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\User;
 use Spatie\Permission\Models\Role;
 
 beforeEach(function () {
@@ -14,6 +15,7 @@ it('registra un usuario con rol user y devuelve token', function () {
         'email' => 'egoi@example.com',
         'password' => 'secret-123',
         'password_confirmation' => 'secret-123',
+        'privacy' => true,
     ]);
 
     $response->assertCreated()
@@ -21,6 +23,29 @@ it('registra un usuario con rol user y devuelve token', function () {
         ->assertJsonPath('user.roles.0', 'user')
         ->assertJsonPath('user.can_access_admin', false)
         ->assertJsonStructure(['token']);
+});
+
+it('exige aceptar la protección de datos para registrarse', function () {
+    $this->postJson('/api/auth/register', [
+        'name' => 'Egoi',
+        'email' => 'egoi@example.com',
+        'password' => 'secret-123',
+        'password_confirmation' => 'secret-123',
+    ])->assertUnprocessable()->assertJsonValidationErrors('privacy');
+});
+
+it('guarda el locale del registro y lo usa como idioma preferido', function () {
+    $this->postJson('/api/auth/register?locale=eu', [
+        'name' => 'Egoi',
+        'email' => 'egoi@example.com',
+        'password' => 'secret-123',
+        'password_confirmation' => 'secret-123',
+        'privacy' => true,
+    ])->assertCreated();
+
+    $user = User::firstWhere('email', 'egoi@example.com');
+    expect($user->locale)->toBe('eu')
+        ->and($user->preferredLocale())->toBe('eu');
 });
 
 it('rechaza el registro cuando el juego es solo-invitación', function () {

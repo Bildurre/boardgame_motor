@@ -24,4 +24,6 @@ Primera versión etiquetada (Fases 0–7 del plan).
 - **SCSS**: tokens (`tokens.scss` con fuentes/colores/espaciado/radios),
   temas claro/oscuro, parciales de componentes y utilidades
   (`rich-content`, formularios).
+- `setThemePersistence()`: el consentimiento de almacenamiento de la web
+  puede desactivar el guardado del tema (se aplica igual, solo en memoria).
 - i18n por props (DC-29): el paquete no lleva textos; la app los inyecta.

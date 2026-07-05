@@ -295,6 +295,52 @@ it('regenera, borra y descarga desde la API', function () {
     expect(GeneratedPdf::count())->toBe(0);
 });
 
+// --- Acciones "de todas" del export (espejo de las previews) ---
+
+it('el catálogo trae estadísticas por idioma (total y listos)', function () {
+    $house = makeHouseWithSchemes(1);
+    app(PdfService::class)->generate('house-schemes', $house, 'es', sync: true);
+
+    $response = $this->actingAs(motorUser('admin'))->getJson('/api/admin/pdfs/exports')->assertOk();
+    $stats = collect($response->json('data'))->firstWhere('type', 'house-schemes')['stats'];
+
+    expect($stats['total'])->toBe(1)
+        ->and($stats['locales'])->toBe(['es' => 1, 'eu' => 0, 'en' => 0]);
+});
+
+it('generar faltantes encola solo los combos sin PDF o fallidos', function () {
+    $house = makeHouseWithSchemes(1);
+    $admin = motorUser('admin');
+    app(PdfService::class)->generate('house-schemes', $house, 'es', sync: true);
+
+    Queue::fake();
+    $this->actingAs($admin)->postJson('/api/admin/pdfs/generate-missing', [
+        'type' => 'house-schemes',
+    ])->assertAccepted()->assertJsonPath('queued', 2); // faltaban eu y en
+
+    // Un fallido también cuenta como faltante.
+    GeneratedPdf::where('locale', 'es')->update(['status' => GeneratedPdf::STATUS_FAILED]);
+    $this->actingAs($admin)->postJson('/api/admin/pdfs/generate-missing', [
+        'type' => 'house-schemes',
+    ])->assertAccepted()->assertJsonPath('queued', 1);
+});
+
+it('regenerar todo encola todos los combos y borrar todo vacía el export', function () {
+    $house = makeHouseWithSchemes(1);
+    $admin = motorUser('admin');
+    $pdf = app(PdfService::class)->generate('house-schemes', $house, 'es', sync: true)->refresh();
+    $path = $pdf->path;
+
+    Queue::fake();
+    $this->actingAs($admin)->postJson('/api/admin/pdfs/regenerate-all', [
+        'type' => 'house-schemes',
+    ])->assertAccepted()->assertJsonPath('queued', 3); // 1 casa x 3 idiomas
+
+    $this->actingAs($admin)->deleteJson('/api/admin/pdfs?type=house-schemes')->assertOk();
+    Storage::disk('public')->assertMissing($path);
+    expect(GeneratedPdf::where('type', 'house-schemes')->count())->toBe(0);
+});
+
 it('la gestión de PDF exige admin', function () {
     $this->postJson('/api/admin/pdfs/generate', ['type' => 'characters'])->assertUnauthorized();
     $this->actingAs(motorUser('user'))

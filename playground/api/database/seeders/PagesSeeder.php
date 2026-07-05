@@ -92,6 +92,18 @@ class PagesSeeder extends Seeder
             ]],
         ]);
 
+        // --- Hija del reglamento: demo del submenú del nav (chevron/hover) ---
+        $glosario = $this->page(
+            ['es' => 'Glosario', 'eu' => 'Glosarioa', 'en' => 'Glossary'],
+            meta: ['es' => 'Términos del juego, de la A a la Z.']
+        );
+        $glosario->forceFill(['parent_id' => $reglas->id])->save();
+        $this->blocks($glosario, [
+            ['header', ['title' => ['es' => 'Glosario', 'eu' => 'Glosarioa', 'en' => 'Glossary']]],
+            ['text', ['body' => ['es' => '<p><strong>Argucia:</strong> carta de intriga de una casa. <strong>Prestigio:</strong> puntos de victoria. <strong>Defensa:</strong> lo que cuesta derrotar a un personaje.</p>'],
+                'width' => 'narrow']],
+        ]);
+
         // --- Casa destacada en la home (demo del campo entity del DSL) ---
         $stark = House::query()->where('name->es', 'like', '%Stark%')->first() ?? House::query()->first();
         if ($stark && $home = Page::query()->where('is_home', true)->first()) {

@@ -9,11 +9,16 @@ export function usePdfLabels(): ComputedRef<PdfManagerLabels> {
   return computed(() => ({
     refresh: t('pdfs.refresh'),
     generate: t('pdfs.generate'),
-    generateAll: t('pdfs.generateAll'),
+    generateMissing: t('pdfs.generateMissing'),
+    regenerateAll: t('pdfs.regenerateAll'),
+    deleteAll: t('pdfs.deleteAll'),
     download: t('pdfs.download'),
     regenerate: t('pdfs.regenerate'),
     delete: t('pdfs.delete'),
     confirmDelete: t('pdfs.confirmDelete'),
+    confirmRegenerateAll: t('pdfs.confirmRegenerateAll'),
+    confirmDeleteAll: t('pdfs.confirmDeleteAll'),
+    confirm: t('common.confirm'),
     cancel: t('common.cancel'),
     empty: t('pdfs.empty'),
     error: t('common.errors.action'),
@@ -26,6 +31,6 @@ export function usePdfLabels(): ComputedRef<PdfManagerLabels> {
     searchPlaceholder: t('pdfs.searchPlaceholder'),
     noResults: t('pdfs.noResults'),
     generatedAt: t('pdfs.generatedAt'),
-    sourcesCount: t('pdfs.sourcesCount'),
+    total: t('previewsManager.total'),
   }))
 }

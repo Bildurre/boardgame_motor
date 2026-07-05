@@ -36,7 +36,8 @@
     "pages": "Orriak",
     "settings": "Konfigurazioa",
     "backups": "Kopiak",
-    "users": "Erabiltzaileak"
+    "users": "Erabiltzaileak",
+    "viewSite": "Ikusi webgunea"
   },
   "icons": {
     "title": "Ikonoak",
@@ -51,8 +52,11 @@
     "toast": {
       "created": "Ikonoa sortua",
       "deleted": "Ikonoa ezabatua",
-      "saveError": "Ezin izan da gorde."
-    }
+      "saveError": "Ezin izan da gorde.",
+      "updated": "Ikonoa eguneratu da."
+    },
+    "edit": "Editatu ikonoa",
+    "imageReplaceLabel": "Irudi berria (aukerakoa)"
   },
   "common": {
     "save": "Gorde",
@@ -78,7 +82,8 @@
     },
     "imageDrag": "Arrastatu irudi bat edo egin klik",
     "close": "Itxi",
-    "imageHint": "Geh. 4 MB"
+    "imageHint": "Geh. 4 MB",
+    "confirm": "Berretsi"
   },
   "login": {
     "title": "Panelerako sarrera",
@@ -279,7 +284,6 @@
   },
   "pdfs": {
     "generate": "Sortu",
-    "generateAll": "Sortu denak",
     "refresh": "Eguneratu",
     "download": "Deskargatu",
     "regenerate": "Birsortu",
@@ -295,7 +299,6 @@
     "searchPlaceholder": "Bilatu…",
     "noResults": "Emaitzarik ez.",
     "generatedAt": "Sortze-data",
-    "sourcesCount": "{'{'}count{'}'} elementu",
     "types": {
       "characters": "Pertsonaia guztiak",
       "schemes": "Argucia guztiak",
@@ -304,7 +307,12 @@
       "houseCounters": "Etxeen kontagailuak (x9, 25 mm)",
       "pages": "Orri inprimagarriak"
     },
-    "selectSource": "Aukeratu elementu bat…"
+    "selectSource": "Aukeratu elementu bat…",
+    "generateMissing": "Sortu falta direnak",
+    "regenerateAll": "Birsortu dena",
+    "deleteAll": "Ezabatu dena",
+    "confirmRegenerateAll": "{type} guztien PDFak birsortu?",
+    "confirmDeleteAll": "{type} guztien PDFak ezabatu?"
   },
   "pages": {
     "title": "Orriak",

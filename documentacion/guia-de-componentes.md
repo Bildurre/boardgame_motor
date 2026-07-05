@@ -535,6 +535,10 @@ vive en el composable `useEntityList` (ver la guía de montar una web, §4.4).
   ~1100px pasa a drawer superpuesto** (asa flotante + overlay) para que el
   contenido principal nunca quede más estrecho que las barras. `reveal()` lo
   muestra al seleccionar algo. Los gestores lo usan para el selector/detalle.
+- **Orden estándar del contenido** (TODOS los paneles derechos): kicker →
+  **acciones primero** → separador (`.manager-panel__divider`) → sección →
+  separador → sección… Las tarjetas que tienen panel derecho llevan una sola
+  acción (entrar al single); el resto de acciones viven en el panel.
 
 ### ManagerCard
 
@@ -569,12 +573,15 @@ vive en el composable `useEntityList` (ver la guía de montar una web, §4.4).
 
 - **Finalidad:** panel derecho de los listados de entidades del juego
   (casas, argucias, personajes): la **tarjeta entera selecciona** (prop
-  `active` de EntityCard marca la elegida) y en la tarjeta quedan solo las
-  acciones básicas (editar + abrir). El panel trae **todas** las acciones
-  arriba del todo — Abrir, Editar, Publicar/Despublicar, **Regenerar PNG**
-  (solo entidades renderizables) y Borrar; en papelera, Restaurar + Borrar
-  definitivamente — más la info del elemento (slot `meta`) y, si
-  `hasPreview`, las **imágenes por idioma** (huecos "—" para las que faltan).
+  `active` de EntityCard marca la elegida) y en la tarjeta queda **solo la
+  acción de entrar al single** (abrir). El panel sigue el orden estándar:
+  **todas** las acciones primero — Abrir, Editar, Publicar/Despublicar,
+  **Regenerar PNG** (solo entidades renderizables) y Borrar; en papelera,
+  Restaurar + Borrar definitivamente — y, tras un separador, el nombre + la
+  info del elemento (slot `meta`) y, si `hasPreview`, las **imágenes por
+  idioma** (huecos "—" para las que faltan). Los **chips** de estado nunca
+  van "muted": sin color explícito se pintan en el acento (y un punto más
+  pequeños).
 - **Dónde:** `playground/admin/src/components/EntityPanel.vue`; la selección
   (`selectedId` / `selected` / `select()`, registro del sidebar con
   `` t(`${ns}.panelTitle`) `` y `reveal()`) vive en `useEntityList`. Es código
@@ -645,15 +652,17 @@ vive en el composable `useEntityList` (ver la guía de montar una web, §4.4).
 
 - **Finalidad:** gestor del **catálogo completo de PDF del juego** (doc 02).
   Lee los exports registrados (`GET /api/admin/pdfs/exports`) y pinta cada uno
-  como ManagerCard fija: los globales con el **estado por idioma** en chips y
-  Generar; los por-entidad con el nº de dueñas y **Generar todo** (la única
-  acción de la tarjeta). Al seleccionar la tarjeta, el panel derecho pone
-  arriba del todo la acción del export (Generar / Generar todo) y muestra sus
-  PDF por idioma (estado, fecha, error completo, Descargar / Regenerar /
-  Borrar) — y en los por-entidad un **SearchSelect** (combobox) de la entidad
-  dueña (de `sources()`, filtro en cliente) con su Generar. Toda la
-  gestión de PDF vive aquí (nada en los singles); añadir un
-  export = registrarlo en el backend + su etiqueta en `typeLabels`.
+  como ManagerCard fija **con el mismo resumen que las previews**: total de
+  piezas y listas por idioma (chips X/Y de `stats`), con **Generar
+  faltantes** como única acción de tarjeta. Al seleccionar la tarjeta, el
+  panel derecho sigue el patrón estándar — **acciones primero** (Generar
+  faltantes / Regenerar todo / Borrar todo, las dos últimas con
+  confirmación), separador, secciones: en los por-entidad un **SearchSelect**
+  (combobox) de la entidad dueña (de `sources()`, filtro en cliente) con su
+  Generar, y los PDF por idioma (estado, fecha, error completo, Descargar /
+  Regenerar / Borrar). Toda la gestión de PDF vive aquí (nada en los
+  singles); añadir un export = registrarlo en el backend + su etiqueta en
+  `typeLabels`.
 - **Props:** `api: AxiosInstance`, `labels?: Partial<PdfManagerLabels>` (DC-29)
   y `typeLabels?: Record<string, string>` (nombre traducido por export).
 - **Uso** (ver `PdfsView` del playground):

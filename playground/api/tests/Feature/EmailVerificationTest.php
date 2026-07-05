@@ -2,6 +2,7 @@
 
 use App\Models\User;
 use Illuminate\Auth\Notifications\VerifyEmail;
+use Illuminate\Support\Facades\Lang;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\URL;
 use Spatie\Permission\Models\Role;
@@ -29,12 +30,30 @@ it('envía el correo de verificación al registrarse', function () {
         'email' => 'egoi@example.com',
         'password' => 'secret-123',
         'password_confirmation' => 'secret-123',
+        'privacy' => true,
     ])->assertCreated()->assertJsonPath('user.email_verified', false);
 
     Notification::assertSentTo(
         User::where('email', 'egoi@example.com')->first(),
         VerifyEmail::class,
     );
+});
+
+it('los correos salen en el idioma del usuario (preferredLocale)', function () {
+    // El usuario guarda su idioma al registrarse/loguearse; el sistema de
+    // notificaciones renderiza con ese locale (HasLocalePreference). Aquí se
+    // comprueba la pieza del motor: preferredLocale + traducciones JSON.
+    $user = User::factory()->unverified()->create(['locale' => 'eu']);
+    expect($user->preferredLocale())->toBe('eu');
+
+    $original = app()->getLocale();
+    app()->setLocale($user->preferredLocale());
+    $subject = (new VerifyEmail)->toMail($user)->subject;
+    app()->setLocale($original);
+
+    expect($subject)->toBe('Egiaztatu zure helbide elektronikoa')
+        ->and(Lang::get('Verify your email address', [], 'es'))
+        ->toBe('Verifica tu dirección de correo');
 });
 
 it('verifica el email con el enlace firmado y redirige a la app', function () {

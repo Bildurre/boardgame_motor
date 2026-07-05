@@ -9,6 +9,24 @@
 .auth .hint { margin-top: $space-5; color: $text-2; }
 .auth .roles { color: $text-2; }
 
+// Protección de datos en el registro: aviso breve + checkbox obligatorio.
+.privacy-note {
+  margin: 0 0 $space-2;
+  color: $text-3;
+  font-size: $fs-13;
+}
+
+.privacy-check {
+  display: flex;
+  align-items: flex-start;
+  gap: $space-2;
+  color: $text-2;
+  font-size: $fs-14;
+  cursor: pointer;
+
+  input { margin-top: 3px; accent-color: $accent-500; }
+}
+
 // Aviso de email sin verificar en "Mi cuenta" (DC-14).
 .verify-notice {
   border: 1px solid $warning;

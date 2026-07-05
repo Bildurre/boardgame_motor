@@ -36,7 +36,8 @@
     "pages": "Pages",
     "settings": "Settings",
     "backups": "Backups",
-    "users": "Users"
+    "users": "Users",
+    "viewSite": "View site"
   },
   "icons": {
     "title": "Icons",
@@ -51,8 +52,11 @@
     "toast": {
       "created": "Icon created",
       "deleted": "Icon deleted",
-      "saveError": "Could not save."
-    }
+      "saveError": "Could not save.",
+      "updated": "Icon updated."
+    },
+    "edit": "Edit icon",
+    "imageReplaceLabel": "New image (optional)"
   },
   "common": {
     "save": "Save",
@@ -78,7 +82,8 @@
     },
     "imageDrag": "Drag an image or click",
     "close": "Close",
-    "imageHint": "Max. 4 MB"
+    "imageHint": "Max. 4 MB",
+    "confirm": "Confirm"
   },
   "login": {
     "title": "Panel access",
@@ -279,7 +284,6 @@
   },
   "pdfs": {
     "generate": "Generate",
-    "generateAll": "Generate all",
     "refresh": "Refresh",
     "download": "Download",
     "regenerate": "Regenerate",
@@ -295,7 +299,6 @@
     "searchPlaceholder": "Search…",
     "noResults": "No results.",
     "generatedAt": "Generated",
-    "sourcesCount": "{'{'}count{'}'} items",
     "types": {
       "characters": "All characters",
       "schemes": "All schemes",
@@ -304,7 +307,12 @@
       "houseCounters": "House counters (x9, 25 mm)",
       "pages": "Printable pages"
     },
-    "selectSource": "Pick an item…"
+    "selectSource": "Pick an item…",
+    "generateMissing": "Generate missing",
+    "regenerateAll": "Regenerate all",
+    "deleteAll": "Delete all",
+    "confirmRegenerateAll": "Regenerate ALL {type} PDFs?",
+    "confirmDeleteAll": "Delete ALL {type} PDFs?"
   },
   "pages": {
     "title": "Pages",

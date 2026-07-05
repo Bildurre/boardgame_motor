@@ -11,6 +11,14 @@ function storedTheme(): ThemeMode {
 
 const themeMode = ref<ThemeMode>(storedTheme())
 
+// Consentimiento de almacenamiento (banner de la web pública): si la app lo
+// desactiva, el tema se aplica igual pero no se guarda en localStorage.
+let persistTheme = true
+
+export function setThemePersistence(enabled: boolean) {
+  persistTheme = enabled
+}
+
 function getSystemTheme(): 'light' | 'dark' {
   return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
 }
@@ -23,7 +31,7 @@ function applyTheme(mode: ThemeMode) {
 export function useTheme() {
   function setTheme(mode: ThemeMode) {
     themeMode.value = mode
-    localStorage.setItem('theme', mode)
+    if (persistTheme) localStorage.setItem('theme', mode)
     applyTheme(mode)
   }
 

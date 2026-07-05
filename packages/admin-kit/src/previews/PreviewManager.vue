@@ -331,7 +331,7 @@ defineExpose({ refreshAll })
         <template v-else>
           <p class="manager-panel__kicker">{{ typeName(activeStatus) }}</p>
 
-          <!-- TODAS las acciones del tipo, arriba del todo (patrón kontuan) -->
+          <!-- Acciones PRIMERO; después, secciones separadas (patrón panel) -->
           <div class="manager-detail__actions">
             <BaseButton
               :disabled="busy || activeStatus.pending === 0"
@@ -349,6 +349,8 @@ defineExpose({ refreshAll })
               {{ L.deleteAll }}
             </BaseButton>
           </div>
+
+          <hr class="manager-panel__divider" />
 
           <SearchSelect
             :model-value="selectedId"

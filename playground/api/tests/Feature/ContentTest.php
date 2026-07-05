@@ -290,15 +290,21 @@ it('sirve la página publicada por slug con settings localizados y datos resuelt
 it('nav y home públicos con caché invalidada al cambiar bloques (DC-10)', function () {
     $admin = motorUser('admin');
     $home = makePage(['title' => ['es' => 'Bienvenida']]);
-    makePage(['title' => ['es' => 'Reglas']]);
+    $reglas = makePage(['title' => ['es' => 'Reglas']]);
     makePage(['title' => ['es' => 'Oculta'], 'is_published' => false]);
+
+    // Hijas: la publicada sale como submenú del nav; la oculta, no.
+    $reglas->children()->create(['title' => ['es' => 'FAQ'], 'is_published' => true]);
+    $reglas->children()->create(['title' => ['es' => 'Borrador'], 'is_published' => false]);
 
     $this->actingAs($admin)->postJson("/api/admin/pages/{$home->id}/set-home")->assertOk();
 
     $this->getJson('/api/pages/nav')
         ->assertOk()
         ->assertJsonCount(2, 'data')
-        ->assertJsonPath('data.0.is_home', true);
+        ->assertJsonPath('data.0.is_home', true)
+        ->assertJsonCount(1, 'data.1.children')
+        ->assertJsonPath('data.1.children.0.title.es', 'FAQ');
 
     $this->getJson('/api/pages/home')->assertOk()->assertJsonPath('data.title', 'Bienvenida');
 

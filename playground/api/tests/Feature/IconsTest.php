@@ -25,6 +25,25 @@ it('sube un icono SVG desde el admin', function () {
     expect(Icon::first()->getFirstMedia('image'))->not->toBeNull();
 });
 
+it('edita un icono: renombra y sustituye la imagen (opcional)', function () {
+    Storage::fake('public');
+    $icon = Icon::create(['name' => 'Espada']);
+
+    // Solo el nombre.
+    $this->actingAs(motorUser('admin'))->postJson("/api/admin/icons/{$icon->id}", [
+        'name' => 'Espada larga',
+    ])->assertOk()->assertJsonPath('data.name', 'Espada larga');
+
+    // Nombre + imagen nueva.
+    $svg = UploadedFile::fake()->createWithContent('espada.svg', '<svg xmlns="http://www.w3.org/2000/svg"/>');
+    $this->actingAs(motorUser('admin'))->post("/api/admin/icons/{$icon->id}", [
+        'name' => 'Mandoble',
+        'image' => $svg,
+    ])->assertOk()->assertJsonPath('data.name', 'Mandoble');
+
+    expect($icon->refresh()->getFirstMedia('image'))->not->toBeNull();
+});
+
 it('la gestión de iconos exige acceso de admin', function () {
     $this->postJson('/api/admin/icons', ['name' => 'X'])->assertUnauthorized();
     $this->actingAs(motorUser('user'))->postJson('/api/admin/icons', ['name' => 'X'])->assertForbidden();

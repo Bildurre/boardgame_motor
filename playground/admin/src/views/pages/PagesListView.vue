@@ -194,11 +194,8 @@ onMounted(load)
         <p v-if="!selected" class="manager-panel__empty">{{ t('pages.panelEmpty') }}</p>
         <template v-else>
           <p class="manager-panel__kicker">{{ t('pages.panelTitle') }}</p>
-          <h3 class="manager-detail__title">
-            {{ selected.title.es ?? Object.values(selected.title)[0] }}
-          </h3>
 
-          <!-- Acciones arriba del todo (patrón kontuan) -->
+          <!-- Acciones PRIMERO; después, secciones separadas (patrón panel) -->
           <div class="manager-detail__actions">
             <BaseButton @click="open(selected)">
               <template #icon><ArrowRight :size="14" /></template>
@@ -218,6 +215,12 @@ onMounted(load)
             </BaseButton>
           </div>
 
+          <hr class="manager-panel__divider" />
+
+          <h3 class="manager-detail__title">
+            {{ selected.title.es ?? Object.values(selected.title)[0] }}
+          </h3>
+
           <!-- Acciones rápidas sin modal -->
           <BaseCheckbox
             :model-value="selected.is_published"
@@ -236,6 +239,7 @@ onMounted(load)
           </p>
 
           <!-- Sus bloques: tipo + resumen de una línea -->
+          <hr v-if="selectedBlocks.length" class="manager-panel__divider" />
           <div v-if="selectedBlocks.length" class="manager-detail">
             <p class="manager-panel__kicker">{{ t('pages.panelBlocks') }}</p>
             <ul class="manager-detail__rows">

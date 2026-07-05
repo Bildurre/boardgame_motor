@@ -38,6 +38,25 @@ const loading = ref(true)
 
 const segment = computed(() => String(route.params.dl ?? ''))
 
+// Filtro de idioma de los PDF: por defecto, el idioma de la web (y se
+// realinea si el visitante cambia de idioma). Solo se listan los del elegido.
+const pdfLocale = ref(locales.current)
+watch(
+  () => locales.current,
+  (code) => {
+    pdfLocale.value = code
+  },
+)
+
+const filteredGroups = computed(() =>
+  groups.value
+    .map((group) => ({
+      ...group,
+      items: group.items.filter((item) => item.locale === pdfLocale.value),
+    }))
+    .filter((group) => group.items.length),
+)
+
 async function load() {
   // Canónica del locale activo: /es/downloads -> /es/descargas.
   const canonical = DOWNLOAD_PATHS[locales.current] ?? segment.value
@@ -86,11 +105,26 @@ function formatSize(bytes: number | null): string {
     <h1 class="downloads__title">{{ t('downloads.title') }}</h1>
     <p class="downloads__intro">{{ t('downloads.intro') }}</p>
 
-    <p v-if="!loading && !groups.length" class="downloads__empty">
+    <!-- Selector del idioma de los PDF (solo se listan los del elegido) -->
+    <div class="downloads__filter" role="group" :aria-label="t('downloads.language')">
+      <span class="downloads__filter-label">{{ t('downloads.language') }}</span>
+      <button
+        v-for="loc in locales.locales"
+        :key="loc.code"
+        type="button"
+        class="downloads__filter-btn"
+        :class="{ 'is-active': pdfLocale === loc.code }"
+        @click="pdfLocale = loc.code"
+      >
+        {{ loc.code.toUpperCase() }}
+      </button>
+    </div>
+
+    <p v-if="!loading && !filteredGroups.length" class="downloads__empty">
       {{ t('downloads.empty') }}
     </p>
 
-    <section v-for="group in groups" :key="group.type" class="downloads__group">
+    <section v-for="group in filteredGroups" :key="group.type" class="downloads__group">
       <h2>{{ typeLabel(group.type) }}</h2>
       <ul class="downloads__list">
         <li v-for="item in group.items" :key="item.id" class="downloads__item">

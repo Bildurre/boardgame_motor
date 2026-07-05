@@ -152,8 +152,8 @@ onMounted(load)
         <p v-if="!selected" class="manager-panel__empty">{{ t('users.panelEmpty') }}</p>
         <template v-else>
           <p class="manager-panel__kicker">{{ t('users.panelTitle') }}</p>
-          <h3 class="manager-detail__title">{{ selected.name }}</h3>
 
+          <!-- Acciones PRIMERO; después, secciones separadas (patrón panel) -->
           <div class="manager-detail__actions">
             <BaseButton variant="secondary" @click="openEdit(selected)">
               <template #icon><SquarePen :size="14" /></template>
@@ -164,6 +164,10 @@ onMounted(load)
               {{ t('common.actions.delete') }}
             </BaseButton>
           </div>
+
+          <hr class="manager-panel__divider" />
+
+          <h3 class="manager-detail__title">{{ selected.name }}</h3>
 
           <!-- Acción rápida sin modal (patrón páginas) -->
           <BaseCheckbox

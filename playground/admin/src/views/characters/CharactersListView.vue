@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { onMounted } from 'vue'
-import { ArrowRight, Plus, SquarePen } from '@lucide/vue'
+import { ArrowRight, Plus } from '@lucide/vue'
 import { BaseGrid, EntityCard, FilterBar, EmptyState } from '@bgm/admin-kit'
 import { BaseButton, BaseTabs, IconButton } from '@bgm/ui'
 import { useEntityList } from '@/composables/useEntityList'
@@ -77,15 +77,15 @@ onMounted(init)
           </div>
         </template>
 
+        <!-- La tarjeta solo lleva "abrir": el resto vive en el panel derecho -->
         <template #actions>
-          <template v-if="!item.deleted_at">
-            <IconButton variant="success" :title="t('common.actions.edit')" @click="edit(item)"
-              ><SquarePen :size="18"
-            /></IconButton>
-            <IconButton variant="info" :title="t('common.actions.open')" @click="goSingle(item)"
-              ><ArrowRight :size="18"
-            /></IconButton>
-          </template>
+          <IconButton
+            v-if="!item.deleted_at"
+            variant="info"
+            :title="t('common.actions.open')"
+            @click="goSingle(item)"
+            ><ArrowRight :size="18"
+          /></IconButton>
         </template>
 
         <template #badges>

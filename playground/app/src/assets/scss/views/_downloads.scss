@@ -38,17 +38,61 @@
     gap: $space-2;
   }
 
-  &__item {
+  // Filtro de idioma de los PDF.
+  &__filter {
     display: flex;
     align-items: center;
-    gap: $space-3;
+    gap: $space-2;
+  }
+
+  &__filter-label {
+    color: $text-3;
+    font-size: $fs-13;
+  }
+
+  &__filter-btn {
+    padding: 2px $space-3;
+    background: none;
+    border: 1px solid $border;
+    border-radius: $radius-pill;
+    color: $text-2;
+    font-size: $fs-13;
+    font-weight: 600;
+    cursor: pointer;
+    transition: color 0.15s ease, border-color 0.15s ease, background-color 0.15s ease;
+
+    &:hover { color: $accent-500; border-color: $accent-500; }
+
+    &.is-active {
+      color: $accent-500;
+      border-color: $accent-500;
+      background: color-mix(in srgb, $accent-500 12%, transparent);
+    }
+  }
+
+  // Tarjeta de PDF. En estrecho: título arriba con el botón de descarga y
+  // los datos debajo; en ancho, todo en una fila.
+  &__item {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    grid-template-areas:
+      "name link"
+      "meta meta";
+    align-items: center;
+    gap: $space-1 $space-3;
     border: 1px solid $border;
     border-radius: $radius-md;
     background: color-mix(in srgb, $surface 65%, transparent);
     padding: $space-2 $space-3;
+
+    @media (min-width: #{$bp-sm}) {
+      display: flex;
+      gap: $space-3;
+    }
   }
 
   &__name {
+    grid-area: name;
     flex: 1;
     min-width: 0;
     overflow: hidden;
@@ -57,6 +101,7 @@
   }
 
   &__meta {
+    grid-area: meta;
     display: inline-flex;
     align-items: center;
     gap: $space-2;
@@ -73,6 +118,7 @@
   }
 
   &__link {
+    grid-area: link;
     display: inline-flex;
     align-items: center;
     justify-content: center;

@@ -21,15 +21,58 @@ h6 {
   font-family: var(--font-headings, inherit);
 }
 
+// La página ocupa SIEMPRE al menos el alto de la ventana: el pie queda
+// pegado abajo aunque el contenido sea corto (columna flex + flex: 1).
+#app {
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+}
+
+.site-content {
+  flex: 1 0 auto;
+}
+
 // Pie con el texto de la configuración.
 .app-footer {
-  margin-top: $space-8;
+  margin-top: auto;
   padding: $space-5 $space-6;
   border-top: 1px solid $border;
   background: $surface;
   color: $text-3;
   font-size: $fs-13;
   text-align: center;
+}
+
+// Banner de consentimiento de almacenamiento (no hay cookies): fijo abajo.
+.consent-banner {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 60;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: $space-3;
+  padding: $space-3 $space-5;
+  background: color-mix(in srgb, $surface 94%, transparent);
+  backdrop-filter: blur(8px);
+  border-top: 1px solid $border;
+
+  &__text {
+    margin: 0;
+    font-size: $fs-13;
+    color: $text-2;
+    max-width: 720px;
+  }
+
+  &__actions {
+    display: flex;
+    gap: $space-2;
+    flex-shrink: 0;
+  }
 }
 
 // Logo del sitio en la barra (configuración de la web). El SVG inlineado

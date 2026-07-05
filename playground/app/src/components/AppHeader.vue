@@ -2,7 +2,7 @@
 import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
-import { FileDown, LogIn, LogOut, Menu, X } from '@lucide/vue'
+import { ChevronDown, FileDown, LayoutDashboard, LogIn, LogOut, Menu, X } from '@lucide/vue'
 import { LocaleSelector, MotorBadge, ThemeSelector } from '@bgm/ui'
 import { api } from '@/lib/api'
 import { entitySections } from '@/entities/registry'
@@ -13,9 +13,11 @@ import { useLocalesStore } from '@/stores/locales'
 import { useSiteStore } from '@/stores/site'
 
 // Cabecera pública estilo kontuan en dos líneas: arriba la marca y las
-// acciones (idioma, colección, tema y el botón de entrar/usuario); debajo,
-// la barra de navegación. En móvil TODO lo del header (salvo el logo) pasa
-// a la barra lateral off-canvas. Se oculta al bajar y asoma al subir.
+// acciones (admin si procede, descargas, entrar/usuario, idioma y tema);
+// debajo, la barra de navegación CENTRADA. Las páginas con hijas publicadas
+// despliegan submenú al hover (chevron, patrón CDL); en móvil TODO lo del
+// header (salvo el logo) pasa a la barra lateral off-canvas, con las hijas
+// indentadas. Se oculta al bajar y asoma al subir.
 const auth = useAuthStore()
 const route = useRoute()
 const router = useRouter()
@@ -29,19 +31,27 @@ interface NavPage {
   title: Record<string, string>
   slugs: Record<string, string>
   is_home: boolean
+  children?: Omit<NavPage, 'is_home' | 'children'>[]
 }
 
 const pages = ref<NavPage[]>([])
 const navOpen = ref(false)
 const hidden = ref(false)
 
+function navEntry(p: { id: number; title: Record<string, string>; slugs: Record<string, string> }) {
+  return {
+    id: p.id,
+    label: p.title[locales.current] || Object.values(p.title)[0] || '',
+    slug: p.slugs[locales.current] || Object.values(p.slugs)[0] || '',
+  }
+}
+
 const navPages = computed(() =>
   pages.value
     .filter((p) => !p.is_home)
     .map((p) => ({
-      id: p.id,
-      label: p.title[locales.current] || Object.values(p.title)[0] || '',
-      slug: p.slugs[locales.current] || Object.values(p.slugs)[0] || '',
+      ...navEntry(p),
+      children: (p.children ?? []).map(navEntry),
     })),
 )
 
@@ -56,6 +66,10 @@ const navSections = computed(() =>
 const downloadsSegment = computed(() => DOWNLOAD_PATHS[locales.current] ?? DOWNLOAD_PATHS.es)
 
 const userInitial = computed(() => auth.user?.name?.charAt(0)?.toUpperCase() ?? '?')
+
+// Enlace a la administración (solo admin/editor). URL por env (kontuan).
+const adminUrl = (import.meta.env.VITE_ADMIN_URL as string | undefined) || 'http://localhost:5174'
+const canAccessAdmin = computed(() => auth.user?.can_access_admin === true)
 
 /** Cambia el idioma NAVEGANDO: el prefijo de la URL manda (DC-12). */
 function switchLocale(code: string) {
@@ -141,12 +155,16 @@ onBeforeUnmount(() => window.removeEventListener('scroll', onScroll))
           <MotorBadge v-else :label="site.title || 'BGM'" />
         </RouterLink>
 
+        <!-- Orden: [admin] descargas · usuario/entrar · idioma · tema -->
         <div class="site-header__actions">
-          <LocaleSelector
-            :model-value="locales.current"
-            :locales="locales.locales"
-            @update:model-value="switchLocale"
-          />
+          <a
+            v-if="canAccessAdmin"
+            class="site-header__collection"
+            :href="adminUrl"
+            :title="t('nav.admin')"
+          >
+            <LayoutDashboard :size="20" />
+          </a>
           <RouterLink
             class="site-header__collection"
             :to="{ name: 'downloads', params: { locale: locales.current, dl: downloadsSegment } }"
@@ -157,7 +175,6 @@ onBeforeUnmount(() => window.removeEventListener('scroll', onScroll))
               {{ collection.count }}
             </span>
           </RouterLink>
-          <ThemeSelector />
 
           <!-- Entrar / usuario: SIEMPRE en la cabecera (patrón kontuan) -->
           <template v-if="auth.isAuthenticated">
@@ -186,21 +203,45 @@ onBeforeUnmount(() => window.removeEventListener('scroll', onScroll))
             <LogIn :size="16" />
             {{ t('nav.login') }}
           </RouterLink>
+
+          <LocaleSelector
+            :model-value="locales.current"
+            :locales="locales.locales"
+            @update:model-value="switchLocale"
+          />
+          <ThemeSelector />
         </div>
       </div>
     </div>
 
-    <!-- Línea 2 (escritorio): la barra de navegación -->
+    <!-- Línea 2 (escritorio): la barra de navegación, centrada -->
     <nav class="site-header__nav">
       <ul class="site-header__list">
-        <li v-for="page in navPages" :key="page.id">
+        <li
+          v-for="page in navPages"
+          :key="page.id"
+          class="site-header__item"
+          :class="{ 'has-children': page.children.length }"
+        >
           <RouterLink
             class="site-header__link"
             :to="{ name: 'page', params: { locale: locales.current, slug: page.slug } }"
-            >{{ page.label }}</RouterLink
           >
+            {{ page.label }}
+            <ChevronDown v-if="page.children.length" :size="14" class="site-header__chevron" />
+          </RouterLink>
+          <!-- Submenú (hover / focus-within, patrón CDL) -->
+          <ul v-if="page.children.length" class="site-header__dropdown">
+            <li v-for="child in page.children" :key="child.id">
+              <RouterLink
+                class="site-header__dropdown-link"
+                :to="{ name: 'page', params: { locale: locales.current, slug: child.slug } }"
+                >{{ child.label }}</RouterLink
+              >
+            </li>
+          </ul>
         </li>
-        <li v-for="section in navSections" :key="section.key">
+        <li v-for="section in navSections" :key="section.key" class="site-header__item">
           <RouterLink
             class="site-header__link"
             :to="{
@@ -210,9 +251,9 @@ onBeforeUnmount(() => window.removeEventListener('scroll', onScroll))
             >{{ section.label }}</RouterLink
           >
         </li>
-        <li>
+        <li class="site-header__item">
           <RouterLink
-            class="site-header__link site-header__link--downloads"
+            class="site-header__link"
             :to="{ name: 'downloads', params: { locale: locales.current, dl: downloadsSegment } }"
             >{{ t('nav.downloads') }}</RouterLink
           >
@@ -239,6 +280,16 @@ onBeforeUnmount(() => window.removeEventListener('scroll', onScroll))
             :to="{ name: 'page', params: { locale: locales.current, slug: page.slug } }"
             >{{ page.label }}</RouterLink
           >
+          <!-- Hijas: siempre desplegadas, con indentación (patrón CDL) -->
+          <ul v-if="page.children.length" class="site-sidebar__children">
+            <li v-for="child in page.children" :key="child.id">
+              <RouterLink
+                class="site-header__link"
+                :to="{ name: 'page', params: { locale: locales.current, slug: child.slug } }"
+                >{{ child.label }}</RouterLink
+              >
+            </li>
+          </ul>
         </li>
         <li v-for="section in navSections" :key="section.key">
           <RouterLink
@@ -252,7 +303,7 @@ onBeforeUnmount(() => window.removeEventListener('scroll', onScroll))
         </li>
         <li>
           <RouterLink
-            class="site-header__link site-header__link--downloads"
+            class="site-header__link"
             :to="{ name: 'downloads', params: { locale: locales.current, dl: downloadsSegment } }"
           >
             {{ t('nav.downloads') }}
@@ -260,6 +311,12 @@ onBeforeUnmount(() => window.removeEventListener('scroll', onScroll))
               {{ collection.count }}
             </span>
           </RouterLink>
+        </li>
+        <li v-if="canAccessAdmin">
+          <a class="site-header__link" :href="adminUrl">
+            <LayoutDashboard :size="16" />
+            {{ t('nav.admin') }}
+          </a>
         </li>
       </ul>
 

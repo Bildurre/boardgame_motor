@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { onMounted, reactive, ref } from 'vue'
+import { computed, onMounted, reactive, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { Plus, Trash2 } from '@lucide/vue'
+import { Plus, SquarePen, Trash2 } from '@lucide/vue'
 import { BaseGrid, EntityCard, EmptyState } from '@bgm/admin-kit'
 import {
   BaseButton,
@@ -35,19 +35,31 @@ async function reload() {
 }
 onMounted(reload)
 
-// --- Modal de alta ---
+// --- Modal de alta / edición (mismo formulario; la imagen es opcional al editar) ---
 const open = ref(false)
 const saving = ref(false)
+const editing = ref<Icon | null>(null)
 const errors = reactive<Record<string, string>>({})
 const form = reactive<{ name: string; image: File | null }>({ name: '', image: null })
+
+const modalTitle = computed(() => (editing.value ? t('icons.edit') : t('icons.new')))
 
 function clearErrors() {
   for (const k of Object.keys(errors)) delete errors[k]
 }
 
 function openCreate() {
+  editing.value = null
   form.name = ''
   form.image = null
+  clearErrors()
+  open.value = true
+}
+
+function openEdit(icon: Icon) {
+  editing.value = icon
+  form.name = icon.name
+  form.image = null // solo se sube si se elige una nueva
   clearErrors()
   open.value = true
 }
@@ -56,7 +68,7 @@ async function save() {
   clearErrors()
   // Validación mínima en cliente (evita el 422 y marca los campos).
   if (!form.name.trim()) errors.name = t('common.required')
-  if (!form.image) errors.image = t('common.required')
+  if (!editing.value && !form.image) errors.image = t('common.required')
   if (errors.name || errors.image) return
 
   saving.value = true
@@ -64,8 +76,13 @@ async function save() {
     const fd = new FormData()
     fd.append('name', form.name)
     if (form.image) fd.append('image', form.image)
-    await api.post('/admin/icons', fd)
-    toast.success(t('icons.toast.created'))
+    if (editing.value) {
+      await api.post(`/admin/icons/${editing.value.id}`, fd)
+      toast.success(t('icons.toast.updated'))
+    } else {
+      await api.post('/admin/icons', fd)
+      toast.success(t('icons.toast.created'))
+    }
     open.value = false
     await reload()
   } catch (e) {
@@ -113,6 +130,9 @@ async function del(icon: Icon) {
           <div class="icon-tile"><img v-if="icon.url" :src="icon.url" :alt="icon.name" /></div>
         </template>
         <template #actions>
+          <IconButton variant="success" :title="t('common.actions.edit')" @click="openEdit(icon)"
+            ><SquarePen :size="18"
+          /></IconButton>
           <IconButton variant="danger" :title="t('common.actions.delete')" @click="del(icon)"
             ><Trash2 :size="18"
           /></IconButton>
@@ -122,7 +142,7 @@ async function del(icon: Icon) {
 
     <EditModal
       v-model="open"
-      :title="t('icons.new')"
+      :title="modalTitle"
       :loading="saving"
       :submit-label="t('common.save')"
       :cancel-label="t('common.cancel')"
@@ -131,7 +151,7 @@ async function del(icon: Icon) {
       <BaseInput v-model="form.name" :label="t('icons.nameLabel')" required :error="errors.name" />
       <ImageUpload
         v-model="form.image"
-        :label="t('icons.imageLabel')"
+        :label="editing ? t('icons.imageReplaceLabel') : t('icons.imageLabel')"
         accept=".svg,.png,.jpg,.jpeg,.webp"
         :max-size="2"
         :drag-text="t('common.imageDrag')"

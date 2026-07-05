@@ -33,6 +33,20 @@
   }
 }
 
+// Enlace "Ver la web" de la barra superior (espejo del enlace a admin del
+// header público): texto con icono, en acento.
+.navbar-viewsite {
+  display: inline-flex;
+  align-items: center;
+  gap: $space-2;
+  color: $accent-500;
+  text-decoration: none;
+  font-size: $fs-14;
+  font-weight: $k-fw-semibold;
+
+  &:hover { color: $accent-400; }
+}
+
 .who-logout {
   display: flex;
   align-items: center;

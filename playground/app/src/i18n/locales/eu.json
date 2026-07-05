@@ -5,7 +5,8 @@
     "login": "Sartu",
     "logout": "Irten",
     "downloads": "Deskargak",
-    "menu": "Menua"
+    "menu": "Menua",
+    "admin": "Administrazioa"
   },
   "entities": {
     "characters": "Pertsonaiak",
@@ -51,7 +52,9 @@
       "submitting": "Sortzen…",
       "hasAccount": "Baduzu kontua?",
       "login": "Sartu",
-      "error": "Ezin izan da izen-ematea osatu."
+      "error": "Ezin izan da izen-ematea osatu.",
+      "privacyNote": "Zure datuak (izena eta emaila) zure kontua kudeatzeko baino ez dira erabiltzen: ez zaizkie hirugarrenei lagatzen eta ezabatzea eska dezakezu nahi duzunean.",
+      "privacyAccept": "Onartzen dut nire datuak nire kontua kudeatzeko tratatzea."
     },
     "forgot": {
       "title": "Berreskuratu pasahitza",
@@ -110,7 +113,8 @@
       "house-tokens": "Etxeen fitxak",
       "house-counters": "Etxeen kontagailuak",
       "pages": "Dokumentuak"
-    }
+    },
+    "language": "Hizkuntza"
   },
   "collection": {
     "title": "Zure bilduma",
@@ -126,5 +130,10 @@
     "error": "Ezin izan da bilduma eguneratu.",
     "add": "Gehitu zure PDFra",
     "inCollection": "Zure bilduman"
+  },
+  "consent": {
+    "text": "Webgune honek ez du cookierik erabiltzen. Zure nabigatzailean hobespen funtzionalak (hizkuntza, gaia), saioa eta, erabiltzen baduzu, zure PDF bilduma baino ez ditu gordetzen. Jarraipenik eta hirugarrenik ez. Onartzen ez baduzu, dena berdin dabil baina ez da gogoratzen birkargatzean.",
+    "accept": "Onartu",
+    "reject": "Memorian bakarrik"
   }
 }

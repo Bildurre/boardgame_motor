@@ -24,4 +24,9 @@ Primera versión etiquetada (Fases 0–7 del plan).
 - **Layout kontuan**: panel derecho contextual (acciones arriba, contenido
   del elemento), breadcrumbs dinámicas, nav con secciones por permiso.
 - `FontUpload` (webfonts del sitio) y utilidades compartidas.
+- **Panel derecho estandarizado**: acciones primero + separadores
+  (`.manager-panel__divider`) entre secciones, en todos los gestores.
+- `PdfManager` con el resumen de las previews (total + listos por idioma) y
+  acciones Generar faltantes / Regenerar todo / Borrar todo.
+- Chips (`.locale-chip`) nunca muted: acento por defecto y fuente menor.
 - i18n por props (DC-29): etiquetas vía `labels`/`typeLabels`.
