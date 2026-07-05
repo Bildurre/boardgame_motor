@@ -816,12 +816,20 @@ La vista **Copias** del admin crea con un clic, lista con fecha y tamaño, y
 descarga/borra desde el panel derecho (descarga autenticada por la API, con
 blob).
 
-**Programación** (en `routes/console.php` del juego):
+**Copia automática (se configura desde el admin).** La programa el MOTOR:
+la vista Copias trae la tarjeta "Copia automática" (activada, frecuencia
+diaria/semanal, día, hora y retención), guardada en la tabla `settings`
+(clave `backup`, servicio `BackupSettings`) y leída por
+`MotorBackup::schedule()` en cada `schedule:run` — los cambios aplican sin
+redeploy. La retención del admin también gobierna `backup:clean` (pisa
+`motor.backup.keep_days`, que queda como valor base). API:
+`PUT /api/admin/backups/schedule` (la config viaja en el
+`GET /api/admin/backups`). En el juego NO declares el backup en
+`routes/console.php`; solo necesitas el cron del scheduler y, si quieres,
+el resto de tareas:
 
 ```php
-Schedule::command('backup:run --disable-notifications')->dailyAt('03:00');
-Schedule::command('backup:clean --disable-notifications')->dailyAt('03:30');
-Schedule::command('pdf:cleanup')->hourly(); // ya que estás: PDFs temporales (doc 02)
+Schedule::command('pdf:cleanup')->hourly(); // PDFs temporales (doc 02)
 ```
 
 **Restore** (DC-16, manual por ahora): descomprime el zip; con SQLite basta

@@ -7,8 +7,11 @@
 > en el zip — el dump exige el binario `sqlite3`). API en
 > `/api/admin/backups` (listar/crear/descargar/borrar, solo `manage-web`) +
 > vista **Copias** en el admin (crear con un clic, panel derecho con
-> descargar/borrar). Programado en `routes/console.php` del juego
-> (`backup:run` + `backup:clean` diarios). Pendiente: creación en cola para
+> descargar/borrar). La copia AUTOMÁTICA se configura desde esa misma vista
+> (activada, frecuencia diaria/semanal, día, hora y retención; servicio
+> `BackupSettings` sobre la tabla settings + `PUT /api/admin/backups/
+> schedule`) y la programa el motor en `MotorBackup::schedule()` — el juego
+> solo necesita el cron de `schedule:run`. Pendiente: creación en cola para
 > BBDD grandes; restore guiado.
 
 ## Qué hace

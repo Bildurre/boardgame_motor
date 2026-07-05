@@ -403,7 +403,7 @@
   "backups": {
     "title": "Copias de seguridad",
     "create": "Crear copia",
-    "hint": "Además de las copias manuales, hay una programada cada noche; las viejas se limpian solas según la retención.",
+    "hint": "La copia automática se configura abajo; las viejas se limpian solas según la retención.",
     "empty": "Todavía no hay copias.",
     "panelTitle": "Copia",
     "panelEmpty": "Selecciona una copia para ver sus acciones.",
@@ -416,6 +416,26 @@
     "toast": {
       "created": "Copia creada.",
       "deleted": "Copia borrada."
+    },
+    "schedule": {
+      "title": "Copia automática",
+      "auto": "Hacer copias automáticas",
+      "frequency": "Frecuencia",
+      "daily": "Diaria",
+      "weekly": "Semanal",
+      "weekday": "Día de la semana",
+      "time": "Hora",
+      "keepDays": "Retención (días)",
+      "saved": "Copia automática guardada.",
+      "weekdays": {
+        "1": "Lunes",
+        "2": "Martes",
+        "3": "Miércoles",
+        "4": "Jueves",
+        "5": "Viernes",
+        "6": "Sábado",
+        "7": "Domingo"
+      }
     }
   },
   "users": {

@@ -16,6 +16,35 @@
     margin: 0;
   }
 
+  // Tarjeta de la copia automática (misma piel que las secciones de
+  // Configuración): los campos en fila con wrap.
+  &__schedule {
+    background: $surface;
+    border: 1px solid $border;
+    border-radius: $radius-lg;
+    padding: $space-5;
+    display: grid;
+    gap: $space-4;
+    justify-items: start;
+
+    h2 {
+      margin: 0;
+      font-size: $fs-16;
+      color: $text-2;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+  }
+
+  &__schedule-fields {
+    display: flex;
+    flex-wrap: wrap;
+    gap: $space-3 $space-4;
+    align-items: flex-end;
+
+    > * { min-width: 140px; }
+  }
+
   &__name {
     color: $text-1;
     font-size: $fs-13;

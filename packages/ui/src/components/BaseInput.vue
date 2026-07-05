@@ -15,6 +15,7 @@ const props = withDefaults(
       | 'search'
       | 'date'
       | 'datetime-local'
+      | 'time'
     error?: string
     hint?: string
     disabled?: boolean

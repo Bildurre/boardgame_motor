@@ -464,7 +464,7 @@
   "backups": {
     "title": "Backups",
     "create": "Create backup",
-    "hint": "Besides manual backups, one is scheduled every night; old ones are cleaned up automatically per retention.",
+    "hint": "Automatic backups are configured below; old ones are cleaned up automatically per retention.",
     "empty": "No backups yet.",
     "panelTitle": "Backup",
     "panelEmpty": "Select a backup to see its actions.",
@@ -477,6 +477,26 @@
     "toast": {
       "created": "Backup created.",
       "deleted": "Backup deleted."
+    },
+    "schedule": {
+      "title": "Automatic backup",
+      "auto": "Run backups automatically",
+      "frequency": "Frequency",
+      "daily": "Daily",
+      "weekly": "Weekly",
+      "weekday": "Day of the week",
+      "time": "Time",
+      "keepDays": "Retention (days)",
+      "saved": "Automatic backup saved.",
+      "weekdays": {
+        "1": "Monday",
+        "2": "Tuesday",
+        "3": "Wednesday",
+        "4": "Thursday",
+        "5": "Friday",
+        "6": "Saturday",
+        "7": "Sunday"
+      }
     }
   },
   "users": {

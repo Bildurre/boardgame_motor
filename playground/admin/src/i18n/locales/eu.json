@@ -464,7 +464,7 @@
   "backups": {
     "title": "Segurtasun-kopiak",
     "create": "Sortu kopia",
-    "hint": "Eskuzko kopiez gain, gauero bat programatuta dago; zaharrak berez garbitzen dira atxikipenaren arabera.",
+    "hint": "Kopia automatikoa behean konfiguratzen da; zaharrak berez garbitzen dira atxikipenaren arabera.",
     "empty": "Oraindik ez dago kopiarik.",
     "panelTitle": "Kopia",
     "panelEmpty": "Hautatu kopia bat bere ekintzak ikusteko.",
@@ -477,6 +477,26 @@
     "toast": {
       "created": "Kopia sortuta.",
       "deleted": "Kopia ezabatuta."
+    },
+    "schedule": {
+      "title": "Kopia automatikoa",
+      "auto": "Kopiak automatikoki egin",
+      "frequency": "Maiztasuna",
+      "daily": "Egunerokoa",
+      "weekly": "Astekoa",
+      "weekday": "Asteko eguna",
+      "time": "Ordua",
+      "keepDays": "Atxikipena (egunak)",
+      "saved": "Kopia automatikoa gordeta.",
+      "weekdays": {
+        "1": "Astelehena",
+        "2": "Asteartea",
+        "3": "Asteazkena",
+        "4": "Osteguna",
+        "5": "Ostirala",
+        "6": "Larunbata",
+        "7": "Igandea"
+      }
     }
   },
   "users": {

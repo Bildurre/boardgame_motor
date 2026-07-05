@@ -1,17 +1,35 @@
 <script setup lang="ts">
 import { computed, onMounted, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { Download, Plus, Trash2 } from '@lucide/vue'
-import { BaseButton, useConfirm, useToast } from '@bgm/ui'
+import { Download, Plus, Save, Trash2 } from '@lucide/vue'
+import {
+  BaseButton,
+  BaseCheckbox,
+  BaseInput,
+  BaseSelect,
+  NumericInput,
+  useConfirm,
+  useToast,
+} from '@bgm/ui'
 import { useRightSidebar } from '@bgm/admin-kit'
 import { api } from '@/lib/api'
 
 // Copias de seguridad (doc 06): crear con un clic, listar, descargar y
-// borrar. La fila entera selecciona y el panel derecho trae las acciones.
+// borrar; la fila entera selecciona y el panel derecho trae las acciones.
+// La copia AUTOMÁTICA (frecuencia, hora, retención) se configura aquí y la
+// programa el scheduler del motor.
 interface BackupRow {
   file: string
   date: string
   size: number
+}
+
+interface BackupSchedule {
+  auto: boolean
+  frequency: 'daily' | 'weekly'
+  time: string
+  weekday: number
+  keep_days: number
 }
 
 const { t, locale } = useI18n()
@@ -25,18 +43,48 @@ const backups = ref<BackupRow[]>([])
 const loading = ref(true)
 const creating = ref(false)
 const selectedFile = ref<string | null>(null)
+const schedule = ref<BackupSchedule | null>(null)
+const savingSchedule = ref(false)
 
 const selected = computed(() => backups.value.find((b) => b.file === selectedFile.value) ?? null)
+
+const frequencyOptions = computed(() => [
+  { value: 'daily', label: t('backups.schedule.daily') },
+  { value: 'weekly', label: t('backups.schedule.weekly') },
+])
+
+// 1 = lunes … 7 = domingo (como lo espera la API).
+const weekdayOptions = computed(() =>
+  [1, 2, 3, 4, 5, 6, 7].map((day) => ({
+    value: String(day),
+    label: t(`backups.schedule.weekdays.${day}`),
+  })),
+)
 
 async function load() {
   loading.value = true
   try {
     const { data } = await api.get('/admin/backups')
     backups.value = data.data
+    schedule.value = data.schedule
   } catch {
     toast.danger(t('common.errors.load'))
   } finally {
     loading.value = false
+  }
+}
+
+async function saveSchedule() {
+  if (!schedule.value) return
+  savingSchedule.value = true
+  try {
+    const { data } = await api.put('/admin/backups/schedule', schedule.value)
+    schedule.value = data.schedule
+    toast.success(t('backups.schedule.saved'))
+  } catch {
+    toast.danger(t('common.errors.action'))
+  } finally {
+    savingSchedule.value = false
   }
 }
 
@@ -120,6 +168,39 @@ onMounted(load)
     </div>
 
     <p class="backups-view__hint">{{ t('backups.hint') }}</p>
+
+    <!-- Copia automática: la programa el scheduler del motor -->
+    <section v-if="schedule" class="backups-view__schedule">
+      <h2>{{ t('backups.schedule.title') }}</h2>
+      <BaseCheckbox v-model="schedule.auto" :label="t('backups.schedule.auto')" />
+      <div v-if="schedule.auto" class="backups-view__schedule-fields">
+        <BaseSelect
+          v-model="schedule.frequency"
+          :label="t('backups.schedule.frequency')"
+          :options="frequencyOptions"
+        />
+        <BaseSelect
+          v-if="schedule.frequency === 'weekly'"
+          :model-value="String(schedule.weekday)"
+          :label="t('backups.schedule.weekday')"
+          :options="weekdayOptions"
+          @update:model-value="(v) => (schedule!.weekday = Number(v))"
+        />
+        <BaseInput v-model="schedule.time" type="time" :label="t('backups.schedule.time')" />
+        <NumericInput
+          v-model="schedule.keep_days"
+          :label="t('backups.schedule.keepDays')"
+          :min="1"
+          :max="365"
+        />
+      </div>
+      <div>
+        <BaseButton :disabled="savingSchedule" @click="saveSchedule">
+          <template #icon><Save :size="14" /></template>
+          {{ t('common.save') }}
+        </BaseButton>
+      </div>
+    </section>
 
     <p v-if="!loading && !backups.length" class="backups-view__empty">{{ t('backups.empty') }}</p>
 
