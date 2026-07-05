@@ -48,8 +48,22 @@ cd .. && npm install
 
 ## 2. Esqueleto del repo del juego
 
-La estructura de referencia es la del `playground/` de este monorepo — de
-hecho, **la forma más rápida de arrancar es copiarlo** y renombrar:
+**La forma más rápida de arrancar es `tools/crear-juego.sh`**: genera un
+proyecto de juego limpio a partir del playground del motor — con las rutas
+ya apuntando al motor hermano, el tooling raíz y la CI adaptados, SOLO las
+guías de documentación y un README con los pasos de arranque:
+
+```bash
+# motor y juego como carpetas hermanas
+git clone --branch v0.1.0 --depth 1 <url-del-motor> motor
+motor/tools/crear-juego.sh mi-juego          # [ruta-al-motor], def. ../motor
+cd mi-juego                                  # y sigue su README.md
+```
+
+El proyecto generado nace **funcionando** (entidades demo, seeder, tests,
+gates) para ir sustituyendo las piezas de ejemplo por las del juego.
+
+La estructura resultante (la misma que la del `playground/` del monorepo):
 
 ```
 mi-juego/
@@ -149,6 +163,8 @@ Qué rellena el juego (todo con el playground de espejo):
 
 ## 5. Checklist del primer día
 
+- [ ] Repo del juego generado con `motor/tools/crear-juego.sh` (o copiado a
+      mano del playground).
 - [ ] Repo del juego con el motor clonado/submódulo al tag (`v0.1.0`).
 - [ ] `api/` instala `bgm/core` por versión; `migrate` + `motor:install` OK.
 - [ ] `admin/` y `app/` compilan (`npm run build`) con `@bgm/ui` y

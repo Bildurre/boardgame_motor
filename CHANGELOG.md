@@ -21,3 +21,12 @@ generación de PDF (catálogo + colección de usuario/invitado), CRM de páginas
 y bloques, configuración de la web, gestión de usuarios, backup de BBDD,
 web pública (locale/SEO/sitemap/prerender, descargas) y panel de usuario
 extensible. Ver el changelog de cada paquete.
+
+Herramientas del monorepo:
+
+- `tools/crear-juego.sh <destino> [ruta-al-motor]` — genera un proyecto de
+  juego limpio a partir del playground (api + admin + app + packages/shared,
+  tooling raíz y CI adaptados, solo las guías de documentación) que consume
+  el motor por versión desde una carpeta hermana.
+- `tools/consumo-externo/probar-consumo.sh` — prueba reproducible de consumo
+  del motor por versión (Composer `path` + npm `file:`).

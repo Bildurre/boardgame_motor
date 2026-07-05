@@ -35,8 +35,11 @@ Durante el desarrollo, el `playground` consume los paquetes por **enlace local**
 es el **monorepo etiquetado** (`vX.Y.Z`, versión de tren para los tres paquetes):
 un juego externo clona/submodula el motor al tag y consume `bgm/core` por
 Composer (`path`) y `@bgm/ui`/`@bgm/admin-kit` por npm (`file:`). Guía:
-[`documentacion/guia-arrancar-un-juego-nuevo.md`](documentacion/guia-arrancar-un-juego-nuevo.md);
-prueba de consumo externa: `tools/consumo-externo/probar-consumo.sh`. CI en
+[`documentacion/guia-arrancar-un-juego-nuevo.md`](documentacion/guia-arrancar-un-juego-nuevo.md).
+**Para arrancar una web nueva**, `tools/crear-juego.sh <destino>` genera un
+proyecto de juego limpio a partir del playground (sin la documentación de
+desarrollo — solo las guías — y con las rutas ya apuntando al motor hermano).
+Prueba de consumo externa: `tools/consumo-externo/probar-consumo.sh`. CI en
 GitHub Actions (`.github/workflows/ci.yml`): ESLint + vue-tsc + build y
 Pint + Pest en cada push/PR.
 
