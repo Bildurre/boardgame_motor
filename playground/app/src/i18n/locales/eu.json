@@ -30,7 +30,8 @@
       "submitting": "Sartzen…",
       "noAccount": "Ez duzu konturik?",
       "register": "Eman izena",
-      "error": "Ezin izan da saioa hasi."
+      "error": "Ezin izan da saioa hasi.",
+      "forgot": "Pasahitza ahaztu duzu?"
     },
     "register": {
       "title": "Sortu kontua",
@@ -41,6 +42,22 @@
       "hasAccount": "Baduzu kontua?",
       "login": "Sartu",
       "error": "Ezin izan da izen-ematea osatu."
+    },
+    "forgot": {
+      "title": "Berreskuratu pasahitza",
+      "intro": "Esan zure emaila eta berrezartzeko esteka bidaliko dizugu.",
+      "submit": "Bidali esteka",
+      "submitting": "Bidaltzen…",
+      "backToLogin": "Itzuli sartzera",
+      "error": "Ezin izan da esteka bidali."
+    },
+    "reset": {
+      "title": "Berrezarri pasahitza",
+      "newPassword": "Pasahitz berria",
+      "submit": "Berrezarri",
+      "submitting": "Berrezartzen…",
+      "done": "Pasahitza berrezarrita: sartu zaitezke.",
+      "error": "Ezin izan da berrezarri (esteka iraungita?)."
     }
   },
   "account": {

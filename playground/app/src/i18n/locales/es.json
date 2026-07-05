@@ -30,7 +30,8 @@
       "submitting": "Entrando…",
       "noAccount": "¿No tienes cuenta?",
       "register": "Regístrate",
-      "error": "No se pudo iniciar sesión."
+      "error": "No se pudo iniciar sesión.",
+      "forgot": "¿Has olvidado la contraseña?"
     },
     "register": {
       "title": "Crear cuenta",
@@ -41,6 +42,22 @@
       "hasAccount": "¿Ya tienes cuenta?",
       "login": "Entra",
       "error": "No se pudo completar el registro."
+    },
+    "forgot": {
+      "title": "Recuperar contraseña",
+      "intro": "Dinos tu email y te enviamos un enlace para restablecerla.",
+      "submit": "Enviar enlace",
+      "submitting": "Enviando…",
+      "backToLogin": "Volver a entrar",
+      "error": "No se pudo enviar el enlace."
+    },
+    "reset": {
+      "title": "Restablecer contraseña",
+      "newPassword": "Nueva contraseña",
+      "submit": "Restablecer",
+      "submitting": "Restableciendo…",
+      "done": "Contraseña restablecida: ya puedes entrar.",
+      "error": "No se pudo restablecer (¿el enlace ha caducado?)."
     }
   },
   "account": {

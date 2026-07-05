@@ -50,6 +50,11 @@ async function submit() {
       </BaseButton>
     </form>
     <p class="hint">
+      <RouterLink :to="{ name: 'forgot', params: { locale: locales.current } }">{{
+        t('auth.login.forgot')
+      }}</RouterLink>
+    </p>
+    <p class="hint">
       {{ t('auth.login.noAccount') }}
       <RouterLink :to="{ name: 'register', params: { locale: locales.current } }">{{
         t('auth.login.register')

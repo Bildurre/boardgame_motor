@@ -11,8 +11,14 @@
 > opcional, verificar/desverificar email con `POST
 > {id}/toggle-verified`, borrar; nadie se borra ni se cambia el rol a sí
 > mismo); el
-> admin SPA filtra nav y rutas con los permisos de `/auth/me`. Pendiente:
-> forgot/reset password (al montar el correo real del juego).
+> admin SPA filtra nav y rutas con los permisos de `/auth/me`. Y
+> **forgot/reset password**: `POST /api/auth/forgot-password` +
+> `POST /api/auth/reset-password` (broker estándar, throttle, respuesta
+> genérica sin revelar emails); el enlace del correo apunta a la SPA
+> (`motor.frontend.reset_path`, por defecto `/restablecer?token=…&email=…`)
+> con vistas `/olvidada` y `/restablecer` en la app. En desarrollo, correo
+> con Mailpit (`MAIL_MAILER=smtp`, puerto 1025; ver .env.example). **Doc
+> completado.**
 
 ## Qué hace
 

@@ -30,7 +30,8 @@
       "submitting": "Logging in…",
       "noAccount": "Don't have an account?",
       "register": "Sign up",
-      "error": "Could not log in."
+      "error": "Could not log in.",
+      "forgot": "Forgot your password?"
     },
     "register": {
       "title": "Create account",
@@ -41,6 +42,22 @@
       "hasAccount": "Already have an account?",
       "login": "Log in",
       "error": "Could not complete the registration."
+    },
+    "forgot": {
+      "title": "Recover password",
+      "intro": "Tell us your email and we will send you a reset link.",
+      "submit": "Send link",
+      "submitting": "Sending…",
+      "backToLogin": "Back to log in",
+      "error": "Could not send the link."
+    },
+    "reset": {
+      "title": "Reset password",
+      "newPassword": "New password",
+      "submit": "Reset",
+      "submitting": "Resetting…",
+      "done": "Password reset: you can log in now.",
+      "error": "Could not reset (has the link expired?)."
     }
   },
   "account": {

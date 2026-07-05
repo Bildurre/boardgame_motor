@@ -46,6 +46,20 @@ const router = createRouter({
           component: () => import('@/views/RegisterView.vue'),
           meta: { guest: true },
         },
+        // Recuperación de contraseña (doc 05): el enlace del correo llega a
+        // /restablecer?token=…&email=… (motor.frontend.reset_path).
+        {
+          path: 'olvidada',
+          name: 'forgot',
+          component: () => import('@/views/ForgotPasswordView.vue'),
+          meta: { guest: true },
+        },
+        {
+          path: 'restablecer',
+          name: 'reset',
+          component: () => import('@/views/ResetPasswordView.vue'),
+          meta: { guest: true },
+        },
         // Panel de usuario (doc 10): una child route por sección registrada
         // (base del motor + las del juego, ver src/account/registry.ts).
         {
