@@ -25,10 +25,12 @@ h6 {
 .app-footer {
   margin-top: $space-8;
   padding: $space-5 $space-6;
-  border-top: 1px solid $border;
+  border-top: 1px solid $accent-500;
+  background: $surface;
   color: $text-3;
   font-size: $fs-13;
   text-align: center;
+  transition: border-color 0.3s ease;
 }
 
 // Logo del sitio en la barra (configuración de la web). El SVG inlineado

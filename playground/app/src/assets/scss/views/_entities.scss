@@ -20,14 +20,10 @@
     justify-content: center;
   }
 
-  // El enlace no debe teñir la tarjeta (la carta manda en su color).
+  // El slot posiciona el botón de añadir; el hover vive en el enlace
+  // interior (.entity-index__card-link, en _downloads.scss).
   &__slot {
     flex: 0 0 auto;
-    color: inherit;
-    text-decoration: none;
-    transition: transform 0.15s ease;
-
-    &:hover { transform: translateY(-3px); }
   }
 }
 

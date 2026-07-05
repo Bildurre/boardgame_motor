@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import { i18n } from '@/i18n'
 import { accountSections } from '@/account/registry'
+import { downloadsPattern } from '@/router/downloads'
 import { sectionPattern } from '@/entities/registry'
 import { useAuthStore } from '@/stores/auth'
 import { useLocalesStore } from '@/stores/locales'
@@ -57,6 +58,13 @@ const router = createRouter({
             component: section.component,
             meta: { auth: true },
           })),
+        },
+        // Apartado público de Descargas (doc 10): PDFs permanentes + tu
+        // colección; el segmento es traducible (canónica en la vista).
+        {
+          path: `:dl(${downloadsPattern()})`,
+          name: 'downloads',
+          component: () => import('@/views/DownloadsView.vue'),
         },
         // Listados de entidades del juego (doc 10): el segmento (en cualquier
         // locale) decide la sección; van ANTES que la página por slug.

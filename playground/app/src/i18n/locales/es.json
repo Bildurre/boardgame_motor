@@ -3,7 +3,9 @@
     "home": "Inicio",
     "account": "Mi cuenta",
     "login": "Entrar",
-    "logout": "Salir"
+    "logout": "Salir",
+    "downloads": "Descargas",
+    "menu": "Menú"
   },
   "entities": {
     "characters": "Personajes",
@@ -68,22 +70,34 @@
       "submit": "Actualizar",
       "ok": "Contraseña actualizada.",
       "error": "No se pudo cambiar la contraseña."
-    },
-    "print": {
-      "intro": "Elige cartas, genera su PDF temporal y imprímelas (doc 02). La colección caduca sola.",
-      "empty": "Tu colección está vacía: añade cartas de la lista de abajo.",
-      "collection": "Tu colección",
-      "copies": "copias",
-      "remove": "Quitar",
-      "clear": "Vaciar",
-      "generate": "Generar PDF",
-      "generating": "Generando…",
-      "download": "Descargar PDF",
-      "failed": "No se pudo generar el PDF.",
-      "pick": "Añadir personajes",
-      "add": "Añadir",
-      "added": "Añadido a la colección.",
-      "error": "No se pudo actualizar la colección."
     }
+  },
+  "downloads": {
+    "title": "Descargas",
+    "intro": "Todos los PDF listos para imprimir, sin registro: cartas, tokens y documentos del juego.",
+    "empty": "Todavía no hay descargas publicadas.",
+    "types": {
+      "characters": "Personajes",
+      "schemes": "Argucias",
+      "house-schemes": "Argucias por casa",
+      "house-tokens": "Tokens de casa",
+      "house-counters": "Contadores de casa",
+      "pages": "Documentos"
+    }
+  },
+  "collection": {
+    "title": "Tu colección",
+    "intro": "Añade cartas desde los listados y genera tu PDF personalizado; también sin registrarte (la colección vive en este navegador y caduca sola).",
+    "empty": "Tu colección está vacía: añade cartas desde los listados.",
+    "copies": "copias",
+    "remove": "Quitar",
+    "clear": "Vaciar",
+    "generate": "Generar PDF",
+    "generating": "Generando…",
+    "download": "Descargar PDF",
+    "failed": "No se pudo generar el PDF.",
+    "error": "No se pudo actualizar la colección.",
+    "add": "Añadir a tu PDF",
+    "inCollection": "En tu colección"
   }
 }

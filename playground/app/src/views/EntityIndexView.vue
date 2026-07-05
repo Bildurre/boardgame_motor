@@ -5,6 +5,7 @@ import { useI18n } from 'vue-i18n'
 import { useHead } from '@bgm/ui'
 import { api } from '@/lib/api'
 import { sectionFor } from '@/entities/registry'
+import AddToCollection from '@/components/AddToCollection.vue'
 import { useLocalesStore } from '@/stores/locales'
 import { useSiteStore } from '@/stores/site'
 
@@ -75,17 +76,24 @@ function detailSlug(item: EntityRow): string {
     <h1 class="entity-index__title">{{ t(section.titleKey) }}</h1>
     <p v-if="!loading && !items.length" class="entity-index__empty">{{ t('list.empty') }}</p>
     <div class="entity-index__grid">
-      <RouterLink
-        v-for="item in items"
-        :key="item.id"
-        class="entity-index__slot"
-        :to="{
-          name: 'entity-detail',
-          params: { locale: locales.current, section: segment, slug: detailSlug(item) },
-        }"
-      >
-        <component :is="section.item" :item="item" :locale="locales.current" />
-      </RouterLink>
+      <div v-for="item in items" :key="item.id" class="entity-index__slot">
+        <RouterLink
+          class="entity-index__card-link"
+          :to="{
+            name: 'entity-detail',
+            params: { locale: locales.current, section: segment, slug: detailSlug(item) },
+          }"
+        >
+          <component :is="section.item" :item="item" :locale="locales.current" />
+        </RouterLink>
+        <!-- Añadir a la colección "para imprimir" (doc 02), como en CDL -->
+        <AddToCollection
+          v-if="section.collectible"
+          :id="item.id"
+          class="entity-index__add"
+          :entity="section.collectible"
+        />
+      </div>
     </div>
   </main>
 </template>

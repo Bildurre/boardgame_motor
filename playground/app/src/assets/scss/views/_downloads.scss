@@ -1,0 +1,146 @@
+@use "tokens" as *;
+
+// Apartado público de Descargas (doc 10): grupos de PDFs permanentes +
+// "tu colección" debajo (gestor compartido con el panel de usuario).
+.downloads {
+  max-width: 860px;
+  margin: 0 auto;
+  padding: $space-6;
+  display: grid;
+  gap: $space-5;
+
+  &__title { margin: 0; }
+
+  &__intro,
+  &__empty {
+    margin: 0;
+    color: $text-3;
+  }
+
+  &__group,
+  &__collection {
+    display: grid;
+    gap: $space-3;
+
+    h2 {
+      margin: 0;
+      border-left: 4px solid $accent-500;
+      padding-left: $space-3;
+      font-size: $fs-18;
+    }
+  }
+
+  &__list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: $space-2;
+  }
+
+  &__item {
+    display: flex;
+    align-items: center;
+    gap: $space-3;
+    border: 1px solid $border;
+    border-radius: $radius-md;
+    background: color-mix(in srgb, $surface 65%, transparent);
+    padding: $space-2 $space-3;
+  }
+
+  &__name {
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  &__meta {
+    display: inline-flex;
+    align-items: center;
+    gap: $space-2;
+    color: $text-3;
+    font-size: $fs-13;
+  }
+
+  &__chip {
+    border: 1px solid $border;
+    border-radius: $radius-sm;
+    padding: 0 $space-1;
+    font-size: $fs-12;
+    font-weight: 600;
+  }
+
+  &__link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 34px;
+    height: 34px;
+    color: $accent-500;
+    border-radius: $radius-md;
+
+    &:hover { background: color-mix(in srgb, $accent-500 12%, transparent); }
+  }
+
+  &__collection { margin-top: $space-4; }
+}
+
+// Botón "añadir a la colección": flotante sobre las cartas de los listados
+// o con etiqueta en los detalles.
+.add-to-collection {
+  display: inline-flex;
+  align-items: center;
+  gap: $space-1;
+  background: $accent-500;
+  color: $surface;
+  border: none;
+  border-radius: 999px;
+  width: 30px;
+  height: 30px;
+  justify-content: center;
+  cursor: pointer;
+  transition: transform 0.15s ease, background-color 0.2s ease;
+
+  &:hover { transform: scale(1.08); }
+
+  &.is-added {
+    background: color-mix(in srgb, $accent-500 25%, $surface);
+    color: $accent-500;
+    cursor: default;
+
+    &:hover { transform: none; }
+  }
+
+  &.has-label {
+    width: auto;
+    height: auto;
+    padding: $space-2 $space-3;
+    border-radius: $radius-md;
+    font-weight: 600;
+    justify-self: start;
+  }
+}
+
+// Slot del índice: el botón flota sobre la esquina de la carta.
+.entity-index__slot {
+  position: relative;
+}
+
+.entity-index__card-link {
+  display: block;
+  color: inherit;
+  text-decoration: none;
+  transition: transform 0.15s ease;
+
+  &:hover { transform: translateY(-3px); }
+}
+
+.entity-index__add {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  z-index: 2;
+  box-shadow: $shadow-sm;
+}

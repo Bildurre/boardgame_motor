@@ -1,8 +1,9 @@
 <script setup lang="ts">
 import { CharacterCard, type Character } from '@playground/shared'
+import AddToCollection from '@/components/AddToCollection.vue'
 
 // Detalle público de un personaje: la carta a tamaño natural + su
-// descripción completa al lado.
+// descripción completa al lado, con "añadir a la colección" (doc 02).
 const props = defineProps<{ item: Character; locale: string }>()
 
 function tr(obj: Record<string, string> | null | undefined) {
@@ -24,6 +25,7 @@ function tr(obj: Record<string, string> | null | undefined) {
         class="entity-detail__text rich-content"
         v-html="tr(item.description)"
       />
+      <AddToCollection :id="item.id" entity="character" label />
     </div>
   </article>
 </template>

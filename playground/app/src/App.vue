@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
-import AppNav from '@/components/AppNav.vue'
+import AppHeader from '@/components/AppHeader.vue'
 import { useAuthStore } from '@/stores/auth'
 import { useLocalesStore } from '@/stores/locales'
 import { useSiteStore } from '@/stores/site'
@@ -23,8 +23,11 @@ onMounted(async () => {
 </script>
 
 <template>
-  <AppNav v-if="!bare" />
-  <RouterView />
+  <AppHeader v-if="!bare" />
+  <!-- La cabecera es fija (CDL): el contenido le deja hueco arriba -->
+  <div :class="{ 'site-content': !bare }">
+    <RouterView />
+  </div>
   <footer v-if="!bare && (site.footerText || site.title)" class="app-footer">
     <span>{{ site.footerText || site.title }}</span>
   </footer>

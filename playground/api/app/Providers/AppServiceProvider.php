@@ -82,6 +82,10 @@ class AppServiceProvider extends ServiceProvider
 
         // Sitemap (doc 10): entidades públicas de ESTE juego. Los segmentos
         // por locale deben casar con el entityRegistry de la app Vue.
+        // El apartado de Descargas también es indexable.
+        Sitemap::add(fn () => [[
+            'slugs' => ['es' => 'descargas', 'eu' => 'deskargak', 'en' => 'downloads'],
+        ]]);
         Sitemap::add(fn () => self::sitemapEntries(
             Character::published()->get(),
             ['es' => 'personajes', 'eu' => 'pertsonaiak', 'en' => 'characters'],

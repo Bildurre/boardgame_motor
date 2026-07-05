@@ -3,7 +3,9 @@
     "home": "Home",
     "account": "My account",
     "login": "Log in",
-    "logout": "Log out"
+    "logout": "Log out",
+    "downloads": "Downloads",
+    "menu": "Menu"
   },
   "entities": {
     "characters": "Characters",
@@ -68,22 +70,34 @@
       "submit": "Update",
       "ok": "Password updated.",
       "error": "Could not change the password."
-    },
-    "print": {
-      "intro": "Pick cards, generate their temporary PDF and print them (doc 02). The collection expires on its own.",
-      "empty": "Your collection is empty: add cards from the list below.",
-      "collection": "Your collection",
-      "copies": "copies",
-      "remove": "Remove",
-      "clear": "Clear",
-      "generate": "Generate PDF",
-      "generating": "Generating…",
-      "download": "Download PDF",
-      "failed": "Could not generate the PDF.",
-      "pick": "Add characters",
-      "add": "Add",
-      "added": "Added to the collection.",
-      "error": "Could not update the collection."
     }
+  },
+  "downloads": {
+    "title": "Downloads",
+    "intro": "Every print-ready PDF, no sign-up needed: cards, tokens and game documents.",
+    "empty": "No downloads published yet.",
+    "types": {
+      "characters": "Characters",
+      "schemes": "Schemes",
+      "house-schemes": "Schemes by house",
+      "house-tokens": "House tokens",
+      "house-counters": "House counters",
+      "pages": "Documents"
+    }
+  },
+  "collection": {
+    "title": "Your collection",
+    "intro": "Add cards from the listings and generate your custom PDF; no sign-up needed (the collection lives in this browser and expires on its own).",
+    "empty": "Your collection is empty: add cards from the listings.",
+    "copies": "copies",
+    "remove": "Remove",
+    "clear": "Clear",
+    "generate": "Generate PDF",
+    "generating": "Generating…",
+    "download": "Download PDF",
+    "failed": "Could not generate the PDF.",
+    "error": "Could not update the collection.",
+    "add": "Add to your PDF",
+    "inCollection": "In your collection"
   }
 }

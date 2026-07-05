@@ -17,6 +17,9 @@ export interface EntitySection {
   titleKey: string
   item: Component
   detail: Component
+  /** Clave del PreviewRegistry si la entidad puede añadirse a la colección
+   *  "para imprimir" (botón ＋ en el índice y el detalle). */
+  collectible?: string
 }
 
 export const entitySections: EntitySection[] = [
@@ -27,6 +30,7 @@ export const entitySections: EntitySection[] = [
     titleKey: 'entities.characters',
     item: CharacterItem,
     detail: CharacterDetail,
+    collectible: 'character',
   },
   {
     key: 'houses',
@@ -35,6 +39,7 @@ export const entitySections: EntitySection[] = [
     titleKey: 'entities.houses',
     item: HouseItem,
     detail: HouseDetail,
+    collectible: 'house', // el token de 40 mm
   },
 ]
 

@@ -3,7 +3,9 @@
     "home": "Hasiera",
     "account": "Nire kontua",
     "login": "Sartu",
-    "logout": "Irten"
+    "logout": "Irten",
+    "downloads": "Deskargak",
+    "menu": "Menua"
   },
   "entities": {
     "characters": "Pertsonaiak",
@@ -68,22 +70,34 @@
       "submit": "Eguneratu",
       "ok": "Pasahitza eguneratuta.",
       "error": "Ezin izan da pasahitza aldatu."
-    },
-    "print": {
-      "intro": "Aukeratu kartak, sortu haien behin-behineko PDFa eta inprimatu (02 dok.). Bilduma berez iraungitzen da.",
-      "empty": "Zure bilduma hutsik dago: gehitu kartak beheko zerrendatik.",
-      "collection": "Zure bilduma",
-      "copies": "kopia",
-      "remove": "Kendu",
-      "clear": "Hustu",
-      "generate": "Sortu PDFa",
-      "generating": "Sortzen…",
-      "download": "Deskargatu PDFa",
-      "failed": "Ezin izan da PDFa sortu.",
-      "pick": "Gehitu pertsonaiak",
-      "add": "Gehitu",
-      "added": "Bildumara gehituta.",
-      "error": "Ezin izan da bilduma eguneratu."
     }
+  },
+  "downloads": {
+    "title": "Deskargak",
+    "intro": "Inprimatzeko prest dauden PDF guztiak, izenik eman gabe: kartak, fitxak eta jokoaren dokumentuak.",
+    "empty": "Oraindik ez dago deskargarik argitaratuta.",
+    "types": {
+      "characters": "Pertsonaiak",
+      "schemes": "Amarruak",
+      "house-schemes": "Amarruak etxeka",
+      "house-tokens": "Etxeen fitxak",
+      "house-counters": "Etxeen kontagailuak",
+      "pages": "Dokumentuak"
+    }
+  },
+  "collection": {
+    "title": "Zure bilduma",
+    "intro": "Gehitu kartak zerrendetatik eta sortu zure PDF pertsonalizatua; izenik eman gabe ere bai (bilduma nabigatzaile honetan bizi da eta berez iraungitzen da).",
+    "empty": "Zure bilduma hutsik dago: gehitu kartak zerrendetatik.",
+    "copies": "kopia",
+    "remove": "Kendu",
+    "clear": "Hustu",
+    "generate": "Sortu PDFa",
+    "generating": "Sortzen…",
+    "download": "Deskargatu PDFa",
+    "failed": "Ezin izan da PDFa sortu.",
+    "error": "Ezin izan da bilduma eguneratu.",
+    "add": "Gehitu zure PDFra",
+    "inCollection": "Zure bilduman"
   }
 }
