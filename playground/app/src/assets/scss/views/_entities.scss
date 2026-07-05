@@ -17,8 +17,11 @@
   &__grid {
     display: flex;
     flex-wrap: wrap;
-    gap: $space-4;
+    // Hueco VERTICAL generoso: el pdf-add flota encima de cada carta (a
+    // -38px) y así no se monta con la fila anterior — queda claro de quién es.
+    gap: 48px $space-4;
     justify-content: center;
+    margin-top: $space-7; // que el de la primera fila no pise el título
   }
 
   // El slot posiciona el botón de añadir; el hover vive en el enlace

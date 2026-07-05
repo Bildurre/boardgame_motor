@@ -36,9 +36,11 @@ async function add() {
     :disabled="busy"
     @click.prevent.stop="add"
   >
-    <Check v-if="added" :size="16" />
+    <!-- Icono a doble tamaño cuando va solo (flotante sobre las cartas);
+         con etiqueta, algo más contenido -->
+    <Check v-if="added" :size="label ? 20 : 32" />
     <!-- "pdf-add": añadir el elemento a tu PDF personalizado -->
-    <FilePlus v-else :size="16" />
+    <FilePlus v-else :size="label ? 20 : 32" />
     <span v-if="label">{{ added ? t('collection.inCollection') : t('collection.add') }}</span>
   </button>
 </template>

@@ -173,10 +173,10 @@
 }
 
 // Flotante FUERA de la carta (encima, a la derecha): sin caja, no pisa los
-// badges de las esquinas.
+// badges de las esquinas. El hueco vertical lo da el row-gap del grid.
 .entity-index__add {
   position: absolute;
-  top: -22px;
+  top: -38px;
   right: 0;
   z-index: 2;
 }
