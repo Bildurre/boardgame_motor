@@ -101,3 +101,13 @@
   color: #06281a;
   &:hover:not(:disabled) { background: color-mix(in srgb, $success 72%, black); }
 }
+.bgm-button--info {
+  background: $info;
+  color: #fff;
+  &:hover:not(:disabled) { background: color-mix(in srgb, $info 72%, black); }
+}
+.bgm-button--warning {
+  background: $warning;
+  color: #2b2005;
+  &:hover:not(:disabled) { background: color-mix(in srgb, $warning 72%, black); }
+}

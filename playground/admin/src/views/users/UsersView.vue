@@ -155,7 +155,7 @@ onMounted(load)
 
           <!-- Acciones PRIMERO; después, secciones separadas (patrón panel) -->
           <div class="manager-detail__actions">
-            <BaseButton variant="secondary" @click="openEdit(selected)">
+            <BaseButton variant="info" @click="openEdit(selected)">
               <template #icon><SquarePen :size="14" /></template>
               {{ t('common.actions.edit') }}
             </BaseButton>

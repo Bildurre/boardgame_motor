@@ -937,8 +937,9 @@ línea vertical** (`.site-header__set` / `__sep`): [enlace a
 `VITE_ADMIN_URL`) + icono de **Descargas** con el contador] | [**Entrar**
 (botón-texto) o chip de usuario] | [selector de **idioma** + **tema**].
 Línea 2: la nav **centrada** — páginas raíz del CRM (las que tienen hijas
-publicadas llevan chevron y submenú al hover), secciones de entidades y
-Descargas (sin color fijo: hover/activo como el resto). En móvil todo (salvo
+publicadas llevan chevron y submenú al hover: al elegir una hija el
+desplegable se CIERRA y el padre queda coloreado como activo), secciones de
+entidades y Descargas (sin color fijo: hover/activo como el resto). En móvil todo (salvo
 el logo) pasa a la barra lateral off-canvas (hijas indentadas; **100 % de
 ancho** por debajo de `$bp-sm`). El admin tiene el enlace inverso, **"Ver la
 web"** (solo icono), en su barra superior (`VITE_APP_URL`), y en estrecho su
@@ -964,14 +965,16 @@ oportunistas del motor (p. ej. guardar `users.locale` en login/registro) van
 con `rescue()`: una migración pendiente no tumba el login (el detalle queda
 en los logs).
 
-**Privacidad.** La web **no usa cookies**: solo localStorage (idioma, tema,
-sesión, token de la colección). Un **banner de consentimiento** (componente
-`ConsentBanner` + `lib/consent.ts`) bloquea TODA persistencia hasta aceptar:
-sin aceptar (o rechazando) todo funciona igual pero en memoria — se pierde al
-recargar — y al aceptar se persisten las preferencias actuales. El tema pasa
-por `setThemePersistence()` (`@bgm/ui`). En el **registro**, un aviso breve de
-protección de datos con **checkbox obligatorio**: el backend exige
-`privacy` aceptado (`'privacy' => ['accepted']` en el register del motor).
+**Privacidad.** La web **no usa cookies** — solo localStorage con
+almacenamiento estrictamente funcional (idioma, tema, sesión, token de la
+colección), así que **no hace falta banner de consentimiento**. En el
+**registro**, un aviso breve de protección de datos con **checkbox
+obligatorio**: el backend exige `privacy` aceptado
+(`'privacy' => ['accepted']` en el register del motor). Y la colección de
+PDF vive **en la cuenta, no en el navegador**: al autenticarse con la
+cabecera `X-Collection-Token` presente, lo acumulado como invitado (items y
+PDF temporales) se **adopta** al usuario (si un item se repite, gana el de
+más copias).
 
 **Correos en el idioma del usuario (DC-14).** El registro guarda el locale
 activo en `users.locale` (y el login lo actualiza); el User implementa

@@ -60,7 +60,7 @@ const locales = useLocalesStore()
         <!-- Acciones PRIMERO; después, secciones separadas (patrón panel) -->
         <div class="manager-detail__actions">
           <template v-if="item.deleted_at">
-            <BaseButton variant="secondary" @click="$emit('restore')">
+            <BaseButton variant="success" @click="$emit('restore')">
               <template #icon><RotateCcw :size="14" /></template>
               {{ t('common.actions.restore') }}
             </BaseButton>
@@ -74,17 +74,17 @@ const locales = useLocalesStore()
               <template #icon><ArrowRight :size="14" /></template>
               {{ t('common.actions.open') }}
             </BaseButton>
-            <BaseButton variant="secondary" @click="$emit('edit')">
+            <BaseButton variant="info" @click="$emit('edit')">
               <template #icon><SquarePen :size="14" /></template>
               {{ t('common.actions.edit') }}
             </BaseButton>
-            <BaseButton variant="secondary" @click="$emit('togglePublish')">
+            <BaseButton variant="warning" @click="$emit('togglePublish')">
               <template #icon>
                 <component :is="item.is_published ? EyeOff : Eye" :size="14" />
               </template>
               {{ item.is_published ? t('common.actions.unpublish') : t('common.actions.publish') }}
             </BaseButton>
-            <BaseButton v-if="hasPreview" variant="secondary" @click="$emit('regenerate')">
+            <BaseButton v-if="hasPreview" variant="success" @click="$emit('regenerate')">
               <template #icon><Camera :size="14" /></template>
               {{ t('previews.regenerate') }}
             </BaseButton>

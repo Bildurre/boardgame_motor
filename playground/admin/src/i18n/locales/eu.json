@@ -74,7 +74,8 @@
       "unpublish": "Argitaratzea kendu",
       "delete": "Ezabatu",
       "restore": "Berreskuratu",
-      "forceDelete": "Betiko ezabatu"
+      "forceDelete": "Betiko ezabatu",
+      "enter": "Sartu"
     },
     "errors": {
       "action": "Ezin izan da eragiketa burutu.",

@@ -74,7 +74,8 @@
       "unpublish": "Despublicar",
       "delete": "Borrar",
       "restore": "Restaurar",
-      "forceDelete": "Borrar definitivamente"
+      "forceDelete": "Borrar definitivamente",
+      "enter": "Entrar"
     },
     "errors": {
       "action": "No se ha podido completar la acción.",

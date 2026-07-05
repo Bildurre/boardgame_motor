@@ -25,7 +25,10 @@ Primera versión etiquetada (Fases 0–7 del plan).
   del elemento), breadcrumbs dinámicas, nav con secciones por permiso.
 - `FontUpload` (webfonts del sitio) y utilidades compartidas.
 - **Panel derecho estandarizado**: acciones primero + separadores
-  (`.manager-panel__divider`) entre secciones, en todos los gestores.
+  (`.manager-panel__divider`) entre secciones, en todos los gestores; los
+  botones de acción del panel van en CONTORNO con el color de su acción
+  (hover: el color pasa al fondo). Las filas de páginas/bloques no hacen
+  wrap: cambian de layout en bloque (container query).
 - `PdfManager` con el resumen de las previews (total + listos por idioma) y
   acciones Generar faltantes / Regenerar todo / Borrar todo.
 - Chips (`.locale-chip`) nunca muted: acento por defecto y fuente menor.

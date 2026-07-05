@@ -313,14 +313,6 @@ defineExpose({ refreshAll })
             >{{ String(locale).toUpperCase() }} {{ count }}/{{ type.total }}</span
           >
         </template>
-
-        <!-- Solo la acción principal; el resto vive en el panel derecho -->
-        <template #actions>
-          <BaseButton :disabled="busy || type.pending === 0" @click="generateType(type)">
-            <template #icon><ImagePlus :size="16" /></template>
-            {{ L.generateMissing }}
-          </BaseButton>
-        </template>
       </ManagerCard>
     </div>
 
@@ -340,7 +332,7 @@ defineExpose({ refreshAll })
               <template #icon><ImagePlus :size="14" /></template>
               {{ L.generateMissing }}
             </BaseButton>
-            <BaseButton variant="secondary" :disabled="busy" @click="regenerateType(activeStatus)">
+            <BaseButton variant="info" :disabled="busy" @click="regenerateType(activeStatus)">
               <template #icon><RefreshCw :size="14" /></template>
               {{ L.regenerateAll }}
             </BaseButton>
@@ -389,7 +381,7 @@ defineExpose({ refreshAll })
                 <template #icon><ImagePlus :size="14" /></template>
                 {{ L.itemGenerateMissing }}
               </BaseButton>
-              <BaseButton variant="secondary" :disabled="busy" @click="regenerateItem">
+              <BaseButton variant="info" :disabled="busy" @click="regenerateItem">
                 <template #icon><RefreshCw :size="14" /></template>
                 {{ L.itemRegenerate }}
               </BaseButton>

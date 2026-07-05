@@ -317,14 +317,6 @@ defineExpose({ refreshAll })
             >{{ String(locale).toUpperCase() }} {{ ready }}/{{ exp.stats.total }}</span
           >
         </template>
-
-        <!-- Solo la acción principal; el resto vive en el panel derecho -->
-        <template #actions>
-          <BaseButton :disabled="busy || !hasMissing(exp)" @click="generateMissing(exp)">
-            <template #icon><FilePlus :size="16" /></template>
-            {{ L.generateMissing }}
-          </BaseButton>
-        </template>
       </ManagerCard>
     </div>
 
@@ -344,7 +336,7 @@ defineExpose({ refreshAll })
               <template #icon><FilePlus :size="14" /></template>
               {{ L.generateMissing }}
             </BaseButton>
-            <BaseButton variant="secondary" :disabled="busy" @click="regenerateAll(activeExport)">
+            <BaseButton variant="info" :disabled="busy" @click="regenerateAll(activeExport)">
               <template #icon><RefreshCw :size="14" /></template>
               {{ L.regenerateAll }}
             </BaseButton>

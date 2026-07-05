@@ -427,6 +427,34 @@ it('un invitado arma su colección con token y genera su PDF temporal', function
     $this->getJson("/api/pdf-collection/pdfs/{$pdf->id}")->assertUnauthorized();
 });
 
+it('al autenticarse se adopta la colección del invitado (items y PDF a la cuenta)', function () {
+    $character = makeCharacter(['is_published' => true]);
+    $token = 'guest-0123456789abcdef';
+    $headers = ['X-Collection-Token' => $token];
+
+    // Como invitado: 2 copias + un PDF temporal generado.
+    $this->postJson('/api/pdf-collection/items', [
+        'entity' => 'character', 'id' => $character->id, 'copies' => 2,
+    ], $headers)->assertCreated();
+    Queue::fake();
+    $pdfId = $this->postJson('/api/pdf-collection/generate', [], $headers)
+        ->assertAccepted()
+        ->json('data.id');
+
+    // Al loguearse, la SPA sigue mandando el token: todo pasa a la cuenta.
+    $user = motorUser();
+    $this->actingAs($user)->getJson('/api/pdf-collection', $headers)
+        ->assertOk()
+        ->assertJsonCount(1, 'data')
+        ->assertJsonPath('data.0.copies', 2);
+
+    $item = PdfCollectionItem::sole();
+    expect($item->user_id)->toBe($user->id)
+        ->and($item->guest_token)->toBeNull()
+        ->and(GeneratedPdf::find($pdfId)->owner_id)->toBe($user->id)
+        ->and(GeneratedPdf::find($pdfId)->guest_token)->toBeNull();
+});
+
 it('el PDF temporal de un invitado solo se descarga con su token', function () {
     $character = makeCharacter(['is_published' => true]);
     $token = 'guest-0123456789abcdef';

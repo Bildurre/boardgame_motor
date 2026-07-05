@@ -109,11 +109,14 @@
     font-size: $fs-13;
   }
 
+  // Etiqueta (idioma…): sin color explícito va en ACENTO, nunca gris, y
+  // ~1pt más pequeña que el texto que la rodea.
   &__chip {
-    border: 1px solid $border;
+    border: 1px solid color-mix(in srgb, $accent-500 45%, transparent);
+    color: $accent-500;
     border-radius: $radius-sm;
     padding: 0 $space-1;
-    font-size: $fs-12;
+    font-size: 0.9em;
     font-weight: 600;
   }
 

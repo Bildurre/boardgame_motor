@@ -130,10 +130,5 @@
     "error": "Could not update the collection.",
     "add": "Add to your PDF",
     "inCollection": "In your collection"
-  },
-  "consent": {
-    "text": "This site uses no cookies. It only stores functional preferences (language, theme), your session and, if you use it, your PDF collection in your browser. No tracking, no third parties. If you decline, everything still works but nothing is remembered after a reload.",
-    "accept": "Accept",
-    "reject": "Memory only"
   }
 }

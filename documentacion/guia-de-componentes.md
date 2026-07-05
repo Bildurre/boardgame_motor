@@ -537,8 +537,13 @@ vive en el composable `useEntityList` (ver la guía de montar una web, §4.4).
   muestra al seleccionar algo. Los gestores lo usan para el selector/detalle.
 - **Orden estándar del contenido** (TODOS los paneles derechos): kicker →
   **acciones primero** → separador (`.manager-panel__divider`) → sección →
-  separador → sección… Las tarjetas que tienen panel derecho llevan una sola
-  acción (entrar al single); el resto de acciones viven en el panel.
+  separador → sección… Los botones de acción del panel van TODOS en
+  **contorno con su color** (borde + texto/stroke de la acción: acento=abrir
+  /generar, info=editar/regenerar, warning=publicar/home, success=restaurar,
+  danger=borrar); en hover el color pasa al fondo y el texto al color de
+  texto normal. Las tarjetas que tienen panel derecho llevan una sola
+  acción — el botón **"Entrar →"** (`.card-enter`) al single —; el resto de
+  acciones viven en el panel.
 
 ### ManagerCard
 

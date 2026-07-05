@@ -3,7 +3,7 @@ import { computed, onMounted, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
 import { ArrowRight, House as HomeIcon, Plus, SquarePen, Trash2 } from '@lucide/vue'
-import { BaseButton, BaseCheckbox, IconButton, useConfirm, useToast } from '@bgm/ui'
+import { BaseButton, BaseCheckbox, useConfirm, useToast } from '@bgm/ui'
 import { useRightSidebar } from '@bgm/admin-kit'
 import { api } from '@/lib/api'
 import PageFormModal, { type PageRow } from '@/components/pages/PageFormModal.vue'
@@ -179,9 +179,9 @@ onMounted(load)
           <span class="locale-chip">{{ page.blocks_count ?? 0 }} ▤</span>
         </span>
         <span class="pages-view__buttons">
-          <IconButton variant="info" :title="t('pages.open')" @click="open(page)"
-            ><ArrowRight :size="16"
-          /></IconButton>
+          <button type="button" class="card-enter" @click="open(page)">
+            {{ t('common.actions.enter') }} <ArrowRight :size="14" />
+          </button>
         </span>
       </article>
     </div>
@@ -201,11 +201,11 @@ onMounted(load)
               <template #icon><ArrowRight :size="14" /></template>
               {{ t('pages.open') }}
             </BaseButton>
-            <BaseButton variant="secondary" @click="openEdit(selected)">
+            <BaseButton variant="info" @click="openEdit(selected)">
               <template #icon><SquarePen :size="14" /></template>
               {{ t('common.actions.edit') }}
             </BaseButton>
-            <BaseButton v-if="!selected.is_home" variant="secondary" @click="setHome(selected)">
+            <BaseButton v-if="!selected.is_home" variant="warning" @click="setHome(selected)">
               <template #icon><HomeIcon :size="14" /></template>
               {{ t('pages.setHome') }}
             </BaseButton>

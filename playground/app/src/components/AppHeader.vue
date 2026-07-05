@@ -38,6 +38,26 @@ const pages = ref<NavPage[]>([])
 const navOpen = ref(false)
 const hidden = ref(false)
 
+// El submenú vive del :hover: al hacer clic en una hija seguiría abierto
+// (el ratón no se ha movido). Se SUPRIME al navegar y se libera cuando el
+// ratón sale del ítem.
+const suppressedDropdown = ref<number | null>(null)
+
+function closeDropdown(pageId: number) {
+  suppressedDropdown.value = pageId
+}
+
+function releaseDropdown(pageId: number) {
+  if (suppressedDropdown.value === pageId) suppressedDropdown.value = null
+}
+
+/** El padre se colorea también cuando la ruta activa es una de sus hijas. */
+function isParentActive(page: { slug: string; children: { slug: string }[] }): boolean {
+  if (route.name !== 'page') return false
+  const slug = String(route.params.slug ?? '')
+  return slug === page.slug || page.children.some((child) => child.slug === slug)
+}
+
 function navEntry(p: { id: number; title: Record<string, string>; slugs: Record<string, string> }) {
   return {
     id: p.id,
@@ -250,21 +270,27 @@ onBeforeUnmount(() => window.removeEventListener('scroll', onScroll))
           v-for="page in navPages"
           :key="page.id"
           class="site-header__item"
-          :class="{ 'has-children': page.children.length }"
+          :class="{
+            'has-children': page.children.length,
+            'is-suppressed': suppressedDropdown === page.id,
+          }"
+          @mouseleave="releaseDropdown(page.id)"
         >
           <RouterLink
             class="site-header__link"
+            :class="{ 'is-active': isParentActive(page) }"
             :to="{ name: 'page', params: { locale: locales.current, slug: page.slug } }"
           >
             {{ page.label }}
             <ChevronDown v-if="page.children.length" :size="14" class="site-header__chevron" />
           </RouterLink>
-          <!-- Submenú (hover / focus-within, patrón CDL) -->
+          <!-- Submenú (hover / focus-within, patrón CDL): se cierra al elegir -->
           <ul v-if="page.children.length" class="site-header__dropdown">
             <li v-for="child in page.children" :key="child.id">
               <RouterLink
                 class="site-header__dropdown-link"
                 :to="{ name: 'page', params: { locale: locales.current, slug: child.slug } }"
+                @click="closeDropdown(page.id)"
                 >{{ child.label }}</RouterLink
               >
             </li>

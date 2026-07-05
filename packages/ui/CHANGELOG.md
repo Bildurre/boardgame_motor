@@ -24,6 +24,9 @@ Primera versión etiquetada (Fases 0–7 del plan).
 - **SCSS**: tokens (`tokens.scss` con fuentes/colores/espaciado/radios),
   temas claro/oscuro, parciales de componentes y utilidades
   (`rich-content`, formularios).
-- `setThemePersistence()`: el consentimiento de almacenamiento de la web
-  puede desactivar el guardado del tema (se aplica igual, solo en memoria).
+- `RichTextInput` se exporta **diferido** (defineAsyncComponent): TipTap
+  (~450 KB) no entra en el bundle de la web pública y el admin lo trocea en
+  su propio chunk.
+- `BaseButton` con variantes `info` y `warning`; `.block-button` cruza sus
+  estados sobre la SUPERFICIE ($surface), no sobre el fondo puro.
 - i18n por props (DC-29): el paquete no lleva textos; la app los inyecta.

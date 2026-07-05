@@ -2,7 +2,7 @@
 import { onMounted } from 'vue'
 import { ArrowRight, Plus } from '@lucide/vue'
 import { BaseGrid, EntityCard, FilterBar, EmptyState } from '@bgm/admin-kit'
-import { BaseButton, BaseTabs, IconButton } from '@bgm/ui'
+import { BaseButton, BaseTabs } from '@bgm/ui'
 import { useEntityList } from '@/composables/useEntityList'
 import type { Scheme } from '@playground/shared'
 import SchemeFormModal from '@/components/schemes/SchemeFormModal.vue'
@@ -77,15 +77,11 @@ onMounted(init)
           </div>
         </template>
 
-        <!-- La tarjeta solo lleva "abrir": el resto vive en el panel derecho -->
+        <!-- La tarjeta solo lleva "entrar" al single; el resto, en el panel -->
         <template #actions>
-          <IconButton
-            v-if="!item.deleted_at"
-            variant="info"
-            :title="t('common.actions.open')"
-            @click="goSingle(item)"
-            ><ArrowRight :size="18"
-          /></IconButton>
+          <button v-if="!item.deleted_at" type="button" class="card-enter" @click="goSingle(item)">
+            {{ t('common.actions.enter') }} <ArrowRight :size="14" />
+          </button>
         </template>
 
         <template #badges>

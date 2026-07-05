@@ -2,7 +2,6 @@
 import { computed, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 import AppHeader from '@/components/AppHeader.vue'
-import ConsentBanner from '@/components/ConsentBanner.vue'
 import { useAuthStore } from '@/stores/auth'
 import { useLocalesStore } from '@/stores/locales'
 import { useSiteStore } from '@/stores/site'
@@ -32,6 +31,4 @@ onMounted(async () => {
   <footer v-if="!bare && (site.footerText || site.title)" class="app-footer">
     <span>{{ site.footerText || site.title }}</span>
   </footer>
-  <!-- Consentimiento de almacenamiento local (no usamos cookies) -->
-  <ConsentBanner v-if="!bare" />
 </template>

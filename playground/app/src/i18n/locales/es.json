@@ -130,10 +130,5 @@
     "error": "No se pudo actualizar la colección.",
     "add": "Añadir a tu PDF",
     "inCollection": "En tu colección"
-  },
-  "consent": {
-    "text": "Esta web no usa cookies. Solo guarda en tu navegador preferencias funcionales (idioma, tema), tu sesión y, si la usas, tu colección de PDF. Sin rastreo ni terceros. Si no aceptas, todo funciona igual pero no se recuerda al recargar.",
-    "accept": "Aceptar",
-    "reject": "Solo en memoria"
   }
 }

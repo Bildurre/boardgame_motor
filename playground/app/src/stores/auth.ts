@@ -1,7 +1,6 @@
 import { defineStore } from 'pinia'
 import { computed, ref } from 'vue'
 import { api, TOKEN_KEY } from '@/lib/api'
-import { persist } from '@/lib/consent'
 
 export interface User {
   id: number
@@ -19,8 +18,7 @@ export const useAuthStore = defineStore('auth', () => {
 
   function setToken(value: string | null) {
     token.value = value
-    if (value)
-      persist(TOKEN_KEY, value) // en memoria si no hay consentimiento
+    if (value) localStorage.setItem(TOKEN_KEY, value)
     else localStorage.removeItem(TOKEN_KEY)
   }
 

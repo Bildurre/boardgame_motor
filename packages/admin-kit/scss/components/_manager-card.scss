@@ -134,7 +134,7 @@
 // Chip de estado por locale (ES/EU/EN), compartido por previews y PDF.
 // Nunca "muted": sin color explícito, el chip va en el ACENTO.
 .locale-chip {
-  font-size: 0.7rem;
+  font-size: 0.9em; // ~1pt menos que el texto base
   font-weight: $k-fw-semibold;
   padding: 1px $space-2;
   border-radius: $radius-sm;
@@ -253,6 +253,29 @@
     display: flex;
     flex-wrap: wrap;
     gap: $space-2;
+
+    // Botones de acción del panel: TODOS con su color, en CONTORNO — borde
+    // y texto/stroke del color de la acción; en hover el color pasa al
+    // fondo y el texto al color de texto normal.
+    @each $variant, $color in (
+      primary: $accent-500,
+      info: $info,
+      warning: $warning,
+      success: $success,
+      danger: $danger,
+    ) {
+      .bgm-button--#{$variant} {
+        background: transparent;
+        border-color: $color;
+        color: $color;
+
+        &:hover:not(:disabled) {
+          background: $color;
+          border-color: $color;
+          color: $text-1;
+        }
+      }
+    }
   }
 
   // Listado compacto del panel (p.ej. bloques de la página seleccionada):

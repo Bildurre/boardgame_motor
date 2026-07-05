@@ -187,18 +187,20 @@
   cursor: pointer;
   transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
 
+  // El "fondo" de los estados cruzados es la SUPERFICIE ($surface, el
+  // segundo tono), no el fondo de página puro: menos negro / menos blanco.
   &--primary {
     background: $accent-500;
     color: $text-1;
 
     &:hover {
-      background: $bg;
+      background: $surface;
       color: $accent-500;
     }
   }
 
   &--secondary {
-    background: $bg;
+    background: $surface;
     color: $accent-500;
 
     &:hover {

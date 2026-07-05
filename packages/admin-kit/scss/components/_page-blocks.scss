@@ -49,9 +49,15 @@
     gap: $space-2;
   }
 
+  // Fila de bloque: SIN wrap por elemento — en estrecho TODAS las filas
+  // cambian a la vez a un layout apilado (grid-areas por container query).
   &__item {
-    display: flex;
-    flex-wrap: wrap;
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    grid-template-areas:
+      "grip type    buttons"
+      "grip summary summary"
+      "grip flags   flags";
     align-items: center;
     gap: $space-1 $space-2;
     border: 1px solid $border;
@@ -62,11 +68,17 @@
     cursor: pointer; // toda la fila selecciona (panel derecho)
     transition: border-color 0.15s ease;
 
+    @container content (min-width: 640px) {
+      grid-template-columns: auto auto minmax(0, 1fr) auto auto;
+      grid-template-areas: "grip type summary flags buttons";
+    }
+
     &:hover { border-color: $border-strong; }
     &.is-active { border-color: $accent-500; }
   }
 
   &__grip {
+    grid-area: grip;
     display: inline-flex;
     color: $text-3;
     cursor: grab;
@@ -74,10 +86,10 @@
     &:active { cursor: grabbing; }
   }
 
-  &__type { font-weight: $k-fw-semibold; white-space: nowrap; }
+  &__type { grid-area: type; font-weight: $k-fw-semibold; white-space: nowrap; }
 
   &__summary {
-    flex: 1 1 10rem;
+    grid-area: summary;
     min-width: 0;
     color: $text-3;
     font-size: $fs-13;
@@ -86,9 +98,10 @@
     white-space: nowrap;
   }
 
-  &__flags { display: flex; gap: $space-1; }
+  &__flags { grid-area: flags; display: flex; gap: $space-1; }
 
   &__buttons {
+    grid-area: buttons;
     margin-left: auto;
     display: flex;
     gap: $space-1;

@@ -74,7 +74,8 @@
       "unpublish": "Unpublish",
       "delete": "Delete",
       "restore": "Restore",
-      "forceDelete": "Delete permanently"
+      "forceDelete": "Delete permanently",
+      "enter": "Enter"
     },
     "errors": {
       "action": "The action could not be completed.",

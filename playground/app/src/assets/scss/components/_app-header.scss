@@ -243,8 +243,10 @@ $header-row2: 46px;
     display: inline-flex;
     align-items: center;
 
-    &.has-children:hover,
-    &.has-children:focus-within {
+    // is-suppressed: recién navegado a una hija (el clic lo pone y el
+    // mouseleave lo quita) — sin él, el :hover mantendría el submenú abierto.
+    &.has-children:not(.is-suppressed):hover,
+    &.has-children:not(.is-suppressed):focus-within {
       .site-header__dropdown {
         visibility: visible;
         opacity: 1;
@@ -317,7 +319,9 @@ $header-row2: 46px;
     // fondo queda para la barra lateral).
     &:hover { color: $accent-500; }
 
-    &.router-link-active {
+    // is-active: también cuando la ruta activa es una HIJA de esta página.
+    &.router-link-active,
+    &.is-active {
       color: $accent-500;
       font-weight: 600;
     }

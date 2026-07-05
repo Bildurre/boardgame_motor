@@ -7,7 +7,6 @@ import {
   BaseButton,
   BaseCheckbox,
   EditModal,
-  IconButton,
   useConfirm,
   useToast,
   type RichIcon,
@@ -347,14 +346,6 @@ defineExpose({ reload: load })
         <span class="page-blocks__flags">
           <span v-if="block.is_printable" class="locale-chip is-ok">PDF</span>
           <span v-if="block.is_indexable" class="locale-chip">IDX</span>
-        </span>
-        <span class="page-blocks__buttons">
-          <IconButton variant="info" :title="L.edit" @click="openEdit(block)"
-            ><SquarePen :size="16"
-          /></IconButton>
-          <IconButton variant="danger" :title="L.delete" @click="remove(block)"
-            ><Trash2 :size="16"
-          /></IconButton>
         </span>
       </article>
     </VueDraggable>

@@ -130,10 +130,5 @@
     "error": "Ezin izan da bilduma eguneratu.",
     "add": "Gehitu zure PDFra",
     "inCollection": "Zure bilduman"
-  },
-  "consent": {
-    "text": "Webgune honek ez du cookierik erabiltzen. Zure nabigatzailean hobespen funtzionalak (hizkuntza, gaia), saioa eta, erabiltzen baduzu, zure PDF bilduma baino ez ditu gordetzen. Jarraipenik eta hirugarrenik ez. Onartzen ez baduzu, dena berdin dabil baina ez da gogoratzen birkargatzean.",
-    "accept": "Onartu",
-    "reject": "Memorian bakarrik"
   }
 }

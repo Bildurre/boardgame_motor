@@ -1,7 +1,6 @@
 import { defineStore } from 'pinia'
 import { computed, ref } from 'vue'
 import { api } from '@/lib/api'
-import { persist } from '@/lib/consent'
 
 // Colección "para imprimir" (doc 02), para logueados E invitados (CDL): la
 // SPA genera un token de invitado (uuid en localStorage) y lo manda SIEMPRE
@@ -29,9 +28,7 @@ function guestToken(): string {
   let token = localStorage.getItem(TOKEN_KEY)
   if (!token) {
     token = crypto.randomUUID()
-    // Sin consentimiento el token vive solo en memoria (la colección
-    // funciona igual, pero no sobrevive a recargar la página).
-    persist(TOKEN_KEY, token)
+    localStorage.setItem(TOKEN_KEY, token)
   }
   return token
 }
