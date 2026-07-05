@@ -585,8 +585,8 @@ vive en el composable `useEntityList` (ver la guía de montar una web, §4.4).
   Restaurar + Borrar definitivamente — y, tras un separador, el nombre + la
   info del elemento (slot `meta`) y, si `hasPreview`, las **imágenes por
   idioma** (huecos "—" para las que faltan). Los **chips** son UNO solo
-  (`.chip` de `@bgm/ui`): píldora con contorno, acento por defecto (nunca
-  gris), `$fs-12` y estados `is-ok/is-info/is-missing/is-failed`.
+  (`.chip` de `@bgm/ui`): contorno de esquinas poco redondeadas, acento por
+  defecto (nunca gris), `$fs-12` y estados `is-ok/is-info/is-missing/is-failed`.
 - **Dónde:** `playground/admin/src/components/EntityPanel.vue`; la selección
   (`selectedId` / `selected` / `select()`, registro del sidebar con
   `` t(`${ns}.panelTitle`) `` y `reveal()`) vive en `useEntityList`. Es código

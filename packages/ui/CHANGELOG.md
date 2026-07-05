@@ -29,7 +29,8 @@ Primera versión etiquetada (Fases 0–7 del plan).
   su propio chunk.
 - `BaseButton` con variantes `info` y `warning`; `.block-button` cruza sus
   estados sobre la SUPERFICIE ($surface), no sobre el fondo puro.
-- **Chip único** (`.chip`): píldora con contorno, acento por defecto (nunca
-  gris), `$fs-12`, con estados `is-ok/is-info/is-missing/is-failed` — lo
-  usan app y admin (sustituye a `.locale-chip` y a los chips por vista).
+- **Chip único** (`.chip`): contorno con esquinas poco redondeadas
+  ($radius-sm), acento por defecto (nunca gris), `$fs-12`, con estados
+  `is-ok/is-info/is-missing/is-failed` — lo usan app y admin (sustituye a
+  `.locale-chip` y a los chips por vista).
 - i18n por props (DC-29): el paquete no lleva textos; la app los inyecta.

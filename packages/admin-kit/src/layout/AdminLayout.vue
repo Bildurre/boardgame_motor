@@ -4,6 +4,7 @@ import { useRoute, type RouteLocationRaw } from 'vue-router'
 import { ChevronLeft, ChevronRight, Menu, X } from '@lucide/vue'
 import { MotorBadge, ThemeSelector, LocaleSelector, AppBreadcrumbs, type Crumb } from '@bgm/ui'
 import RightSidebar from './RightSidebar.vue'
+import { useRightSidebar } from '../composables/useRightSidebar'
 
 // Layout del panel — portado del AppLayout de kontuan (DC-28): sidebar
 // colapsable en escritorio, drawer a pantalla completa en móvil, preferencias
@@ -65,6 +66,13 @@ watch(
     if (isMobile.value) sidebarMobileOpen.value = false
   },
 )
+
+// Al abrir el drawer IZQUIERDO se CIERRA el derecho (no solo se oculta):
+// así, al cerrar el izquierdo, el derecho sigue cerrado (queda su asa).
+const rightSidebar = useRightSidebar()
+watch(sidebarMobileOpen, (open) => {
+  if (open) rightSidebar.closeMobile()
+})
 
 function toggleSidebar() {
   sidebarCollapsed.value = !sidebarCollapsed.value

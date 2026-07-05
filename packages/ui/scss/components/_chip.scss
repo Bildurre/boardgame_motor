@@ -1,14 +1,15 @@
 @use "tokens" as *;
 
 // El chip ÚNICO del motor (etiquetas de estado, idioma, contadores…), para
-// app y admin. Píldora con contorno, NUNCA gris: sin estado explícito va en
-// el color de ACENTO; los estados lo tiñen. Tamaño fijo $fs-12.
+// app y admin. Contorno con esquinas POCO redondeadas (más cuadrado que una
+// píldora) y NUNCA gris: sin estado explícito va en el color de ACENTO; los
+// estados lo tiñen. Tamaño fijo $fs-12.
 .chip {
   display: inline-flex;
   align-items: center;
   gap: 2px;
   padding: 1px $space-2;
-  border-radius: $radius-pill;
+  border-radius: $radius-sm;
   font-size: $fs-12;
   font-weight: 600;
   white-space: nowrap;

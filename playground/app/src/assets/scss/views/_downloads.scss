@@ -109,40 +109,36 @@
     font-size: $fs-13;
   }
 
+  // Botón de acción "descargar": sin padding ni caja, solo el icono.
   &__link {
     grid-area: link;
     display: inline-flex;
     align-items: center;
-    justify-content: center;
-    width: 34px;
-    height: 34px;
     color: $accent-500;
-    border-radius: $radius-md;
+    transition: color 0.15s ease;
 
-    &:hover { background: color-mix(in srgb, $accent-500 12%, transparent); }
+    &:hover { color: $accent-400; }
   }
 
   &__collection { margin-top: $space-4; }
 }
 
-// Botón "añadir a la colección": flotante sobre las cartas de los listados
-// o con etiqueta en los detalles.
+// Botón "añadir a la colección" (pdf-add): sin padding ni caja — el icono en
+// el color del TEXTO y coloreado (acento) en hover. Flotante sobre las
+// cartas de los listados o con etiqueta en los detalles.
 .add-to-collection {
   display: inline-flex;
   align-items: center;
-  justify-content: center;
   gap: $space-1;
-  width: 36px;
-  height: 36px;
-  background: color-mix(in srgb, $surface 88%, transparent);
-  color: $accent-500;
+  padding: 0;
+  background: none;
+  color: $text-2;
   border: none;
-  border-radius: $radius-md;
   cursor: pointer;
-  transition: background-color 0.15s ease, color 0.15s ease;
+  transition: color 0.15s ease;
 
   &:hover {
-    background: color-mix(in srgb, $accent-500 12%, $surface);
+    color: $accent-500;
   }
 
   &.is-added {
@@ -151,14 +147,8 @@
   }
 
   &.has-label {
-    width: auto;
-    height: auto;
-    padding: $space-2 $space-3;
     font-weight: 600;
     justify-self: start;
-    background: none;
-
-    &:hover { background: color-mix(in srgb, $accent-500 12%, transparent); }
   }
 }
 
@@ -182,11 +172,11 @@
   }
 }
 
+// Flotante FUERA de la carta (encima, a la derecha): sin caja, no pisa los
+// badges de las esquinas.
 .entity-index__add {
   position: absolute;
-  top: -10px;
-  right: -10px;
+  top: -22px;
+  right: 0;
   z-index: 2;
-  border: 1px solid $border;
-  box-shadow: $shadow-sm;
 }
