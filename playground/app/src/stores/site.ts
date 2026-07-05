@@ -24,6 +24,7 @@ export interface SiteSettings {
   accent_colors: string[]
   font_headings: string
   font_body: string
+  font_special: string
   footer_text: Record<string, string>
   fonts: Record<string, SiteFont>
   /** SVG del logo inlineado por la API (currentColor hereda el acento). */
@@ -103,6 +104,7 @@ export const useSiteStore = defineStore('site', () => {
     const root = document.documentElement.style
     root.setProperty('--font-headings', fonts[settings.value.font_headings]?.stack || 'inherit')
     root.setProperty('--font-body', fonts[settings.value.font_body]?.stack || '')
+    root.setProperty('--font-special', fonts[settings.value.font_special]?.stack || 'inherit')
   }
 
   function applyFavicon() {

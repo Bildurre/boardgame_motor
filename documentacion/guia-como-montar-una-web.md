@@ -63,6 +63,11 @@ referencia en el `playground` (cópialos y adáptalos): **House** (CRUD básico)
 
 6. Datos de prueba: **avisa antes de insertar datos** de entidades; el seeder
    base solo crea usuarios.
+7. **Cola**: en desarrollo deja `QUEUE_CONNECTION=sync` (PNG y PDF se
+   generan en la propia petición, sin worker). En producción usa `database`
+   + `php artisan queue:work` — con `database` y SIN worker los PDF se
+   quedan en `pending` para siempre y "no aparecen" en el admin ni en las
+   Descargas.
 
 ---
 

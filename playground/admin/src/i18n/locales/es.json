@@ -378,7 +378,8 @@
       "customFonts": "Fuentes propias",
       "fontName": "Nombre de la fuente",
       "fontFileHint": "WOFF2/WOFF/TTF/OTF · Máx. 4 MB",
-      "fontDrag": "Arrastra una fuente o haz clic"
+      "fontDrag": "Arrastra una fuente o haz clic",
+      "fontSpecial": "Fuente especial (citas)"
     },
     "accentModes": {
       "fixed": "Fijo",
@@ -398,7 +399,8 @@
       "saved": "Configuración guardada.",
       "saveError": "No se pudo guardar."
     },
-    "uploadFont": "Subir fuente"
+    "uploadFont": "Subir fuente",
+    "fontPreviewSpecial": "Cuando juegas, solo puedes ganar o morir."
   },
   "backups": {
     "title": "Copias de seguridad",

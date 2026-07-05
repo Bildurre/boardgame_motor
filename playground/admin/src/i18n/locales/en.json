@@ -444,7 +444,8 @@
       "customFonts": "Custom fonts",
       "fontName": "Font name",
       "fontFileHint": "WOFF2/WOFF/TTF/OTF · Max 4 MB",
-      "fontDrag": "Drag a font or click"
+      "fontDrag": "Drag a font or click",
+      "fontSpecial": "Special font (quotes)"
     },
     "accentModes": {
       "fixed": "Fixed",
@@ -464,7 +465,8 @@
       "saved": "Settings saved.",
       "saveError": "Could not save."
     },
-    "uploadFont": "Upload font"
+    "uploadFont": "Upload font",
+    "fontPreviewSpecial": "When you play, you win or you die."
   },
   "backups": {
     "title": "Backups",

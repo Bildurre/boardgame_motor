@@ -444,7 +444,8 @@
       "customFonts": "Letra-tipo propioak",
       "fontName": "Letra-tipoaren izena",
       "fontFileHint": "WOFF2/WOFF/TTF/OTF · Geh. 4 MB",
-      "fontDrag": "Arrastatu letra-tipo bat edo egin klik"
+      "fontDrag": "Arrastatu letra-tipo bat edo egin klik",
+      "fontSpecial": "Letra berezia (aipuak)"
     },
     "accentModes": {
       "fixed": "Finkoa",
@@ -464,7 +465,8 @@
       "saved": "Konfigurazioa gordeta.",
       "saveError": "Ezin izan da gorde."
     },
-    "uploadFont": "Igo letra-tipoa"
+    "uploadFont": "Igo letra-tipoa",
+    "fontPreviewSpecial": "Jokatzen duzunean, irabazi edo hil baino ez."
   },
   "backups": {
     "title": "Segurtasun-kopiak",

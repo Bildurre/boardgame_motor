@@ -2,7 +2,7 @@
 import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
-import { FileDown, Menu, X } from '@lucide/vue'
+import { FileDown, LogIn, LogOut, Menu, X } from '@lucide/vue'
 import { LocaleSelector, MotorBadge, ThemeSelector } from '@bgm/ui'
 import { api } from '@/lib/api'
 import { entitySections } from '@/entities/registry'
@@ -12,10 +12,10 @@ import { useCollectionStore } from '@/stores/collection'
 import { useLocalesStore } from '@/stores/locales'
 import { useSiteStore } from '@/stores/site'
 
-// Cabecera pública estilo CDL: fija, dos filas (marca + acciones arriba;
-// nav centrada abajo, con el borde del color de acento), off-canvas en
-// móvil y ocultación al hacer scroll hacia abajo. El contador de la
-// colección "para imprimir" enlaza con Descargas.
+// Cabecera pública estilo kontuan en dos líneas: arriba la marca y las
+// acciones (idioma, colección, tema y el botón de entrar/usuario); debajo,
+// la barra de navegación. En móvil TODO lo del header (salvo el logo) pasa
+// a la barra lateral off-canvas. Se oculta al bajar y asoma al subir.
 const auth = useAuthStore()
 const route = useRoute()
 const router = useRouter()
@@ -55,6 +55,8 @@ const navSections = computed(() =>
 
 const downloadsSegment = computed(() => DOWNLOAD_PATHS[locales.current] ?? DOWNLOAD_PATHS.es)
 
+const userInitial = computed(() => auth.user?.name?.charAt(0)?.toUpperCase() ?? '?')
+
 /** Cambia el idioma NAVEGANDO: el prefijo de la URL manda (DC-12). */
 function switchLocale(code: string) {
   if (code === locales.current) return
@@ -70,7 +72,7 @@ async function logout() {
   router.push({ name: 'home', params: { locale: locales.current } })
 }
 
-// Ocultar al bajar, enseñar al subir (patrón CDL).
+// Ocultar al bajar, enseñar al subir.
 let lastY = 0
 function onScroll() {
   const y = window.scrollY
@@ -103,8 +105,9 @@ onBeforeUnmount(() => window.removeEventListener('scroll', onScroll))
 
 <template>
   <header class="site-header" :class="{ 'is-hidden': hidden }">
-    <div class="site-header__main-bar">
-      <div class="site-header__main">
+    <!-- Línea 1: marca + acciones (solo escritorio; en móvil, burger + logo) -->
+    <div class="site-header__bar">
+      <div class="site-header__bar-inner">
         <button
           class="site-header__burger"
           type="button"
@@ -121,7 +124,7 @@ onBeforeUnmount(() => window.removeEventListener('scroll', onScroll))
           class="site-header__brand"
           :title="site.title || 'BGM'"
         >
-          <!-- Logo SVG inlineado: currentColor hereda el acento (CDL) -->
+          <!-- Logo SVG inlineado: currentColor hereda el acento -->
           <!-- eslint-disable vue/no-v-html -- SVG subido por el admin -->
           <span
             v-if="site.settings?.logo_inline"
@@ -139,13 +142,11 @@ onBeforeUnmount(() => window.removeEventListener('scroll', onScroll))
         </RouterLink>
 
         <div class="site-header__actions">
-          <span class="site-header__locale">
-            <LocaleSelector
-              :model-value="locales.current"
-              :locales="locales.locales"
-              @update:model-value="switchLocale"
-            />
-          </span>
+          <LocaleSelector
+            :model-value="locales.current"
+            :locales="locales.locales"
+            @update:model-value="switchLocale"
+          />
           <RouterLink
             class="site-header__collection"
             :to="{ name: 'downloads', params: { locale: locales.current, dl: downloadsSegment } }"
@@ -157,70 +158,139 @@ onBeforeUnmount(() => window.removeEventListener('scroll', onScroll))
             </span>
           </RouterLink>
           <ThemeSelector />
+
+          <!-- Entrar / usuario: SIEMPRE en la cabecera (patrón kontuan) -->
+          <template v-if="auth.isAuthenticated">
+            <RouterLink
+              class="site-header__user"
+              :to="{ name: 'account', params: { locale: locales.current } }"
+              :title="t('nav.account')"
+            >
+              <span class="site-header__avatar">{{ userInitial }}</span>
+              <span class="site-header__user-name">{{ auth.user?.name }}</span>
+            </RouterLink>
+            <button
+              class="site-header__logout"
+              type="button"
+              :title="t('nav.logout')"
+              @click="logout"
+            >
+              <LogOut :size="18" />
+            </button>
+          </template>
+          <RouterLink
+            v-else
+            class="site-header__login"
+            :to="{ name: 'login', params: { locale: locales.current } }"
+          >
+            <LogIn :size="16" />
+            {{ t('nav.login') }}
+          </RouterLink>
         </div>
       </div>
     </div>
 
-    <nav class="site-header__nav" :class="{ 'is-open': navOpen }">
-      <div class="site-header__nav-inner">
-        <div class="site-header__nav-locale">
-          <LocaleSelector
-            :model-value="locales.current"
-            :locales="locales.locales"
-            @update:model-value="switchLocale"
-          />
-        </div>
-        <ul class="site-header__list">
-          <li v-for="page in navPages" :key="page.id">
-            <RouterLink
-              class="site-header__link"
-              :to="{ name: 'page', params: { locale: locales.current, slug: page.slug } }"
-              >{{ page.label }}</RouterLink
-            >
-          </li>
-          <li v-for="section in navSections" :key="section.key">
-            <RouterLink
-              class="site-header__link"
-              :to="{
-                name: 'entity-index',
-                params: { locale: locales.current, section: section.section },
-              }"
-              >{{ section.label }}</RouterLink
-            >
-          </li>
-          <li>
-            <RouterLink
-              class="site-header__link site-header__link--downloads"
-              :to="{
-                name: 'downloads',
-                params: { locale: locales.current, dl: downloadsSegment },
-              }"
-              >{{ t('nav.downloads') }}</RouterLink
-            >
-          </li>
-          <template v-if="auth.isAuthenticated">
-            <li>
-              <RouterLink
-                class="site-header__link"
-                :to="{ name: 'account', params: { locale: locales.current } }"
-                >{{ t('nav.account') }}</RouterLink
-              >
-            </li>
-            <li>
-              <button class="site-header__link site-header__logout" @click="logout">
-                {{ t('nav.logout') }}
-              </button>
-            </li>
-          </template>
-          <li v-else>
-            <RouterLink
-              class="site-header__link"
-              :to="{ name: 'login', params: { locale: locales.current } }"
-              >{{ t('nav.login') }}</RouterLink
-            >
-          </li>
-        </ul>
-      </div>
+    <!-- Línea 2 (escritorio): la barra de navegación -->
+    <nav class="site-header__nav">
+      <ul class="site-header__list">
+        <li v-for="page in navPages" :key="page.id">
+          <RouterLink
+            class="site-header__link"
+            :to="{ name: 'page', params: { locale: locales.current, slug: page.slug } }"
+            >{{ page.label }}</RouterLink
+          >
+        </li>
+        <li v-for="section in navSections" :key="section.key">
+          <RouterLink
+            class="site-header__link"
+            :to="{
+              name: 'entity-index',
+              params: { locale: locales.current, section: section.section },
+            }"
+            >{{ section.label }}</RouterLink
+          >
+        </li>
+        <li>
+          <RouterLink
+            class="site-header__link site-header__link--downloads"
+            :to="{ name: 'downloads', params: { locale: locales.current, dl: downloadsSegment } }"
+            >{{ t('nav.downloads') }}</RouterLink
+          >
+        </li>
+      </ul>
     </nav>
+
+    <!-- Barra lateral (móvil): TODO lo del header salvo el logo -->
+    <aside class="site-sidebar" :class="{ 'is-open': navOpen }">
+      <div class="site-sidebar__prefs">
+        <LocaleSelector
+          :model-value="locales.current"
+          :locales="locales.locales"
+          @update:model-value="switchLocale"
+        />
+        <ThemeSelector />
+      </div>
+      <hr class="site-sidebar__divider" />
+
+      <ul class="site-sidebar__list">
+        <li v-for="page in navPages" :key="page.id">
+          <RouterLink
+            class="site-header__link"
+            :to="{ name: 'page', params: { locale: locales.current, slug: page.slug } }"
+            >{{ page.label }}</RouterLink
+          >
+        </li>
+        <li v-for="section in navSections" :key="section.key">
+          <RouterLink
+            class="site-header__link"
+            :to="{
+              name: 'entity-index',
+              params: { locale: locales.current, section: section.section },
+            }"
+            >{{ section.label }}</RouterLink
+          >
+        </li>
+        <li>
+          <RouterLink
+            class="site-header__link site-header__link--downloads"
+            :to="{ name: 'downloads', params: { locale: locales.current, dl: downloadsSegment } }"
+          >
+            {{ t('nav.downloads') }}
+            <span v-if="collection.count" class="site-header__collection-count">
+              {{ collection.count }}
+            </span>
+          </RouterLink>
+        </li>
+      </ul>
+
+      <hr class="site-sidebar__divider" />
+      <div class="site-sidebar__user">
+        <template v-if="auth.isAuthenticated">
+          <RouterLink
+            class="site-header__user"
+            :to="{ name: 'account', params: { locale: locales.current } }"
+          >
+            <span class="site-header__avatar">{{ userInitial }}</span>
+            <span class="site-header__user-name">{{ auth.user?.name }}</span>
+          </RouterLink>
+          <button
+            class="site-header__logout"
+            type="button"
+            :title="t('nav.logout')"
+            @click="logout"
+          >
+            <LogOut :size="18" />
+          </button>
+        </template>
+        <RouterLink
+          v-else
+          class="site-header__login"
+          :to="{ name: 'login', params: { locale: locales.current } }"
+        >
+          <LogIn :size="16" />
+          {{ t('nav.login') }}
+        </RouterLink>
+      </div>
+    </aside>
   </header>
 </template>

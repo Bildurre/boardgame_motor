@@ -2,7 +2,8 @@
 
 > **Estado: web pública implementada (Fases 5/5.5/6 ✅).** Además de lo de
 > las Fases 5/5.5 (shell, `PageView`/home con plantillas, `/_render`,
-> Configuración de la web completa con acento aleatorio y webfonts), la
+> Configuración de la web completa con acento aleatorio, webfonts y tres
+> fuentes configurables — títulos, texto y ESPECIAL (bloque cita) —), la
 > Fase 6 añade: **prefijo de locale** en el router (`/es`·`/eu`·`/en`; el
 > guard sincroniza el store y vue-i18n, el cambio de idioma navega y cada
 > vista redirige a su canónica, DC-12), **SEO** con `useHead` de @bgm/ui

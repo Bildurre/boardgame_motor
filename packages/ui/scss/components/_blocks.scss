@@ -121,10 +121,20 @@
     margin: 0;
     border-left: 3px solid $accent-500;
     padding-left: $space-4;
-    font-size: $fs-18;
+    // Fuente "especial" de la configuración de la web (doc 10); las fuentes
+    // decorativas piden un cuerpo mayor.
+    font-family: var(--font-special, inherit);
+    font-size: $fs-24;
     font-style: italic;
   }
-  &__author { margin-top: $space-2; color: $text-3; font-style: normal; font-size: $fs-14; }
+  &__author {
+    margin-top: $space-2;
+    color: $text-3;
+    // El autor no hereda la fuente especial de la cita.
+    font-family: var(--font-body, inherit);
+    font-style: normal;
+    font-size: $fs-14;
+  }
 }
 
 .block__index {

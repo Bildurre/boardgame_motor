@@ -52,7 +52,10 @@
     background: $color-accent;
     color: #fff;
 
-    &:hover { background: $color-accent-dark; }
+    // Hover bien visible: accent-600 apenas se distingue del 500.
+    &:hover:not(:disabled) {
+      background: color-mix(in srgb, $color-accent 72%, black);
+    }
   }
 
   &--secondary {
@@ -60,7 +63,10 @@
     border-color: $color-border;
     color: $color-text;
 
-    &:hover { border-color: $color-accent; }
+    &:hover:not(:disabled) {
+      background: color-mix(in srgb, $color-accent 14%, transparent);
+      border-color: $color-accent;
+    }
   }
 }
 
@@ -88,10 +94,10 @@
 .bgm-button--danger {
   background: $danger;
   color: #fff;
-  &:hover { filter: brightness(0.92); }
+  &:hover:not(:disabled) { background: color-mix(in srgb, $danger 72%, black); }
 }
 .bgm-button--success {
   background: $success;
   color: #06281a;
-  &:hover { filter: brightness(0.95); }
+  &:hover:not(:disabled) { background: color-mix(in srgb, $success 72%, black); }
 }

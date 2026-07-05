@@ -29,6 +29,8 @@ class SiteSettingsSeeder extends Seeder
             'accent_colors' => ['#29ab5f', '#f15959', '#408cfd'], // verde/rojo/azul de CDL
             'font_headings' => 'ebgaramond', // webfont del juego (public/fonts)
             'font_body' => 'lora',
+            'font_special' => 'italianno', // solo la usa el bloque cita
+
             'footer_text' => [
                 'es' => 'Choque de Leyendas · un juego de mesa imprimible',
                 'eu' => 'Kondairen Talka · inprima daitekeen mahai-jokoa',

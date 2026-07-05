@@ -34,6 +34,7 @@ const accentColor = ref('#6c5ce7')
 const accentColors = ref<string[]>([])
 const fontHeadings = ref('system')
 const fontBody = ref('system')
+const fontSpecial = ref('system')
 const footerText = ref<Record<string, string>>({})
 
 interface SiteFont {
@@ -160,6 +161,7 @@ async function load() {
     accentColors.value = s.accent_colors ?? []
     fontHeadings.value = s.font_headings
     fontBody.value = s.font_body
+    fontSpecial.value = s.font_special ?? 'system'
     footerText.value = s.footer_text ?? {}
     fonts.value = s.fonts ?? {}
     customFonts.value = s.custom_fonts ?? []
@@ -183,6 +185,7 @@ async function save() {
       accent_colors: accentColors.value,
       font_headings: fontHeadings.value,
       font_body: fontBody.value,
+      font_special: fontSpecial.value,
       custom_fonts: customFonts.value.map(({ key, name, file }) => ({ key, name, file })),
       footer_text: footerText.value,
     })
@@ -335,6 +338,20 @@ onMounted(async () => {
                 :style="{ fontFamily: fonts[fontBody]?.stack }"
               >
                 {{ t('settings.fontPreviewBody') }}
+              </p>
+            </div>
+            <!-- Fuente "especial": acentos puntuales (hoy, el bloque cita) -->
+            <div>
+              <BaseSelect
+                v-model="fontSpecial"
+                :label="t('settings.fields.fontSpecial')"
+                :options="fontOptions"
+              />
+              <p
+                class="settings-view__font-preview"
+                :style="{ fontFamily: fonts[fontSpecial]?.stack }"
+              >
+                {{ t('settings.fontPreviewSpecial') }}
               </p>
             </div>
           </div>
