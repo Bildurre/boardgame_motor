@@ -31,5 +31,4 @@ Primera versión etiquetada (Fases 0–7 del plan).
   wrap: cambian de layout en bloque (container query).
 - `PdfManager` con el resumen de las previews (total + listos por idioma) y
   acciones Generar faltantes / Regenerar todo / Borrar todo.
-- Chips (`.locale-chip`) nunca muted: acento por defecto y fuente menor.
 - i18n por props (DC-29): etiquetas vía `labels`/`typeLabels`.

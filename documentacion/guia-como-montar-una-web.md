@@ -943,7 +943,8 @@ entidades y Descargas (sin color fijo: hover/activo como el resto). En móvil to
 el logo) pasa a la barra lateral off-canvas (hijas indentadas; **100 % de
 ancho** por debajo de `$bp-sm`). El admin tiene el enlace inverso, **"Ver la
 web"** (solo icono), en su barra superior (`VITE_APP_URL`), y en estrecho su
-barra superior muestra la **marca** (el sidebar está oculto). La página ocupa
+barra superior muestra la **marca** (el sidebar está oculto) y, con el
+drawer izquierdo abierto, la barra derecha (panel + asa) se esconde. La página ocupa
 siempre al menos el alto de la ventana (columna flex): el footer queda
 pegado abajo.
 
