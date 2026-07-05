@@ -24,9 +24,16 @@ export function isValidationError(e: unknown): boolean {
   return (e as ApiErrorShape)?.response?.status === 422
 }
 
-/** Mensaje de error de la API (message traducido) o el fallback dado. */
+/**
+ * Mensaje de error de la API (message traducido) o el fallback dado. Solo se
+ * confía en los 4xx: un 5xx puede llevar el volcado del servidor (SQL,
+ * trazas) con APP_DEBUG activo y NUNCA debe verse en el frontend.
+ */
 export function apiMessage(e: unknown, fallback: string): string {
-  const message = (e as ApiErrorShape & { response?: { data?: { message?: string } } })?.response
-    ?.data?.message
+  const response = (e as ApiErrorShape & { response?: { data?: { message?: string } } })?.response
+  const status = response?.status ?? 0
+  if (status < 400 || status >= 500) return fallback
+
+  const message = response?.data?.message
   return typeof message === 'string' && message !== '' ? message : fallback
 }

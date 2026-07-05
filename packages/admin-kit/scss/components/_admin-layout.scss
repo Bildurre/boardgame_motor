@@ -196,6 +196,14 @@
   min-width: 0;
 }
 
+// La marca en la barra superior (solo móvil: el sidebar está oculto).
+.navbar-brand {
+  display: inline-flex;
+  align-items: center;
+  text-decoration: none;
+  flex-shrink: 0;
+}
+
 .navbar-title {
   font-size: $fs-16;
   font-weight: $k-fw-semibold;

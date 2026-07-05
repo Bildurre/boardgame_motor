@@ -135,6 +135,11 @@ function toggleSidebar() {
             <X v-if="sidebarMobileOpen" :size="20" />
             <Menu v-else :size="20" />
           </button>
+          <!-- En estrecho el sidebar (y su marca) están ocultos: la marca
+               pasa a la barra superior -->
+          <RouterLink v-if="isMobile" :to="props.homeRoute" class="navbar-brand">
+            <MotorBadge :label="brand" />
+          </RouterLink>
           <span class="navbar-title">{{ title }}</span>
         </div>
         <div class="navbar-right">

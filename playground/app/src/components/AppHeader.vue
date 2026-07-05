@@ -71,6 +71,23 @@ const userInitial = computed(() => auth.user?.name?.charAt(0)?.toUpperCase() ?? 
 const adminUrl = (import.meta.env.VITE_ADMIN_URL as string | undefined) || 'http://localhost:5174'
 const canAccessAdmin = computed(() => auth.user?.can_access_admin === true)
 
+/**
+ * Ir al admin MANTENIENDO la sesión: se pide un código de traspaso (un solo
+ * uso, 60 s) y el admin lo canjea por su propio token al cargar. Si falla,
+ * se navega igual (login normal).
+ */
+async function goToAdmin(event: MouseEvent) {
+  event.preventDefault()
+  let url = adminUrl
+  try {
+    const code = await auth.requestHandoff()
+    url = `${adminUrl}/?handoff=${code}`
+  } catch {
+    // sin código: el admin pedirá login
+  }
+  window.location.href = url
+}
+
 /** Cambia el idioma NAVEGANDO: el prefijo de la URL manda (DC-12). */
 function switchLocale(code: string) {
   if (code === locales.current) return
@@ -155,61 +172,73 @@ onBeforeUnmount(() => window.removeEventListener('scroll', onScroll))
           <MotorBadge v-else :label="site.title || 'BGM'" />
         </RouterLink>
 
-        <!-- Orden: [admin] descargas · usuario/entrar · idioma · tema -->
+        <!-- Tres grupos con separador: [admin·descargas] | usuario | prefs -->
         <div class="site-header__actions">
-          <a
-            v-if="canAccessAdmin"
-            class="site-header__collection"
-            :href="adminUrl"
-            :title="t('nav.admin')"
-          >
-            <LayoutDashboard :size="20" />
-          </a>
-          <RouterLink
-            class="site-header__collection"
-            :to="{ name: 'downloads', params: { locale: locales.current, dl: downloadsSegment } }"
-            :title="t('nav.downloads')"
-          >
-            <FileDown :size="20" />
-            <span v-if="collection.count" class="site-header__collection-count">
-              {{ collection.count }}
-            </span>
-          </RouterLink>
+          <span class="site-header__set">
+            <a
+              v-if="canAccessAdmin"
+              class="site-header__collection"
+              :href="adminUrl"
+              :title="t('nav.admin')"
+              @click="goToAdmin"
+            >
+              <LayoutDashboard :size="20" />
+            </a>
+            <RouterLink
+              class="site-header__collection"
+              :to="{ name: 'downloads', params: { locale: locales.current, dl: downloadsSegment } }"
+              :title="t('nav.downloads')"
+            >
+              <FileDown :size="20" />
+              <span v-if="collection.count" class="site-header__collection-count">
+                {{ collection.count }}
+              </span>
+            </RouterLink>
+          </span>
+
+          <span class="site-header__sep" aria-hidden="true" />
 
           <!-- Entrar / usuario: SIEMPRE en la cabecera (patrón kontuan) -->
-          <template v-if="auth.isAuthenticated">
+          <span class="site-header__set">
+            <template v-if="auth.isAuthenticated">
+              <RouterLink
+                class="site-header__user"
+                :to="{ name: 'account', params: { locale: locales.current } }"
+                :title="t('nav.account')"
+              >
+                <span class="site-header__avatar">{{ userInitial }}</span>
+                <span class="site-header__user-name">{{ auth.user?.name }}</span>
+              </RouterLink>
+              <button
+                class="site-header__logout"
+                type="button"
+                :title="t('nav.logout')"
+                @click="logout"
+              >
+                <LogOut :size="18" />
+              </button>
+            </template>
             <RouterLink
-              class="site-header__user"
-              :to="{ name: 'account', params: { locale: locales.current } }"
-              :title="t('nav.account')"
+              v-else
+              class="site-header__login"
+              :to="{ name: 'login', params: { locale: locales.current } }"
             >
-              <span class="site-header__avatar">{{ userInitial }}</span>
-              <span class="site-header__user-name">{{ auth.user?.name }}</span>
+              <LogIn :size="16" />
+              {{ t('nav.login') }}
             </RouterLink>
-            <button
-              class="site-header__logout"
-              type="button"
-              :title="t('nav.logout')"
-              @click="logout"
-            >
-              <LogOut :size="18" />
-            </button>
-          </template>
-          <RouterLink
-            v-else
-            class="site-header__login"
-            :to="{ name: 'login', params: { locale: locales.current } }"
-          >
-            <LogIn :size="16" />
-            {{ t('nav.login') }}
-          </RouterLink>
+          </span>
 
-          <LocaleSelector
-            :model-value="locales.current"
-            :locales="locales.locales"
-            @update:model-value="switchLocale"
-          />
-          <ThemeSelector />
+          <span class="site-header__sep" aria-hidden="true" />
+
+          <!-- Preferencias: idioma + tema -->
+          <span class="site-header__set">
+            <LocaleSelector
+              :model-value="locales.current"
+              :locales="locales.locales"
+              @update:model-value="switchLocale"
+            />
+            <ThemeSelector />
+          </span>
         </div>
       </div>
     </div>
@@ -313,7 +342,7 @@ onBeforeUnmount(() => window.removeEventListener('scroll', onScroll))
           </RouterLink>
         </li>
         <li v-if="canAccessAdmin">
-          <a class="site-header__link" :href="adminUrl">
+          <a class="site-header__link" :href="adminUrl" @click="goToAdmin">
             <LayoutDashboard :size="16" />
             {{ t('nav.admin') }}
           </a>

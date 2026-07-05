@@ -95,6 +95,25 @@ it('cierra sesión revocando el token actual', function () {
     expect($user->tokens()->count())->toBe(0);
 });
 
+it('traspasa la sesión entre las SPA con un código de un solo uso (handoff)', function () {
+    // Pedir un código exige sesión (antes de actingAs: se queda pegado).
+    $this->postJson('/api/auth/handoff')->assertUnauthorized();
+
+    $user = motorUser('admin');
+    $code = $this->actingAs($user)->postJson('/api/auth/handoff')
+        ->assertOk()
+        ->json('code');
+
+    // El canje es público (el código ES la credencial)…
+    $response = $this->postJson('/api/auth/handoff/consume', ['code' => $code])->assertOk();
+    expect($response->json('user.id'))->toBe($user->id)
+        ->and($response->json('token'))->toBeString();
+
+    // …pero de UN SOLO USO, y un código inventado no vale.
+    $this->postJson('/api/auth/handoff/consume', ['code' => $code])->assertUnauthorized();
+    $this->postJson('/api/auth/handoff/consume', ['code' => 'nope-nope'])->assertUnauthorized();
+});
+
 it('permite el admin a admin y editor pero no a user ni invitados', function () {
     $this->getJson('/api/admin/ping')->assertUnauthorized();
 

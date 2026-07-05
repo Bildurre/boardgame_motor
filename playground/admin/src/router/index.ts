@@ -42,6 +42,20 @@ export function onLocaleChange(newLocale: string) {
 
 router.beforeEach(async (to) => {
   const auth = useAuthStore()
+
+  // Traspaso de sesión desde la web pública (?handoff=…, un solo uso): se
+  // canjea por un token propio ANTES del guard de auth y se limpia la URL.
+  if (to.query.handoff) {
+    try {
+      await auth.consumeHandoff(String(to.query.handoff))
+    } catch {
+      // código caducado/usado: seguirá al login normal
+    }
+    const query = { ...to.query }
+    delete query.handoff
+    return { path: to.path, query, hash: to.hash, replace: true }
+  }
+
   if (auth.token && !auth.user) {
     try {
       await auth.fetchMe()

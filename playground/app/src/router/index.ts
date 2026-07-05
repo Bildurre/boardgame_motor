@@ -116,6 +116,20 @@ const router = createRouter({
 })
 
 router.beforeEach(async (to) => {
+  // Traspaso de sesión desde el admin (?handoff=…, un solo uso): se canjea
+  // por un token propio ANTES de resolver la ruta y se limpia de la URL.
+  if (to.query.handoff) {
+    const auth = useAuthStore()
+    try {
+      await auth.consumeHandoff(String(to.query.handoff))
+    } catch {
+      // código caducado/usado: se sigue como invitado
+    }
+    const query = { ...to.query }
+    delete query.handoff
+    return { path: to.path, query, hash: to.hash, replace: true }
+  }
+
   // El prefijo manda: sincroniza el store (persiste + ?locale de la API) y
   // los textos de la propia interfaz.
   const locales = useLocalesStore()

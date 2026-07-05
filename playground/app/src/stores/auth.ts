@@ -47,6 +47,22 @@ export const useAuthStore = defineStore('auth', () => {
     user.value = data.data
   }
 
+  /**
+   * Canjea un código de traspaso (?handoff=…, un solo uso) llegado desde la
+   * otra SPA por un token propio: la sesión "viaja" de admin a web.
+   */
+  async function consumeHandoff(code: string) {
+    const { data } = await api.post('/auth/handoff/consume', { code })
+    setToken(data.token)
+    user.value = data.user
+  }
+
+  /** Pide un código de traspaso hacia la otra SPA (60 s, un solo uso). */
+  async function requestHandoff(): Promise<string> {
+    const { data } = await api.post('/auth/handoff')
+    return data.code
+  }
+
   /** Limpieza local (sin llamar a la API): para 401 del interceptor. */
   function clearSession() {
     setToken(null)
@@ -62,5 +78,16 @@ export const useAuthStore = defineStore('auth', () => {
     clearSession()
   }
 
-  return { user, token, isAuthenticated, login, register, fetchMe, logout, clearSession }
+  return {
+    user,
+    token,
+    isAuthenticated,
+    login,
+    register,
+    fetchMe,
+    logout,
+    clearSession,
+    consumeHandoff,
+    requestHandoff,
+  }
 })

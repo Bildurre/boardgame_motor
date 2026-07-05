@@ -931,17 +931,38 @@ sufijo del sitio.
 > casas): el router da prioridad a las secciones.
 
 **Cabecera pública (dos líneas, patrón kontuan + CDL).** Línea 1: marca a la
-izquierda y, a la derecha, en este orden — enlace a **administración** (icono,
-solo si `can_access_admin`; URL en `VITE_ADMIN_URL`), icono de **Descargas**
-con el contador de la colección, **Entrar** (botón-texto) o chip de usuario,
-selector de **idioma** y **tema**. Línea 2: la nav **centrada** — páginas raíz
-del CRM (las que tienen hijas publicadas llevan chevron y submenú al hover),
-secciones de entidades y Descargas (sin color fijo: hover/activo como el
-resto). En móvil todo (salvo el logo) pasa a la barra lateral off-canvas
-(hijas indentadas; **100 % de ancho** por debajo de `$bp-sm`). El admin tiene
-el enlace inverso, **"Ver la web"**, en su barra superior (`VITE_APP_URL`).
-La página ocupa siempre al menos el alto de la ventana (columna flex): el
-footer queda pegado abajo.
+izquierda y, a la derecha, las acciones en **tres grupos separados por una
+línea vertical** (`.site-header__set` / `__sep`): [enlace a
+**administración** (icono, solo si `can_access_admin`; URL en
+`VITE_ADMIN_URL`) + icono de **Descargas** con el contador] | [**Entrar**
+(botón-texto) o chip de usuario] | [selector de **idioma** + **tema**].
+Línea 2: la nav **centrada** — páginas raíz del CRM (las que tienen hijas
+publicadas llevan chevron y submenú al hover), secciones de entidades y
+Descargas (sin color fijo: hover/activo como el resto). En móvil todo (salvo
+el logo) pasa a la barra lateral off-canvas (hijas indentadas; **100 % de
+ancho** por debajo de `$bp-sm`). El admin tiene el enlace inverso, **"Ver la
+web"** (solo icono), en su barra superior (`VITE_APP_URL`), y en estrecho su
+barra superior muestra la **marca** (el sidebar está oculto). La página ocupa
+siempre al menos el alto de la ventana (columna flex): el footer queda
+pegado abajo.
+
+**Sesión compartida web <-> admin (handoff).** Las dos SPA viven en orígenes
+distintos (localStorage separado), así que los enlaces cruzados **traspasan
+la sesión** con un código de un solo uso: el origen pide
+`POST /api/auth/handoff` (autenticado → `{ code }`, 60 s en caché) y navega a
+`destino/?handoff=CODE`; el guard del destino canjea el código
+(`POST /api/auth/handoff/consume`, público y con throttle: el código ES la
+credencial) por un **token propio** y limpia la URL. El token Sanctum nunca
+viaja en la URL; si el código caducó, se sigue al login normal.
+
+**Errores hacia el frontend.** Los `apiMessage()` de ambas SPA solo confían
+en el `message` de los errores **4xx** (textos que el backend traduce a
+propósito); un 5xx muestra siempre el mensaje genérico — con `APP_DEBUG`
+activo Laravel mete el volcado (SQL, trazas) en la respuesta y eso no debe
+verse jamás. En producción, además, `APP_DEBUG=false`. Y las escrituras
+oportunistas del motor (p. ej. guardar `users.locale` en login/registro) van
+con `rescue()`: una migración pendiente no tumba el login (el detalle queda
+en los logs).
 
 **Privacidad.** La web **no usa cookies**: solo localStorage (idioma, tema,
 sesión, token de la colección). Un **banner de consentimiento** (componente

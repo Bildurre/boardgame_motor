@@ -34,17 +34,18 @@
 }
 
 // Enlace "Ver la web" de la barra superior (espejo del enlace a admin del
-// header público): texto con icono, en acento.
+// header público): botón de icono, sin texto.
 .navbar-viewsite {
   display: inline-flex;
   align-items: center;
-  gap: $space-2;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
   color: $accent-500;
+  border-radius: $radius-md;
   text-decoration: none;
-  font-size: $fs-14;
-  font-weight: $k-fw-semibold;
 
-  &:hover { color: $accent-400; }
+  &:hover { background: color-mix(in srgb, $accent-500 10%, transparent); }
 }
 
 .who-logout {

@@ -67,6 +67,22 @@ async function logout() {
 // Enlace a la web pública (espejo del enlace a admin del header público).
 const appUrl = (import.meta.env.VITE_APP_URL as string | undefined) || 'http://localhost:5173'
 
+/**
+ * Ir a la web MANTENIENDO la sesión: código de traspaso de un solo uso que
+ * la web canjea al cargar. Si falla, se navega igual (como invitado).
+ */
+async function goToSite(event: MouseEvent) {
+  event.preventDefault()
+  let url = appUrl
+  try {
+    const code = await auth.requestHandoff()
+    url = `${appUrl}/?handoff=${code}`
+  } catch {
+    // sin código: se entra como invitado
+  }
+  window.location.href = url
+}
+
 // Resalta el ítem del menú también en las vistas hijas (single de heroe →
 // Personajes; single de página → Páginas): cada ruta declara su sección en
 // meta.nav y aquí se aplica la clase `active` (mismo estilo que
@@ -196,11 +212,10 @@ function navActive(section: string) {
       </RouterLink>
     </template>
 
-    <!-- Barra superior: ir a la web pública (espejo del enlace del header) -->
+    <!-- Barra superior: ir a la web pública (solo icono, con traspaso) -->
     <template #actions>
-      <a class="navbar-viewsite" :href="appUrl" :title="t('nav.viewSite')">
-        <Globe :size="16" />
-        <span>{{ t('nav.viewSite') }}</span>
+      <a class="navbar-viewsite" :href="appUrl" :title="t('nav.viewSite')" @click="goToSite">
+        <Globe :size="18" />
       </a>
     </template>
 
