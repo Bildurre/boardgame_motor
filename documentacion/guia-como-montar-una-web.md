@@ -843,9 +843,10 @@ el resto de tareas:
 Schedule::command('pdf:cleanup')->hourly(); // PDFs temporales (doc 02)
 ```
 
-**Restore** (DC-16, manual por ahora): descomprime el zip; con SQLite basta
-con reponer el fichero de la BBDD y `storage/app/public`; con MySQL,
-`mysql base < dump.sql`. BBDD muy grandes → mover la creación a cola.
+**Restore** (DC-16, manual): paso a paso en `funcionalidades/06`
+(down → reponer BBDD y media → optimize:clear → up). **BBDD grandes**:
+`MOTOR_BACKUP_QUEUE=true` y la copia manual va en cola (respuesta 202; la
+vista sondea el listado hasta que aparece; hace falta un worker).
 
 ## 6quinquies. Web pública: locale, SEO y listados (Fase 6)
 

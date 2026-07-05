@@ -1,7 +1,9 @@
 <?php
 
+use Bgm\Core\Backup\Jobs\RunBackupJob;
 use Bgm\Core\Backup\MotorBackup;
 use Illuminate\Console\Scheduling\Schedule;
+use Illuminate\Support\Facades\Queue;
 use Illuminate\Support\Facades\Storage;
 
 // Copias de seguridad (doc 06, DC-16): crear, listar, descargar y borrar
@@ -45,6 +47,23 @@ it('el admin crea, lista, descarga y borra copias de seguridad', function () {
         ->assertJsonCount(0, 'data');
     $this->actingAs($admin)->deleteJson("/api/admin/backups/{$file}")
         ->assertNotFound();
+});
+
+it('con motor.backup.queue la copia manual va en cola (BBDD grandes)', function () {
+    config(['motor.backup.queue' => true]);
+    $admin = motorUser('admin');
+
+    Queue::fake();
+    $this->actingAs($admin)->postJson('/api/admin/backups')
+        ->assertAccepted()
+        ->assertJsonPath('queued', true);
+    Queue::assertPushed(RunBackupJob::class);
+
+    // El job crea el zip de verdad (disco falso del beforeEach).
+    (new RunBackupJob)->handle();
+    $this->actingAs($admin)->getJson('/api/admin/backups')
+        ->assertOk()
+        ->assertJsonCount(1, 'data');
 });
 
 it('la copia automática se configura desde el admin y la programa el motor', function () {

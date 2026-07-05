@@ -98,8 +98,21 @@ function select(backup: BackupRow, event: MouseEvent) {
 async function create() {
   creating.value = true
   try {
-    const { data } = await api.post('/admin/backups')
+    const { data, status } = await api.post('/admin/backups')
     backups.value = data.data
+
+    // 202 = en cola (BBDD grandes, DC-16): sondea hasta que aparezca la
+    // copia nueva (o desiste a los ~3 minutos).
+    if (status === 202) {
+      const before = backups.value.length
+      for (let i = 0; i < 90; i++) {
+        await new Promise((resolve) => setTimeout(resolve, 2000))
+        const { data: fresh } = await api.get('/admin/backups')
+        backups.value = fresh.data
+        if (backups.value.length > before) break
+      }
+    }
+
     toast.success(t('backups.toast.created'))
   } catch {
     toast.danger(t('common.errors.action'))

@@ -11,8 +11,10 @@
 > (activada, frecuencia diaria/semanal, día, hora y retención; servicio
 > `BackupSettings` sobre la tabla settings + `PUT /api/admin/backups/
 > schedule`) y la programa el motor en `MotorBackup::schedule()` — el juego
-> solo necesita el cron de `schedule:run`. Pendiente: creación en cola para
-> BBDD grandes; restore guiado.
+> solo necesita el cron de `schedule:run`. Con `MOTOR_BACKUP_QUEUE=true` la
+> copia manual va EN COLA (RunBackupJob, respuesta 202 y sondeo del listado
+> en la vista) para BBDD grandes; restore guiado documentado abajo.
+> **Doc completado.**
 
 ## Qué hace
 
@@ -64,6 +66,22 @@ si incluye media).
   S3, programación, notificaciones).
 - **Restore** → **DC-16**: **export ahora**; restore manual documentado; restore
   guiado más adelante. BBDD grandes → en cola.
+
+## Restore guiado (manual, paso a paso)
+
+1. **Para el sitio** (modo mantenimiento): `php artisan down`.
+2. **Descarga y descomprime** el zip de la vista Copias (o de
+   `storage/app/backups/{app}/`). Dentro va la BBDD y, si estaba activado,
+   `storage/app/public` (media).
+3. **BBDD**:
+   - SQLite: repón el fichero (p. ej. `database/database.sqlite`) encima
+     del actual.
+   - MySQL/Postgres: `mysql base < db-dumps/mysql-base.sql` (o `psql`).
+4. **Media**: repón `storage/app/public` desde el zip (previews y PDFs se
+   pueden regenerar desde el admin si prefieres no restaurarlos).
+5. **Cachés**: `php artisan optimize:clear` (la config del sitio y los
+   permisos de Spatie se cachean).
+6. `php artisan up` y comprueba `php artisan backup:list` (monitor sano).
 
 ## Riesgos
 
