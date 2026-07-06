@@ -8,15 +8,18 @@
     "packages/admin-kit",
     "playground/packages/shared",
     "playground/admin",
-    "playground/app"
+    "playground/app",
+    "plantilla/packages/shared",
+    "plantilla/admin",
+    "plantilla/app"
   ],
   "scripts": {
     "dev": "concurrently -n app,admin,api,queue -c blue,green,red,yellow \"npm run dev -w playground/app\" \"npm run dev -w playground/admin\" \"npm run dev:api\" \"npm run dev:queue\"",
     "dev:front": "concurrently -n app,admin -c blue,green \"npm run dev -w playground/app\" \"npm run dev -w playground/admin\"",
     "dev:api": "cd playground/api && php artisan serve --port=8010",
     "dev:queue": "cd playground/api && php artisan queue:listen --tries=1",
-    "build": "npm run build -w playground/app && npm run build -w playground/admin",
-    "type-check": "npm run type-check -w playground/app && npm run type-check -w playground/admin",
+    "build": "npm run build -w playground/app && npm run build -w playground/admin && npm run build -w plantilla/app && npm run build -w plantilla/admin",
+    "type-check": "npm run type-check -w playground/app && npm run type-check -w playground/admin && npm run type-check -w plantilla/app && npm run type-check -w plantilla/admin",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "format": "prettier --write \"packages/*/src/**/*.{ts,vue}\" \"playground/admin/src/**/*.{ts,vue}\" \"playground/app/src/**/*.{ts,vue}\"",

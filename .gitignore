@@ -14,6 +14,8 @@ playground/api/public/build/
 # como en kontuan. Overrides locales en .env.local (ignorado).
 !playground/app/.env
 !playground/admin/.env
+!plantilla/app/.env
+!plantilla/admin/.env
 
 # Laravel runtime
 playground/api/storage/*.key

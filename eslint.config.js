@@ -17,6 +17,7 @@ export default [
       '**/coverage/**',
       '**/dev-dist/**',
       'playground/api/**',
+      'plantilla/api/**',
     ],
   },
   js.configs.recommended,

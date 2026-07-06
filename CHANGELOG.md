@@ -25,6 +25,11 @@ los cambios de API pueden llegar en versiones menores).
 - **Licencia GPL-3.0-only** y publicación en registros públicos: Packagist
   (`edc-motor/core`, vía el repo split `bildurre/edc-core`) y npmjs
   (org `edc-motor`). El consumo por clon hermano deja de ser necesario.
+- **`plantilla/`**: esqueleto mínimo de juego (api + admin + app +
+  `packages/shared`) con toda la infraestructura del motor funcionando y SIN
+  entidades demo, cubierto por los gates del monorepo. `tools/crear-juego.sh`
+  ahora genera los juegos desde ella, con dependencias por versión de los
+  registros (sin carpeta `motor/` hermana).
 
 ## [0.1.0] — 2026-07-05
 

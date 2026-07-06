@@ -27,21 +27,25 @@ boardgame_motor/                 # monorepo donde se desarrolla el motor
 │   └── packages/
 │       └── shared/  @playground/shared (lo del juego compartido admin/app:
 │                    cartas para web + render PNG, tipos, SCSS)
+├── plantilla/                   # esqueleto mínimo SIN demo (base de crear-juego.sh)
 └── documentacion/
 ```
 
-Durante el desarrollo, el `playground` consume los paquetes por **enlace local**
-(Composer `path` repository + npm workspaces). La distribución versionada (DC-33)
-es el **monorepo etiquetado** (`vX.Y.Z`, versión de tren para los tres paquetes):
-un juego externo clona/submodula el motor al tag y consume `edc-motor/core` por
-Composer (`path`) y `@edc-motor/ui`/`@edc-motor/admin-kit` por npm (`file:`). Guía:
+Durante el desarrollo, el `playground` y la `plantilla` consumen los paquetes
+por **enlace local** (Composer `path` repository + npm workspaces). La
+distribución (DC-33) es **open source (GPL-3.0) por registros públicos** con
+versión de tren (`vX.Y.Z`, un tag para los tres paquetes): `edc-motor/core` en
+**Packagist** (vía el split read-only [`edc-core`](https://github.com/bildurre/edc-core))
+y `@edc-motor/ui` / `@edc-motor/admin-kit` en **npmjs** (org `edc-motor`) — el
+workflow `publicar.yml` publica ambos con cada tag. Guía:
 [`documentacion/guia-arrancar-un-juego-nuevo.md`](documentacion/guia-arrancar-un-juego-nuevo.md).
-**Para arrancar una web nueva**, `tools/crear-juego.sh <destino>` genera un
-proyecto de juego limpio a partir del playground (sin la documentación de
-desarrollo — solo las guías — y con las rutas ya apuntando al motor hermano).
-Prueba de consumo externa: `tools/consumo-externo/probar-consumo.sh`. CI en
-GitHub Actions (`.github/workflows/ci.yml`): ESLint + vue-tsc + build y
-Pint + Pest en cada push/PR.
+**Para arrancar una web nueva**, `tools/crear-juego.sh <destino>` genera el
+proyecto del juego desde `plantilla/`: infraestructura funcionando, sin
+entidades demo, dependencias por versión de los registros y solo las guías
+como documentación. Prueba de consumo local:
+`tools/consumo-externo/probar-consumo.sh`. CI en GitHub Actions
+(`.github/workflows/ci.yml`): ESLint + vue-tsc + build (playground y
+plantilla) y Pint + Pest en cada push/PR.
 
 ## Requisitos
 

@@ -2,7 +2,13 @@
 import { ref, onMounted, onUnmounted, watch } from 'vue'
 import { useRoute, type RouteLocationRaw } from 'vue-router'
 import { ChevronLeft, ChevronRight, Menu, X } from '@lucide/vue'
-import { MotorBadge, ThemeSelector, LocaleSelector, AppBreadcrumbs, type Crumb } from '@edc-motor/ui'
+import {
+  MotorBadge,
+  ThemeSelector,
+  LocaleSelector,
+  AppBreadcrumbs,
+  type Crumb,
+} from '@edc-motor/ui'
 import RightSidebar from './RightSidebar.vue'
 import { useRightSidebar } from '../composables/useRightSidebar'
 
