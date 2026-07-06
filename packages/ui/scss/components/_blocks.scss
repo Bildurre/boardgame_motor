@@ -47,7 +47,7 @@
     display: grid;
     gap: $space-4;
 
-    .bgm-button { justify-self: start; text-decoration: none; }
+    .edc-button { justify-self: start; text-decoration: none; }
   }
 
   &--header .block__title { font-size: $fs-28; }

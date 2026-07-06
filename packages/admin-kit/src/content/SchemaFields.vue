@@ -17,7 +17,7 @@ import {
   type RichIcon,
   type RichTextLabels,
   type SelectOption,
-} from '@bgm/ui'
+} from '@edc-motor/ui'
 import EntityRefSelect from './EntityRefSelect.vue'
 
 // Renderer del DSL de campos (DC-08): pinta el formulario de un bloque a

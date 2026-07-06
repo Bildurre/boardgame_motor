@@ -2,8 +2,8 @@
 
 use App\Models\Character;
 use App\Models\House;
-use Bgm\Core\Previews\Jobs\GeneratePreviewJob;
-use Bgm\Core\Previews\RenderToken;
+use Edc\Core\Previews\Jobs\GeneratePreviewJob;
+use Edc\Core\Previews\RenderToken;
 use Illuminate\Support\Facades\Queue;
 use Illuminate\Support\Facades\Storage;
 

@@ -75,7 +75,7 @@
     min-width: 0;
   }
 
-  // El aspecto lo pone el .chip unificado (@bgm/ui); aquí solo la posición.
+  // El aspecto lo pone el .chip unificado (@edc-motor/ui); aquí solo la posición.
   &__chip {
     margin-left: auto;
     flex: 0 0 auto;
@@ -242,7 +242,7 @@
       success: $success,
       danger: $danger,
     ) {
-      .bgm-button--#{$variant} {
+      .edc-button--#{$variant} {
         background: transparent;
         border-color: $color;
         color: $color;

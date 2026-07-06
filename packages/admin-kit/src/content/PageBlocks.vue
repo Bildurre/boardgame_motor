@@ -11,7 +11,7 @@ import {
   useToast,
   type RichIcon,
   type RichTextLabels,
-} from '@bgm/ui'
+} from '@edc-motor/ui'
 import SchemaFields, { type FieldSchema } from './SchemaFields.vue'
 import { useRightSidebar } from '../composables/useRightSidebar'
 

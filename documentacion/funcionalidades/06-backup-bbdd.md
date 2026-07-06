@@ -2,7 +2,7 @@
 
 > **Estado: implementado (Fase 6 ✅).** `spatie/laravel-backup` (DC-16)
 > con la config derivada de `motor.backup` en
-> `Bgm\Core\Backup\MotorBackup::applyConfig()` (disco `backups` local por
+> `Edc\Core\Backup\MotorBackup::applyConfig()` (disco `backups` local por
 > defecto, retención `keep_days`, media opcional; SQLite entra como fichero
 > en el zip — el dump exige el binario `sqlite3`). API en
 > `/api/admin/backups` (listar/crear/descargar/borrar, solo `manage-web`) +

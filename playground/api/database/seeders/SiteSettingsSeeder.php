@@ -2,8 +2,8 @@
 
 namespace Database\Seeders;
 
-use Bgm\Core\Site\Models\Setting;
-use Bgm\Core\Site\SiteSettings;
+use Edc\Core\Site\Models\Setting;
+use Edc\Core\Site\SiteSettings;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Storage;
 

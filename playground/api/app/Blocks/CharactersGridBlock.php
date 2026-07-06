@@ -3,9 +3,9 @@
 namespace App\Blocks;
 
 use App\Models\Character;
-use Bgm\Core\Content\BlockType;
-use Bgm\Core\Content\Fields\Field;
-use Bgm\Core\Content\Models\Block;
+use Edc\Core\Content\BlockType;
+use Edc\Core\Content\Fields\Field;
+use Edc\Core\Content\Models\Block;
 
 /**
  * Bloque con-datos de ESTE juego: rejilla de cartas de personaje publicadas.

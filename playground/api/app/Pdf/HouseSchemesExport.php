@@ -4,8 +4,8 @@ namespace App\Pdf;
 
 use App\Models\House;
 use App\Models\Scheme;
-use Bgm\Core\Pdf\PdfExport;
-use Bgm\Core\Pdf\PrintableItem;
+use Edc\Core\Pdf\PdfExport;
+use Edc\Core\Pdf\PrintableItem;
 use Illuminate\Database\Eloquent\Model;
 
 /**

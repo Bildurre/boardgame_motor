@@ -2,7 +2,7 @@
 import { computed, onMounted, reactive, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { Plus, SquarePen, Trash2 } from '@lucide/vue'
-import { BaseGrid, EntityCard, EmptyState } from '@bgm/admin-kit'
+import { BaseGrid, EntityCard, EmptyState } from '@edc-motor/admin-kit'
 import {
   BaseButton,
   IconButton,
@@ -11,7 +11,7 @@ import {
   ImageUpload,
   useToast,
   useConfirm,
-} from '@bgm/ui'
+} from '@edc-motor/ui'
 import { api } from '@/lib/api'
 import { fieldErrors } from '@/lib/apiError'
 import { useIconsStore, type Icon } from '@/stores/icons'

@@ -99,7 +99,7 @@
   "dashboard": {
     "title": "Panel",
     "connectedAs": "Conectado como {name} ({roles}).",
-    "motor": "Motor {name} v{version} · locales {locales}"
+    "motor": "{name} v{version} · locales {locales}"
   },
   "houses": {
     "title": "Casas",

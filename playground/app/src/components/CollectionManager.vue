@@ -2,7 +2,7 @@
 import { onMounted, ref } from 'vue'
 import { Download, FileText, Trash2, X } from '@lucide/vue'
 import { useI18n } from 'vue-i18n'
-import { BaseButton } from '@bgm/ui'
+import { BaseButton } from '@edc-motor/ui'
 import { useCollectionStore, type CollectionItem } from '@/stores/collection'
 import { useLocalesStore } from '@/stores/locales'
 

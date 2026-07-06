@@ -99,7 +99,7 @@
   "dashboard": {
     "title": "Dashboard",
     "connectedAs": "Signed in as {name} ({roles}).",
-    "motor": "Engine {name} v{version} · locales {locales}"
+    "motor": "{name} v{version} · locales {locales}"
   },
   "houses": {
     "title": "Houses",

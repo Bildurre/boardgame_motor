@@ -2,13 +2,13 @@
 
 use App\Models\House;
 use App\Models\Scheme;
-use Bgm\Core\Content\Models\Page;
-use Bgm\Core\Pdf\Jobs\GeneratePdfJob;
-use Bgm\Core\Pdf\Models\GeneratedPdf;
-use Bgm\Core\Pdf\Models\PdfCollectionItem;
-use Bgm\Core\Pdf\PdfExport;
-use Bgm\Core\Pdf\PdfService;
-use Bgm\Core\Support\Facades\Pdfs;
+use Edc\Core\Content\Models\Page;
+use Edc\Core\Pdf\Jobs\GeneratePdfJob;
+use Edc\Core\Pdf\Models\GeneratedPdf;
+use Edc\Core\Pdf\Models\PdfCollectionItem;
+use Edc\Core\Pdf\PdfExport;
+use Edc\Core\Pdf\PdfService;
+use Edc\Core\Support\Facades\Pdfs;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Queue;
 use Illuminate\Support\Facades\Storage;

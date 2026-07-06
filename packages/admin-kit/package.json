@@ -1,7 +1,8 @@
 {
-  "name": "@bgm/admin-kit",
-  "version": "0.1.0",
-  "private": true,
+  "name": "@edc-motor/admin-kit",
+  "version": "0.2.0",
+  "description": "EdC Motor — kit del panel de administración: layout, gestores CRUD, imágenes, PDF, páginas, configuración, usuarios y copias (paquete fuente: lo compila el consumidor con Vite)",
+  "license": "GPL-3.0-only",
   "type": "module",
   "main": "src/index.ts",
   "types": "src/index.ts",
@@ -9,8 +10,30 @@
     ".": "./src/index.ts",
     "./scss/*": "./scss/*"
   },
+  "files": [
+    "src",
+    "scss",
+    "LICENSE",
+    "README.md"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bildurre/boardgame_motor.git",
+    "directory": "packages/admin-kit"
+  },
+  "homepage": "https://github.com/bildurre/boardgame_motor/tree/main/packages/admin-kit#readme",
+  "bugs": "https://github.com/bildurre/boardgame_motor/issues",
+  "keywords": [
+    "vue",
+    "admin",
+    "boardgame",
+    "edc-motor"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
   "dependencies": {
-    "@bgm/ui": "*",
+    "@edc-motor/ui": "^0.2.0",
     "axios": "^1.7.0",
     "vue-draggable-plus": "^0.6.1"
   },

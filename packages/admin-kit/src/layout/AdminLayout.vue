@@ -2,7 +2,7 @@
 import { ref, onMounted, onUnmounted, watch } from 'vue'
 import { useRoute, type RouteLocationRaw } from 'vue-router'
 import { ChevronLeft, ChevronRight, Menu, X } from '@lucide/vue'
-import { MotorBadge, ThemeSelector, LocaleSelector, AppBreadcrumbs, type Crumb } from '@bgm/ui'
+import { MotorBadge, ThemeSelector, LocaleSelector, AppBreadcrumbs, type Crumb } from '@edc-motor/ui'
 import RightSidebar from './RightSidebar.vue'
 import { useRightSidebar } from '../composables/useRightSidebar'
 
@@ -30,7 +30,7 @@ const props = withDefaults(
   }>(),
   {
     title: '',
-    brand: 'BGM Admin',
+    brand: 'EdC Admin',
     locales: () => [],
     locale: '',
     homeRoute: () => ({ name: 'dashboard' }),
@@ -45,7 +45,7 @@ const emit = defineEmits<{ 'update:locale': [code: string] }>()
 const MOBILE_BREAKPOINT = 768
 
 const route = useRoute()
-const sidebarCollapsed = ref(localStorage.getItem('bgm_admin_collapsed') === '1')
+const sidebarCollapsed = ref(localStorage.getItem('edc_admin_collapsed') === '1')
 const sidebarMobileOpen = ref(false)
 const isMobile = ref(false)
 
@@ -76,7 +76,7 @@ watch(sidebarMobileOpen, (open) => {
 
 function toggleSidebar() {
   sidebarCollapsed.value = !sidebarCollapsed.value
-  localStorage.setItem('bgm_admin_collapsed', sidebarCollapsed.value ? '1' : '0')
+  localStorage.setItem('edc_admin_collapsed', sidebarCollapsed.value ? '1' : '0')
 }
 </script>
 

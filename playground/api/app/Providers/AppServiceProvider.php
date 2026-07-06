@@ -13,10 +13,10 @@ use App\Pdf\HouseCountersExport;
 use App\Pdf\HouseSchemesExport;
 use App\Pdf\HouseTokensExport;
 use App\Pdf\SchemesExport;
-use Bgm\Core\Support\Facades\Blocks;
-use Bgm\Core\Support\Facades\Pdfs;
-use Bgm\Core\Support\Facades\Previews;
-use Bgm\Core\Support\Facades\Sitemap;
+use Edc\Core\Support\Facades\Blocks;
+use Edc\Core\Support\Facades\Pdfs;
+use Edc\Core\Support\Facades\Previews;
+use Edc\Core\Support\Facades\Sitemap;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider

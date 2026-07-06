@@ -1,6 +1,6 @@
 @use "tokens" as *;
 
-.bgm-button {
+.edc-button {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -35,13 +35,13 @@
   // Con slot de icono (patrón kontuan): fila por defecto en todas partes;
   // SOLO cuando el contenedor `content` (el área de contenido) es estrecho,
   // el texto pasa a mini-etiqueta bajo el icono.
-  &--has-icon:not(.bgm-button--text):not(.bgm-button--text-danger) {
+  &--has-icon:not(.edc-button--text):not(.edc-button--text-danger) {
     @container content (max-width: #{$bp-sm - 1px}) {
       flex-direction: column;
       gap: 2px;
       padding: $space-1 $space-2;
 
-      .bgm-button__text {
+      .edc-button__text {
         font-size: 10px;
         line-height: 1;
       }
@@ -71,7 +71,7 @@
 }
 
 // Botón tipo TEXTO (kontuan): sin fondo, sin borde ni padding; solo color.
-.bgm-button--text {
+.edc-button--text {
   background: transparent;
   border-color: transparent;
   padding: 0;
@@ -79,7 +79,7 @@
 
   &:hover:not(:disabled) { color: $accent-700; background: transparent; }
 }
-.bgm-button--text-danger {
+.edc-button--text-danger {
   background: transparent;
   border-color: transparent;
   padding: 0;
@@ -91,22 +91,22 @@
   }
 }
 
-.bgm-button--danger {
+.edc-button--danger {
   background: $danger;
   color: #fff;
   &:hover:not(:disabled) { background: color-mix(in srgb, $danger 72%, black); }
 }
-.bgm-button--success {
+.edc-button--success {
   background: $success;
   color: #06281a;
   &:hover:not(:disabled) { background: color-mix(in srgb, $success 72%, black); }
 }
-.bgm-button--info {
+.edc-button--info {
   background: $info;
   color: #fff;
   &:hover:not(:disabled) { background: color-mix(in srgb, $info 72%, black); }
 }
-.bgm-button--warning {
+.edc-button--warning {
   background: $warning;
   color: #2b2005;
   &:hover:not(:disabled) { background: color-mix(in srgb, $warning 72%, black); }

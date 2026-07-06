@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { PdfManager } from '@bgm/admin-kit'
+import { PdfManager } from '@edc-motor/admin-kit'
 import { api } from '@/lib/api'
 import { usePdfLabels } from '@/lib/pdfLabels'
 

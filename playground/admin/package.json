@@ -10,8 +10,8 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@bgm/admin-kit": "*",
-    "@bgm/ui": "*",
+    "@edc-motor/admin-kit": "*",
+    "@edc-motor/ui": "*",
     "@lucide/vue": "^1.0.0",
     "@playground/shared": "*",
     "pinia": "^3.0.0",

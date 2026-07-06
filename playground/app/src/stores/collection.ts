@@ -22,7 +22,7 @@ export interface CollectionPdf {
   error: string | null
 }
 
-const TOKEN_KEY = 'bgm_collection_token'
+const TOKEN_KEY = 'edc_collection_token'
 
 function guestToken(): string {
   let token = localStorage.getItem(TOKEN_KEY)

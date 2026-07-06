@@ -6,11 +6,11 @@ import vuePrettierConfig from '@vue/eslint-config-prettier'
 // Config única para todo el monorepo: paquetes del motor + playground.
 export default [
   {
-    name: 'bgm/files-to-lint',
+    name: 'edc/files-to-lint',
     files: ['**/*.{ts,mts,tsx,vue}'],
   },
   {
-    name: 'bgm/files-to-ignore',
+    name: 'edc/files-to-ignore',
     ignores: [
       '**/dist/**',
       '**/node_modules/**',
@@ -26,7 +26,7 @@ export default [
   {
     // Scripts de build en Node (p. ej. el prerender de la app): globals de
     // Node en vez de las del navegador.
-    name: 'bgm/node-scripts',
+    name: 'edc/node-scripts',
     files: ['**/scripts/**/*.mjs'],
     languageOptions: {
       globals: {

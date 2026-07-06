@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { BlockShell } from '@bgm/ui'
+import { BlockShell } from '@edc-motor/ui'
 import { SchemeCard, type Scheme } from '@playground/shared'
 import { useLocalesStore } from '@/stores/locales'
 

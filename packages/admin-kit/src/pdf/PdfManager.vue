@@ -2,7 +2,7 @@
 import { computed, onMounted, reactive, ref } from 'vue'
 import type { AxiosInstance } from 'axios'
 import { Download, FilePlus, RefreshCw, Trash2 } from '@lucide/vue'
-import { BaseButton, IconButton, SearchSelect, useConfirm, useToast } from '@bgm/ui'
+import { BaseButton, IconButton, SearchSelect, useConfirm, useToast } from '@edc-motor/ui'
 import ManagerCard from '../components/ManagerCard.vue'
 import { useRightSidebar } from '../composables/useRightSidebar'
 

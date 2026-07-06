@@ -1,4 +1,4 @@
-# Guía de componentes — BoardGame Motor (BGM)
+# Guía de componentes — EdC Motor (EdC)
 
 Catálogo de todos los componentes, composables y utilidades que ofrece el motor.
 Para cada uno se indica su **finalidad** (para qué se usa) y su **uso** (cómo se usa).
@@ -11,22 +11,22 @@ Para cada uno se indica su **finalidad** (para qué se usa) y su **uso** (cómo 
 
 Paquetes:
 
-- **`@bgm/ui`** — librería base de componentes, composables y tokens. La consume
+- **`@edc-motor/ui`** — librería base de componentes, composables y tokens. La consume
   cualquier front (admin y app público).
-- **`@bgm/admin-kit`** — layout del panel y scaffolding CRUD, construido sobre
-  `@bgm/ui`. Solo lo consume el admin.
+- **`@edc-motor/admin-kit`** — layout del panel y scaffolding CRUD, construido sobre
+  `@edc-motor/ui`. Solo lo consume el admin.
 
 Los estilos se importan vía SCSS:
 
 ```scss
 // en el main.scss de cada app
-@use '@bgm/ui/scss/shared-components';      // tokens + componentes base
-@use '@bgm/admin-kit/scss/admin-kit';       // solo en el admin
+@use '@edc-motor/ui/scss/shared-components';      // tokens + componentes base
+@use '@edc-motor/admin-kit/scss/admin-kit';       // solo en el admin
 ```
 
 ---
 
-## `@bgm/ui` — Componentes
+## `@edc-motor/ui` — Componentes
 
 ### BaseButton
 
@@ -77,13 +77,13 @@ Los estilos se importan vía SCSS:
 
 - **Finalidad:** distintivo de marca del motor (logotipo textual con punto).
   Se usa en la cabecera/brand del layout.
-- **Props:** `label?: string` (def. `BGM`), `version?: string` (si se pasa se
+- **Props:** `label?: string` (def. `EdC`), `version?: string` (si se pasa se
   muestra como ` · vX`).
 - **Uso:**
 
 ```vue
-<MotorBadge label="BGM Admin" />
-<MotorBadge label="BGM" :version="motorVersion" />
+<MotorBadge label="EdC Admin" />
+<MotorBadge label="EdC" :version="motorVersion" />
 ```
 
 ### BaseTabs
@@ -367,7 +367,7 @@ color. Úsalos siempre en formularios (en modal o donde sea).
 
 ---
 
-## `@bgm/ui` — Composables y utilidades
+## `@edc-motor/ui` — Composables y utilidades
 
 ### useToast()
 
@@ -427,7 +427,7 @@ if (!ok) return
 
 ---
 
-## `@bgm/admin-kit` — Componentes
+## `@edc-motor/admin-kit` — Componentes
 
 ### AdminLayout
 
@@ -438,7 +438,7 @@ if (!ok) return
   sidebar, las migas de pan (`AppBreadcrumbs`) en el contenido y un pie de
   usuario. El contenido es un _container_ (`container-name: content`), así los
   componentes internos (tabs, listas) responden al ancho real, no al viewport.
-- **Props:** `title?`, `brand?` (def. `'BGM Admin'`), `locales?` (lista para el
+- **Props:** `title?`, `brand?` (def. `'EdC Admin'`), `locales?` (lista para el
   selector), `locale?` (v-model:locale del idioma de la app),
   `homeRoute?` (destino del logo; def. `{ name: 'dashboard' }`),
   `homeCrumb?` (miga "home"; `null` la oculta), `breadcrumbs?` (migas ya
@@ -450,7 +450,7 @@ if (!ok) return
 
 ```vue
 <AdminLayout
-  :title="title" brand="BGM Admin"
+  :title="title" brand="EdC Admin"
   :locales="locales.locales" :locale="locales.current"
   @update:locale="locales.setCurrent"
 >
@@ -585,7 +585,7 @@ vive en el composable `useEntityList` (ver la guía de montar una web, §4.4).
   Restaurar + Borrar definitivamente — y, tras un separador, el nombre + la
   info del elemento (slot `meta`) y, si `hasPreview`, las **imágenes por
   idioma** (huecos "—" para las que faltan). Los **chips** son UNO solo
-  (`.chip` de `@bgm/ui`): contorno de esquinas poco redondeadas, acento por
+  (`.chip` de `@edc-motor/ui`): contorno de esquinas poco redondeadas, acento por
   defecto (nunca gris), `$fs-12` y estados `is-ok/is-info/is-missing/is-failed`.
 - **Dónde:** `playground/admin/src/components/EntityPanel.vue`; la selección
   (`selectedId` / `selected` / `select()`, registro del sidebar con
@@ -676,7 +676,7 @@ vive en el composable `useEntityList` (ver la guía de montar una web, §4.4).
 <PdfManager :api="api" :labels="pdfLabels" :type-labels="typeLabels" />
 ```
 
-## `@bgm/admin-kit` — Composables
+## `@edc-motor/admin-kit` — Composables
 
 ### useResource(api, basePath)
 
@@ -739,7 +739,7 @@ app, junto al layout/router:
 
 ```vue
 <template>
-  <AdminLayout title="BGM Admin">
+  <AdminLayout title="EdC Admin">
     <template #nav>…</template>
     <RouterView />
   </AdminLayout>

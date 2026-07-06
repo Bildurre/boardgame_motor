@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "286b3521fcc2e0d278cc79b7b7eac4c1",
+    "content-hash": "9d62e4fa5d0b4416712a056e5c8becbb",
     "packages": [
         {
             "name": "barryvdh/laravel-dompdf",
@@ -82,46 +82,6 @@
                 }
             ],
             "time": "2026-02-21T08:51:10+00:00"
-        },
-        {
-            "name": "bgm/core",
-            "version": "0.0.1",
-            "dist": {
-                "type": "path",
-                "url": "../../packages/core",
-                "reference": "f3f2d34551b5cde571d445a57a27ee6f12095227"
-            },
-            "require": {
-                "barryvdh/laravel-dompdf": "^3.0",
-                "laravel/sanctum": "^4.0",
-                "php": "^8.2",
-                "spatie/browsershot": "^5.0",
-                "spatie/laravel-backup": "^10.3",
-                "spatie/laravel-medialibrary": "^11.0",
-                "spatie/laravel-permission": "^8.0",
-                "spatie/laravel-sluggable": "^4.0",
-                "spatie/laravel-translatable": "^6.0"
-            },
-            "type": "library",
-            "extra": {
-                "laravel": {
-                    "providers": [
-                        "Bgm\\Core\\MotorServiceProvider"
-                    ]
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "Bgm\\Core\\": "src/"
-                }
-            },
-            "license": [
-                "proprietary"
-            ],
-            "description": "Boardgame Motor — núcleo backend (Laravel) reutilizable",
-            "transport-options": {
-                "relative": true
-            }
         },
         {
             "name": "brick/math",
@@ -788,6 +748,56 @@
                 }
             ],
             "time": "2025-10-31T18:51:33+00:00"
+        },
+        {
+            "name": "edc-motor/core",
+            "version": "0.2.0",
+            "dist": {
+                "type": "path",
+                "url": "../../packages/core",
+                "reference": "a585c38f94e562e440e3383f2d9446d0bec6dba2"
+            },
+            "require": {
+                "barryvdh/laravel-dompdf": "^3.0",
+                "laravel/sanctum": "^4.0",
+                "php": "^8.2",
+                "spatie/browsershot": "^5.0",
+                "spatie/laravel-backup": "^10.3",
+                "spatie/laravel-medialibrary": "^11.0",
+                "spatie/laravel-permission": "^8.0",
+                "spatie/laravel-sluggable": "^4.0",
+                "spatie/laravel-translatable": "^6.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Edc\\Core\\MotorServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Edc\\Core\\": "src/"
+                }
+            },
+            "license": [
+                "GPL-3.0-only"
+            ],
+            "description": "EdC Motor (Espadas de Ceniza Motor) — núcleo backend Laravel reutilizable para webs de juegos de mesa: auth y roles, contenido i18n, render a PNG, PDF recortables, CRM de páginas, configuración, usuarios y backup",
+            "homepage": "https://github.com/bildurre/boardgame_motor",
+            "keywords": [
+                "boardgame",
+                "edc-motor",
+                "laravel"
+            ],
+            "support": {
+                "issues": "https://github.com/bildurre/boardgame_motor/issues",
+                "source": "https://github.com/bildurre/edc-core"
+            },
+            "transport-options": {
+                "relative": true
+            }
         },
         {
             "name": "egulias/email-validator",

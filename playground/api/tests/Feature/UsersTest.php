@@ -11,7 +11,7 @@ it('el admin crea, edita y borra usuarios', function () {
 
     $created = $this->actingAs($admin)->postJson('/api/admin/users', [
         'name' => 'Nueva Editora',
-        'email' => 'editora@bgm.test',
+        'email' => 'editora@edc.test',
         'password' => 'secreta123',
         'role' => 'editor',
     ])->assertCreated();
@@ -23,22 +23,22 @@ it('el admin crea, edita y borra usuarios', function () {
     // Listado con búsqueda.
     $this->actingAs($admin)->getJson('/api/admin/users?search=editora')
         ->assertOk()
-        ->assertJsonPath('data.0.email', 'editora@bgm.test');
+        ->assertJsonPath('data.0.email', 'editora@edc.test');
 
     // Edición: cambia el rol (y la contraseña vacía no se toca).
     $this->actingAs($admin)->putJson("/api/admin/users/{$id}", [
         'name' => 'Nueva Admin',
-        'email' => 'editora@bgm.test',
+        'email' => 'editora@edc.test',
         'password' => '',
         'role' => 'admin',
     ])->assertOk()->assertJsonPath('data.roles.0', 'admin');
 
     // Email duplicado -> 422; rol desconocido -> 422.
     $this->actingAs($admin)->postJson('/api/admin/users', [
-        'name' => 'Dupe', 'email' => 'editora@bgm.test', 'password' => 'secreta123', 'role' => 'editor',
+        'name' => 'Dupe', 'email' => 'editora@edc.test', 'password' => 'secreta123', 'role' => 'editor',
     ])->assertUnprocessable();
     $this->actingAs($admin)->postJson('/api/admin/users', [
-        'name' => 'Rey', 'email' => 'rey@bgm.test', 'password' => 'secreta123', 'role' => 'rey',
+        'name' => 'Rey', 'email' => 'rey@edc.test', 'password' => 'secreta123', 'role' => 'rey',
     ])->assertUnprocessable();
 
     $this->actingAs($admin)->deleteJson("/api/admin/users/{$id}")->assertNoContent();

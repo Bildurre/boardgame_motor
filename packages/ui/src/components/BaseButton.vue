@@ -15,10 +15,10 @@ withDefaults(
 <template>
   <button
     :type="type"
-    class="bgm-button"
-    :class="[`bgm-button--${variant}`, { 'bgm-button--has-icon': !!$slots.icon }]"
+    class="edc-button"
+    :class="[`edc-button--${variant}`, { 'edc-button--has-icon': !!$slots.icon }]"
   >
-    <span v-if="$slots.icon" class="bgm-button__icon"><slot name="icon" /></span>
-    <span v-if="$slots.default" class="bgm-button__text"><slot /></span>
+    <span v-if="$slots.icon" class="edc-button__icon"><slot name="icon" /></span>
+    <span v-if="$slots.default" class="edc-button__text"><slot /></span>
   </button>
 </template>

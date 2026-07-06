@@ -1,4 +1,4 @@
-// @bgm/ui — librería de componentes base + tokens + utilidades del motor.
+// @edc-motor/ui — librería de componentes base + tokens + utilidades del motor.
 
 import { defineAsyncComponent } from 'vue'
 

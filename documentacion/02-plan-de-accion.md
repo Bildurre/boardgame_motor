@@ -1,4 +1,4 @@
-# Boardgame Motor — Plan de acción general
+# EdC Motor — Plan de acción general
 
 > Hoja de ruta por fases. Cada funcionalidad tiene su plan detallado en
 > `documentacion/funcionalidades/`. Aquí va el **orden**, las **dependencias** y
@@ -27,7 +27,7 @@
 
 - [x] Estructura del monorepo del motor (`packages/*`, `playground/`).
 - [x] `core` esqueleto: composer.json, `MotorServiceProvider`, config publicable, ruta `api/motor/ping`.
-- [x] `@bgm/ui` y `@bgm/admin-kit` esqueleto: package.json + barrel exports apuntando a `src` (patrón kontuan, sin build en dev).
+- [x] `@edc-motor/ui` y `@edc-motor/admin-kit` esqueleto: package.json + barrel exports apuntando a `src` (patrón kontuan, sin build en dev).
 - [x] `playground`: Laravel `api` + Vue `admin` + Vue `app` que ya consumen los paquetes por *path*/workspace (enlace local), sin publicar.
 - [x] **PWA** (DC-01): `vite-plugin-pwa` en admin y app (manifest + service worker). Faltan iconos reales (los pone cada juego).
 - [x] Script `dev` con `concurrently` (estilo kontuan) + `dev:front` + `build`.
@@ -38,10 +38,10 @@
 **Meta:** poder entrar al admin y al panel de usuario. Base transversal del resto.
 > Depende de Fase 0. Plan: `funcionalidades/05-auth-usuarios-roles.md`.
 
-- [x] Sanctum + login/logout/registro + `me` (en `bgm/core`).
+- [x] Sanctum + login/logout/registro + `me` (en `edc-motor/core`).
 - [x] Roles admin/editor/user (Spatie) + middleware `motor.admin` + comando `motor:install`.
 - [x] Panel de usuario (datos de cuenta + cambio de contraseña) en la `app`.
-- [x] Stores Pinia de auth + cliente axios `createApi` (`@bgm/ui`) en admin y app; guards de router.
+- [x] Stores Pinia de auth + cliente axios `createApi` (`@edc-motor/ui`) en admin y app; guards de router.
 - [x] Verificación de email (DC-14): `Registered` + ruta firmada `verification.verify` (verifica y redirige a la app), reenvío con throttle, y cambiar el email invalida y reenvía. Aviso + reenvío en 'Mi cuenta'. *(forgot/reset password: cuando se monte el correo real del juego.)*
 - **Hito:** ✅ login como admin/editor entra al admin; `user` no (403/redirección); `user` entra a su panel de cuenta.
 
@@ -85,7 +85,7 @@
 - [x] Modelos Page/Block (jerárquicos, traducibles, reordenables), SEO, home única, printable/indexable. Bloques SIN columnas por tipo: todo en `settings` JSON.
 - [x] **`BlockType` + `BlockTypeRegistry`** (facade `Blocks`): un tipo se declara UNA vez (esquema de campos DC-08) y de ahí salen formulario, validación, localización y `resolveData`. Motor: header/text/text-card/quote/cta; juego: `Blocks::register(...)`. `HtmlSanitizer` en servidor (DC-09). Caché por (página, locale) invalidada al editar (DC-10).
 - [x] Editor en admin-kit: `SchemaFields` (renderer del DSL) + `PageBlocks` (paleta, drag con vue-draggable-plus DC-17, modal generado). Playground: vistas de páginas + i18n.
-- [x] Render público en `app`: nav de páginas publicadas, home del CRM, `PageView` por slug traducible con redirección a la canónica (DC-12); `blockRegistry` = componentes del motor (@bgm/ui) + los del juego.
+- [x] Render público en `app`: nav de páginas publicadas, home del CRM, `PageView` por slug traducible con redirección a la canónica (DC-12); `blockRegistry` = componentes del motor (@edc-motor/ui) + los del juego.
 - [x] Bloque índice automático (`index`) y **PDF de páginas imprimibles** (export `pages` del motor con vista `motor::pdf.page`).
 - [x] Panel derecho en todo el admin (patrón kontuan): páginas (acciones + toggles + **sus bloques resumidos**), bloques (acciones + **contenido por campo**) y listados de entidades (`EntityPanel`: todas las acciones, info y PNG por idioma; en la tarjeta solo editar + abrir).
 - [x] **Plantillas de página por juego**: catálogo en `motor.content.templates` (el juego añade las suyas en su AppServiceProvider), select en el modal del admin (`GET /admin/pages/templates`) y `templateRegistry` en la SPA (la clave viaja en el payload; demo `landing` a lo ancho en el playground).
@@ -116,14 +116,14 @@
 > Plan: `funcionalidades/06-backup-bbdd.md`, `10-web-publica-y-panel-usuario.md`.
 
 - [x] Backup BBDD (doc 06, DC-16): `spatie/laravel-backup` configurado por el motor (`MotorBackup::applyConfig()` desde `motor.backup`; SQLite como fichero en el zip, media opcional), API `/api/admin/backups` (crear/listar/descargar/borrar, `manage-web`) y vista **Copias** en el admin. La copia AUTOMÁTICA se configura desde esa vista (activada, frecuencia diaria/semanal, día, hora, retención — `BackupSettings` + `PUT /api/admin/backups/schedule`) y la programa el motor (`MotorBackup::schedule()`): el juego solo necesita el cron de `schedule:run`.
-- [x] Andamiaje de la web pública (doc 10): router con **prefijo de locale** (`/es`·`/eu`·`/en`, el cambio de idioma conserva la entidad y redirige a la canónica, DC-12), vue-i18n para los textos de la interfaz, **SEO** con `useHead` de @bgm/ui (title/description/canonical/hreflang), **sitemap.xml** del motor (páginas del CRM + entidades registradas con la facade `Sitemap`), **prerender en build** (`npm run prerender`, DC-18) y **listados de entidades genéricos** (patrón índice+detalle por slug configurado en el `entityRegistry` de la app; playground: personajes y casas).
+- [x] Andamiaje de la web pública (doc 10): router con **prefijo de locale** (`/es`·`/eu`·`/en`, el cambio de idioma conserva la entidad y redirige a la canónica, DC-12), vue-i18n para los textos de la interfaz, **SEO** con `useHead` de @edc-motor/ui (title/description/canonical/hreflang), **sitemap.xml** del motor (páginas del CRM + entidades registradas con la facade `Sitemap`), **prerender en build** (`npm run prerender`, DC-18) y **listados de entidades genéricos** (patrón índice+detalle por slug configurado en el `entityRegistry` de la app; playground: personajes y casas).
 - [x] Panel de usuario extensible (doc 10): `AccountLayout` con menú lateral y una child route por sección registrada en `src/account/registry.ts` — el motor aporta Mis datos y Contraseña (doc 05) y el juego cuelga las suyas; el playground engancha **"Para imprimir"** (colección PDF temporal del doc 02: añadir cartas, copias, generar y descargar). Vistas de auth/cuenta traducidas (vue-i18n).
 - **Hito:** ✅ backup descargable desde admin; web pública navegable con locale/SEO/sitemap/prerender; el playground rellena un "slot" del panel de usuario (Para imprimir) — PDF generado y descargado de punta a punta.
 
 ### Fase 7 — Publicación de paquetes y endurecido ✅
 **Meta:** dejar el motor consumible por versión y documentado.
 
-- [x] Distribución (DC-33): monorepo etiquetado (`vX.Y.Z`, versión de tren para los 3 paquetes), consumo por clon/submódulo al tag — Composer con repositorio `path` (`bgm/core` por versión) y npm con `file:` (paquetes fuente compilados por el Vite del juego). **Prueba de consumo desde un repo externo**: `tools/consumo-externo/probar-consumo.sh` (composer install real + vite build de una app externa con @bgm/ui y @bgm/admin-kit).
+- [x] Distribución (DC-33): monorepo etiquetado (`vX.Y.Z`, versión de tren para los 3 paquetes), consumo por clon/submódulo al tag — Composer con repositorio `path` (`edc-motor/core` por versión) y npm con `file:` (paquetes fuente compilados por el Vite del juego). **Prueba de consumo desde un repo externo**: `tools/consumo-externo/probar-consumo.sh` (composer install real + vite build de una app externa con @edc-motor/ui y @edc-motor/admin-kit).
 - [x] Versionado **0.1.0** en los 4 manifiestos, `CHANGELOG.md` en raíz + por paquete (Keep a Changelog), y guía nueva `guia-arrancar-un-juego-nuevo.md` (esqueleto, backend, frontends, checklist del primer día, cómo etiquetar).
 - [x] CI en GitHub Actions (`.github/workflows/ci.yml`): job frontend (npm ci + eslint + vue-tsc + build app/admin) y job backend (PHP 8.4 + Pint api/core + Pest con SQLite en memoria); corre en push a main, tags `v*` y PRs. La suite Pest (111 tests) cubre auth/roles, entidades, previews, PDF (catálogo + colección usuario/invitado), CRM, settings, backups y web pública.
 - **Hito:** ✅ el consumo por versión desde un proyecto externo está probado con script reproducible; con el playground de plantilla y la guía nueva, un juego nuevo arranca en < 1 día.

@@ -11,7 +11,7 @@
     "prerender": "node scripts/prerender.mjs"
   },
   "dependencies": {
-    "@bgm/ui": "*",
+    "@edc-motor/ui": "*",
     "@lucide/vue": "^1.0.0",
     "@playground/shared": "*",
     "pinia": "^3.0.0",

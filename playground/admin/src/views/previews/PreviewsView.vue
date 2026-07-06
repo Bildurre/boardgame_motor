@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { PreviewManager, type PreviewManagerLabels } from '@bgm/admin-kit'
+import { PreviewManager, type PreviewManagerLabels } from '@edc-motor/admin-kit'
 import { api } from '@/lib/api'
 
-// Gestor de imágenes (previews PNG): el componente vive en @bgm/admin-kit;
+// Gestor de imágenes (previews PNG): el componente vive en @edc-motor/admin-kit;
 // aquí solo se le pasan la API y los textos traducidos (DC-29).
 const { t } = useI18n()
 

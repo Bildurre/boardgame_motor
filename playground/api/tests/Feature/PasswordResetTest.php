@@ -23,7 +23,7 @@ it('envía el enlace de recuperación apuntando a la SPA', function () {
     });
 
     // Email desconocido: misma respuesta genérica (sin revelar si existe).
-    $this->postJson('/api/auth/forgot-password', ['email' => 'nadie@bgm.test'])
+    $this->postJson('/api/auth/forgot-password', ['email' => 'nadie@edc.test'])
         ->assertOk();
     Notification::assertCount(1);
 });

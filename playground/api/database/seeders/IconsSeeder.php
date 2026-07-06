@@ -2,7 +2,7 @@
 
 namespace Database\Seeders;
 
-use Bgm\Core\Icons\Models\Icon;
+use Edc\Core\Icons\Models\Icon;
 use Illuminate\Database\Seeder;
 
 /**

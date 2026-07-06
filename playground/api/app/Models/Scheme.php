@@ -2,12 +2,12 @@
 
 namespace App\Models;
 
-use Bgm\Core\Media\Concerns\HasImage;
-use Bgm\Core\Previews\Concerns\HasPreviewImage;
-use Bgm\Core\Previews\PreviewableContract;
-use Bgm\Core\Support\Concerns\HasFilters;
-use Bgm\Core\Support\Concerns\HasPublishedState;
-use Bgm\Core\Support\Concerns\ResolvesBySlug;
+use Edc\Core\Media\Concerns\HasImage;
+use Edc\Core\Previews\Concerns\HasPreviewImage;
+use Edc\Core\Previews\PreviewableContract;
+use Edc\Core\Support\Concerns\HasFilters;
+use Edc\Core\Support\Concerns\HasPublishedState;
+use Edc\Core\Support\Concerns\ResolvesBySlug;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;

@@ -146,7 +146,7 @@ admin se construye solo a partir de ahí (no hay formularios por tipo a mano).
 
 - **`PageView`**: pide `/public/pages/{slug}`, itera bloques y monta el componente
   Vue de cada tipo (`component` del `BlockType`). Los de presentación vienen en
-  `@bgm/ui`; los de datos, en `app` del juego.
+  `@edc-motor/ui`; los de datos, en `app` del juego.
 - SEO por `meta_*` (doc 10). Páginas con `is_printable` enlazan con PDF (doc 02).
 
 ## Frontera motor ↔ juego
@@ -162,7 +162,7 @@ admin se construye solo a partir de ahí (no hay formularios por tipo a mano).
 
 1. Modelos Page/Block + migraciones del motor + servicios CRUD/reorder/i18n.
 2. `BlockType` (abstract) + `BlockTypeRegistry` + contrato de esquema de campos.
-3. Bloques de presentación del motor (back + componentes en `@bgm/ui`).
+3. Bloques de presentación del motor (back + componentes en `@edc-motor/ui`).
 4. API (`/pages`, `/block-types`, render público).
 5. `PageEditor` + `BlockPalette` + `BlockEditor` dirigido por esquema en admin-kit.
 6. `PageView` en `app` (render por componente de tipo).

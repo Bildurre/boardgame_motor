@@ -1,6 +1,6 @@
 import { computed, type ComputedRef } from 'vue'
 import { useI18n } from 'vue-i18n'
-import type { PdfManagerLabels } from '@bgm/admin-kit'
+import type { PdfManagerLabels } from '@edc-motor/admin-kit'
 
 /** Textos traducidos del gestor de PDF (DC-29). */
 export function usePdfLabels(): ComputedRef<PdfManagerLabels> {

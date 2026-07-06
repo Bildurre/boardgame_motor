@@ -1,0 +1,78 @@
+# Publicación al etiquetar (DC-33): con cada tag vX.Y.Z se publican los dos
+# paquetes npm en npmjs (org edc-motor) y se espeja packages/core al repo de
+# solo lectura bildurre/edc-core (con el tag), del que bebe Packagist.
+#
+# Secrets necesarios:
+#   NPM_TOKEN   — granular access token con Read/Write sobre el scope @edc-motor
+#   SPLIT_TOKEN — fine-grained PAT con Contents: Read and write en edc-core
+name: Publicar
+
+on:
+  push:
+    tags: ['v*']
+
+jobs:
+  npm:
+    name: npm publish (@edc-motor/ui + admin-kit)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          registry-url: https://registry.npmjs.org
+
+      - name: Comprobar que el tag coincide con la versión de tren
+        run: |
+          TAG="${GITHUB_REF_NAME#v}"
+          for p in packages/ui packages/admin-kit; do
+            V="$(node -p "require('./$p/package.json').version")"
+            if [ "$V" != "$TAG" ]; then
+              echo "ERROR: $p está en $V pero el tag es $TAG" >&2
+              exit 1
+            fi
+          done
+
+      - name: Publicar @edc-motor/ui
+        run: npm publish --access public
+        working-directory: packages/ui
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Publicar @edc-motor/admin-kit
+        run: npm publish --access public
+        working-directory: packages/admin-kit
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+  split-core:
+    name: Split de packages/core → edc-core
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # subtree split necesita la historia completa
+
+      - name: Comprobar que el tag coincide con la versión del core
+        run: |
+          TAG="${GITHUB_REF_NAME#v}"
+          V="$(php -r 'echo json_decode(file_get_contents("packages/core/composer.json"))->version;')"
+          if [ "$V" != "$TAG" ]; then
+            echo "ERROR: packages/core está en $V pero el tag es $TAG" >&2
+            exit 1
+          fi
+
+      - name: Generar el split y empujarlo con el tag
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          COMMIT="$(git subtree split --prefix=packages/core HEAD)"
+          echo "split: $COMMIT"
+          REMOTE="https://x-access-token:${SPLIT_TOKEN}@github.com/bildurre/edc-core.git"
+          # main del espejo siempre refleja el último split (force: es read-only)
+          git push --force "$REMOTE" "$COMMIT:refs/heads/main"
+          git tag -f "$GITHUB_REF_NAME" "$COMMIT"
+          git push --force "$REMOTE" "refs/tags/$GITHUB_REF_NAME"
+        env:
+          SPLIT_TOKEN: ${{ secrets.SPLIT_TOKEN }}

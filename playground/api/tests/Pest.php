@@ -2,8 +2,8 @@
 
 use App\Models\Character;
 use App\Models\User;
-use Bgm\Core\Auth\MotorAuth;
-use Bgm\Core\Previews\PreviewRenderer;
+use Edc\Core\Auth\MotorAuth;
+use Edc\Core\Previews\PreviewRenderer;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 

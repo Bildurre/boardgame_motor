@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { onMounted } from 'vue'
 import { ArrowRight, Plus } from '@lucide/vue'
-import { BaseGrid, EntityCard, FilterBar, EmptyState } from '@bgm/admin-kit'
-import { BaseButton, BaseTabs } from '@bgm/ui'
+import { BaseGrid, EntityCard, FilterBar, EmptyState } from '@edc-motor/admin-kit'
+import { BaseButton, BaseTabs } from '@edc-motor/ui'
 import { useEntityList } from '@/composables/useEntityList'
 import type { House } from '@playground/shared'
 import HouseFormModal from '@/components/houses/HouseFormModal.vue'

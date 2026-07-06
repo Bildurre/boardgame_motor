@@ -16,8 +16,8 @@ import {
   Users,
   LogOut,
 } from '@lucide/vue'
-import { AdminLayout } from '@bgm/admin-kit'
-import { ToastContainer, ConfirmDialog, type Crumb } from '@bgm/ui'
+import { AdminLayout } from '@edc-motor/admin-kit'
+import { ToastContainer, ConfirmDialog, type Crumb } from '@edc-motor/ui'
 import { useAuthStore } from '@/stores/auth'
 import { useLocalesStore } from '@/stores/locales'
 import { usePageCrumb } from '@/composables/usePageCrumb'
@@ -96,7 +96,7 @@ function navActive(section: string) {
   <AdminLayout
     v-if="isAdminArea"
     :title="title"
-    brand="BGM Admin"
+    brand="EdC Admin"
     :locales="locales.locales"
     :locale="locales.current"
     :home-crumb="homeCrumb"

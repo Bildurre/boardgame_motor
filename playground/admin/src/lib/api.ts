@@ -1,6 +1,6 @@
-import { createApi } from '@bgm/ui'
+import { createApi } from '@edc-motor/ui'
 
-export const TOKEN_KEY = 'bgm_admin_token'
+export const TOKEN_KEY = 'edc_admin_token'
 
 export const api = createApi({
   baseURL: import.meta.env.VITE_API_URL,

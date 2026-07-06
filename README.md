@@ -1,4 +1,4 @@
-# Boardgame Motor (BGM)
+# EdC Motor — Espadas de Ceniza Motor
 
 Motor común (paquetes versionados) para construir webs de juegos de mesa: API REST
 (Laravel) + admin y público (Vue 3 SPA, instalables como PWA), con generación de
@@ -17,13 +17,13 @@ consume el motor y programa solo sus entidades.
 ```
 boardgame_motor/                 # monorepo donde se desarrolla el motor
 ├── packages/
-│   ├── core/        bgm/core          (Composer — backend Laravel)
-│   ├── ui/          @bgm/ui           (npm — componentes Vue + tokens SCSS)
-│   └── admin-kit/   @bgm/admin-kit    (npm — layout + CRUD admin)
+│   ├── core/        edc-motor/core          (Composer — backend Laravel)
+│   ├── ui/          @edc-motor/ui           (npm — componentes Vue + tokens SCSS)
+│   └── admin-kit/   @edc-motor/admin-kit    (npm — layout + CRUD admin)
 ├── playground/                  # juego-demo para desarrollar/probar el motor
-│   ├── api/         Laravel (requiere bgm/core por path repository)
-│   ├── admin/       Vue SPA (5174) — usa @bgm/admin-kit + @bgm/ui
-│   ├── app/         Vue SPA (5173) — web pública, usa @bgm/ui
+│   ├── api/         Laravel (requiere edc-motor/core por path repository)
+│   ├── admin/       Vue SPA (5174) — usa @edc-motor/admin-kit + @edc-motor/ui
+│   ├── app/         Vue SPA (5173) — web pública, usa @edc-motor/ui
 │   └── packages/
 │       └── shared/  @playground/shared (lo del juego compartido admin/app:
 │                    cartas para web + render PNG, tipos, SCSS)
@@ -33,8 +33,8 @@ boardgame_motor/                 # monorepo donde se desarrolla el motor
 Durante el desarrollo, el `playground` consume los paquetes por **enlace local**
 (Composer `path` repository + npm workspaces). La distribución versionada (DC-33)
 es el **monorepo etiquetado** (`vX.Y.Z`, versión de tren para los tres paquetes):
-un juego externo clona/submodula el motor al tag y consume `bgm/core` por
-Composer (`path`) y `@bgm/ui`/`@bgm/admin-kit` por npm (`file:`). Guía:
+un juego externo clona/submodula el motor al tag y consume `edc-motor/core` por
+Composer (`path`) y `@edc-motor/ui`/`@edc-motor/admin-kit` por npm (`file:`). Guía:
 [`documentacion/guia-arrancar-un-juego-nuevo.md`](documentacion/guia-arrancar-un-juego-nuevo.md).
 **Para arrancar una web nueva**, `tools/crear-juego.sh <destino>` genera un
 proyecto de juego limpio a partir del playground (sin la documentación de
@@ -47,13 +47,13 @@ Pint + Pest en cada push/PR.
 
 - PHP >= 8.2 · Composer 2.x
 - Node >= 20.19 o >= 22.12 · npm >= 10
-- MySQL >= 8 (el playground usa una base de datos `bgm`)
+- MySQL >= 8 (el playground usa una base de datos `edc`)
 
 ## Puesta en marcha
 
 ```bash
 # 0) Crear la base de datos (una vez)
-mysql -u root -p -e "CREATE DATABASE bgm CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;"
+mysql -u root -p -e "CREATE DATABASE edc CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;"
 
 # 1) Backend del playground
 cd playground/api
@@ -64,7 +64,7 @@ cp .env.example .env          # ajusta DB_USERNAME / DB_PASSWORD si hace falta
 php artisan key:generate
 php artisan migrate
 php artisan motor:install     # roles base (admin/editor/user)
-php artisan db:seed           # demo completa: usuarios de prueba (admin@bgm.test /
+php artisan db:seed           # demo completa: usuarios de prueba (admin@edc.test /
                               # editor@ / user@, contraseña "password"), casas,
                               # argucias, personajes y páginas del CRM (home,
                               # casas y reglamento imprimible)
@@ -75,7 +75,7 @@ cd ../..
 npm install
 ```
 
-> El `.env.example` ya apunta a MySQL (`DB_DATABASE=bgm`, `DB_HOST=127.0.0.1`,
+> El `.env.example` ya apunta a MySQL (`DB_DATABASE=edc`, `DB_HOST=127.0.0.1`,
 > `DB_USERNAME=root`, `DB_PASSWORD=` vacío). Cambia usuario/contraseña en tu `.env`
 > según tu MySQL local.
 

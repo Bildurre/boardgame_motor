@@ -3,8 +3,8 @@
 namespace Database\Seeders;
 
 use App\Models\House;
-use Bgm\Core\Content\Models\Block;
-use Bgm\Core\Content\Models\Page;
+use Edc\Core\Content\Models\Block;
+use Edc\Core\Content\Models\Page;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Storage;
 
@@ -152,7 +152,7 @@ class PagesSeeder extends Seeder
         $image = imagecreatetruecolor(480, 360);
         imagefill($image, 0, 0, imagecolorallocate($image, 108, 92, 231));
         imagefilledellipse($image, 240, 180, 200, 200, imagecolorallocate($image, 255, 255, 255));
-        imagestring($image, 5, 190, 172, 'BGM demo', imagecolorallocate($image, 60, 50, 140));
+        imagestring($image, 5, 190, 172, 'EdC demo', imagecolorallocate($image, 60, 50, 140));
 
         ob_start();
         imagepng($image);

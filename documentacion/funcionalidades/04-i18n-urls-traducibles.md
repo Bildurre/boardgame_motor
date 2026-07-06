@@ -66,10 +66,10 @@ TranslatableRouting::register('pages', Page::class);
 ### Frontend
 
 - **app (público)**: Vue Router con prefijo de locale (`/es/...`, `/eu/...`). Cada
-  vista pide datos por slug+locale; `@bgm/ui` trae un `useContentLocales` y un
+  vista pide datos por slug+locale; `@edc-motor/ui` trae un `useContentLocales` y un
   `LocaleSwitcher` que cambia de idioma **manteniendo la entidad** (resuelve el slug
   equivalente en el otro idioma vía API).
-- **admin**: `TranslatableInput` (de `@bgm/ui`) para editar todos los idiomas de un
+- **admin**: `TranslatableInput` (de `@edc-motor/ui`) para editar todos los idiomas de un
   campo, **incluido el slug**, con aviso de unicidad. Aquí es donde hoy se rompe;
   se trata como ciudadano de primera.
 - **vue-i18n** para los textos de la propia interfaz (distinto de los datos).
@@ -88,7 +88,7 @@ TranslatableRouting::register('pages', Page::class);
 3. `HasTranslatableSlug` del motor + unicidad por locale.
 4. `SlugResolver` genérico + `TranslatableRouting::register`.
 5. Endpoints públicos por slug con canónica por locale.
-6. `TranslatableInput` (con slug) + `LocaleSwitcher` en `@bgm/ui`; prefijo de
+6. `TranslatableInput` (con slug) + `LocaleSwitcher` en `@edc-motor/ui`; prefijo de
    locale en el router de `app`.
 7. Playground: entidad traducible con slug por idioma, editable en admin y navegable
    en público en los dos idiomas.

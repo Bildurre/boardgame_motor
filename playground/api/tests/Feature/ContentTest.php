@@ -1,10 +1,10 @@
 <?php
 
 use App\Models\House;
-use Bgm\Core\Content\BlockTypeRegistry;
-use Bgm\Core\Content\Models\Block;
-use Bgm\Core\Content\Models\Page;
-use Bgm\Core\Content\PageService;
+use Edc\Core\Content\BlockTypeRegistry;
+use Edc\Core\Content\Models\Block;
+use Edc\Core\Content\Models\Page;
+use Edc\Core\Content\PageService;
 
 function makePage(array $attributes = []): Page
 {

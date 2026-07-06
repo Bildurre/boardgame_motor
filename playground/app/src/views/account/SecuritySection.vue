@@ -2,7 +2,7 @@
 import { ref } from 'vue'
 import { KeyRound } from '@lucide/vue'
 import { useI18n } from 'vue-i18n'
-import { BaseButton } from '@bgm/ui'
+import { BaseButton } from '@edc-motor/ui'
 import { api } from '@/lib/api'
 import { apiMessage } from '@/lib/apiError'
 

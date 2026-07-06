@@ -2,7 +2,7 @@
 import { computed, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
-import { useHead } from '@bgm/ui'
+import { useHead } from '@edc-motor/ui'
 import { api } from '@/lib/api'
 import { sectionFor } from '@/entities/registry'
 import AddToCollection from '@/components/AddToCollection.vue'

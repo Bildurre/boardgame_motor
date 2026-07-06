@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed } from 'vue'
-import { BlockShell } from '@bgm/ui'
+import { BlockShell } from '@edc-motor/ui'
 import { CharacterCard, type Character } from '@playground/shared'
 import { useLocalesStore } from '@/stores/locales'
 

@@ -1,4 +1,4 @@
-// @bgm/admin-kit — layout del panel + scaffolding CRUD (sobre @bgm/ui).
+// @edc-motor/admin-kit — layout del panel + scaffolding CRUD (sobre @edc-motor/ui).
 
 export { default as AdminLayout } from './layout/AdminLayout.vue'
 // Panel derecho contextual (patrón kontuan): AdminLayout lo monta; cada vista

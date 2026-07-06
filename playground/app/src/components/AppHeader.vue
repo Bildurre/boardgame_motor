@@ -3,7 +3,7 @@ import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { ChevronDown, FileDown, LayoutDashboard, LogIn, LogOut, Menu, X } from '@lucide/vue'
-import { LocaleSelector, MotorBadge, ThemeSelector } from '@bgm/ui'
+import { LocaleSelector, MotorBadge, ThemeSelector } from '@edc-motor/ui'
 import { api } from '@/lib/api'
 import { entitySections } from '@/entities/registry'
 import { DOWNLOAD_PATHS } from '@/router/downloads'
@@ -173,7 +173,7 @@ onBeforeUnmount(() => window.removeEventListener('scroll', onScroll))
         <RouterLink
           :to="{ name: 'home', params: { locale: locales.current } }"
           class="site-header__brand"
-          :title="site.title || 'BGM'"
+          :title="site.title || 'EdC'"
         >
           <!-- Logo SVG inlineado: currentColor hereda el acento -->
           <!-- eslint-disable vue/no-v-html -- SVG subido por el admin -->
@@ -189,7 +189,7 @@ onBeforeUnmount(() => window.removeEventListener('scroll', onScroll))
             :src="site.settings.logo"
             :alt="site.title || 'logo'"
           />
-          <MotorBadge v-else :label="site.title || 'BGM'" />
+          <MotorBadge v-else :label="site.title || 'EdC'" />
         </RouterLink>
 
         <!-- Tres grupos con separador: [admin·descargas] | usuario | prefs -->

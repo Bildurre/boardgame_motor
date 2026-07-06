@@ -4,9 +4,9 @@ namespace App\Blocks;
 
 use App\Models\House;
 use App\Models\Scheme;
-use Bgm\Core\Content\BlockType;
-use Bgm\Core\Content\Fields\Field;
-use Bgm\Core\Content\Models\Block;
+use Edc\Core\Content\BlockType;
+use Edc\Core\Content\Fields\Field;
+use Edc\Core\Content\Models\Block;
 
 /**
  * Bloque con-datos de ESTE juego: una casa elegida a dedo (la demo canónica

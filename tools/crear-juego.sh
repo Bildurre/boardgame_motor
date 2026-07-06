@@ -83,10 +83,10 @@ copiar playground/packages/shared packages/shared
 # ------------------------------------------------------- rutas hacia el motor
 echo "== 2/5 · Apuntando composer y vite al motor ($MOTOR_REL)"
 
-# api/composer.json: nombre propio, bgm/core por VERSIÓN y path repo al motor.
+# api/composer.json: nombre propio, edc-motor/core por VERSIÓN y path repo al motor.
 sed -i \
   -e "s|\"name\": \"laravel/laravel\"|\"name\": \"$NOMBRE/api\"|" \
-  -e "s|\"bgm/core\": \"\*\"|\"bgm/core\": \"$VERSION\"|" \
+  -e "s|\"edc-motor/core\": \"\*\"|\"edc-motor/core\": \"$VERSION\"|" \
   -e "s|\"url\": \"../../packages/core\"|\"url\": \"$MOTOR_DESDE_HIJO/packages/core\"|" \
   "$DEST/api/composer.json"
 
@@ -102,14 +102,14 @@ for spa in app admin; do
 done
 
 # Marca del juego en vez de la del playground (manifest PWA y nombres npm).
-sed -i "s|BGM Playground|$NOMBRE|g" "$DEST/app/vite.config.ts" "$DEST/admin/vite.config.ts"
+sed -i "s|EdC Playground|$NOMBRE|g" "$DEST/app/vite.config.ts" "$DEST/admin/vite.config.ts"
 sed -i "s|\"name\": \"playground-app\"|\"name\": \"$NOMBRE-app\"|" "$DEST/app/package.json"
 sed -i "s|\"name\": \"playground-admin\"|\"name\": \"$NOMBRE-admin\"|" "$DEST/admin/package.json"
 
 # ------------------------------------------------------------- tooling raíz --
 echo "== 3/5 · Tooling raíz (package.json, eslint, prettier, gitignore, CI)"
 
-# Workspaces del juego + @bgm/* por file: (los hijos declaran "*" y npm lo
+# Workspaces del juego + @edc-motor/* por file: (los hijos declaran "*" y npm lo
 # resuelve contra estos enlaces). Mismos gates que el monorepo.
 cat > "$DEST/package.json" <<JSON
 {
@@ -123,8 +123,8 @@ cat > "$DEST/package.json" <<JSON
     "app"
   ],
   "dependencies": {
-    "@bgm/ui": "file:$MOTOR_REL/packages/ui",
-    "@bgm/admin-kit": "file:$MOTOR_REL/packages/admin-kit"
+    "@edc-motor/ui": "file:$MOTOR_REL/packages/ui",
+    "@edc-motor/admin-kit": "file:$MOTOR_REL/packages/admin-kit"
   },
   "scripts": {
     "dev": "concurrently -n app,admin,api,queue -c blue,green,red,yellow \"npm run dev -w app\" \"npm run dev -w admin\" \"npm run dev:api\" \"npm run dev:queue\"",
@@ -210,8 +210,8 @@ cp "$MOTOR_DIR"/documentacion/guia-*.md "$DEST/documentacion/"
 cat > "$DEST/README.md" <<README
 # $NOMBRE
 
-Proyecto de juego sobre el **Boardgame Motor** (bgm/core \`$VERSION\`,
-@bgm/ui y @bgm/admin-kit por \`file:\`). Generado con
+Proyecto de juego sobre el **EdC Motor** (edc-motor/core \`$VERSION\`,
+@edc-motor/ui y @edc-motor/admin-kit por \`file:\`). Generado con
 \`tools/crear-juego.sh\` a partir de la plantilla del motor: trae una API
 Laravel, un panel de administración y una web pública funcionando con
 entidades de ejemplo (casas, personajes…) para sustituir por las del juego.
@@ -220,9 +220,9 @@ entidades de ejemplo (casas, personajes…) para sustituir por las del juego.
 
 \`\`\`
 $MOTOR_REL          # clon/submódulo del motor al tag v$VERSION (carpeta hermana)
-api/               # Laravel + bgm/core
-admin/             # SPA de administración (@bgm/admin-kit)
-app/               # web pública (@bgm/ui)
+api/               # Laravel + edc-motor/core
+admin/             # SPA de administración (@edc-motor/admin-kit)
+app/               # web pública (@edc-motor/ui)
 packages/shared/   # cartas y tipos compartidos entre admin, app y render PNG
 \`\`\`
 
@@ -255,15 +255,15 @@ cd api && php artisan db:seed
 > \`MOTOR_CHROME_PATH\` en \`api/.env\` (hay un \`npm run chrome:install\`
 > dentro de \`api/\`).
 
-Credenciales demo del seeder: \`admin@bgm.test\` / \`editor@bgm.test\` /
-\`user@bgm.test\`, contraseña \`password\`.
+Credenciales demo del seeder: \`admin@edc.test\` / \`editor@edc.test\` /
+\`user@edc.test\`, contraseña \`password\`.
 
 ## Guías
 
 - \`documentacion/guia-como-montar-una-web.md\` — cómo montar cada pieza
   (entidades, bloques, PNG, PDF, SEO…).
 - \`documentacion/guia-de-componentes.md\` — catálogo de componentes de
-  @bgm/ui y @bgm/admin-kit.
+  @edc-motor/ui y @edc-motor/admin-kit.
 - \`documentacion/guia-arrancar-un-juego-nuevo.md\` — distribución del motor
   por versión y cómo actualizar de tag.
 

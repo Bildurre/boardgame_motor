@@ -2,7 +2,7 @@
 import { onMounted, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { ImageOff, ImagePlus, RefreshCw } from '@lucide/vue'
-import { BaseButton, useToast } from '@bgm/ui'
+import { BaseButton, useToast } from '@edc-motor/ui'
 import { api } from '@/lib/api'
 
 // PNG generados de una entidad renderizable (Fase 3): los muestra por locale

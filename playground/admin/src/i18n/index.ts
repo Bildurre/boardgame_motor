@@ -5,7 +5,7 @@ import en from './locales/en.json'
 
 // Clave de localStorage compartida con el store de locales (idioma único:
 // UI + rutas + contenido).
-export const LOCALE_KEY = 'bgm_admin_locale'
+export const LOCALE_KEY = 'edc_admin_locale'
 
 const i18n = createI18n({
   legacy: false,

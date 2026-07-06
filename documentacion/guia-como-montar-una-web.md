@@ -1,7 +1,7 @@
 # Guía: cómo montar una web nueva (juego) sobre el motor
 
-Guía práctica y **paso a paso** para crear un juego nuevo con BoardGame Motor
-(BGM) y para añadirle entidades (modelos), iconos y vistas. Ejemplos de
+Guía práctica y **paso a paso** para crear un juego nuevo con EdC Motor
+(EdC) y para añadirle entidades (modelos), iconos y vistas. Ejemplos de
 referencia en el `playground` (cópialos y adáptalos): **House** (CRUD básico),
 **Scheme** (argucia — relación `belongsTo` + single + modo carta) y **Character**
 (personaje — campos calculados + single + modo carta).
@@ -15,14 +15,14 @@ referencia en el `playground` (cópialos y adáptalos): **House** (CRUD básico)
 
 ## 0. Modelo mental
 
-- El **motor** (`bgm/core`, `@bgm/ui`, `@bgm/admin-kit`) aporta lo común: auth,
+- El **motor** (`edc-motor/core`, `@edc-motor/ui`, `@edc-motor/admin-kit`) aporta lo común: auth,
   media, i18n, traits, componentes, layout, biblioteca de iconos. **No se toca
   por juego.**
 - Cada **juego** es su propio repo/monorepo con tres piezas que **consumen** el
   motor y programan **solo sus entidades**:
-  - `api/` — Laravel + Sanctum (usa `bgm/core` vía Composer _path repository_).
-  - `admin/` — SPA Vue (panel) que usa `@bgm/admin-kit` + `@bgm/ui`.
-  - `app/` — SPA Vue (público) que usa `@bgm/ui`.
+  - `api/` — Laravel + Sanctum (usa `edc-motor/core` vía Composer _path repository_).
+  - `admin/` — SPA Vue (panel) que usa `@edc-motor/admin-kit` + `@edc-motor/ui`.
+  - `app/` — SPA Vue (público) que usa `@edc-motor/ui`.
   - `packages/shared/` — lo del juego compartido entre admin y app: los
     **componentes visuales de las entidades** (la carta que se ve en la web y
     se captura a PNG, D8), sus tipos y su SCSS.
@@ -38,7 +38,7 @@ referencia en el `playground` (cópialos y adáptalos): **House** (CRUD básico)
 
    ```json
    "repositories": [{ "type": "path", "url": "../../packages/core" }],
-   "require": { "bgm/core": "*" }
+   "require": { "edc-motor/core": "*" }
    ```
 
 3. `api/bootstrap/app.php`: registra el `SetLocale` del motor en el grupo `api`
@@ -46,12 +46,12 @@ referencia en el `playground` (cópialos y adáptalos): **House** (CRUD básico)
 
    ```php
    ->withMiddleware(function (Middleware $middleware): void {
-       $middleware->appendToGroup('api', \Bgm\Core\I18n\Http\Middleware\SetLocale::class);
+       $middleware->appendToGroup('api', \Edc\Core\I18n\Http\Middleware\SetLocale::class);
    })
    ```
 
 4. Front: cada SPA lee la API de `VITE_API_URL` (`.env`), sin proxy. El admin
-   usa `createApi()` de `@bgm/ui` (token Sanctum + 401).
+   usa `createApi()` de `@edc-motor/ui` (token Sanctum + 401).
 5. Instala y prepara:
 
    ```bash
@@ -116,7 +116,7 @@ class House extends Model implements HasMedia
 }
 ```
 
-**Traits del motor** (`Bgm\Core\…`) y qué aporta cada uno:
+**Traits del motor** (`Edc\Core\…`) y qué aporta cada uno:
 
 | Trait | Para qué | Requiere / expone |
 |---|---|---|
@@ -207,7 +207,7 @@ Route::middleware(['auth:sanctum','motor.admin'])->prefix('admin')->group(functi
 ```
 
 > Las rutas propias del juego van en `api/routes/api.php` (grupo `api`
-> automático). Las del **motor** ya vienen dadas por `bgm/core` (auth, locales,
+> automático). Las del **motor** ya vienen dadas por `edc-motor/core` (auth, locales,
 > iconos…) y usan `Route::prefix('api')->middleware('api')`.
 
 ### 2.6 Validación traducida
@@ -239,7 +239,7 @@ nada en el backend del juego.
 ## 4. Frontend admin — añadir las vistas del modelo
 
 Todo esto vive en el **juego** (`admin/src`), componiendo piezas de
-`@bgm/admin-kit` + `@bgm/ui`. Nada de tablas: **grid de tarjetas** (DC-30), y
+`@edc-motor/admin-kit` + `@edc-motor/ui`. Nada de tablas: **grid de tarjetas** (DC-30), y
 altas/ediciones en **modal** (DC-31).
 
 ### 4.1 i18n (`admin/src/i18n/locales/*.json`)
@@ -352,7 +352,7 @@ al abrir en edición carga por slug; emite `saved`.
 </EditModal>
 ```
 
-Elementos de formulario disponibles (todos de `@bgm/ui`, ver la guía de
+Elementos de formulario disponibles (todos de `@edc-motor/ui`, ver la guía de
 componentes): `BaseInput`, `BaseTextarea`, `BaseSelect`, `BaseCheckbox`,
 `TranslatableInput` (text/textarea/**wysiwyg**), `RichTextInput`, `ImageUpload`
 (drag&drop), `PaletteColorPicker` (hex).
@@ -454,7 +454,7 @@ ensamblado.
 
 ### 6.1 Tipos de export (el catálogo del juego)
 
-Un export es una clase pequeña en `api/app/Pdf/` que extiende `Bgm\Core\Pdf\PdfExport`
+Un export es una clase pequeña en `api/app/Pdf/` que extiende `Edc\Core\Pdf\PdfExport`
 y declara: quién es la entidad dueña (`sourceModel()`) y qué ítems van dentro
 (`items()`). El conjunto de exports registrados ES el catálogo de PDF del juego:
 define **qué PDF se pueden generar y qué contiene cada uno**, y la sección PDF
@@ -648,7 +648,7 @@ La UI pública de esta colección llega con el andamiaje de la web (Fase 6).
 | Índice automático | `index` | `title` (texto, trad.), `numbered` (boolean) — enlaza a los bloques posteriores indexables |
 | Llamada a la acción | `cta` | `title`, `body` (richtext), `button_text`*, `button_url`* (trad.), `button_variant` (select: primary/secondary), `image`, `image_position` |
 
-El botón del CTA usa `.block-button` (`@bgm/ui`), con dos variantes de
+El botón del CTA usa `.block-button` (`@edc-motor/ui`), con dos variantes de
 **hover cruzado**: `primary` ("Normal") = fondo de acento y texto del color
 del texto, que en hover pasa a fondo del color de fondo con texto de acento;
 `secondary` ("Inverso") = exactamente al revés. Ambas llevan borde de acento.
@@ -698,7 +698,7 @@ El motor pone TODO el CRM (páginas jerárquicas traducibles con SEO y home
 única, bloques reordenables, editor generado, render público con caché); el
 juego solo **declara sus tipos de bloque**. Añadir un bloque son dos piezas:
 
-1. **La clase** en `api/app/Blocks/` (extiende `Bgm\Core\Content\BlockType`):
+1. **La clase** en `api/app/Blocks/` (extiende `Edc\Core\Content\BlockType`):
    `$key`, `fields()` con el DSL (DC-08: `Field::text|richtext|number|boolean|
    select|color|image`, con `->translatable() ->required() ->default()`) y,
    si consulta modelos del juego, `resolveData($block, $locale)`. Registro:
@@ -707,7 +707,7 @@ juego solo **declara sus tipos de bloque**. Añadir un bloque son dos piezas:
 2. **El componente Vue** en `app/src/blocks/` + su entrada en
    `app/src/blocks/registry.ts` (clave = `$key`). Recibe `settings`
    (localizados) y `data` (lo de `resolveData`). Los cinco de presentación
-   del motor vienen hechos (`motorBlockComponents` de `@bgm/ui`).
+   del motor vienen hechos (`motorBlockComponents` de `@edc-motor/ui`).
 
 En el admin: vista Páginas (lista + modal) y single con `PageBlocks`
 (admin-kit): paleta, drag (DC-17) y modal generado por `SchemaFields`.
@@ -784,7 +784,7 @@ En la app, todo vive en `stores/site.ts` (cargar + aplicar + sorteo).
 ### 6bis.2 Colores e imagen de fondo (patrón CDL)
 
 - **Imagen de fondo por página** (columna `background_image`, subida desde el
-  modal de página): la SPA pinta `<PageBackground>` (@bgm/ui) — una capa FIJA
+  modal de página): la SPA pinta `<PageBackground>` (@edc-motor/ui) — una capa FIJA
   a toda la ventana tras el contenido (`z-index: -1`, cover, `grayscale(60%)`)
   cuya intensidad decide el tema: `--page-bg-opacity` = **0.2 en claro, 0.1
   en oscuro** (variables de `_theme.scss`, el juego puede recalibrarlas).
@@ -904,7 +904,7 @@ El backend expone los endpoints públicos (solo publicados, slug resoluble en
 cualquier locale, payload con el mapa `slug` por locale — mismo shape que los
 bloques con-datos, p. ej. `renderData($locale) + slugs`).
 
-**SEO.** `useHead` (de `@bgm/ui`) fija title, meta description, canonical y
+**SEO.** `useHead` (de `@edc-motor/ui`) fija title, meta description, canonical y
 alternates hreflang por ruta (sin dependencias). El **sitemap** lo sirve la
 API en `GET /sitemap.xml`: el motor mete las páginas publicadas del CRM y el
 juego añade sus entidades en el provider:

@@ -1,6 +1,6 @@
 <?php
 
-use Bgm\Core\Icons\Models\Icon;
+use Edc\Core\Icons\Models\Icon;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 

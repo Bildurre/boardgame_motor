@@ -1,7 +1,7 @@
 <?php
 
-use Bgm\Core\Backup\Jobs\RunBackupJob;
-use Bgm\Core\Backup\MotorBackup;
+use Edc\Core\Backup\Jobs\RunBackupJob;
+use Edc\Core\Backup\MotorBackup;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Support\Facades\Queue;
 use Illuminate\Support\Facades\Storage;

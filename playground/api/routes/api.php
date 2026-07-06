@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Route;
 /*
 | Rutas propias del juego (playground). Se cargan con prefijo /api y el grupo
 | de middleware 'api'. Las rutas del motor (auth, ping, locales) las añade
-| el propio paquete bgm/core.
+| el propio paquete edc-motor/core.
 */
 
 // --- Público (solo entidades publicadas) ---

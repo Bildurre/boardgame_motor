@@ -1,7 +1,7 @@
 # Registro de decisiones cerradas (ADR)
 
 > Resuelve **todas** las cuestiones que quedaban abiertas en los docs de
-> funcionalidad, más las decisiones de **PWA** (DC-01), **naming/BGM** (DC-21),
+> funcionalidad, más las decisiones de **PWA** (DC-01), **naming/EdC** (DC-21),
 > **infraestructura** (DC-22) y **locales** (DC-23). Cada entrada: la pregunta, la
 > decisión y el porqué. Si una decisión cambia, se edita aquí y en el doc afectado.
 
@@ -23,9 +23,9 @@ obliga a SSR. (Amplía D6.)
   workspace). **Cero infraestructura de publicación.** Es lo más limpio y sencillo.
 - **Publicación versionada (Fase 7):** se activa cuando hace falta consumir el motor
   desde un repo de juego externo con versión fijada:
-  - **npm** (`@bgm/ui`, `@bgm/admin-kit`) → `npm publish` por paquete a **GitHub
-    Packages** (registry privado del scope `@bgm`). Sin repos extra.
-  - **Composer** (`bgm/core`) → como Composer no instala un subdirectorio por tag,
+  - **npm** (`@edc-motor/ui`, `@edc-motor/admin-kit`) → `npm publish` por paquete a
+    **npmjs.com** (org pública `edc-motor`). Sin repos extra.
+  - **Composer** (`edc-motor/core`) → como Composer no instala un subdirectorio por tag,
     se **espeja** el paquete a un repo read-only (`git subtree split`) que lleva los
     tags, automatizado con una GitHub Action al taggear. Es la única "maquinaria", y
     es estándar.
@@ -158,13 +158,15 @@ permite slots/overrides y caer a componentes a mano para pantallas especiales.
 
 ## Naming, infra y locales
 
-### DC-21 · Marca y nombres de paquete: `bgm`
-**Decisión:** la marca es **BGM** (BoardgameMotor). Vendor/scope **`bgm`**:
-- Composer: **`bgm/core`** (backend Laravel).
-- npm: **`@bgm/ui`** y **`@bgm/admin-kit`**.
+### DC-21 · Marca y nombres de paquete: `edc-motor`
+**Decisión:** la marca es **EdC Motor** (Espadas de Ceniza Motor). Vendor/scope
+**`edc-motor`** en los dos registros públicos:
+- Composer: **`edc-motor/core`** (backend Laravel), namespace PHP `Edc\Core`.
+- npm: **`@edc-motor/ui`** y **`@edc-motor/admin-kit`** (org npm `edc-motor`).
 - Directorios del monorepo: `packages/{core,ui,admin-kit}`.
-**Por qué:** el proyecto *es* el boardgamemotor; `bgm` es corto y sin redundancias
-("motor" ya está implícito).
+**Por qué:** el vendor `bgm` estaba cogido en Packagist y el scope npm no era
+verificable; `edc-motor` está libre en ambos y liga el motor a su juego madre.
+*(Sustituye al nombre `bgm` usado hasta la v0.1.0.)*
 
 ### DC-22 · Infraestructura: un droplet DigitalOcean por juego
 **Decisión:** **cada web/juego completo (api + admin + app) va en su propio droplet
@@ -193,7 +195,7 @@ da consistencia.
 ### DC-25 · Iconos: Lucide (`@lucide/vue`), siempre
 **Decisión:** todos los frontends (admin y app) usan **Lucide** como única librería de
 iconos. Paquete **`@lucide/vue`** (el antiguo `lucide-vue-next` está deprecado). Peer
-dependency en `@bgm/ui` y `@bgm/admin-kit`; dependency en cada app.
+dependency en `@edc-motor/ui` y `@edc-motor/admin-kit`; dependency en cada app.
 **Por qué:** consistencia visual, una sola librería; alineado con kontuan.
 
 ### DC-29 · i18n de la app + rutas y slugs traducibles (patrón kontuan)
@@ -203,7 +205,7 @@ contenido. Las rutas tienen **segmentos de path traducidos** por locale
 + `onLocaleChange` (patrón kontuan). Las rutas de detalle usan **slug** (no id); el
 slug es traducible (uno por locale) y el backend resuelve por slug en cualquier locale
 (`ResolvesBySlug::whereSlug`). Toda cadena visible vive en `i18n/locales/*.json`;
-los componentes del motor (`@bgm/ui`, `@bgm/admin-kit`) no llevan i18n: exponen sus
+los componentes del motor (`@edc-motor/ui`, `@edc-motor/admin-kit`) no llevan i18n: exponen sus
 textos como props y la app los traduce.
 **Por qué:** SEO y UX multilingües reales; el motor se mantiene agnóstico de idioma y
 reutilizable. Ver `documentacion/guia-de-componentes.md` (sección i18n).
@@ -216,7 +218,7 @@ web pública ya lo hacía la redirección a la canónica (DC-12).
 ### DC-30 · Index de entidades: grid de tarjetas, nunca tablas
 **Decisión:** las vistas de listado (index) **no usan tablas**: siempre **grid de
 tarjetas**. Orden de la vista: **filtros → tabs → grid**. Componentes en
-`@bgm/admin-kit`, copiados/mezclados de kontuan y de Choque de Leyendas (DC-28):
+`@edc-motor/admin-kit`, copiados/mezclados de kontuan y de Choque de Leyendas (DC-28):
 `FilterBar` (búsqueda con lupa, estilo kontuan), `BaseGrid` (grid responsive por
 `@container`), `EntityCard` (estructura kontuan + zonas `badges`/`meta` de CDL +
 franja `media`), `EmptyState`. `ResourceList`/`FiltersBar` (tabla + select) quedaron
@@ -227,7 +229,7 @@ con el modo "carta" del render a PNG (Fase 3).
 ### DC-31 · Altas y ediciones en modal (patrón kontuan), no rutas
 **Decisión:** los formularios de **crear/editar** entidades son **modales** que se
 abren desde el listado (y más adelante desde el "single"), no páginas con ruta
-propia. Componente base `EditModal` en `@bgm/ui` (BaseModal + pie Cancelar/Guardar,
+propia. Componente base `EditModal` en `@edc-motor/ui` (BaseModal + pie Cancelar/Guardar,
 agnóstico de i18n). Cada entidad tiene su `XFormModal` (`modelValue` + `mode` +
 `targetSlug`) que carga por slug al abrir en edición y emite `saved`. Se eliminan
 las rutas `*/nueva` y `*/:slug/editar`.
@@ -237,9 +239,9 @@ editará en modal.
 
 ### DC-32 · WYSIWYG con TipTap y biblioteca de iconos del juego
 **Decisión:** el editor de texto enriquecido es **TipTap** (`RichTextInput` en
-`@bgm/ui`, carga diferida). Para los símbolos del juego (dados, recursos…), el
+`@edc-motor/ui`, carga diferida). Para los símbolos del juego (dados, recursos…), el
 motor ofrece una **biblioteca de iconos** (como en CDL): modelo `Icon` en
-`bgm/core` (nombre + slug + imagen SVG/PNG por MediaLibrary), migración cargada
+`edc-motor/core` (nombre + slug + imagen SVG/PNG por MediaLibrary), migración cargada
 por el `MotorServiceProvider`, endpoints `GET /api/icons` (listado para el
 selector) y `POST`/`DELETE /api/admin/icons` (gestión). El editor recibe la lista
 por prop y **inserta cada icono en línea** como `<img class="rt-icon">`. No se
@@ -248,20 +250,23 @@ suben imágenes arbitrarias en el texto: solo iconos del set preparado.
 gestionable por cada juego sin tocar el motor. La primera feature del motor con
 modelo + migración propios (no en el playground), por ser building block común.
 
-### DC-33 · Distribución: monorepo etiquetado + versión de tren
-**Decisión:** el motor se distribuye como **monorepo etiquetado** (`vX.Y.Z`):
-`bgm/core`, `@bgm/ui` y `@bgm/admin-kit` comparten versión (de tren) y
-CHANGELOG por paquete. El juego **clona o añade como submódulo** el motor
-fijado al tag y consume: `bgm/core` por Composer con repositorio `path` y
-versión exigida; `@bgm/ui` / `@bgm/admin-kit` por npm `file:` como **paquetes
-fuente** (los compila el Vite del juego, que aporta `sass-embedded` y
-`@vitejs/plugin-vue`, con `loadPaths` de SCSS al paquete). Actualizar =
-mover el tag + `composer update bgm/core` + `npm install`. Prueba de consumo
-reproducible en `tools/consumo-externo/probar-consumo.sh`; guía en
-`guia-arrancar-un-juego-nuevo.md`.
-**Por qué:** cero infraestructura (sin registry) manteniendo instalación por
-versión y actualización deliberada; un registry privado (Satis/Verdaccio)
-puede sustituir el clon después cambiando solo `repositories`/especificadores.
+### DC-33 · Distribución: registros públicos + versión de tren
+**Decisión (revisada en 0.2.0):** el motor es **open source (GPL-3.0-only)** y se
+distribuye por los registros públicos, con **versión de tren** (`vX.Y.Z`, un tag
+en el monorepo, CHANGELOG por paquete):
+- `edc-motor/core` en **Packagist**, vía el repo split de solo lectura
+  **`bildurre/edc-core`** (Packagist no admite subdirectorios; una GitHub Action
+  espeja `packages/core` con cada tag — workflow `publicar.yml`).
+- `@edc-motor/ui` y `@edc-motor/admin-kit` en **npmjs** (org `edc-motor`),
+  publicados directamente desde el monorepo con el mismo workflow. Son
+  **paquetes fuente** (los compila el Vite del juego, que aporta
+  `sass-embedded` y `@vitejs/plugin-vue`, con `loadPaths` de SCSS al paquete).
+El juego instala como con cualquier paquete: `composer require edc-motor/core`
+y `npm i @edc-motor/ui @edc-motor/admin-kit`; actualizar = `composer update` +
+`npm update` leyendo el changelog. Guía en `guia-arrancar-un-juego-nuevo.md`.
+**Por qué:** es el flujo estándar (sin clones hermanos ni registries privados);
+el único mecanismo extra —el split— lo automatiza el CI. *(Sustituye al consumo
+por clon hermano con `path`/`file:` usado hasta la v0.1.0.)*
 
 ### DC-26 · Mobile-first + 4 tiers responsivos
 **Decisión:** CSS **mobile-first** (base móvil, `@media (min-width: …)` para ampliar).
@@ -317,10 +322,10 @@ incluido), con **`es`** por defecto. Configurable por juego en `config/motor.php
 | DC-18 | SEO | prerender + sitemap; SSR plan B |
 | DC-19 | Admin DSL | declarativo con slots/escape |
 | DC-20 | Traits | componibles; filtros unificados |
-| DC-21 | Naming | marca BGM; `bgm/core`, `@bgm/ui`, `@bgm/admin-kit` |
+| DC-21 | Naming | marca EdC; `edc-motor/core`, `@edc-motor/ui`, `@edc-motor/admin-kit` |
 | DC-22 | Infra | droplet DO por juego; storage configurable (disco / S3 opcional) |
 | DC-23 | Locales | es / eu / en (default es) |
 | DC-24 | Migraciones | `datetimes()`/`softDeletesDatetime()` (no TIMESTAMP, año 2038); código en inglés |
 | DC-25 | Iconos | Lucide (`lucide-vue-next`), siempre, en admin y app |
 | DC-26 | Mobile-first | CSS mobile-first + breakpoints en tokens; sidebar admin = drawer/hamburguesa |
-| DC-33 | Distribución | monorepo etiquetado, versión de tren; composer path + npm file: al tag |
+| DC-33 | Distribución | open source GPL-3.0; versión de tren; Packagist (split edc-core) + npmjs (org edc-motor) |

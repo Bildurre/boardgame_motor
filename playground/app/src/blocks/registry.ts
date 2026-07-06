@@ -1,5 +1,5 @@
 import type { Component } from 'vue'
-import { motorBlockComponents } from '@bgm/ui'
+import { motorBlockComponents } from '@edc-motor/ui'
 import CharactersGridBlock from './CharactersGridBlock.vue'
 import FeaturedHouseBlock from './FeaturedHouseBlock.vue'
 import HousesSchemesBlock from './HousesSchemesBlock.vue'

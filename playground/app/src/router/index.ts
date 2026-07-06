@@ -16,7 +16,7 @@ const LOCALE_PATTERN = LOCALES.join('|')
 
 /** Locale a usar cuando la URL no trae prefijo (persistido por el store). */
 function storedLocale(): string {
-  const saved = localStorage.getItem('bgm_app_locale')
+  const saved = localStorage.getItem('edc_app_locale')
   return saved && LOCALES.includes(saved) ? saved : 'es'
 }
 

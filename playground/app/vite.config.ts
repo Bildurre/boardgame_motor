@@ -11,9 +11,9 @@ export default defineConfig({
     VitePWA({
       registerType: 'autoUpdate',
       manifest: {
-        name: 'BGM Playground',
-        short_name: 'BGM',
-        description: 'Web pública de prueba del Boardgame Motor',
+        name: 'EdC Playground',
+        short_name: 'EdC',
+        description: 'Web pública de prueba del EdC Motor',
         theme_color: '#6c5ce7',
         background_color: '#0f1115',
         display: 'standalone',

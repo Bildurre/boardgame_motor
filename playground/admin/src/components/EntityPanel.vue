@@ -10,7 +10,7 @@ import {
   SquarePen,
   Trash2,
 } from '@lucide/vue'
-import { BaseButton } from '@bgm/ui'
+import { BaseButton } from '@edc-motor/ui'
 import { useLocalesStore } from '@/stores/locales'
 import type { EntityBase } from '@playground/shared'
 

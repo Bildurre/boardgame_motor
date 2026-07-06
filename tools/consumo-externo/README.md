@@ -10,11 +10,11 @@ tools/consumo-externo/probar-consumo.sh /ruta/dir  # o un directorio dado
 
 Qué hace:
 
-1. **Composer**: crea un proyecto externo que exige `bgm/core` a la versión
+1. **Composer**: crea un proyecto externo que exige `edc-motor/core` a la versión
    actual (repositorio `path` hacia `packages/core`), lanza `composer
    install` real (descarga Sanctum/Spatie/etc.) y comprueba que las clases
    clave del motor autocargan y que la versión instalada es la esperada.
-2. **Vite**: crea una app externa mínima con `@bgm/ui` y `@bgm/admin-kit`
+2. **Vite**: crea una app externa mínima con `@edc-motor/ui` y `@edc-motor/admin-kit`
    por `file:`, con los `loadPaths` de SCSS hacia los tokens del paquete, y
    la compila (`vite build`) importando componentes de ambos paquetes, un
    composable (`useHead`) y SCSS del motor.

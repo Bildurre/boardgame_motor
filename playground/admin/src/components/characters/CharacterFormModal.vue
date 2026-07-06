@@ -8,8 +8,8 @@ import {
   NumericInput,
   BaseCheckbox,
   useToast,
-} from '@bgm/ui'
-import { useResource } from '@bgm/admin-kit'
+} from '@edc-motor/ui'
+import { useResource } from '@edc-motor/admin-kit'
 import { api } from '@/lib/api'
 import { fieldErrors } from '@/lib/apiError'
 import { useEditorLabels } from '@/lib/editorLabels'

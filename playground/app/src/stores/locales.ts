@@ -7,7 +7,7 @@ export interface Locale {
   name: string
 }
 
-const LOCALE_KEY = 'bgm_app_locale'
+const LOCALE_KEY = 'edc_app_locale'
 
 // Idioma de la web pública: se envía a la API (?locale) y decide qué slug y
 // título se pintan. Persistido en localStorage.

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { BaseInput, BaseSelect, EditModal, useToast } from '@bgm/ui'
+import { BaseInput, BaseSelect, EditModal, useToast } from '@edc-motor/ui'
 import { api } from '@/lib/api'
 import { fieldErrors } from '@/lib/apiError'
 import { useAuthStore } from '@/stores/auth'

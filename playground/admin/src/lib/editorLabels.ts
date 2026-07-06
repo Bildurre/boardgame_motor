@@ -1,6 +1,6 @@
 import { computed, type ComputedRef } from 'vue'
 import { useI18n } from 'vue-i18n'
-import type { RichTextLabels } from '@bgm/ui'
+import type { RichTextLabels } from '@edc-motor/ui'
 
 /** Textos traducidos de la barra del editor WYSIWYG (DC-29). */
 export function useEditorLabels(): ComputedRef<RichTextLabels> {

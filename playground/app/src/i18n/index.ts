@@ -8,7 +8,7 @@ import en from './locales/en.json'
 // activo lo gobierna el prefijo de la URL (router) vía stores/locales.
 export const i18n = createI18n({
   legacy: false,
-  locale: localStorage.getItem('bgm_app_locale') || 'es',
+  locale: localStorage.getItem('edc_app_locale') || 'es',
   fallbackLocale: 'es',
   messages: { es, eu, en },
 })

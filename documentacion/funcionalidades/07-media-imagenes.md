@@ -28,7 +28,7 @@ previews), atributos de color/coste.
 - Almacenamiento por disco configurable; helper de URL; borrado al eliminar el
   modelo; soporte de "dados"/iconos inline en texto rico (relación con doc 03).
 
-**Frontend (`@bgm/ui`):**
+**Frontend (`@edc-motor/ui`):**
 - `ImageUpload` (drag&drop + preview) y variante multilingüe (una por locale).
 
 ## Frontera motor ↔ juego
@@ -41,7 +41,7 @@ previews), atributos de color/coste.
 
 1. Decidir MediaLibrary vs traits propios.
 2. Traits del motor + almacenamiento + borrado en cascada.
-3. `ImageUpload` (simple y multilingüe) en `@bgm/ui`.
+3. `ImageUpload` (simple y multilingüe) en `@edc-motor/ui`.
 
 ## Hito de aceptación
 

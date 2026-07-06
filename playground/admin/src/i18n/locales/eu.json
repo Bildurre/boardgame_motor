@@ -99,7 +99,7 @@
   "dashboard": {
     "title": "Panela",
     "connectedAs": "{name} gisa konektatuta ({roles}).",
-    "motor": "{name} motorra v{version} · hizkuntzak {locales}"
+    "motor": "{name} v{version} · hizkuntzak {locales}"
   },
   "houses": {
     "title": "Etxeak",

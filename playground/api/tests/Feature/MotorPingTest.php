@@ -4,7 +4,7 @@ it('responde el ping del motor con versión y locales', function () {
     $this->getJson('/api/motor/ping')
         ->assertOk()
         ->assertJson([
-            'package' => 'bgm/core',
+            'package' => 'edc-motor/core',
             'version' => config('motor.version'),
             'default_locale' => 'es',
         ])

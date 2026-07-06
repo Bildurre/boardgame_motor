@@ -13,9 +13,9 @@ y los tres paquetes comparten esa versión (versión *de tren*):
 
 | Paquete | Qué es | Se instala con |
 |---|---|---|
-| `bgm/core` | Backend Laravel (provider, migraciones, API) | Composer (repositorio `path`) |
-| `@bgm/ui` | Componentes públicos Vue + SCSS (paquete **fuente**) | npm (`file:`) |
-| `@bgm/admin-kit` | Kit del admin (paquete **fuente**, depende de `@bgm/ui`) | npm (`file:`) |
+| `edc-motor/core` | Backend Laravel (provider, migraciones, API) | Composer (repositorio `path`) |
+| `@edc-motor/ui` | Componentes públicos Vue + SCSS (paquete **fuente**) | npm (`file:`) |
+| `@edc-motor/admin-kit` | Kit del admin (paquete **fuente**, depende de `@edc-motor/ui`) | npm (`file:`) |
 
 Los paquetes npm son **fuente** (`main: src/index.ts`): los compila la app
 del juego con Vite (por eso necesitan `sass-embedded` y
@@ -38,7 +38,7 @@ dependencias (leer antes los `CHANGELOG.md` del motor):
 
 ```bash
 git -C motor fetch --tags && git -C motor checkout v0.2.0
-cd api && composer update bgm/core
+cd api && composer update edc-motor/core
 cd .. && npm install
 ```
 
@@ -68,9 +68,9 @@ La estructura resultante (la misma que la del `playground/` del monorepo):
 ```
 mi-juego/
 ├── motor/                  # clon/submódulo del motor al tag elegido
-├── api/                    # Laravel (bgm/core)
-├── admin/                  # SPA de administración (@bgm/admin-kit)
-├── app/                    # web pública (@bgm/ui)
+├── api/                    # Laravel (edc-motor/core)
+├── admin/                  # SPA de administración (@edc-motor/admin-kit)
+├── app/                    # web pública (@edc-motor/ui)
 ├── packages/shared/        # cartas y tipos compartidos entre admin y app
 └── package.json            # workspaces npm: admin, app, packages/shared
 ```
@@ -90,15 +90,15 @@ En `composer.json`, apunta al motor clonado y exige la versión:
 
 ```json
 {
-  "require": { "bgm/core": "0.1.0" },
+  "require": { "edc-motor/core": "0.1.0" },
   "repositories": {
-    "bgm-core": { "type": "path", "url": "../motor/packages/core" }
+    "edc-core": { "type": "path", "url": "../motor/packages/core" }
   }
 }
 ```
 
 ```bash
-composer update bgm/core        # instala core + sus dependencias (Sanctum, Spatie…)
+composer update edc-motor/core        # instala core + sus dependencias (Sanctum, Spatie…)
 php artisan vendor:publish --tag=motor-config   # config/motor.php
 php artisan migrate             # migraciones del motor + las tuyas
 php artisan motor:install       # roles base (admin, editor, user) y permisos
@@ -128,8 +128,8 @@ juego (workspaces `admin`, `app`, `packages/shared`):
 ```json
 {
   "dependencies": {
-    "@bgm/ui": "file:../motor/packages/ui",
-    "@bgm/admin-kit": "file:../motor/packages/admin-kit"
+    "@edc-motor/ui": "file:../motor/packages/ui",
+    "@edc-motor/admin-kit": "file:../motor/packages/admin-kit"
   }
 }
 ```
@@ -166,9 +166,9 @@ Qué rellena el juego (todo con el playground de espejo):
 - [ ] Repo del juego generado con `motor/tools/crear-juego.sh` (o copiado a
       mano del playground).
 - [ ] Repo del juego con el motor clonado/submódulo al tag (`v0.1.0`).
-- [ ] `api/` instala `bgm/core` por versión; `migrate` + `motor:install` OK.
-- [ ] `admin/` y `app/` compilan (`npm run build`) con `@bgm/ui` y
-      `@bgm/admin-kit` por `file:`.
+- [ ] `api/` instala `edc-motor/core` por versión; `migrate` + `motor:install` OK.
+- [ ] `admin/` y `app/` compilan (`npm run build`) con `@edc-motor/ui` y
+      `@edc-motor/admin-kit` por `file:`.
 - [ ] Primera entidad de juego completa (checklist §7 de la guía de la web).
 - [ ] Seeder demo; login admin y web pública navegable en los 3 locales.
 - [ ] CI copiada de `.github/workflows/ci.yml` (ajustando rutas).

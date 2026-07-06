@@ -3,7 +3,7 @@ import { ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { LogIn } from '@lucide/vue'
-import { BaseButton, MotorBadge } from '@bgm/ui'
+import { BaseButton, MotorBadge } from '@edc-motor/ui'
 import { useAuthStore } from '@/stores/auth'
 import { apiMessage } from '@/lib/apiError'
 
@@ -38,7 +38,7 @@ async function submit() {
 <template>
   <main class="login">
     <div class="login__box">
-      <MotorBadge label="BGM Admin" />
+      <MotorBadge label="EdC Admin" />
       <h1>{{ t('login.title') }}</h1>
       <form class="form" @submit.prevent="submit">
         <div class="field">

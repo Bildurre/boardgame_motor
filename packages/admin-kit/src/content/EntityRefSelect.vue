@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, onMounted, ref } from 'vue'
 import type { AxiosInstance } from 'axios'
-import { SearchSelect, type SearchSelectOption } from '@bgm/ui'
+import { SearchSelect, type SearchSelectOption } from '@edc-motor/ui'
 
 // Selector del campo `entity` del DSL (doc 03): busca entre las opciones
 // del endpoint del juego (shape {data: [{id, name: {locale: texto}}]}) y

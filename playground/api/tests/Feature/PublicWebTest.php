@@ -1,7 +1,7 @@
 <?php
 
 use App\Models\Character;
-use Bgm\Core\Content\Models\Page;
+use Edc\Core\Content\Models\Page;
 
 // Web pública (doc 10): lectura pública de entidades por slug en cualquier
 // locale (con los slugs por locale para la canónica, DC-12) y sitemap con

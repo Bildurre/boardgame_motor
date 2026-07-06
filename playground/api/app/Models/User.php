@@ -2,8 +2,8 @@
 
 namespace App\Models;
 
-use Bgm\Core\Auth\Concerns\IsMotorUser;
 use Database\Factories\UserFactory;
+use Edc\Core\Auth\Concerns\IsMotorUser;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Contracts\Translation\HasLocalePreference;
 use Illuminate\Database\Eloquent\Attributes\Fillable;

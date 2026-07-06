@@ -1,4 +1,4 @@
-# Boardgame Motor — Arquitectura
+# EdC Motor — Arquitectura
 
 > Cómo se organiza el motor, qué hay en cada paquete, cómo es un juego que lo
 > consume, y dónde está la frontera "motor vs juego".
@@ -12,9 +12,9 @@
 │  boardgame_motor/   (monorepo donde se DESARROLLA el motor)    │
 │                                                                │
 │  packages/                                                     │
-│   ├── core        →  bgm/core        (Composer — backend)      │
-│   ├── ui          →  @bgm/ui         (npm — Vue + SCSS)        │
-│   └── admin-kit   →  @bgm/admin-kit  (npm — layout + CRUD)     │
+│   ├── core        →  edc-motor/core        (Composer — backend)      │
+│   ├── ui          →  @edc-motor/ui         (npm — Vue + SCSS)        │
+│   └── admin-kit   →  @edc-motor/admin-kit  (npm — layout + CRUD)     │
 │  playground/             (juego-demo mínimo para probar motor) │
 │  documentacion/                                                │
 └──────────────────────────────────────────────────────────────┘
@@ -23,9 +23,9 @@
 ┌──────────────────────────────────────────────────────────────┐
 │  choque_de_leyendas/  (y cada juego futuro — su PROPIO repo)   │
 │                                                                │
-│  api/     Laravel  → require bgm/core:^1.0          │
-│  admin/   Vue SPA  → deps @bgm/ui + admin-kit│
-│  app/     Vue SPA  → deps @bgm/ui                  │
+│  api/     Laravel  → require edc-motor/core:^1.0          │
+│  admin/   Vue SPA  → deps @edc-motor/ui + admin-kit│
+│  app/     Vue SPA  → deps @edc-motor/ui                  │
 │  assets/  documentacion/                                       │
 └──────────────────────────────────────────────────────────────┘
 ```
@@ -39,13 +39,13 @@ específico de ese juego.
 
 ### 2.1. `core` (Composer)
 
-Paquete Laravel instalable (`bgm/core`). Aporta backend reutilizable
+Paquete Laravel instalable (`edc-motor/core`). Aporta backend reutilizable
 vía un `ServiceProvider` con auto-registro de rutas, migraciones publicables,
 config publicable y comandos artisan.
 
 ```
 core/
-├── composer.json                 # name: bgm/core
+├── composer.json                 # name: edc-motor/core
 ├── config/motor.php              # config publicable (locales, pdf, storage…)
 ├── database/migrations/          # tablas del motor (pages, blocks, generated_pdfs,
 │                                 #   users, roles, media, …) publicables
@@ -84,14 +84,14 @@ core/
 - **Render a PNG**: el juego declara qué entidades son "renderizables" y a qué
   ruta del frontend corresponde su componente visual.
 
-### 2.2. `ui` (npm — `@bgm/ui`)
+### 2.2. `ui` (npm — `@edc-motor/ui`)
 
 Equivalente a `@kontuan/shared`: componentes Vue 3 base + tokens y estilos SCSS,
 sin lógica de negocio. Lo consumen **admin** y **app** de cada juego.
 
 ```
-ui/                               # paquete @bgm/ui
-├── package.json                  # @bgm/ui
+ui/                               # paquete @edc-motor/ui
+├── package.json                  # @edc-motor/ui
 ├── src/
 │   ├── components/
 │   │   ├── base/                 # BaseButton, BaseInput, BaseModal, BaseTable…
@@ -107,15 +107,15 @@ ui/                               # paquete @bgm/ui
     └── components/
 ```
 
-### 2.3. `admin-kit` (npm — `@bgm/admin-kit`)
+### 2.3. `admin-kit` (npm — `@edc-motor/admin-kit`)
 
 Lo que evita rehacer el admin en cada juego: **layout del panel**, scaffolding de
 CRUD, editor de bloques del CRM, gestor de PDF/previews, gestión de usuarios.
-Construido sobre `@bgm/ui`.
+Construido sobre `@edc-motor/ui`.
 
 ```
-admin-kit/                        # paquete @bgm/admin-kit
-├── package.json                  # @bgm/admin-kit
+admin-kit/                        # paquete @edc-motor/admin-kit
+├── package.json                  # @edc-motor/admin-kit
 ├── src/
 │   ├── layout/                   # AdminLayout, Sidebar, Topbar, Breadcrumbs
 │   ├── crud/                     # BaseGrid, EntityCard, FilterBar, EmptyState, useResource()
@@ -130,21 +130,21 @@ admin-kit/                        # paquete @bgm/admin-kit
 **Cómo lo extiende un juego:** el admin del juego importa `AdminLayout` y registra
 sus secciones/CRUDs declarándolos (modelo, campos, columnas) o componiendo con
 `BaseGrid`/`EntityCard`/`FilterBar` (y el futuro `ResourceForm`). Las pantallas muy específicas (ej. constructor de
-mazos) las escribe el juego a mano usando `@bgm/ui`.
+mazos) las escribe el juego a mano usando `@edc-motor/ui`.
 
 ## 3. Anatomía de un juego (ej. estructura futura de choque)
 
 ```
 <juego>/
 ├── api/                          # Laravel
-│   ├── composer.json             # require bgm/core
+│   ├── composer.json             # require edc-motor/core
 │   ├── app/Models/               # Card, Hero, Faction… (entidades del juego)
 │   ├── app/Http/Controllers/     # extienden los del motor
 │   ├── app/BlockTypes/           # bloques-con-datos del juego (counters-list…)
 │   ├── app/Previews/             # declaración de entidades renderizables a PNG
 │   ├── database/migrations/      # tablas del juego (las del motor vienen publicadas)
 │   └── routes/api.php            # rutas propias del juego
-├── admin/                        # Vue SPA — @bgm/ui + admin-kit
+├── admin/                        # Vue SPA — @edc-motor/ui + admin-kit
 │   └── src/                      # registra CRUDs y pantallas propias
 ├── app/                          # Vue SPA — público + panel usuario
 │   └── src/                      # vistas públicas, componentes visuales de entidades
@@ -173,7 +173,7 @@ mazos) las escribe el juego a mano usando `@bgm/ui`.
 | Tests | Pest |
 | Formato | Pint |
 
-### Frontend (`@bgm/ui` + `admin-kit` + admin/app de cada juego)
+### Frontend (`@edc-motor/ui` + `admin-kit` + admin/app de cada juego)
 
 | Pieza | Tecnología |
 |---|---|

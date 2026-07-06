@@ -2,7 +2,7 @@
 import { onMounted, ref, watch } from 'vue'
 import { LogIn, User } from '@lucide/vue'
 import { useI18n } from 'vue-i18n'
-import { MotorBadge, BaseButton, PageBackground, useHead } from '@bgm/ui'
+import { MotorBadge, BaseButton, PageBackground, useHead } from '@edc-motor/ui'
 import { api } from '@/lib/api'
 import { blockRegistry } from '@/blocks/registry'
 import { templateFor } from '@/templates/registry'
@@ -89,7 +89,7 @@ onMounted(async () => {
   </template>
 
   <main v-else class="home">
-    <MotorBadge label="BGM" :version="ping?.version ?? ''" />
+    <MotorBadge label="EdC" :version="ping?.version ?? ''" />
     <h1>Playground · Web pública</h1>
     <p v-if="auth.user">
       Hola, <strong>{{ auth.user.name }}</strong

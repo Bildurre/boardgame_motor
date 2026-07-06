@@ -1,6 +1,6 @@
 <?php
 
-use Bgm\Core\Media\MotorPathGenerator;
+use Edc\Core\Media\MotorPathGenerator;
 use Spatie\ImageOptimizer\Optimizers\Avifenc;
 use Spatie\ImageOptimizer\Optimizers\Cwebp;
 use Spatie\ImageOptimizer\Optimizers\Gifsicle;

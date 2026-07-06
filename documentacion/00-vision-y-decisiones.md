@@ -1,4 +1,4 @@
-# Boardgame Motor — Visión y decisiones
+# EdC Motor — Visión y decisiones
 
 > Documento vivo. Recoge **qué** estamos construyendo, **por qué**, y las
 > **decisiones cerradas** que dan forma a todo lo demás. Si una decisión
@@ -56,9 +56,9 @@ Tres metas, compatibles entre sí:
 | D6 | **Frontend: 2 SPA Vue por juego** | `admin` (admin + editores) y `app` (web pública del expositor + panel de usuario al loguearse). Ambas Vue 3 + Vite + TS. **SPA, no SSR/Nuxt.** SEO se resuelve con gestión de `<head>`/meta + prerender donde haga falta. |
 | D7 | **Auth con 3 roles simples** | `admin` (yo), `editor` (ayuda con algunas cosas), `user` (sin acceso al admin). El motor trae el panel de usuario y opciones de cuenta/config montadas pero "vacías", listas para que cada juego cuelgue lo suyo. Sin roles complejos. |
 | D8 | **Pipeline PDF: fuente única de verdad** | El **componente Vue** de la entidad sirve para (a) mostrarse en web, (b) capturarse a PNG con browser headless, y (c) montar el PDF con esos PNG. Nada de plantillas de impresión duplicadas. |
-| D9 | **Distribución de paquetes: Git + tags** | Repos Git con tags de versión (Composer vía VCS, npm vía Git/GitHub Packages). Sin Packagist/npm públicos. *(Cerrado: ver DC-02.)* |
+| D9 | **Distribución de paquetes: registros públicos** | El motor es open source (GPL-3.0): `edc-motor/core` en Packagist (vía split read-only `edc-core`) y `@edc-motor/*` en npmjs. *(Ver DC-33.)* |
 | D10 | **Frontends instalables en móvil (PWA)** | `admin` y `app` son PWA instalables (Add to Home Screen) vía `vite-plugin-pwa`: manifest + service worker, app-shell cacheado, modo standalone. No offline completo de datos. *(Ver DC-01.)* |
-| D11 | **Marca y namespace: `bgm`** | El proyecto es **BGM** (BoardgameMotor). Paquetes `bgm/core` (Composer), `@bgm/ui` y `@bgm/admin-kit` (npm). *(Ver DC-21.)* |
+| D11 | **Marca y namespace: `edc-motor`** | El proyecto es **EdC Motor** (Espadas de Ceniza Motor). Paquetes `edc-motor/core` (Composer, namespace `Edc\\Core`), `@edc-motor/ui` y `@edc-motor/admin-kit` (npm). *(Ver DC-21.)* |
 | D12 | **Infra: un droplet DigitalOcean por juego** | Cada web (api+admin+app) en su droplet, con worker de cola + Chromium. Storage configurable: disco por defecto, S3/Spaces opcional. *(Ver DC-22.)* |
 | D13 | **Locales por defecto: es / eu / en** | Euskera incluido; `es` por defecto; configurable por juego. *(Ver DC-23.)* |
 

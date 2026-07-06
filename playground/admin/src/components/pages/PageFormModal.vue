@@ -8,7 +8,7 @@ import {
   ImageUpload,
   TranslatableInput,
   useToast,
-} from '@bgm/ui'
+} from '@edc-motor/ui'
 import { api } from '@/lib/api'
 import { useLocalesStore } from '@/stores/locales'
 

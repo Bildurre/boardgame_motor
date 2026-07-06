@@ -2,7 +2,7 @@
 import { computed, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
-import { PageBackground, useHead } from '@bgm/ui'
+import { PageBackground, useHead } from '@edc-motor/ui'
 import { api } from '@/lib/api'
 import { blockRegistry } from '@/blocks/registry'
 import { templateFor } from '@/templates/registry'

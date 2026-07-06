@@ -10,8 +10,8 @@ import {
   NumericInput,
   useConfirm,
   useToast,
-} from '@bgm/ui'
-import { useRightSidebar } from '@bgm/admin-kit'
+} from '@edc-motor/ui'
+import { useRightSidebar } from '@edc-motor/admin-kit'
 import { api } from '@/lib/api'
 
 // Copias de seguridad (doc 06): crear con un clic, listar, descargar y

@@ -3,7 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\User;
-use Bgm\Core\Auth\MotorAuth;
+use Edc\Core\Auth\MotorAuth;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 
@@ -22,9 +22,9 @@ class DatabaseSeeder extends Seeder
         MotorAuth::syncRolesAndPermissions();
 
         $usuarios = [
-            ['admin', 'Admin', 'admin@bgm.test'],
-            ['editor', 'Editor', 'editor@bgm.test'],
-            ['user', 'Usuario', 'user@bgm.test'],
+            ['admin', 'Admin', 'admin@edc.test'],
+            ['editor', 'Editor', 'editor@edc.test'],
+            ['user', 'Usuario', 'user@edc.test'],
         ];
 
         foreach ($usuarios as [$role, $name, $email]) {
