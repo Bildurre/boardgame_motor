@@ -681,7 +681,10 @@ en servidor (HtmlSanitizer, DC-09). `image` sube al momento
 (`POST /admin/content/uploads`) y guarda la URL; con `->translatable()` es
 **multilingüe** (una URL por locale, editor `TranslatableImage` y fallback
 al locale por defecto en el render) — así van todas las de los bloques del
-motor.
+motor. Las subidas conservan el **nombre original** del fichero (saneado;
+sufijo `-2`… solo si colisiona) y **no dejan huérfanos**: al sustituir una
+imagen el backend borra la anterior (`replaces`) y el botón "quitar" la
+borra del disco (`DELETE /admin/content/uploads`).
 
 **Anidados**: `Field::group('clave')->fields([...])` (objeto de subcampos),
 `Field::repeater('clave')->fields([...])->min(n)->max(n)` (lista de filas

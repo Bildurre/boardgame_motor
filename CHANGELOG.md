@@ -18,6 +18,9 @@ los cambios de API pueden llegar en versiones menores).
   admin (`TranslatableImage`), con fallback al locale por defecto y el SVG
   inlineado por idioma (currentColor hereda el acento). El formato antiguo
   (URL única) se sigue aceptando.
+- **Subidas de imagen sin huérfanos** (logo, favicon, fondos e imágenes de
+  bloques): se guardan con el nombre original del fichero y al sustituir o
+  quitar una imagen la anterior se borra del disco.
 
 ## [0.2.0] — 2026-07-06
 

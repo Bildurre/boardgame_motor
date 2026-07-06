@@ -6,7 +6,11 @@ admin). Paquete **fuente** (se consume vía Vite). Versión de tren con
 
 ## [0.3.0] — 2026-07-07
 
-- Sin cambios propios: versión de tren (logo traducible en `edc-motor/core`).
+### Cambiado
+
+- `TranslatableImage`: la prop `upload` recibe también la URL a la que
+  sustituye (`(file, replaces?)`) y hay una prop opcional `removeFile` para
+  borrar el fichero al pulsar "quitar".
 
 ## [0.2.0] — 2026-07-06
 

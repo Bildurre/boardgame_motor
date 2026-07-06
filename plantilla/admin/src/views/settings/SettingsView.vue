@@ -128,10 +128,12 @@ function removeCustomFont(font: CustomFont) {
   if (fontBody.value === font.key) fontBody.value = 'system'
 }
 
-async function upload(file: File): Promise<string | null> {
+async function upload(file: File, replaces?: string | null): Promise<string | null> {
   try {
     const form = new FormData()
     form.append('image', file)
+    // El backend borra el fichero sustituido: sin huérfanos.
+    if (replaces) form.append('replaces', replaces)
     const { data } = await api.post('/admin/content/uploads', form)
     return data.url
   } catch {
@@ -140,16 +142,26 @@ async function upload(file: File): Promise<string | null> {
   }
 }
 
+/** Borra la subida del disco (el botón "quitar"); en silencio si falla. */
+async function removeUpload(url: string): Promise<void> {
+  await api.delete('/admin/content/uploads', { data: { url } }).catch(() => {})
+}
+
 // Subida para TranslatableImage (una URL por idioma): lanza si falla para
 // que el componente no borre el valor del locale activo.
-async function uploadLogo(file: File): Promise<string> {
-  const url = await upload(file)
+async function uploadLogo(file: File, replaces?: string | null): Promise<string> {
+  const url = await upload(file, replaces)
   if (!url) throw new Error('upload failed')
   return url
 }
 
 async function uploadFavicon(file: File | null) {
-  favicon.value = file ? ((await upload(file)) ?? favicon.value) : null
+  if (!file) {
+    if (favicon.value) removeUpload(favicon.value)
+    favicon.value = null
+    return
+  }
+  favicon.value = (await upload(file, favicon.value)) ?? favicon.value
 }
 
 async function load() {
@@ -243,6 +255,7 @@ onMounted(async () => {
               :locales="locales.locales"
               :label="t('settings.fields.logo')"
               :upload="uploadLogo"
+              :remove-file="removeUpload"
             />
             <ImageUpload
               :model-value="null"
@@ -252,7 +265,7 @@ onMounted(async () => {
               :drag-text="t('common.imageDrag')"
               :hint-text="t('settings.fields.faviconHint')"
               @update:model-value="uploadFavicon"
-              @remove="favicon = null"
+              @remove="uploadFavicon(null)"
             />
           </div>
         </section>

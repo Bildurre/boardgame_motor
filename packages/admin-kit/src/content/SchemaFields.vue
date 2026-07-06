@@ -85,15 +85,28 @@ function selectOptions(field: FieldSchema): SelectOption[] {
 }
 
 /** Sube la imagen al momento; en settings queda la URL pública. */
-async function upload(file: File): Promise<string> {
+async function upload(file: File, replaces?: string | null): Promise<string> {
   const form = new FormData()
   form.append('image', file)
+  // El backend borra el fichero sustituido: sin huérfanos.
+  if (replaces) form.append('replaces', replaces)
   const { data } = await props.api.post('/admin/content/uploads', form)
   return data.url
 }
 
+/** Borra la subida del disco (el botón "quitar"); en silencio si falla. */
+async function removeUpload(url: string): Promise<void> {
+  await props.api.delete('/admin/content/uploads', { data: { url } }).catch(() => {})
+}
+
 async function uploadImage(field: FieldSchema, file: File | null) {
-  set(field.key, file ? await upload(file) : null)
+  const current = (props.modelValue[field.key] as string | null) ?? null
+  if (!file) {
+    if (current) removeUpload(current)
+    set(field.key, null)
+    return
+  }
+  set(field.key, await upload(file, current))
 }
 
 // --- Anidados (group / repeater) ---
@@ -291,6 +304,7 @@ function addLabel(): string {
         :label="label(field)"
         :required="field.required"
         :upload="upload"
+        :remove-file="removeUpload"
         @update:model-value="(v) => set(field.key, v)"
       />
 
@@ -300,7 +314,7 @@ function addLabel(): string {
           :model-value="null"
           :current-url="(modelValue[field.key] as string) ?? null"
           @update:model-value="(f: File | null) => uploadImage(field, f)"
-          @remove="set(field.key, null)"
+          @remove="uploadImage(field, null)"
         />
       </div>
     </template>

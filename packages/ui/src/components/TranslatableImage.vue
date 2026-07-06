@@ -19,8 +19,11 @@ const props = withDefaults(
     locales: Locale[]
     label?: string
     required?: boolean
-    /** Sube el fichero y devuelve la URL pública que se guarda. */
-    upload: (file: File) => Promise<string>
+    /** Sube el fichero (con la URL a la que sustituye, para que el backend
+     *  borre la anterior) y devuelve la URL pública que se guarda. */
+    upload: (file: File, replaces?: string | null) => Promise<string>
+    /** Borra el fichero al pulsar "quitar" (opcional). */
+    removeFile?: (url: string) => void | Promise<void>
     error?: string
   }>(),
   { modelValue: () => ({}), required: false },
@@ -52,15 +55,21 @@ function setUrl(url: string | null) {
 
 async function onFile(file: File | null) {
   if (!file) {
-    setUrl(null)
+    onRemove()
     return
   }
   uploading.value = true
   try {
-    setUrl(await props.upload(file))
+    setUrl(await props.upload(file, currentUrl.value))
   } finally {
     uploading.value = false
   }
+}
+
+function onRemove() {
+  const url = currentUrl.value
+  if (url && props.removeFile) Promise.resolve(props.removeFile(url)).catch(() => {})
+  setUrl(null)
 }
 
 function onClickOutside(e: MouseEvent) {
@@ -112,7 +121,7 @@ onBeforeUnmount(() => document.removeEventListener('click', onClickOutside))
       :current-url="currentUrl"
       :error="uploading ? undefined : error"
       @update:model-value="onFile"
-      @remove="setUrl(null)"
+      @remove="onRemove"
     />
 
     <p v-if="error" class="form-field__error">{{ error }}</p>

@@ -5,7 +5,11 @@ Kit de construcción del panel de administración (sobre `@edc-motor/ui`). Paque
 
 ## [0.3.0] — 2026-07-07
 
-- Sin cambios propios: versión de tren (logo traducible en `edc-motor/core`).
+### Cambiado
+
+- `SchemaFields` (imágenes de bloques): al sustituir una imagen se manda
+  `replaces` y el backend borra la anterior; el botón "quitar" borra la
+  subida del disco.
 
 ## [0.2.0] — 2026-07-06
 
