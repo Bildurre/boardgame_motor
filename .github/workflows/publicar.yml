@@ -16,9 +16,9 @@ jobs:
     name: npm publish (@edc-motor/ui + admin-kit)
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v5
         with:
           node-version: 22
           registry-url: https://registry.npmjs.org
@@ -50,9 +50,12 @@ jobs:
     name: Split de packages/core → edc-core
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
         with:
           fetch-depth: 0 # subtree split necesita la historia completa
+          # Sin esto, checkout deja la credencial del GITHUB_TOKEN como
+          # extraheader de git y PISA el SPLIT_TOKEN de la URL del push.
+          persist-credentials: false
 
       - name: Comprobar que el tag coincide con la versión del core
         run: |
