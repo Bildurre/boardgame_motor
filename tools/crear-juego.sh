@@ -243,12 +243,26 @@ el \`playground/\` del monorepo del motor.
 
 ## Actualizar el motor
 
-Lee los \`CHANGELOG.md\` del motor y:
+Lee antes los \`CHANGELOG.md\` del motor.
 
-\`\`\`bash
-cd api && composer update edc-motor/core
-cd .. && npm update @edc-motor/ui @edc-motor/admin-kit
-\`\`\`
+- **Parche** (p. ej. 0.3.0 → 0.3.1) — la horquilla \`^\` lo coge sola:
+
+  \`\`\`bash
+  cd api && composer update edc-motor/core
+  cd .. && npm update @edc-motor/ui @edc-motor/admin-kit
+  \`\`\`
+
+- **Minor de la serie 0** (p. ej. 0.3 → 0.4) — puede romper API: sube la
+  horquilla a mano y revisa la sección de migración del changelog:
+
+  \`\`\`bash
+  cd api && composer require edc-motor/core:^0.4.0
+  cd .. && npm install @edc-motor/ui@^0.4.0 @edc-motor/admin-kit@^0.4.0
+  \`\`\`
+
+  Si el cambio toca el **cascarón** (archivos generados que viven en este
+  repo), el changelog lo dice; el diff exacto:
+  \`git -C <monorepo> diff vX.Y.0 vX.Z.0 -- plantilla\`.
 
 ## Gates (desde la raíz)
 

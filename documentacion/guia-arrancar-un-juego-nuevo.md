@@ -24,10 +24,25 @@ en el consumidor; no hay paso de build en el motor).
 
 **Actualizar de versión** (leer antes los `CHANGELOG.md` del motor):
 
-```bash
-cd api && composer update edc-motor/core
-cd .. && npm update @edc-motor/ui @edc-motor/admin-kit
-```
+- **Parche** (0.3.0 → 0.3.1) — la horquilla `^` lo coge sola:
+
+  ```bash
+  cd api && composer update edc-motor/core
+  cd .. && npm update @edc-motor/ui @edc-motor/admin-kit
+  ```
+
+- **Minor de la serie 0** (0.3 → 0.4) — puede romper API, así que hay que
+  subir la horquilla a mano y revisar la migración del changelog:
+
+  ```bash
+  cd api && composer require edc-motor/core:^0.4.0
+  cd .. && npm install @edc-motor/ui@^0.4.0 @edc-motor/admin-kit@^0.4.0
+  ```
+
+  Si el cambio toca el **cascarón** (los archivos generados que viven en tu
+  repo: stores, vistas, headers…), el changelog lo dice y el diff exacto es
+  `git -C <monorepo> diff vX.Y.0 vX.Z.0 -- plantilla` — con el cascarón sin
+  tocar, basta copiar los archivos listados desde `plantilla/`.
 
 ## 2. Esqueleto del repo del juego
 
