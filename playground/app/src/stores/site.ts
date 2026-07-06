@@ -161,5 +161,15 @@ export const useSiteStore = defineStore('site', () => {
     if (settings.value?.accent_mode === 'random') pickAccent()
   }
 
-  return { settings, title, footerText, description, logoUrl, logoInline, documentTitle, load, onNavigate }
+  return {
+    settings,
+    title,
+    footerText,
+    description,
+    logoUrl,
+    logoInline,
+    documentTitle,
+    load,
+    onNavigate,
+  }
 })
