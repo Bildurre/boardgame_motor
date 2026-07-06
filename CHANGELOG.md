@@ -12,6 +12,11 @@ El formato sigue [Keep a Changelog](https://keepachangelog.com/es/) y el
 versionado, [SemVer](https://semver.org/lang/es/) (mientras estemos en `0.x`,
 los cambios de API pueden llegar en versiones menores).
 
+## [0.3.1] — 2026-07-07
+
+- Fix: la subida de imágenes rechazaba los SVG ("debe ser una imagen");
+  vuelven a admitirse y se guardan saneados (sin scripts ni handlers).
+
 ## [0.3.0] — 2026-07-07
 
 - **Logo traducible** en la configuración de la web: uno por idioma desde el

@@ -31,6 +31,26 @@ it('guarda con el nombre original saneado y sufija solo si colisiona', function 
     expect($segunda->json('path'))->toBe('content/mi-logo-v2-2.png');
 });
 
+it('admite svg y lo guarda saneado (sin scripts ni handlers)', function () {
+    $disk = Storage::disk(config('motor.storage.disk', 'public'));
+
+    $svg = '<svg xmlns="http://www.w3.org/2000/svg" onload="alert(1)">'
+        .'<script>alert(2)</script>'
+        .'<a href="javascript:alert(3)"><circle r="5" fill="currentColor"/></a></svg>';
+    $fichero = UploadedFile::fake()->createWithContent('Logo Web.svg', $svg);
+
+    $respuesta = $this->actingAs(motorUser('admin'))
+        ->post('/api/admin/content/uploads', ['image' => $fichero])
+        ->assertCreated();
+
+    expect($respuesta->json('path'))->toBe('content/logo-web.svg');
+    $guardado = $disk->get('content/logo-web.svg');
+    expect($guardado)->toContain('currentColor')
+        ->not->toContain('<script')
+        ->not->toContain('onload')
+        ->not->toContain('javascript:');
+});
+
 it('borra el fichero sustituido al subir con replaces', function () {
     $disk = Storage::disk(config('motor.storage.disk', 'public'));
 
