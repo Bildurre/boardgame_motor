@@ -11,9 +11,25 @@
 #
 #   <directorio-destino>  dónde crear el juego (p. ej. ../mi-juego).
 #                         El nombre del juego se toma del basename.
+# Es un script de BASH (sh/dash no valen): ejecútalo directamente o con bash.
+if [ -z "${BASH_VERSION:-}" ]; then
+  echo "ERROR: ejecútame con bash (o directamente: tools/crear-juego.sh), no con sh." >&2
+  exit 1
+fi
+
 set -euo pipefail
 
 MOTOR_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+
+# El script copia la plantilla DESDE el clon del monorepo: no vale copiarlo
+# suelto a otro directorio.
+if [[ ! -d "$MOTOR_DIR/plantilla" ]] || ! git -C "$MOTOR_DIR" rev-parse --git-dir >/dev/null 2>&1; then
+  echo "ERROR: no encuentro la plantilla del motor junto al script." >&2
+  echo "  Ejecútalo desde dentro del clon del monorepo:" >&2
+  echo "    git clone https://github.com/bildurre/boardgame_motor.git" >&2
+  echo "    boardgame_motor/tools/crear-juego.sh <directorio-destino>" >&2
+  exit 1
+fi
 
 if [[ $# -lt 1 ]]; then
   sed -n '2,13p' "${BASH_SOURCE[0]}" | sed 's/^# \{0,1\}//'
