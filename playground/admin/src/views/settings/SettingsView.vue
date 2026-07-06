@@ -8,6 +8,7 @@ import {
   BaseSelect,
   FontUpload,
   ImageUpload,
+  TranslatableImage,
   PaletteColorPicker,
   TranslatableInput,
   useToast,
@@ -27,7 +28,7 @@ const saving = ref(false)
 
 const title = ref<Record<string, string>>({})
 const description = ref<Record<string, string>>({})
-const logo = ref<string | null>(null)
+const logo = ref<Record<string, string>>({})
 const favicon = ref<string | null>(null)
 const accentMode = ref<'fixed' | 'random'>('fixed')
 const accentColor = ref('#6c5ce7')
@@ -139,8 +140,12 @@ async function upload(file: File): Promise<string | null> {
   }
 }
 
-async function uploadLogo(file: File | null) {
-  logo.value = file ? ((await upload(file)) ?? logo.value) : null
+// Subida para TranslatableImage (una URL por idioma): lanza si falla para
+// que el componente no borre el valor del locale activo.
+async function uploadLogo(file: File): Promise<string> {
+  const url = await upload(file)
+  if (!url) throw new Error('upload failed')
+  return url
 }
 
 async function uploadFavicon(file: File | null) {
@@ -154,7 +159,7 @@ async function load() {
     const s = data.data
     title.value = s.title ?? {}
     description.value = s.description ?? {}
-    logo.value = s.logo
+    logo.value = s.logo ?? {}
     favicon.value = s.favicon
     accentMode.value = s.accent_mode
     accentColor.value = s.accent_color
@@ -232,15 +237,12 @@ onMounted(async () => {
             :rows="2"
           />
           <div class="settings-view__uploads">
-            <ImageUpload
-              :model-value="null"
-              :current-url="logo"
+            <!-- Logo por idioma (fallback al por defecto en la web) -->
+            <TranslatableImage
+              v-model="logo"
+              :locales="locales.locales"
               :label="t('settings.fields.logo')"
-              accept=".svg,.png,.webp"
-              :drag-text="t('common.imageDrag')"
-              :hint-text="t('settings.fields.logoHint')"
-              @update:model-value="uploadLogo"
-              @remove="logo = null"
+              :upload="uploadLogo"
             />
             <ImageUpload
               :model-value="null"

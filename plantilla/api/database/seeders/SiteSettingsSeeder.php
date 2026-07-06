@@ -23,7 +23,7 @@ class SiteSettingsSeeder extends Seeder
         app(SiteSettings::class)->update([
             'title' => ['es' => 'Tu juego', 'eu' => 'Zure jokoa', 'en' => 'Your game'],
             'description' => ['es' => 'Un juego de mesa imprimible montado sobre EdC Motor.'],
-            'logo' => $this->logo(),
+            'logo' => ['es' => $this->logo()], // por idioma; el resto usa el fallback
             'favicon' => $this->favicon(),
             'accent_mode' => 'random',
             'accent_colors' => ['#6c5ce7'],

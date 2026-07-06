@@ -12,6 +12,13 @@ El formato sigue [Keep a Changelog](https://keepachangelog.com/es/) y el
 versionado, [SemVer](https://semver.org/lang/es/) (mientras estemos en `0.x`,
 los cambios de API pueden llegar en versiones menores).
 
+## [0.3.0] — 2026-07-07
+
+- **Logo traducible** en la configuración de la web: uno por idioma desde el
+  admin (`TranslatableImage`), con fallback al locale por defecto y el SVG
+  inlineado por idioma (currentColor hereda el acento). El formato antiguo
+  (URL única) se sigue aceptando.
+
 ## [0.2.0] — 2026-07-06
 
 ### Cambiado

@@ -754,10 +754,14 @@ se guarda en la tabla `settings` bajo la clave 'site' y la SPA pública lo lee
 de **`GET /api/site`** al arrancar):
 
 - **Identidad:** título del sitio (traducible; el `document.title` sale como
-  `página · sitio`), descripción (meta por defecto), **logo** (SVG/PNG) y
-  **favicon**. El logo SVG viaja **inlineado** en el payload (`logo_inline`) y
-  se pinta con `currentColor`: hereda el acento activo (un fichero
-  cross-origin no valdría — fetch/mask exigen CORS).
+  `página · sitio`), descripción (meta por defecto), **logo traducible**
+  (SVG/PNG, **uno por idioma** con `TranslatableImage`; la web resuelve el
+  del locale actual con fallback al por defecto — `logoUrl`/`logoInline` del
+  store del sitio) y **favicon**. Cada logo SVG viaja **inlineado** en el
+  payload (`logo_inline`, mapa por idioma) y se pinta con `currentColor`:
+  hereda el acento activo (un fichero cross-origin no valdría — fetch/mask
+  exigen CORS). Basta `fill="currentColor"` / `stroke="currentColor"` en las
+  formas del SVG; lo que lleve color propio se queda como esté.
 - **Acento:** fijo (un color) o **ALEATORIO estilo CDL**: una lista de colores
   candidatos de la que la SPA sortea uno al cargar **y re-sortea en cada
   navegación** (`router.afterEach` → `site.onNavigate()`, el disparador extra

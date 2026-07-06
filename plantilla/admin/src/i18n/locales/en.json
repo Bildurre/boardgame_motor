@@ -286,7 +286,6 @@
       "title": "Site title",
       "description": "Description (default meta)",
       "logo": "Logo (SVG/PNG)",
-      "logoHint": "Shown in the public site bar",
       "favicon": "Favicon (PNG/SVG)",
       "faviconHint": "Browser tab icon",
       "accentMode": "Accent color",

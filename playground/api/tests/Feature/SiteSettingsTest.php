@@ -1,6 +1,8 @@
 <?php
 
+use Edc\Core\Site\SiteSettings;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Storage;
 
 // Configuración de la web (doc 10): GET público con defaults + catálogo de
 // fuentes, PUT de admin con validación, y caché invalidada al guardar.
@@ -73,6 +75,34 @@ it('guarda la configuración desde el admin y el público la refleja', function 
         ->and($public->json('data.font_headings'))->toBe('serif')
         // Lo no tocado conserva su default.
         ->and($public->json('data.accent_color'))->toBe('#6c5ce7');
+});
+
+it('el logo es traducible y los svg del disco viajan inlineados por idioma', function () {
+    $admin = motorUser('admin');
+    $disk = Storage::disk(config('motor.storage.disk', 'public'));
+    $disk->put('content/logo-es.svg', '<svg><text>ES</text></svg>');
+    $disk->put('content/logo-eu.svg', '<svg><text>EU</text></svg>');
+
+    $this->actingAs($admin)->putJson('/api/admin/settings/site', [
+        'logo' => [
+            'es' => $disk->url('content/logo-es.svg'),
+            'eu' => $disk->url('content/logo-eu.svg'),
+        ],
+    ])->assertOk();
+
+    $public = $this->getJson('/api/site')->assertOk();
+    expect($public->json('data.logo.es'))->toContain('logo-es.svg')
+        ->and($public->json('data.logo.eu'))->toContain('logo-eu.svg')
+        ->and($public->json('data.logo_inline.es'))->toContain('ES')
+        ->and($public->json('data.logo_inline.eu'))->toContain('EU');
+});
+
+it('normaliza el logo del formato antiguo (string) al locale por defecto', function () {
+    // Instalaciones que guardaron el logo como URL única (pre 0.3.0).
+    app(SiteSettings::class)->update(['logo' => 'https://cdn.example/logo.png']);
+
+    $public = $this->getJson('/api/site')->assertOk();
+    expect($public->json('data.logo'))->toBe([config('motor.default_locale') => 'https://cdn.example/logo.png']);
 });
 
 it('valida colores, modo y fuentes', function () {

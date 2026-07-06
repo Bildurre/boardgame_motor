@@ -3,6 +3,10 @@
 Kit de construcción del panel de administración (sobre `@edc-motor/ui`). Paquete
 **fuente** (se consume vía Vite). Versión de tren con `edc-motor/core` y `@edc-motor/ui`.
 
+## [0.3.0] — 2026-07-07
+
+- Sin cambios propios: versión de tren (logo traducible en `edc-motor/core`).
+
 ## [0.2.0] — 2026-07-06
 
 ### Cambiado

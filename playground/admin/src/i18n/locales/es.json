@@ -374,7 +374,6 @@
       "title": "Título del sitio",
       "description": "Descripción (meta por defecto)",
       "logo": "Logo (SVG/PNG)",
-      "logoHint": "Se muestra en la barra de la web pública",
       "favicon": "Favicon (PNG/SVG)",
       "faviconHint": "Icono de la pestaña del navegador",
       "accentMode": "Color de acento",

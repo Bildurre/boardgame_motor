@@ -23,7 +23,7 @@ class SiteSettingsSeeder extends Seeder
         app(SiteSettings::class)->update([
             'title' => ['es' => 'Choque de Leyendas', 'eu' => 'Kondairen Talka', 'en' => 'Clash of Legends'],
             'description' => ['es' => 'El juego de cartas imprimible de las grandes casas.'],
-            'logo' => $this->logo(),
+            'logo' => ['es' => $this->logo()], // por idioma; el resto usa el fallback
             'favicon' => $this->favicon(),
             'accent_mode' => 'random',
             'accent_colors' => ['#29ab5f', '#f15959', '#408cfd'], // verde/rojo/azul de CDL
