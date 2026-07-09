@@ -12,7 +12,7 @@ El formato sigue [Keep a Changelog](https://keepachangelog.com/es/) y el
 versionado, [SemVer](https://semver.org/lang/es/) (mientras estemos en `0.x`,
 los cambios de API pueden llegar en versiones menores).
 
-## [Sin publicar]
+## [0.4.1] — 2026-07-09
 
 - **El header crece con el logo**: la línea 1 de la cabecera pública ya no es
   fija (56px); mide el alto del logo + 22px en cada breakpoint (56 → 66 → 78
