@@ -14,6 +14,12 @@ los cambios de API pueden llegar en versiones menores).
 
 ## [Sin publicar]
 
+- **El header crece con el logo**: la línea 1 de la cabecera pública ya no es
+  fija (56px); mide el alto del logo + 22px en cada breakpoint (56 → 66 → 78
+  → 90px), con el resto de elementos centrados verticalmente y la barra
+  lateral móvil y el hueco del contenido siguiéndola. Antes el logo ancho
+  (68px) se salía del header. **Migración del cascarón**: copiar
+  `app/src/assets/scss/components/_app-header.scss` de `plantilla/`.
 - **Scripts de mantenimiento en la plantilla**: los juegos nuevos nacen con
   `update-motor.sh <version>` (sube los paquetes composer/npm del motor, migra
   y limpia cachés), `copiar-plantilla.sh [-t vX.Y.Z] <rutas...>` (trae archivos
