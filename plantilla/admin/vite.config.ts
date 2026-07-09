@@ -29,6 +29,15 @@ export default defineConfig({
   resolve: {
     alias: { '@': fileURLToPath(new URL('./src', import.meta.url)) },
   },
+  // Los paquetes del motor son "fuente" (.ts/.vue sin compilar). Consumidos
+  // desde node_modules, Vite los pre-empaqueta pero externaliza sus .vue, que
+  // importan su propia copia de los composables: los singletons (toast,
+  // confirm, panel derecho) se duplican y la UI deja de reaccionar. Se
+  // excluyen para servirlos como fuente (en el monorepo, al ir enlazados,
+  // no se pre-empaquetan y el exclude es inocuo).
+  optimizeDeps: {
+    exclude: ['@edc-motor/admin-kit', '@edc-motor/ui'],
+  },
   server: { port: 5174 },
   css: {
     preprocessorOptions: {

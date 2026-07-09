@@ -12,6 +12,19 @@ El formato sigue [Keep a Changelog](https://keepachangelog.com/es/) y el
 versionado, [SemVer](https://semver.org/lang/es/) (mientras estemos en `0.x`,
 los cambios de API pueden llegar en versiones menores).
 
+## [Sin publicar]
+
+- **Fix de la plantilla (Vite)**: en los juegos que consumen los paquetes
+  desde npm (no enlazados), el optimizador de dependencias de Vite
+  pre-empaquetaba `@edc-motor/ui` y `@edc-motor/admin-kit` pero externalizaba
+  sus `.vue`, duplicando los singletons de los composables (toast, confirm,
+  panel derecho): el panel no se abría al seleccionar y los confirms/toasts no
+  salían. Los `vite.config.ts` de la plantilla (admin y app) añaden
+  `optimizeDeps.exclude` para servir los paquetes como fuente. **Migración de
+  juegos existentes**: añadir a `admin/vite.config.ts`
+  `optimizeDeps: { exclude: ['@edc-motor/admin-kit', '@edc-motor/ui'] }` y a
+  `app/vite.config.ts` `optimizeDeps: { exclude: ['@edc-motor/ui'] }`.
+
 ## [0.4.0] — 2026-07-07
 
 - **Bloques anidados** (un nivel) con índice automático **indentado** y
