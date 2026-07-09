@@ -14,6 +14,12 @@ los cambios de API pueden llegar en versiones menores).
 
 ## [Sin publicar]
 
+- **Scripts de mantenimiento en la plantilla**: los juegos nuevos nacen con
+  `update-motor.sh <version>` (sube los paquetes composer/npm del motor, migra
+  y limpia cachés), `copiar-plantilla.sh [-t vX.Y.Z] <rutas...>` (trae archivos
+  del cascarón desde `plantilla/` del monorepo, para las notas de "migración
+  del cascarón" del changelog) y `claude.sh --start/--finish <rama>` (flujo de
+  ramas de Claude).
 - **Fix de la plantilla (Vite)**: en los juegos que consumen los paquetes
   desde npm (no enlazados), el optimizador de dependencias de Vite
   pre-empaquetaba `@edc-motor/ui` y `@edc-motor/admin-kit` pero externalizaba
