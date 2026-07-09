@@ -26,6 +26,8 @@ los cambios de API pueden llegar en versiones menores).
   elementos, escala h3–h6 y sin párrafos vacíos.
 - El single de página recupera el **panel de la Página** en la barra derecha
   (acciones + flags + slugs) cuando no hay bloque seleccionado.
+- El logo del header de la web crece con el ancho: 34px en estrecho y hasta
+  el doble (68px) en pantallas anchas.
 
 ## [0.3.1] — 2026-07-07
 
