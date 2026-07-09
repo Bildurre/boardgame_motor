@@ -92,6 +92,25 @@ class PagesSeeder extends Seeder
             ]],
         ]);
 
+        // --- Bloque HIJO (anidado, demo del índice indentado): las fases del
+        // turno cuelgan del bloque "Turno de juego" ---
+        $turno = Block::query()
+            ->where('page_id', $reglas->id)
+            ->where('settings->title->es', 'Turno de juego')
+            ->first();
+        if ($turno) {
+            Block::create([
+                'page_id' => $reglas->id,
+                'parent_id' => $turno->id,
+                'type' => 'text',
+                'order' => (int) Block::query()->where('page_id', $reglas->id)->max('order') + 1,
+                'settings' => [
+                    'title' => ['es' => 'Fases del turno'],
+                    'body' => ['es' => '<p>Robo, intriga y combate: en ese orden. El índice muestra este apartado <strong>indentado</strong> bajo su padre.</p>'],
+                ],
+            ]);
+        }
+
         // --- Hija del reglamento: demo del submenú del nav (chevron/hover) ---
         $glosario = $this->page(
             ['es' => 'Glosario', 'eu' => 'Glosarioa', 'en' => 'Glossary'],

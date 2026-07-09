@@ -653,20 +653,37 @@ El botón del CTA usa `.block-button` (`@edc-motor/ui`), con dos variantes de
 del texto, que en hover pasa a fondo del color de fondo con texto de acento;
 `secondary` ("Inverso") = exactamente al revés. Ambas llevan borde de acento.
 
-(*) obligatorio en el locale por defecto. Todas las `image` son
-**multilingües** (`->translatable()`: una URL por locale, con fallback al
-default). TODOS los bloques llevan además los **campos comunes** que añade el
-motor, aplicados por el envoltorio `BlockShell`: `align` (select:
-left/center/right/justify), **`width`** (anchura del contenido — `wide`
-960px por defecto / `full` ancho completo / `narrow` 680px; da coherencia
+(*) obligatorio en el locale por defecto. **Título y subtítulo existen en
+todos los bloques de presentación y nunca son obligatorios**; el título se
+pinta como **h1 solo en la cabecera** (h2 en el resto) y nunca se justifica
+(justificado → izquierda). Todas las `image` son **multilingües**
+(`->translatable()`: una URL por locale, con fallback al default). TODOS los
+bloques llevan además los **campos comunes** que añade el motor, aplicados
+por el envoltorio `BlockShell`: `align` (select: left/center/right/justify,
+por defecto izquierda), **`width`** (anchura del contenido — `wide` ~1200px
+**por defecto** / `full` ancho completo / `narrow` 680px; da coherencia
 entre bloques y entre páginas) y `background` (color, aplicado como tinte
-semitransparente).
+semitransparente). Tipografía de bloque con tokens: texto `$fs-16`,
+subtítulo `$fs-20`, título `$fs-28` (la cabecera sube a `$fs-32`/`$fs-24`);
+el wysiwyg pone márgenes entre elementos y escala h2 28 · h3 24 · h4 20 ·
+h5 18 · h6 16 (`_rich-content.scss` de `@edc-motor/ui`).
 
 `image_position` es el campo estándar `BlockType::imagePositionField()`
 (reutilizable por los bloques del juego): `top` / `left` / `right` / `bottom`
 (columnas o encima/debajo) y `clear-left` / `clear-right` — la imagen queda
 **flotada y el texto la rodea** siguiendo por debajo (el "cleartext" de CDL);
 en pantallas estrechas la imagen pasa arriba a lo ancho.
+`BlockType::imageLayoutFields()` añade además, para las posiciones en
+columnas: **`image_fit`** — `contain` (entera, sin deformar), `cover`
+(recorta para llenar) o `fill` (deforma), siempre con el **alto que marca el
+texto de al lado** — e **`image_columns`** — reparto izquierda:derecha
+(1:1, 1:2, 2:1, 1:3, 3:1, 2:3, 3:2, 1:4, 4:1, 3:4, 4:3).
+
+**Bloques anidados (un nivel)**: cualquier bloque puede colgar de otro
+(`parent_id`, campo "Bloque padre" en los ajustes comunes del admin). El
+hijo se renderiza justo después de su padre, su tarjeta va **sangrada** en
+el gestor y el **índice automático** lo saca **indentado**
+(`items[].depth`). Pensado para reglamentos con apartados y sub-apartados.
 
 ### 6bis.0b El DSL de campos (DC-08), referencia
 

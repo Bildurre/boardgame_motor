@@ -202,7 +202,9 @@
       "confirmDelete": "Delete this block?",
       "panelTitle": "Block",
       "panelEmpty": "Pick a block to see its actions.",
-      "panelContent": "Content"
+      "panelContent": "Content",
+      "parent": "Parent block (indented indexes)",
+      "parentNone": "— None —"
     },
     "panelTitle": "Page",
     "panelEmpty": "Pick a page to see its actions.",

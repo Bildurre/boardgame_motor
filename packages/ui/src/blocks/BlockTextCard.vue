@@ -14,6 +14,7 @@ defineProps<{ settings: Record<string, unknown>; data?: Record<string, unknown> 
     <div class="block__card">
       <span v-if="settings.label" class="block__label">{{ settings.label }}</span>
       <h2 v-if="settings.title" class="block__title">{{ settings.title }}</h2>
+      <p v-if="settings.subtitle" class="block__subtitle">{{ settings.subtitle }}</p>
       <div class="block__media-layout">
         <img v-if="settings.image" class="block__image" :src="String(settings.image)" alt="" />
         <div class="block__text rich-content" v-html="settings.body" />

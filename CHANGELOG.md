@@ -12,6 +12,21 @@ El formato sigue [Keep a Changelog](https://keepachangelog.com/es/) y el
 versionado, [SemVer](https://semver.org/lang/es/) (mientras estemos en `0.x`,
 los cambios de API pueden llegar en versiones menores).
 
+## [0.4.0] — 2026-07-07
+
+- **Bloques anidados** (un nivel) con índice automático **indentado** y
+  tarjetas hijas sangradas en el admin.
+- Imagen de los bloques texto/CTA: **modo de escalado** (contener / cubrir /
+  rellenar, al alto del texto de al lado) y **reparto de columnas** (1:1 …
+  4:3). Subidas hasta 10 MB.
+- **Subtítulo en todos los bloques**; ningún título es obligatorio. Título h1
+  solo en la cabecera (h2 en el resto, nunca justificado).
+- Tipografía con tokens: texto 16 · subtítulo 20 · título 28 (cabecera
+  32/24); anchura por defecto `wide` **~1200px**. Wysiwyg con márgenes entre
+  elementos, escala h3–h6 y sin párrafos vacíos.
+- El single de página recupera el **panel de la Página** en la barra derecha
+  (acciones + flags + slugs) cuando no hay bloque seleccionado.
+
 ## [0.3.1] — 2026-07-07
 
 - Fix: la subida de imágenes rechazaba los SVG ("debe ser una imagen");

@@ -3,6 +3,20 @@
 Kit de construcción del panel de administración (sobre `@edc-motor/ui`). Paquete
 **fuente** (se consume vía Vite). Versión de tren con `edc-motor/core` y `@edc-motor/ui`.
 
+## [0.4.0] — 2026-07-07
+
+### Añadido
+
+- `PageBlocks`: **bloque padre** en el formulario (anidado de un nivel),
+  tarjetas hijas **indentadas** bajo su padre (y recolocadas tras el drag), y
+  slot **`#panel-default`** para que la vista pinte su propio panel (p. ej.
+  las acciones de la página) cuando no hay bloque seleccionado.
+
+### Corregido
+
+- Aire entre el selector de color de fondo y los checkboxes de los ajustes
+  comunes del bloque.
+
 ## [0.3.1] — 2026-07-07
 
 - Sin cambios propios: versión de tren (fix de subida de SVG en `edc-motor/core`).

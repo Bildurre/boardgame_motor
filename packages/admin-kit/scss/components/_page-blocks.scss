@@ -120,7 +120,20 @@
 
     display: grid;
     gap: $space-3;
+
+    // display:grid no gobierna el contenido desplegado de un <details>: el
+    // aire de los checkboxes (bajo el selector de color) y del select del
+    // padre va a mano, y cada checkbox en su propia línea.
+    > .checkbox {
+      display: flex;
+      margin-top: $space-2;
+    }
+    > .checkbox:first-of-type { margin-top: $space-4; }
+    > .form-field { margin-top: $space-3; }
   }
+
+  // Bloques hijos (parent_id): tarjeta sangrada bajo su padre.
+  &__item.is-child { margin-left: $space-7; }
 }
 
 .schema-fields {

@@ -4,6 +4,22 @@ Componentes Vue 3 + SCSS para las webs públicas (y piezas compartidas con el
 admin). Paquete **fuente** (se consume vía Vite). Versión de tren con
 `edc-motor/core` y `@edc-motor/admin-kit`.
 
+## [0.4.0] — 2026-07-07
+
+### Añadido
+
+- Token `$fs-32`; parcial público **`_rich-content.scss`** (márgenes entre
+  párrafos/listas/títulos del wysiwyg y escala h2 28 · h3 24 · h4 20 · h5 18
+  · h6 16).
+- Bloques: subtítulo en todos; marco de imagen en columnas con
+  `image_fit`/`image_columns`; índice con sangría por nivel.
+
+### Cambiado
+
+- Tipografía de bloque: texto 16 · subtítulo 20 · título 28 (cabecera
+  32/24). El título es h1 SOLO en la cabecera (h2 en el resto) y nunca se
+  justifica (justificado → izquierda). Anchura `wide` a **1200px**.
+
 ## [0.3.1] — 2026-07-07
 
 - Sin cambios propios: versión de tren (fix de subida de SVG en `edc-motor/core`).

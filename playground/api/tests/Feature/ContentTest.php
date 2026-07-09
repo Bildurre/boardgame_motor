@@ -28,7 +28,8 @@ it('la paleta lista los tipos del motor y los del juego con su esquema', functio
 
     // El esquema de campos viaja serializado (el BlockEditor se genera de aquí).
     $header = collect($response->json('data'))->firstWhere('key', 'header');
-    expect($header['fields'][0])->toMatchArray(['key' => 'title', 'type' => 'text', 'translatable' => true, 'required' => true])
+    // Título y subtítulo nunca son obligatorios (ni en la cabecera).
+    expect($header['fields'][0])->toMatchArray(['key' => 'title', 'type' => 'text', 'translatable' => true, 'required' => false])
         ->and($header['common'])->toHaveCount(3); // align + width + background
 });
 
@@ -106,11 +107,11 @@ it('valida los bloques con las reglas derivadas del esquema', function () {
     $admin = motorUser('admin');
     $page = makePage();
 
-    // header exige título en el locale por defecto.
+    // El título ya no es obligatorio en ningún bloque (cabecera incluida).
     $this->actingAs($admin)->postJson("/api/admin/pages/{$page->id}/blocks", [
         'type' => 'header',
-        'settings' => ['title' => ['en' => 'Only english']],
-    ])->assertUnprocessable();
+        'settings' => ['subtitle' => ['es' => 'Sin título']],
+    ])->assertCreated();
 
     // select fuera de opciones -> 422.
     $this->actingAs($admin)->postJson("/api/admin/pages/{$page->id}/blocks", [
@@ -126,6 +127,62 @@ it('valida los bloques con las reglas derivadas del esquema', function () {
         'type' => 'header',
         'settings' => ['title' => ['es' => 'Hola'], 'align' => 'center'],
     ])->assertCreated();
+});
+
+it('anida bloques de un nivel y el índice los saca indentados', function () {
+    $admin = motorUser('admin');
+    $page = makePage();
+
+    $indice = $this->actingAs($admin)->postJson("/api/admin/pages/{$page->id}/blocks", [
+        'type' => 'index',
+        'settings' => [],
+    ])->assertCreated()->json('data.id');
+
+    $padre = $this->actingAs($admin)->postJson("/api/admin/pages/{$page->id}/blocks", [
+        'type' => 'text',
+        'settings' => ['title' => ['es' => 'Padre'], 'body' => ['es' => '<p>a</p>']],
+    ])->assertCreated()->json('data.id');
+
+    // Hijo colgando del padre.
+    $hijo = $this->actingAs($admin)->postJson("/api/admin/pages/{$page->id}/blocks", [
+        'type' => 'text',
+        'settings' => ['title' => ['es' => 'Hijo'], 'body' => ['es' => '<p>b</p>']],
+        'parent_id' => $padre,
+    ])->assertCreated()->json('data.id');
+
+    // Encadenar (nieto) no se permite; ni un padre de otra página.
+    $this->actingAs($admin)->postJson("/api/admin/pages/{$page->id}/blocks", [
+        'type' => 'text',
+        'settings' => ['body' => ['es' => '<p>c</p>']],
+        'parent_id' => $hijo,
+    ])->assertUnprocessable();
+    $otra = makePage();
+    $this->actingAs($admin)->postJson("/api/admin/pages/{$otra->id}/blocks", [
+        'type' => 'text',
+        'settings' => ['body' => ['es' => '<p>c</p>']],
+        'parent_id' => $padre,
+    ])->assertUnprocessable();
+
+    // El render público saca el índice con depth 0/1 (hijo indentado).
+    $page->update(['is_published' => true]);
+    $slug = $page->getTranslation('slug', 'es');
+    $blocks = $this->getJson("/api/pages/{$slug}?locale=es")->assertOk()->json('data.blocks');
+    $index = collect($blocks)->firstWhere('type', 'index');
+    expect($index['data']['items'])->toHaveCount(2)
+        ->and($index['data']['items'][0])->toMatchArray(['label' => 'Padre', 'depth' => 0])
+        ->and($index['data']['items'][1])->toMatchArray(['label' => 'Hijo', 'depth' => 1]);
+});
+
+it('el saneado tira los párrafos vacíos del wysiwyg', function () {
+    $admin = motorUser('admin');
+    $page = makePage();
+
+    $response = $this->actingAs($admin)->postJson("/api/admin/pages/{$page->id}/blocks", [
+        'type' => 'text',
+        'settings' => ['body' => ['es' => '<p>Uno</p><p> </p><p><br></p><p>Dos</p>']],
+    ])->assertCreated();
+
+    expect($response->json('data.settings.body.es'))->toBe('<p>Uno</p><p>Dos</p>');
 });
 
 it('el DSL anidado valida, sanea y localiza (repeater y entity)', function () {

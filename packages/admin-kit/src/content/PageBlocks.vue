@@ -6,6 +6,7 @@ import { VueDraggable } from 'vue-draggable-plus'
 import {
   BaseButton,
   BaseCheckbox,
+  BaseSelect,
   EditModal,
   useConfirm,
   useToast,
@@ -35,6 +36,8 @@ export interface PageBlocksLabels {
   panelTitle: string
   panelEmpty: string
   panelContent: string
+  parent: string
+  parentNone: string
 }
 
 const defaultLabels: PageBlocksLabels = {
@@ -52,6 +55,8 @@ const defaultLabels: PageBlocksLabels = {
   panelTitle: 'Bloque',
   panelEmpty: 'Selecciona un bloque para ver sus acciones.',
   panelContent: 'Contenido',
+  parent: 'Bloque padre (índices indentados)',
+  parentNone: '— Ninguno —',
 }
 
 const props = withDefaults(
@@ -90,6 +95,7 @@ interface BlockRow {
   id: number
   type: string
   order: number
+  parent_id: number | null
   settings: Record<string, unknown>
   is_printable: boolean
   is_indexable: boolean
@@ -128,6 +134,16 @@ const modalType = ref<BlockTypeSchema | null>(null)
 const form = ref<Record<string, unknown>>({})
 const formPrintable = ref(true)
 const formIndexable = ref(true)
+const formParent = ref<number | null>(null)
+
+// Padres elegibles: bloques raíz de la página (un solo nivel de anidado),
+// nunca uno mismo.
+const parentOptions = computed(() => {
+  const self = editing.value?.id
+  return blocks.value
+    .filter((b) => !b.parent_id && b.id !== self)
+    .map((b) => ({ value: String(b.id), label: `${typeName(b.type)} — ${summary(b) || b.id}` }))
+})
 
 function typeName(key: string): string {
   const type = types.value.find((t) => t.key === key)
@@ -205,6 +221,18 @@ const selectedFields = computed(() => {
     .filter((entry) => entry.value)
 })
 
+/** Hijos justo debajo de su padre (en su orden relativo): anidado visible. */
+function arrange(list: BlockRow[]): BlockRow[] {
+  const parents = list.filter((b) => !b.parent_id)
+  const out: BlockRow[] = []
+  for (const parent of parents) {
+    out.push(parent, ...list.filter((b) => b.parent_id === parent.id))
+  }
+  // Huérfanos (padre borrado en otra sesión): al final, sin perderse.
+  out.push(...list.filter((b) => !out.includes(b)))
+  return out
+}
+
 async function load() {
   try {
     const [palette, list] = await Promise.all([
@@ -212,7 +240,7 @@ async function load() {
       props.api.get(`/admin/pages/${props.pageId}/blocks`),
     ])
     types.value = palette.data.data
-    blocks.value = list.data.data
+    blocks.value = arrange(list.data.data)
   } catch {
     toast.danger(L.error)
   }
@@ -229,6 +257,7 @@ function openCreate(type: BlockTypeSchema) {
   form.value = defaults
   formPrintable.value = true
   formIndexable.value = true
+  formParent.value = null
   modalOpen.value = true
 }
 
@@ -238,6 +267,7 @@ function openEdit(block: BlockRow) {
   form.value = { ...(block.settings ?? {}) }
   formPrintable.value = block.is_printable
   formIndexable.value = block.is_indexable
+  formParent.value = block.parent_id
   modalOpen.value = true
 }
 
@@ -250,6 +280,7 @@ async function save() {
       settings: form.value,
       is_printable: formPrintable.value,
       is_indexable: formIndexable.value,
+      parent_id: formParent.value,
     }
     if (editing.value) {
       await props.api.put(`/admin/blocks/${editing.value.id}`, payload)
@@ -282,8 +313,10 @@ async function remove(block: BlockRow) {
   }
 }
 
-/** El drag reordena en cliente; se persiste la lista de ids. */
+/** El drag reordena en cliente; los hijos se recolocan bajo su padre y se
+ *  persiste la lista de ids resultante. */
 async function persistOrder() {
+  blocks.value = arrange(blocks.value)
   try {
     await props.api.post(`/admin/pages/${props.pageId}/blocks/reorder`, {
       ids: blocks.value.map((b) => b.id),
@@ -337,7 +370,7 @@ defineExpose({ reload: load })
         v-for="block in blocks"
         :key="block.id"
         class="page-blocks__item"
-        :class="{ 'is-active': selectedId === block.id }"
+        :class="{ 'is-active': selectedId === block.id, 'is-child': block.parent_id }"
         @click="(e) => selectBlock(block, e)"
       >
         <span class="page-blocks__grip"><GripVertical :size="16" /></span>
@@ -381,6 +414,12 @@ defineExpose({ reload: load })
           />
           <BaseCheckbox v-model="formPrintable" :label="L.printable" />
           <BaseCheckbox v-model="formIndexable" :label="L.indexable" />
+          <BaseSelect
+            :model-value="formParent === null ? '' : String(formParent)"
+            :label="L.parent"
+            :options="[{ value: '', label: L.parentNone }, ...parentOptions]"
+            @update:model-value="(v: string) => (formParent = v ? Number(v) : null)"
+          />
         </details>
       </template>
     </EditModal>
@@ -388,7 +427,11 @@ defineExpose({ reload: load })
     <!-- Acciones del bloque seleccionado, en el panel derecho (patrón kontuan) -->
     <Teleport defer to="#right-sidebar-target">
       <div class="manager-panel">
-        <p v-if="!selected" class="manager-panel__empty">{{ L.panelEmpty }}</p>
+        <!-- Sin bloque seleccionado, la vista puede poner su propio panel
+             (p. ej. las acciones de la página) -->
+        <slot v-if="!selected" name="panel-default">
+          <p class="manager-panel__empty">{{ L.panelEmpty }}</p>
+        </slot>
         <template v-else>
           <p class="manager-panel__kicker">{{ typeName(selected.type) }}</p>
 

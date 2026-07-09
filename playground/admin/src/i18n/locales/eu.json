@@ -356,7 +356,9 @@
       "confirmDelete": "Bloke hau ezabatu?",
       "panelTitle": "Blokea",
       "panelEmpty": "Aukeratu bloke bat bere ekintzak ikusteko.",
-      "panelContent": "Edukia"
+      "panelContent": "Edukia",
+      "parent": "Bloke gurasoa (aurkibide koskatuak)",
+      "parentNone": "— Bat ere ez —"
     },
     "panelTitle": "Orria",
     "panelEmpty": "Aukeratu orri bat bere ekintzak ikusteko.",

@@ -9,6 +9,7 @@ import { computed, type CSSProperties } from 'vue'
 const props = defineProps<{ settings: Record<string, unknown> }>()
 
 const width = computed(() => `block--w-${(props.settings.width as string) || 'wide'}`)
+const align = computed(() => `block--align-${(props.settings.align as string) || 'left'}`)
 
 const style = computed<CSSProperties>(() => {
   const background = props.settings.background as string | undefined
@@ -22,7 +23,7 @@ const style = computed<CSSProperties>(() => {
 </script>
 
 <template>
-  <section class="block" :class="width" :style="style">
+  <section class="block" :class="[width, align]" :style="style">
     <div class="block__inner">
       <slot />
     </div>

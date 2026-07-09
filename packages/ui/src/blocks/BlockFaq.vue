@@ -17,6 +17,7 @@ defineProps<{
 <template>
   <BlockShell :settings="settings" class="block--faq">
     <h2 v-if="settings.title" class="block__title">{{ settings.title }}</h2>
+    <p v-if="settings.subtitle" class="block__subtitle">{{ settings.subtitle }}</p>
     <details v-for="(item, i) in settings.items ?? []" :key="i" class="block__faq-item">
       <summary class="block__faq-question">{{ item.question }}</summary>
       <div v-if="item.answer" class="block__faq-answer rich-content" v-html="item.answer" />

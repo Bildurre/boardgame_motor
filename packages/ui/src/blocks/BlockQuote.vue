@@ -7,6 +7,8 @@ defineProps<{ settings: Record<string, unknown>; data?: Record<string, unknown> 
 <!-- eslint-disable vue/no-v-html -- HTML saneado en servidor (DC-09) -->
 <template>
   <BlockShell :settings="settings" class="block--quote">
+    <h2 v-if="settings.title" class="block__title">{{ settings.title }}</h2>
+    <p v-if="settings.subtitle" class="block__subtitle">{{ settings.subtitle }}</p>
     <blockquote class="block__quote">
       <img v-if="settings.image" class="block__avatar" :src="String(settings.image)" alt="" />
       <div class="rich-content" v-html="settings.quote" />

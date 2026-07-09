@@ -202,7 +202,9 @@
       "confirmDelete": "¿Borrar este bloque?",
       "panelTitle": "Bloque",
       "panelEmpty": "Selecciona un bloque para ver sus acciones.",
-      "panelContent": "Contenido"
+      "panelContent": "Contenido",
+      "parent": "Bloque padre (índices indentados)",
+      "parentNone": "— Ninguno —"
     },
     "panelTitle": "Página",
     "panelEmpty": "Selecciona una página para ver sus acciones.",
