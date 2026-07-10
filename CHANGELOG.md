@@ -12,7 +12,7 @@ El formato sigue [Keep a Changelog](https://keepachangelog.com/es/) y el
 versionado, [SemVer](https://semver.org/lang/es/) (mientras estemos en `0.x`,
 los cambios de API pueden llegar en versiones menores).
 
-## [Sin publicar]
+## [0.4.2] — 2026-07-10
 
 - **Bloque CTA**: botones a cuerpo 18, tarjeta un poco más transparente
   (50%) y la imagen sangra hasta el borde de la tarjeta según su posición
