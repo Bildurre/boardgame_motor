@@ -12,7 +12,7 @@ El formato sigue [Keep a Changelog](https://keepachangelog.com/es/) y el
 versionado, [SemVer](https://semver.org/lang/es/) (mientras estemos en `0.x`,
 los cambios de API pueden llegar en versiones menores).
 
-## [0.4.1] — 2026-07-09
+## [Sin publicar]
 
 - **Bloque CTA**: botones a cuerpo 18, tarjeta un poco más transparente
   (50%) y la imagen sangra hasta el borde de la tarjeta según su posición
@@ -25,20 +25,22 @@ los cambios de API pueden llegar en versiones menores).
   cascarón**: copiar de `plantilla/`
   `admin/src/views/settings/SettingsView.vue`, `app/src/App.vue` y
   `app/src/assets/scss/main.scss`.
+- **Header afinado**: el logo se acota a 34 → 44 → **50px** (antes subía a
+  68) y las acciones pasan a elementos sueltos — sin barras separadoras ni
+  grupos, con un único gap; descargas, salir y entrar/usuario sin caja ni
+  iconos, en color de texto y color solo al hover (acento; rojo en salir).
+  **Migración del cascarón**: copiar de `plantilla/`
+  `app/src/assets/scss/components/_app-header.scss` y
+  `app/src/components/AppHeader.vue`.
+
+## [0.4.1] — 2026-07-09
+
 - **El header crece con el logo**: la línea 1 de la cabecera pública ya no es
   fija (56px); mide el alto del logo + 22px en cada breakpoint, con el resto
   de elementos centrados verticalmente y la barra lateral móvil y el hueco
-  del contenido siguiéndola (antes el logo ancho se salía del header). La
-  escalera del logo se acota: 34 → 44 → **50px** como máximo (header 56 → 66
-  → 72px).
-- **Acciones del header más limpias**: fuera las barras separadoras y los
-  grupos — elementos sueltos (admin · descargas · entrar/usuario · idioma ·
-  tema) con un único gap. Patrón común: icono/texto en color de texto, sin
-  caja ni padding, y color solo al hover (acento; rojo en salir).
-  Entrar/usuario pierde los iconos (texto a secas). **Migración del
-  cascarón**: copiar de `plantilla/`
-  `app/src/assets/scss/components/_app-header.scss` y
-  `app/src/components/AppHeader.vue`.
+  del contenido siguiéndola (antes el logo ancho se salía del header).
+  **Migración del cascarón**: copiar
+  `app/src/assets/scss/components/_app-header.scss` de `plantilla/`.
 - **Scripts de mantenimiento en la plantilla**: los juegos nuevos nacen con
   `update-motor.sh <version>` (sube los paquetes composer/npm del motor, migra
   y limpia cachés), `copiar-plantilla.sh [-t vX.Y.Z] <rutas...>` (trae archivos
