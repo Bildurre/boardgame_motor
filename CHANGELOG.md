@@ -20,11 +20,12 @@ los cambios de API pueden llegar en versiones menores).
   del contenido siguiéndola (antes el logo ancho se salía del header). La
   escalera del logo se acota: 34 → 44 → **50px** como máximo (header 56 → 66
   → 72px).
-- **Acciones del header más limpias**: fuera las barras separadoras
-  verticales entre grupos (descargas · entrar/usuario · selectores), con el
-  mismo aire entre grupos que entre selectores; Entrar/usuario pierde los
-  iconos (texto a secas) y pasa a color muted como los selectores, con
-  acento solo al hover. **Migración del cascarón**: copiar de `plantilla/`
+- **Acciones del header más limpias**: fuera las barras separadoras y los
+  grupos — elementos sueltos (admin · descargas · entrar/usuario · idioma ·
+  tema) con un único gap. Patrón común: icono/texto en color de texto, sin
+  caja ni padding, y color solo al hover (acento; rojo en salir).
+  Entrar/usuario pierde los iconos (texto a secas). **Migración del
+  cascarón**: copiar de `plantilla/`
   `app/src/assets/scss/components/_app-header.scss` y
   `app/src/components/AppHeader.vue`.
 - **Scripts de mantenimiento en la plantilla**: los juegos nuevos nacen con
