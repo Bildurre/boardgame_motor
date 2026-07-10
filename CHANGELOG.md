@@ -14,6 +14,13 @@ los cambios de API pueden llegar en versiones menores).
 
 ## [0.4.1] — 2026-07-09
 
+- **Pie de página con wysiwyg**: el campo de Configuración pasa de textarea a
+  editor de texto rico y la web pública pinta el HTML (saneado por lista
+  blanca en `edc-motor/core`, como los bloques) con la escala discreta del
+  pie. Requiere versión nueva de `edc-motor/core`. **Migración del
+  cascarón**: copiar de `plantilla/`
+  `admin/src/views/settings/SettingsView.vue`, `app/src/App.vue` y
+  `app/src/assets/scss/main.scss`.
 - **El header crece con el logo**: la línea 1 de la cabecera pública ya no es
   fija (56px); mide el alto del logo + 22px en cada breakpoint, con el resto
   de elementos centrados verticalmente y la barra lateral móvil y el hueco
