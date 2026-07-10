@@ -15,11 +15,18 @@ los cambios de API pueden llegar en versiones menores).
 ## [0.4.1] — 2026-07-09
 
 - **El header crece con el logo**: la línea 1 de la cabecera pública ya no es
-  fija (56px); mide el alto del logo + 22px en cada breakpoint (56 → 66 → 78
-  → 90px), con el resto de elementos centrados verticalmente y la barra
-  lateral móvil y el hueco del contenido siguiéndola. Antes el logo ancho
-  (68px) se salía del header. **Migración del cascarón**: copiar
-  `app/src/assets/scss/components/_app-header.scss` de `plantilla/`.
+  fija (56px); mide el alto del logo + 22px en cada breakpoint, con el resto
+  de elementos centrados verticalmente y la barra lateral móvil y el hueco
+  del contenido siguiéndola (antes el logo ancho se salía del header). La
+  escalera del logo se acota: 34 → 44 → **50px** como máximo (header 56 → 66
+  → 72px).
+- **Acciones del header más limpias**: fuera las barras separadoras
+  verticales entre grupos (descargas · entrar/usuario · selectores), con el
+  mismo aire entre grupos que entre selectores; Entrar/usuario pierde los
+  iconos (texto a secas) y pasa a color muted como los selectores, con
+  acento solo al hover. **Migración del cascarón**: copiar de `plantilla/`
+  `app/src/assets/scss/components/_app-header.scss` y
+  `app/src/components/AppHeader.vue`.
 - **Scripts de mantenimiento en la plantilla**: los juegos nuevos nacen con
   `update-motor.sh <version>` (sube los paquetes composer/npm del motor, migra
   y limpia cachés), `copiar-plantilla.sh [-t vX.Y.Z] <rutas...>` (trae archivos
