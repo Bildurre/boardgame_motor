@@ -14,6 +14,10 @@ los cambios de API pueden llegar en versiones menores).
 
 ## [0.4.1] — 2026-07-09
 
+- **Bloque CTA**: botones a cuerpo 18, tarjeta un poco más transparente
+  (50%) y la imagen sangra hasta el borde de la tarjeta según su posición
+  (en columnas toca arriba, abajo y su lateral). La anchura `narrow` de los
+  bloques sube a 800px. Requiere versión nueva de `@edc-motor/ui`.
 - **Pie de página con wysiwyg**: el campo de Configuración pasa de textarea a
   editor de texto rico y la web pública pinta el HTML (saneado por lista
   blanca en `edc-motor/core`, como los bloques) con la escala discreta del

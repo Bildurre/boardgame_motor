@@ -15,7 +15,7 @@
   }
 
   // Anchura del contenido (campo común `width`): coherente entre bloques.
-  &--w-narrow .block__inner { max-width: 680px; }
+  &--w-narrow .block__inner { max-width: 800px; }
   &--w-full .block__inner { max-width: none; padding-inline: $space-6; }
 
   // Tipografía de bloque: texto $fs-16, subtítulo $fs-20, título $fs-28
@@ -43,7 +43,7 @@
   &__card {
     // Semitransparente: la imagen de fondo de la página se ve a través
     // (patrón CDL, rgba(surface, .5)); el blur mantiene el texto legible.
-    background: color-mix(in srgb, $surface 65%, transparent);
+    background: color-mix(in srgb, $surface 50%, transparent);
     backdrop-filter: blur(8px);
     border: 1px solid $border;
     border-radius: $radius-lg;
@@ -157,6 +157,48 @@
     display: grid;
     gap: $space-3;
     justify-items: start;
+    align-content: center; // centrado frente a la imagen sangrada
+  }
+
+  // La imagen del CTA sangra hasta el borde de la tarjeta según su posición:
+  // en columnas toca arriba, abajo y su lateral (el título viaja a la
+  // columna de texto); arriba/abajo toca los laterales. Esquinas siguiendo
+  // el radio de la tarjeta.
+  &--cta.block--image-right .block__media-layout .block__image-frame,
+  &--cta.block--image-left .block__media-layout .block__image-frame {
+    @container content (min-width: #{$bp-sm}) {
+      overflow: hidden;
+      min-height: 0;
+
+      .block__image { border-radius: 0; }
+    }
+  }
+  &--cta.block--image-right .block__media-layout .block__image-frame {
+    @container content (min-width: #{$bp-sm}) {
+      margin: (-$space-8) (-$space-8) (-$space-8) 0;
+      border-radius: 0 $radius-lg $radius-lg 0;
+    }
+  }
+  &--cta.block--image-left .block__media-layout .block__image-frame {
+    @container content (min-width: #{$bp-sm}) {
+      margin: (-$space-8) 0 (-$space-8) (-$space-8);
+      border-radius: $radius-lg 0 0 $radius-lg;
+    }
+  }
+  // Arriba solo sangra si no hay título/subtítulo por encima.
+  &--cta.block--image-top .block__card > .block__media-layout:first-child > .block__image {
+    justify-self: stretch;
+    max-width: none;
+    width: calc(100% + #{$space-8 * 2});
+    margin: (-$space-8) (-$space-8) 0;
+    border-radius: $radius-lg $radius-lg 0 0;
+  }
+  &--cta.block--image-bottom .block__media-layout > .block__image {
+    justify-self: stretch;
+    max-width: none;
+    width: calc(100% + #{$space-8 * 2});
+    margin: 0 (-$space-8) (-$space-8);
+    border-radius: 0 0 $radius-lg $radius-lg;
   }
 
   &--quote .block__quote {
@@ -227,6 +269,7 @@
   padding: $space-2 $space-5;
   border: 1px solid $accent-500;
   border-radius: $radius-md;
+  font-size: $fs-18;
   font-weight: 600;
   text-decoration: none;
   cursor: pointer;

@@ -4,6 +4,19 @@ Componentes Vue 3 + SCSS para las webs públicas (y piezas compartidas con el
 admin). Paquete **fuente** (se consume vía Vite). Versión de tren con
 `edc-motor/core` y `@edc-motor/admin-kit`.
 
+## [Sin publicar]
+
+### Cambiado
+
+- **Bloque CTA**: los botones suben a cuerpo 18 (`$fs-18`); la tarjeta es un
+  poco más transparente (50% de superficie, antes 65%, como el resto de
+  tarjetas de bloque); y la **imagen sangra hasta el borde de la tarjeta**
+  según su posición — en columnas (izquierda/derecha) toca arriba, abajo y su
+  lateral (el título y subtítulo pasan a la columna de texto), y
+  arriba/abajo toca los laterales (arriba solo si no hay título encima).
+  Las esquinas siguen el radio de la tarjeta.
+- **Anchura `narrow` de los bloques**: sube de 680px a **800px**.
+
 ## [0.4.0] — 2026-07-07
 
 ### Añadido
