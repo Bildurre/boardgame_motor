@@ -3,6 +3,19 @@
 Kit de construcción del panel de administración (sobre `@edc-motor/ui`). Paquete
 **fuente** (se consume vía Vite). Versión de tren con `edc-motor/core` y `@edc-motor/ui`.
 
+## [Sin publicar]
+
+### Añadido
+
+- `EntityCard`: prop `editable` + evento `edit` — botón de lápiz integrado en
+  la cabecera para editar desde la propia tarjeta (pensado para entidades sin
+  vista single). `editLabel` opcional para el texto accesible (DC-29).
+
+### Cambiado
+
+- Convención de la franja `media` de `EntityCard`: solo para entidades con
+  imagen o preview; las entidades sin imagen (taxonomías) no llevan emblema.
+
 ## [0.4.0] — 2026-07-07
 
 ### Añadido

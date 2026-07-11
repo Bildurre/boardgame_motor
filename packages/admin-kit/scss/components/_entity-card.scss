@@ -55,6 +55,22 @@
     min-width: 0;
   }
 
+  // Editar en la propia tarjeta (entidades sin single).
+  &__edit {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: $space-1;
+    background: none;
+    border: none;
+    border-radius: $radius-sm;
+    color: $text-3;
+    cursor: pointer;
+    transition: color 0.15s ease;
+
+    &:hover { color: $accent-500; }
+  }
+
   &__actions {
     display: flex;
     align-items: center;

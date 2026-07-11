@@ -12,6 +12,13 @@ El formato sigue [Keep a Changelog](https://keepachangelog.com/es/) y el
 versionado, [SemVer](https://semver.org/lang/es/) (mientras estemos en `0.x`,
 los cambios de API pueden llegar en versiones menores).
 
+## [Sin publicar]
+
+- **Tarjetas de entidad del admin**: `EntityCard` gana `editable`/`edit` (botón
+  de editar en la propia tarjeta, para entidades sin vista single) y la franja
+  del emblema queda reservada a entidades con imagen o preview — las
+  taxonomías ya no pintan monograma.
+
 ## [0.4.2] — 2026-07-10
 
 - **Bloque CTA**: botones a cuerpo 18, tarjeta un poco más transparente
