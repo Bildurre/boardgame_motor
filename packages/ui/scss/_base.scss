@@ -31,3 +31,16 @@ h2 { font-size: $fs-24; }
 h3 { font-size: $fs-20; }
 
 a { color: $accent-500; text-decoration: none; &:hover { color: $accent-600; } }
+
+// Todo lo clickable señala que lo es; los estados deshabilitados lo revierten
+// (cada componente pone su not-allowed si toca).
+button:not(:disabled),
+[role='button']:not([aria-disabled='true']),
+select:not(:disabled),
+summary,
+input[type='checkbox']:not(:disabled),
+input[type='radio']:not(:disabled),
+input[type='submit']:not(:disabled),
+input[type='file']:not(:disabled) {
+  cursor: pointer;
+}

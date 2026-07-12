@@ -1,0 +1,65 @@
+@use "tokens" as *;
+
+// Dropdown personalizado del BaseSelect: el trigger hereda altura/borde de
+// .form-field__select (comparte clase) y el wrapper aporta la flecha ::after;
+// aquí solo el estado abierto y el panel flotante (estética del search-select).
+.base-select {
+  &.is-open::after {
+    transform: translateY(-50%) rotate(180deg);
+  }
+
+  &.is-open > &__trigger {
+    border-color: $input-border-focus;
+  }
+
+  &__trigger {
+    text-align: left;
+  }
+
+  &__value {
+    display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+
+    &.is-placeholder { color: $input-placeholder; }
+  }
+
+  &__panel {
+    position: absolute;
+    top: calc(100% + #{$space-1});
+    left: 0;
+    right: 0;
+    z-index: 50;
+    background: $surface;
+    border: 1px solid $border-strong;
+    border-radius: $radius-md;
+    box-shadow: $shadow-md;
+    list-style: none;
+    margin: 0;
+    padding: $space-1;
+    display: grid;
+    gap: 1px;
+    max-height: 240px;
+    overflow-y: auto;
+  }
+
+  &__option {
+    border-radius: $radius-sm;
+    color: $text-1;
+    cursor: pointer;
+    font-size: $fs-13;
+    overflow: hidden;
+    padding: $space-2 $space-2;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+
+    &.is-highlighted { background: $surface-2; }
+
+    &.is-active {
+      background: color-mix(in srgb, $accent-500 14%, transparent);
+      color: $accent-500;
+      font-weight: $k-fw-semibold;
+    }
+  }
+}

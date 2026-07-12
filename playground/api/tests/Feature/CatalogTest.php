@@ -39,7 +39,7 @@ it('lista solo publicadas, paginadas y con la clave en la respuesta', function (
         ->assertJsonPath('meta.per_page', 48);
 });
 
-it('ordena con ?sort: name asc, name_desc y default id desc', function () {
+it('ordena con ?sort: name asc, name_desc, oldest y default id desc', function () {
     makeCharacter(['name' => ['es' => 'Bran', 'eu' => 'Beñat'], 'is_published' => true]);
     makeCharacter(['name' => ['es' => 'Arya', 'eu' => 'Aitor'], 'is_published' => true]);
     makeCharacter(['name' => ['es' => 'Cersei', 'eu' => 'Katalin'], 'is_published' => true]);
@@ -68,6 +68,13 @@ it('ordena con ?sort: name asc, name_desc y default id desc', function () {
     $this->getJson('/api/catalog/character?sort=latest&locale=es')
         ->assertOk()
         ->assertJsonPath('data.0.name', 'Cersei');
+
+    // oldest: id asc — el primero creado primero.
+    $this->getJson('/api/catalog/character?sort=oldest&locale=es')
+        ->assertOk()
+        ->assertJsonPath('data.0.name', 'Bran')
+        ->assertJsonPath('data.1.name', 'Arya')
+        ->assertJsonPath('data.2.name', 'Cersei');
 
     // El orden por nombre es sobre la columna del locale de la petición.
     $this->getJson('/api/catalog/character?sort=name&locale=eu')
