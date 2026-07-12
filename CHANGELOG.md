@@ -12,7 +12,7 @@ El formato sigue [Keep a Changelog](https://keepachangelog.com/es/) y el
 versionado, [SemVer](https://semver.org/lang/es/) (mientras estemos en `0.x`,
 los cambios de API pueden llegar en versiones menores).
 
-## [Sin publicar]
+## [0.4.7] — 2026-07-12
 
 - **`BasePagination`** en `@edc-motor/ui` (controles de página para los
   listados) y regla global de iconos del wysiwyg a 1.2x el tamaño del texto
