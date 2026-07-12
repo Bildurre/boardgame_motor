@@ -4,15 +4,22 @@ Componentes Vue 3 + SCSS para las webs públicas (y piezas compartidas con el
 admin). Paquete **fuente** (se consume vía Vite). Versión de tren con
 `edc-motor/core` y `@edc-motor/admin-kit`.
 
-<<<<<<< HEAD
-## [0.4.5] — 2026-07-12
+## [Sin publicar]
 
-- Sin cambios propios: versión de tren.
-=======
+### Añadido
+
+- **`BasePagination`**: paginación compacta de listados (anterior / "x de y" /
+  siguiente; con una sola página no pinta nada), para los index del admin y
+  de la web.
+
+### Cambiado
+
+- **Iconos del wysiwyg al tamaño del texto**: regla global — `img.rt-icon`
+  mide SIEMPRE 1.2x el font-size del texto que lo rodea, se renderice donde
+  se renderice (antes solo dentro de `.rich-content`, y en paneles sin esa
+  clase salían a tamaño completo).
+
 ## [0.4.6] — 2026-07-12
-
-- Regla base: todo lo clickable (botones, checkboxes, radios, summary,
-  role=button) lleva `cursor: pointer` salvo deshabilitado.
 
 ### Cambiado
 
@@ -29,7 +36,12 @@ admin). Paquete **fuente** (se consume vía Vite). Versión de tren con
   panel (nunca era seleccionable), y `required` ya no participa en la
   validación nativa del formulario (solo asterisco + `aria-required`). SCSS
   nuevo en `components/_base-select.scss`.
->>>>>>> claude/choique-disable-language-abgt8x
+- Regla base: todo lo clickable (botones, checkboxes, radios, summary,
+  role=button) lleva `cursor: pointer` salvo deshabilitado.
+
+## [0.4.5] — 2026-07-12
+
+- Sin cambios propios: versión de tren.
 
 ## [0.4.4] — 2026-07-12
 

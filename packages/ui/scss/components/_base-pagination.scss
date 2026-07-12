@@ -1,0 +1,39 @@
+@use "../tokens" as *;
+
+// Paginación compacta de listados (BasePagination.vue).
+.base-pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: $space-2;
+
+  &__button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    background: none;
+    border: 1px solid $border;
+    border-radius: $radius-sm;
+    color: $text-2;
+    transition: color 0.15s ease, border-color 0.15s ease;
+
+    &:not(:disabled):hover {
+      color: $accent-500;
+      border-color: $accent-500;
+    }
+
+    &:disabled {
+      opacity: $disabled-opacity;
+      cursor: not-allowed;
+    }
+  }
+
+  &__status {
+    font-size: $fs-13;
+    color: $text-2;
+    min-width: 56px;
+    text-align: center;
+  }
+}

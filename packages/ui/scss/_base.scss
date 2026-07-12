@@ -44,3 +44,14 @@ input[type='submit']:not(:disabled),
 input[type='file']:not(:disabled) {
   cursor: pointer;
 }
+
+// Iconos del juego insertados por el wysiwyg (img.rt-icon): SIEMPRE al
+// tamaño del texto que los rodea (1.2x), se rendericen donde se rendericen
+// (con o sin .rich-content alrededor).
+img.rt-icon {
+  display: inline-block;
+  width: 1.2em;
+  height: 1.2em;
+  vertical-align: -0.24em;
+  margin: 0 1px;
+}

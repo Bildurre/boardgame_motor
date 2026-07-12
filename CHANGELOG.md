@@ -12,20 +12,26 @@ El formato sigue [Keep a Changelog](https://keepachangelog.com/es/) y el
 versionado, [SemVer](https://semver.org/lang/es/) (mientras estemos en `0.x`,
 los cambios de API pueden llegar en versiones menores).
 
+## [Sin publicar]
+
+- **`BasePagination`** en `@edc-motor/ui` (controles de página para los
+  listados) y regla global de iconos del wysiwyg a 1.2x el tamaño del texto
+  en cualquier render (los paneles sin `.rich-content` los pintaban gigantes).
+
 ## [0.4.6] — 2026-07-12
 
-- Sin cambios propios: versión de tren.
+- **`BaseSelect` personalizado** (`@edc-motor/ui`): el `<select>` nativo pasa
+  a ser un dropdown propio (trigger + panel con la estética del SearchSelect)
+  con teclado y aria completos y la MISMA API: los consumidores no cambian.
+- Regla base de ui: todo lo clickable lleva `cursor: pointer` salvo
+  deshabilitado.
+- El `?sort` del catálogo público acepta también `oldest` (id ascendente).
 
 ## [0.4.5] — 2026-07-12
 
 - **Ordenación en el catálogo público** (`edc-motor/core`): el modo lista de
-  `GET /api/catalog/{key}` acepta `?sort=name|name_desc|latest|oldest` (nombre
-  del locale activo asc/desc; `oldest` = id asc; default id desc). El modo
-  `random` lo ignora.
-- **`BaseSelect` personalizado** (`@edc-motor/ui`): el `<select>` nativo pasa
-  a ser un dropdown propio (trigger + panel con la estética del SearchSelect)
-  con teclado completo y aria, manteniendo la API pública tal cual — los usos
-  existentes no cambian.
+  `GET /api/catalog/{key}` acepta `?sort=name|name_desc|latest` (nombre del
+  locale activo asc/desc; default id desc). El modo `random` lo ignora.
 
 ## [0.4.4] — 2026-07-12
 
