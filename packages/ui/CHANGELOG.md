@@ -4,9 +4,32 @@ Componentes Vue 3 + SCSS para las webs públicas (y piezas compartidas con el
 admin). Paquete **fuente** (se consume vía Vite). Versión de tren con
 `edc-motor/core` y `@edc-motor/admin-kit`.
 
+<<<<<<< HEAD
 ## [0.4.5] — 2026-07-12
 
 - Sin cambios propios: versión de tren.
+=======
+## [Sin publicar]
+
+- Regla base: todo lo clickable (botones, checkboxes, radios, summary,
+  role=button) lleva `cursor: pointer` salvo deshabilitado.
+
+### Cambiado
+
+- **`BaseSelect` personalizado**: el `<select>` nativo se sustituye por un
+  dropdown propio — botón trigger (misma altura y aspecto que un input del
+  motor: reutiliza `.form-field__select` y su wrapper) + panel de opciones
+  con la estética del SearchSelect (surface, borde, sombra, scroll interno).
+  Teclado completo (flechas, Enter/Espacio, Escape, Home/End), aria
+  (`listbox`/`option`, `aria-expanded`, `aria-selected`) y cierre por click
+  exterior. **API intacta** (mismas props y emit `update:modelValue` con
+  string): los usos existentes no cambian. Matices: el valor se compara y
+  emite como string (igual que el DOM del nativo), el placeholder se pinta en
+  el trigger y la antigua `<option value="" disabled>` deja de listarse en el
+  panel (nunca era seleccionable), y `required` ya no participa en la
+  validación nativa del formulario (solo asterisco + `aria-required`). SCSS
+  nuevo en `components/_base-select.scss`.
+>>>>>>> claude/choique-disable-language-abgt8x
 
 ## [0.4.4] — 2026-07-12
 

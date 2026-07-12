@@ -15,8 +15,13 @@ los cambios de API pueden llegar en versiones menores).
 ## [0.4.5] — 2026-07-12
 
 - **Ordenación en el catálogo público** (`edc-motor/core`): el modo lista de
-  `GET /api/catalog/{key}` acepta `?sort=name|name_desc|latest` (nombre del
-  locale activo asc/desc; default id desc). El modo `random` lo ignora.
+  `GET /api/catalog/{key}` acepta `?sort=name|name_desc|latest|oldest` (nombre
+  del locale activo asc/desc; `oldest` = id asc; default id desc). El modo
+  `random` lo ignora.
+- **`BaseSelect` personalizado** (`@edc-motor/ui`): el `<select>` nativo pasa
+  a ser un dropdown propio (trigger + panel con la estética del SearchSelect)
+  con teclado completo y aria, manteniendo la API pública tal cual — los usos
+  existentes no cambian.
 
 ## [0.4.4] — 2026-07-12
 
