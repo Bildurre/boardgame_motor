@@ -83,6 +83,14 @@
     },
     "imageDrag": "Arrastra una imagen o haz clic",
     "close": "Cerrar",
+    "filters": "Filtros",
+    "clearFilters": "Quitar filtros",
+    "sort": {
+      "latest": "Más recientes primero",
+      "oldest": "Más antiguos primero",
+      "nameAsc": "Alfabético (A-Z)",
+      "nameDesc": "Alfabético (Z-A)"
+    },
     "imageHint": "Máx. 4 MB",
     "confirm": "Confirmar"
   },
@@ -322,6 +330,12 @@
     "homeChip": "Home",
     "published": "Publicada",
     "draft": "Borrador",
+    "filters": {
+      "status": "Estado",
+      "all": "Todos los estados",
+      "published": "Publicadas",
+      "draft": "Borradores"
+    },
     "setHome": "Marcar como home",
     "confirmDelete": "¿Enviar \"{name}\" a la papelera?",
     "fields": {

@@ -19,7 +19,17 @@ los cambios de API pueden llegar en versiones menores).
   botón "Filtros" con badge, responsive por container query propia),
   `SortToggles` (fecha latest ⇄ oldest y alfabético name ⇄ name_desc) y
   `FiltersModal` (filtros en vivo sin guardar, grid de 1 → 2 → 3 columnas
-  según el ancho del modal, "Quitar filtros" + "Cerrar").
+  según el ancho del modal, "Quitar filtros" + "Cerrar"). El cascarón adopta
+  el patrón: `UsersView` (búsqueda + toggles; `GET /admin/users` del core
+  acepta ahora `?sort` con el contrato de los index, alfabético por defecto)
+  y `PagesListView` (búsqueda + filtro de estado en el modal; el árbol no se
+  reordena), con los wrappers `ListToolbar`/`ListFiltersModal` que ponen los
+  textos i18n del admin. **Migración del cascarón**: copiar de
+  `plantilla/admin/` `src/components/ListToolbar.vue`,
+  `src/components/ListFiltersModal.vue`, `src/views/users/UsersView.vue` y
+  `src/views/pages/PagesListView.vue`, y añadir a los tres
+  `src/i18n/locales/*.json` las claves `common.filters`,
+  `common.clearFilters`, `common.sort.*` y `pages.filters.*`.
 - **Controles de formulario compactos** (`@edc-motor/ui` y admin-kit): altura
   de inputs, selects, buscadores y botones de 40px a 36px, padding 8px/10px
   (la paginación se queda a 32px, control secundario).
