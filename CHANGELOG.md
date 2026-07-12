@@ -12,6 +12,10 @@ El formato sigue [Keep a Changelog](https://keepachangelog.com/es/) y el
 versionado, [SemVer](https://semver.org/lang/es/) (mientras estemos en `0.x`,
 los cambios de API pueden llegar en versiones menores).
 
+## [0.4.6] — 2026-07-12
+
+- Sin cambios propios: versión de tren.
+
 ## [0.4.5] — 2026-07-12
 
 - **Ordenación en el catálogo público** (`edc-motor/core`): el modo lista de

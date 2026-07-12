@@ -9,7 +9,7 @@ admin). Paquete **fuente** (se consume vía Vite). Versión de tren con
 
 - Sin cambios propios: versión de tren.
 =======
-## [Sin publicar]
+## [0.4.6] — 2026-07-12
 
 - Regla base: todo lo clickable (botones, checkboxes, radios, summary,
   role=button) lleva `cursor: pointer` salvo deshabilitado.
