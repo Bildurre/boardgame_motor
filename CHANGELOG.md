@@ -14,6 +14,11 @@ los cambios de API pueden llegar en versiones menores).
 
 ## [Sin publicar]
 
+- **Fix**: guardar una entidad renderizable con la cola `sync` colgaba la
+  petición generando la preview inline (y podía acabar en 500) — ahora se
+  difiere a después de la respuesta. La plantilla trae
+  `QUEUE_CONNECTION=database`; en juegos existentes, ponerlo en `api/.env`.
+
 - **`BasePagination`** en `@edc-motor/ui` (controles de página para los
   listados) y regla global de iconos del wysiwyg a 1.2x el tamaño del texto
   en cualquier render (los paneles sin `.rich-content` los pintaban gigantes).
