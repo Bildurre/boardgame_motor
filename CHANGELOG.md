@@ -14,6 +14,19 @@ los cambios de API pueden llegar en versiones menores).
 
 ## [Sin publicar]
 
+- **Sistema de filtros unificado de los index** en `@edc-motor/ui`:
+  `IndexToolbar` (búsqueda con lupa a la derecha + toggles de ordenación +
+  botón "Filtros" con badge, responsive por container query propia),
+  `SortToggles` (fecha latest ⇄ oldest y alfabético name ⇄ name_desc) y
+  `FiltersModal` (filtros en vivo sin guardar, grid de 1 → 2 → 3 columnas
+  según el ancho del modal, "Quitar filtros" + "Cerrar").
+- **Controles de formulario compactos** (`@edc-motor/ui` y admin-kit): altura
+  de inputs, selects, buscadores y botones de 40px a 36px, padding 8px/10px
+  (la paginación se queda a 32px, control secundario).
+- **Fix** (`edc-motor/core`): la búsqueda de `HasFilters` hace el LIKE de
+  cada campo de `$searchable` sobre el json del locale activo (antes
+  mezclaba locales al buscar sobre el json crudo).
+
 - **Fix**: guardar una entidad renderizable con la cola `sync` colgaba la
   petición generando la preview inline (y podía acabar en 500) — ahora se
   difiere a después de la respuesta. La plantilla trae

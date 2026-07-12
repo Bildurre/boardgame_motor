@@ -101,9 +101,9 @@ $shadow-lg: var(--shadow-lg);
 // Formularios (elementos estilo kontuan)
 $focus-ring: 0 0 0 3px color-mix(in srgb, #{$accent-500} 25%, transparent);
 $disabled-opacity: 0.45;
-$input-height: 40px;
-$input-padding-x: 12px;
-$input-padding-y: 10px;
+$input-height: 36px;
+$input-padding-x: 10px;
+$input-padding-y: 8px;
 $input-radius: $radius-md;
 $input-bg: $surface-2;
 $input-text: $text-1;

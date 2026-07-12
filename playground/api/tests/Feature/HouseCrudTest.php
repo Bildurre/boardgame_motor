@@ -58,7 +58,8 @@ it('filtra por búsqueda y por estado', function () {
     makeHouse(['name' => ['es' => 'Casa Lannister']]);
     $admin = motorUser('admin');
 
-    $this->actingAs($admin)->getJson('/api/admin/houses?search=stark')
+    // La búsqueda es sobre el json del locale activo: se fija el locale.
+    $this->actingAs($admin)->getJson('/api/admin/houses?search=stark&locale=es')
         ->assertOk()->assertJsonCount(1, 'data');
 
     $this->actingAs($admin)->getJson('/api/admin/houses?status=draft')

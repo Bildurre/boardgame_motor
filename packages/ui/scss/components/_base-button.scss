@@ -5,7 +5,8 @@
   align-items: center;
   justify-content: center;
   gap: $space-2;
-  padding: $space-2 $space-4;
+  min-height: $input-height; // misma altura que los inputs del motor (36px)
+  padding: $space-1 $space-4;
   border: 1px solid transparent;
   border-radius: $radius-md;
   font: inherit;
@@ -74,6 +75,7 @@
 .edc-button--text {
   background: transparent;
   border-color: transparent;
+  min-height: 0;
   padding: 0;
   color: $accent-500;
 
@@ -82,6 +84,7 @@
 .edc-button--text-danger {
   background: transparent;
   border-color: transparent;
+  min-height: 0;
   padding: 0;
   color: $danger;
 

@@ -37,7 +37,7 @@ class Character extends Model implements HasMedia, PreviewableContract
 
     public array $translatable = ['name', 'description', 'ability', 'slug'];
 
-    protected array $searchable = ['name'];
+    protected array $searchable = ['name', 'ability'];
 
     protected function casts(): array
     {

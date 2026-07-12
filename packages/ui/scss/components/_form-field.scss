@@ -54,7 +54,7 @@
     &::after {
       content: '';
       position: absolute;
-      right: 12px;
+      right: $input-padding-x;
       top: 50%;
       transform: translateY(-50%);
       width: 0;

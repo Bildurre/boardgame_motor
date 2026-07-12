@@ -11,6 +11,8 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
+    // 32px a propósito: control secundario, un punto por debajo de los 36px
+    // de los controles de formulario.
     width: 32px;
     height: 32px;
     background: none;

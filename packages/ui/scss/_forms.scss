@@ -18,7 +18,8 @@ select,
 textarea {
   font: inherit;
   width: 100%;
-  padding: 10px 12px;
+  height: $input-height; // controles de una línea a 36px (como .form-field)
+  padding: 0 $input-padding-x;
   background: $surface;
   border: 1px solid $border;
   border-radius: $radius-md;
@@ -26,7 +27,12 @@ textarea {
   &:hover { border-color: $border-strong; }
   &:focus { outline: none; border-color: $accent-500; }
 }
-textarea { resize: vertical; }
+textarea {
+  height: auto;
+  min-height: $input-height;
+  padding: $input-padding-y $input-padding-x;
+  resize: vertical;
+}
 input[type="color"] { width: 44px; height: 36px; padding: 2px; cursor: pointer; }
 
 .error { color: $danger; margin: 0; }

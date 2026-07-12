@@ -1,0 +1,103 @@
+@use "tokens" as *;
+
+// Barra de los index (IndexToolbar.vue). El propio toolbar es el contenedor
+// de las queries: por debajo de $bp-sm de ancho REAL de la barra, la búsqueda
+// pasa a su fila y debajo toggles + botón se reparten el ancho.
+.index-toolbar {
+  container-type: inline-size;
+  margin-bottom: $space-4;
+
+  &__inner {
+    display: flex;
+    align-items: center;
+    gap: $space-3;
+  }
+
+  &__search {
+    position: relative;
+    flex: 1;
+    min-width: 0;
+  }
+
+  &__search-icon {
+    position: absolute;
+    right: $input-padding-x;
+    top: 50%;
+    transform: translateY(-50%);
+    color: $text-3;
+    pointer-events: none;
+  }
+
+  &__search-input {
+    width: 100%;
+    height: $input-height;
+    padding: 0 34px 0 $input-padding-x; // hueco a la derecha para la lupa
+    background: $input-bg;
+    color: $input-text;
+    border: 1px solid $input-border;
+    border-radius: $input-radius;
+    font-family: $k-font-sans;
+    font-size: $fs-14;
+    transition: border-color 0.15s, box-shadow 0.15s;
+
+    &::placeholder { color: $input-placeholder; }
+    &:hover:not(:focus) { border-color: $input-border-hover; }
+    &:focus {
+      outline: none;
+      border-color: $input-border-focus;
+      box-shadow: $input-focus-ring;
+    }
+  }
+
+  &__actions {
+    display: flex;
+    align-items: center;
+    gap: $space-3;
+    flex-shrink: 0;
+  }
+
+  &__filters {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: $space-2;
+    height: $input-height;
+    padding: 0 $space-3;
+    background: $input-bg;
+    border: 1px solid $input-border;
+    border-radius: $input-radius;
+    color: $text-2;
+    font-family: $k-font-sans;
+    font-size: $fs-14;
+    cursor: pointer;
+    transition: border-color 0.15s ease, color 0.15s ease;
+
+    &:hover { border-color: $input-border-hover; color: $text-1; }
+  }
+
+  &__badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 18px;
+    height: 18px;
+    padding: 0 5px;
+    border-radius: $radius-pill;
+    background: $accent-500;
+    color: #fff;
+    font-size: $fs-11;
+    font-weight: $k-fw-semibold;
+    line-height: 1;
+  }
+
+  // Estrecho: la búsqueda ocupa su fila; debajo, toggles y botón se
+  // reparten el ancho proporcionalmente.
+  @container (max-width: #{$bp-sm - 1px}) {
+    &__inner { flex-wrap: wrap; }
+    &__search { flex: 1 1 100%; }
+    &__actions {
+      flex: 1 1 100%;
+      > * { flex: 1 1 auto; }
+    }
+  }
+}
