@@ -12,6 +12,12 @@ El formato sigue [Keep a Changelog](https://keepachangelog.com/es/) y el
 versionado, [SemVer](https://semver.org/lang/es/) (mientras estemos en `0.x`,
 los cambios de API pueden llegar en versiones menores).
 
+## [Sin publicar]
+
+- **Ordenación en el catálogo público** (`edc-motor/core`): el modo lista de
+  `GET /api/catalog/{key}` acepta `?sort=name|name_desc|latest` (nombre del
+  locale activo asc/desc; default id desc). El modo `random` lo ignora.
+
 ## [0.4.4] — 2026-07-12
 
 - **Catálogo público genérico**: `GET /api/catalog/{key}` sirve cualquier

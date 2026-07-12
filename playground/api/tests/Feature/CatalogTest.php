@@ -39,6 +39,44 @@ it('lista solo publicadas, paginadas y con la clave en la respuesta', function (
         ->assertJsonPath('meta.per_page', 48);
 });
 
+it('ordena con ?sort: name asc, name_desc y default id desc', function () {
+    makeCharacter(['name' => ['es' => 'Bran', 'eu' => 'Beñat'], 'is_published' => true]);
+    makeCharacter(['name' => ['es' => 'Arya', 'eu' => 'Aitor'], 'is_published' => true]);
+    makeCharacter(['name' => ['es' => 'Cersei', 'eu' => 'Katalin'], 'is_published' => true]);
+
+    // name: ascendente por el name del locale activo.
+    $this->getJson('/api/catalog/character?sort=name&locale=es')
+        ->assertOk()
+        ->assertJsonPath('data.0.name', 'Arya')
+        ->assertJsonPath('data.1.name', 'Bran')
+        ->assertJsonPath('data.2.name', 'Cersei');
+
+    // name_desc: descendente.
+    $this->getJson('/api/catalog/character?sort=name_desc&locale=es')
+        ->assertOk()
+        ->assertJsonPath('data.0.name', 'Cersei')
+        ->assertJsonPath('data.1.name', 'Bran')
+        ->assertJsonPath('data.2.name', 'Arya');
+
+    // Sin sort (o sort=latest): id desc — el último creado primero.
+    $this->getJson('/api/catalog/character?locale=es')
+        ->assertOk()
+        ->assertJsonPath('data.0.name', 'Cersei')
+        ->assertJsonPath('data.1.name', 'Arya')
+        ->assertJsonPath('data.2.name', 'Bran');
+
+    $this->getJson('/api/catalog/character?sort=latest&locale=es')
+        ->assertOk()
+        ->assertJsonPath('data.0.name', 'Cersei');
+
+    // El orden por nombre es sobre la columna del locale de la petición.
+    $this->getJson('/api/catalog/character?sort=name&locale=eu')
+        ->assertOk()
+        ->assertJsonPath('data.0.name', 'Aitor')
+        ->assertJsonPath('data.1.name', 'Beñat')
+        ->assertJsonPath('data.2.name', 'Katalin');
+});
+
 it('busca por nombre sobre el locale activo', function () {
     makeCharacter(['name' => ['es' => 'Arya', 'eu' => 'Aitor'], 'is_published' => true]);
     makeCharacter(['name' => ['es' => 'Bran', 'eu' => 'Beñat'], 'is_published' => true]);
