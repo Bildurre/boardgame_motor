@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 #
 # Release del tren del motor: sube la versión en todos los sitios, cierra los
-# changelogs, commitea, taguea, pushea y publica los paquetes npm.
+# changelogs, commitea, taguea y pushea (publica la action al llegar el tag).
 #
 # Uso: ./tools/release.sh 0.4.4 [-y]
 #   -y  no pide confirmación antes de pushear/publicar
@@ -14,8 +14,9 @@
 #   CHANGELOG.md y packages/*/CHANGELOG.md  "[Sin publicar]" → "[X.Y.Z] — fecha"
 #   (si un paquete no tiene sección pendiente, se le añade "versión de tren")
 #
-# Después: commit "Release X.Y.Z", tag vX.Y.Z, push main --tags y npm publish
-# de ui y admin-kit. El core llega a Packagist vía la CI del split al pushear.
+# Después: commit "Release X.Y.Z", tag vX.Y.Z y push main --tags. La
+# publicación la hace la action "Publicar" al recibir el tag: npm (ui y
+# admin-kit) y el split de core hacia Packagist. Aquí no se publica nada.
 
 set -euo pipefail
 
@@ -40,8 +41,6 @@ git fetch origin main --tags
 if git rev-parse "v$VERSION" >/dev/null 2>&1; then
   echo "✖ El tag v$VERSION ya existe" >&2; exit 1
 fi
-npm whoami >/dev/null 2>&1 || { echo "✖ Sin sesión npm (haz npm login)" >&2; exit 1; }
-
 FECHA="$(date +%F)"
 
 # --- Versiones ---------------------------------------------------------------
@@ -77,7 +76,7 @@ echo
 git --no-pager diff --stat
 echo
 if [[ "$ASSUME_YES" != "-y" ]]; then
-  read -r -p "¿Commitear, taguear v$VERSION, pushear y publicar en npm? [s/N] " ok
+  read -r -p "¿Commitear, taguear v$VERSION y pushear (la action publicará)? [s/N] " ok
   [[ "$ok" == "s" || "$ok" == "S" ]] || { git checkout -- .; echo "Cancelado (cambios revertidos)"; exit 1; }
 fi
 
@@ -87,16 +86,8 @@ git commit -m "Release $VERSION"
 git tag "v$VERSION"
 git push origin main --tags
 
-# --- Publicación npm (el core lo publica la CI del split en Packagist) -----------
-for pkg in packages/ui packages/admin-kit; do
-  if ! (cd "$pkg" && npm publish); then
-    echo "✖ npm publish falló en $pkg. El commit y el tag YA están pusheados:" >&2
-    echo "  arregla la causa y relanza a mano: cd $pkg && npm publish" >&2
-    exit 1
-  fi
-done
-
 echo
-echo "✔ Release $VERSION completa: tag v$VERSION pusheado y npm publicado."
-echo "  Packagist (edc-motor/core) se actualiza solo vía la CI del split:"
-echo "  comprueba que la action ha pasado. En cada juego: ./update-motor.sh $VERSION"
+echo "✔ Release $VERSION: tag v$VERSION pusheado."
+echo "  La action 'Publicar' se encarga del resto (npm de ui/admin-kit y el"
+echo "  split de core hacia Packagist): vigila que pase en GitHub → Actions."
+echo "  Cuando esté verde, en cada juego: ./update-motor.sh $VERSION"
