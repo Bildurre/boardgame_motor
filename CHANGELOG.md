@@ -12,7 +12,7 @@ El formato sigue [Keep a Changelog](https://keepachangelog.com/es/) y el
 versionado, [SemVer](https://semver.org/lang/es/) (mientras estemos en `0.x`,
 los cambios de API pueden llegar en versiones menores).
 
-## [Sin publicar]
+## [0.4.4] — 2026-07-12
 
 - **Catálogo público genérico**: `GET /api/catalog/{key}` sirve cualquier
   entidad del registry de previews sin auth y solo publicada — modo lista con
