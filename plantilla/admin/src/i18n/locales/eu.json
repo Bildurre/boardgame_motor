@@ -219,7 +219,8 @@
     "cta": "Ekintza-deia",
     "characters-grid": "Pertsonaien sareta",
     "houses-schemes": "Etxeak eta argukiak",
-    "index": "Aurkibide automatikoa"
+    "index": "Aurkibide automatikoa",
+    "related": "Erlazionatuak"
   },
   "blockFields": {
     "title": "Izenburua",
@@ -245,7 +246,12 @@
     "question": "Galdera",
     "answer": "Erantzuna",
     "house_id": "Etxea",
-    "show_schemes": "Erakutsi bere amarruak"
+    "show_schemes": "Erakutsi bere amarruak",
+    "preview_key": "Entitatea",
+    "mode": "Modua",
+    "count": "Elementu kopurua",
+    "with_button": "Indizerako botoiarekin",
+    "button_label": "Botoiaren testua"
   },
   "blockOptions": {
     "align": {
@@ -275,6 +281,10 @@
     "button_variant": {
       "primary": "Arrunta (azentu-hondoa)",
       "secondary": "Alderantzizkoa (hondoaren kolorea)"
+    },
+    "mode": {
+      "latest": "Berrienak",
+      "random": "Ausazkoak"
     }
   },
   "settings": {

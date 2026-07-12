@@ -21,10 +21,10 @@ function makePage(array $attributes = []): Page
 it('la paleta lista los tipos del motor y los del juego con su esquema', function () {
     $response = $this->actingAs(motorUser('admin'))->getJson('/api/admin/block-types')
         ->assertOk()
-        ->assertJsonCount(10, 'data'); // 7 presentación (motor) + 3 con-datos (juego)
+        ->assertJsonCount(11, 'data'); // 7 presentación + 1 con-datos (motor) + 3 con-datos (juego)
 
     $keys = collect($response->json('data'))->pluck('key');
-    expect($keys)->toContain('header', 'text', 'text-card', 'quote', 'cta', 'index', 'faq', 'characters-grid', 'houses-schemes', 'featured-house');
+    expect($keys)->toContain('header', 'text', 'text-card', 'quote', 'cta', 'index', 'faq', 'related', 'characters-grid', 'houses-schemes', 'featured-house');
 
     // El esquema de campos viaja serializado (el BlockEditor se genera de aquí).
     $header = collect($response->json('data'))->firstWhere('key', 'header');

@@ -1,0 +1,42 @@
+@use "tokens" as *;
+
+// Bloque `related` (BlockRelated.vue): cabecera en rejilla (títulos + botón
+// al índice a la derecha en ≥sm, patrón del relateds de CDL) sobre una
+// PreviewGrid compacta.
+.block--related {
+  .block__related-header {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: $space-4;
+
+    @media (min-width: $bp-sm) {
+      grid-template-columns: 1fr auto;
+      align-items: center;
+    }
+  }
+
+  .block__related-titles {
+    min-width: 0; // que los títulos largos no desborden la rejilla
+    display: grid;
+    gap: $space-2;
+  }
+
+  .block__related-button {
+    justify-self: start;
+
+    @media (min-width: $bp-sm) {
+      justify-self: end;
+    }
+  }
+
+  // Centrado/derecha del campo común `align`: la cabecera acompaña.
+  &.block--align-center .block__related-header {
+    @media (min-width: $bp-sm) {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  &.block--align-center .block__related-button {
+    justify-self: center;
+  }
+}

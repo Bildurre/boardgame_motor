@@ -219,7 +219,8 @@
     "cta": "Call to action",
     "characters-grid": "Characters grid",
     "houses-schemes": "Houses and schemes",
-    "index": "Automatic index"
+    "index": "Automatic index",
+    "related": "Related"
   },
   "blockFields": {
     "title": "Title",
@@ -245,7 +246,12 @@
     "question": "Question",
     "answer": "Answer",
     "house_id": "House",
-    "show_schemes": "Show its schemes"
+    "show_schemes": "Show its schemes",
+    "preview_key": "Entity",
+    "mode": "Mode",
+    "count": "Number of items",
+    "with_button": "With button to the index",
+    "button_label": "Button text"
   },
   "blockOptions": {
     "align": {
@@ -275,6 +281,10 @@
     "button_variant": {
       "primary": "Normal (accent background)",
       "secondary": "Inverse (page background)"
+    },
+    "mode": {
+      "latest": "Most recent",
+      "random": "Random"
     }
   },
   "settings": {

@@ -12,6 +12,27 @@ El formato sigue [Keep a Changelog](https://keepachangelog.com/es/) y el
 versionado, [SemVer](https://semver.org/lang/es/) (mientras estemos en `0.x`,
 los cambios de API pueden llegar en versiones menores).
 
+## [Sin publicar]
+
+- **Catálogo público genérico**: `GET /api/catalog/{key}` sirve cualquier
+  entidad del registry de previews sin auth y solo publicada — modo lista con
+  paginación y `?search`, modo `?mode=random&count=N` y `?exclude` para los
+  singles. Ítem `{id, name, slug|null, preview|null}`
+  (`Edc\Core\Previews\CatalogItem`, compartido con el bloque `related`).
+- **Bloque `related`** (primer bloque `data` del motor): rejilla de entidades
+  relacionadas de cualquier clave del registry de previews — título/subtítulo,
+  entidad (opciones en vivo del registry), modo `latest|random`, `count`
+  (1..12) y botón opcional al índice. En `@edc-motor/ui` lo pinta
+  `BlockRelated`; los enlaces se resuelven con el mapa que la app provee vía
+  `catalogRoutesKey`. Requiere versión nueva de `edc-motor/core` y
+  `@edc-motor/ui`.
+- **`PreviewGrid`** (`@edc-motor/ui`): rejilla presentacional de previews del
+  catálogo (paginación prev/next, slots `item`/`actions`/`empty`, fallback
+  con el nombre cuando el PNG no está generado) para los índices públicos de
+  los juegos. **Migración del cascarón**: copiar de `plantilla/`
+  `app/src/main.ts` y `app/src/entities/catalogRoutes.ts` (provide de
+  `catalogRoutesKey`, necesario para los enlaces del bloque `related`).
+
 ## [0.4.3] — 2026-07-11
 
 - **Tarjetas de entidad del admin**: `EntityCard` gana `editable`/`edit` (botón

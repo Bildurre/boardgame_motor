@@ -4,6 +4,25 @@ Componentes Vue 3 + SCSS para las webs públicas (y piezas compartidas con el
 admin). Paquete **fuente** (se consume vía Vite). Versión de tren con
 `edc-motor/core` y `@edc-motor/admin-kit`.
 
+## [Sin publicar]
+
+### Añadido
+
+- **`PreviewGrid`**: rejilla presentacional de previews del catálogo público
+  (`GET /api/catalog/{key}`). Props `items` (con `to` opcional → RouterLink),
+  `loading`, `page`/`pages` (paginación prev/next con emit `page`) y variante
+  `compact`; slots `item` y `actions` (scoped `{ item }`) y `empty`. Fallback
+  con el nombre y proporción de carta (5/7) cuando la preview no está
+  generada. Textos por prop (DC-29). SCSS en `components/_preview-grid.scss`.
+- **Bloque `related`** (`BlockRelated`, clave `related` en
+  `motorBlockComponents`): título/subtítulo + PreviewGrid compacta con los
+  ítems de `data` y botón opcional al índice (`with_button`/`button_label`;
+  texto por defecto por prop, DC-29). Los enlaces se resuelven con el mapa
+  que la app provee vía **`catalogRoutesKey`** (nuevo
+  `src/blocks/catalogRoutes.ts`, exporta también los tipos `CatalogItem`,
+  `CatalogRouteEntry` y `CatalogRoutes`); sin mapa, los ítems se pintan sin
+  enlace. SCSS en `components/_block-related.scss`.
+
 ## [0.4.3] — 2026-07-11
 
 - Sin cambios propios: versión de tren.
