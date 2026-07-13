@@ -22,7 +22,8 @@
 
   // Franja superior opcional (emblema/imagen). Cuadrada: con el grid de los
   // index a 4 columnas la tarjeta es más estrecha y la imagen queda contenida
-  // (más bien pequeña) y centrada, nunca deformada ni recortada.
+  // (más bien pequeña) y centrada, nunca deformada ni recortada. Sin fondo:
+  // la franja hereda la superficie de la tarjeta.
   &__media {
     position: relative;
     aspect-ratio: 1 / 1;
@@ -30,7 +31,6 @@
     align-items: center;
     justify-content: center;
     overflow: hidden;
-    background: $surface-2;
 
     img { width: 100%; height: 100%; object-fit: contain; }
   }
@@ -40,7 +40,7 @@
     display: flex;
     align-items: center;
     gap: $space-2;
-    padding: $space-3 $space-4;
+    padding: $space-3 $space-4 $space-2;
     border-bottom: 1px solid $border;
     min-width: 0;
   }
@@ -57,7 +57,8 @@
     min-width: 0;
   }
 
-  // Editar en la propia tarjeta (entidades sin single).
+  // Editar en la propia tarjeta (entidades sin single). En verde ($success),
+  // con hover al estilo de los icon-btn del ui (fondo semitransparente).
   &__edit {
     display: inline-flex;
     align-items: center;
@@ -66,11 +67,11 @@
     background: none;
     border: none;
     border-radius: $radius-sm;
-    color: $text-3;
+    color: $success;
     cursor: pointer;
-    transition: color 0.15s ease;
+    transition: color 0.15s ease, background-color 0.15s ease;
 
-    &:hover { color: $accent-500; }
+    &:hover { background: rgba(74, 222, 128, 0.16); }
   }
 
   &__actions {
@@ -84,7 +85,7 @@
     display: flex;
     flex-direction: column;
     gap: $space-2;
-    padding: $space-3 $space-4;
+    padding: $space-2 $space-4 $space-3;
   }
 
   &__badges {
