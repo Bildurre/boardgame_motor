@@ -85,6 +85,10 @@
     top: var(--app-right-sidebar-top, 0px);
     right: 0;
     bottom: 0;
+    // El align-self: flex-start del modo columna aplica aquí como alineación
+    // de caja posicionada y encogería el alto al contenido en vez de
+    // estirarlo hasta bottom: 0.
+    align-self: auto;
     height: auto;
     padding-top: 0;
     z-index: 60; // por encima de la cabecera fija (50)
