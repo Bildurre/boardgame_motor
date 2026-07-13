@@ -8,7 +8,7 @@ Kit de construcción del panel de administración (sobre `@edc-motor/ui`). Paque
 
 - Sin cambios propios: versión de tren.
 =======
-## [Sin publicar]
+## [0.4.8] — 2026-07-13
 
 ### Cambiado
 
