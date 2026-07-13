@@ -14,10 +14,6 @@ los cambios de API pueden llegar en versiones menores).
 
 ## [0.4.8] — 2026-07-13
 
-- Sin cambios propios: versión de tren.
-
-## [0.4.7] — 2026-07-12
-
 - **Sistema de filtros unificado de los index** en `@edc-motor/ui`:
   `IndexToolbar` (búsqueda con lupa a la derecha + toggles de ordenación +
   botón "Filtros" con badge, responsive por container query propia),
@@ -45,6 +41,8 @@ los cambios de API pueden llegar en versiones menores).
   petición generando la preview inline (y podía acabar en 500) — ahora se
   difiere a después de la respuesta. La plantilla trae
   `QUEUE_CONNECTION=database`; en juegos existentes, ponerlo en `api/.env`.
+
+## [0.4.7] — 2026-07-12
 
 - **`BasePagination`** en `@edc-motor/ui` (controles de página para los
   listados) y regla global de iconos del wysiwyg a 1.2x el tamaño del texto

@@ -6,15 +6,8 @@ admin). Paquete **fuente** (se consume vía Vite). Versión de tren con
 
 ## [0.4.8] — 2026-07-13
 
-- Sin cambios propios: versión de tren.
-
-## [0.4.7] — 2026-07-12
-
 ### Añadido
 
-- **`BasePagination`**: paginación compacta de listados (anterior / "x de y" /
-  siguiente; con una sola página no pinta nada), para los index del admin y
-  de la web.
 - **`SortToggles`**: dos toggles de ordenación para los index — fecha
   (latest ⇄ oldest) y alfabético (name ⇄ name_desc). Pulsar el inactivo lo
   activa en su primer estado; pulsar el activo invierte el sentido. Iconos
@@ -41,6 +34,16 @@ admin). Paquete **fuente** (se consume vía Vite). Versión de tren con
   `BaseButton` (min-height 36px; las variantes `text` quedan sin altura
   mínima). `BasePagination` se queda a 32px a propósito (control secundario,
   un punto por debajo).
+
+## [0.4.7] — 2026-07-12
+
+### Añadido
+
+- **`BasePagination`**: paginación compacta de listados (anterior / "x de y" /
+  siguiente; con una sola página no pinta nada), para los index del admin y
+  de la web.
+
+### Cambiado
 
 - **Iconos del wysiwyg al tamaño del texto**: regla global — `img.rt-icon`
   mide SIEMPRE 1.2x el font-size del texto que lo rodea, se renderice donde
