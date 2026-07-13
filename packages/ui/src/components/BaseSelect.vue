@@ -1,11 +1,14 @@
 <script setup lang="ts">
 import { computed, nextTick, onBeforeUnmount, ref } from 'vue'
+import { useDropdownPanel } from '../composables/useDropdownPanel'
 
 // Select de formulario (portado de kontuan). Dropdown personalizado (botón
 // trigger + panel de opciones) con la MISMA API que el <select> nativo al que
 // sustituye: el trigger reutiliza el aspecto de .form-field__select y el
 // panel, la estética del SearchSelect. Teclado completo (flechas, Enter,
-// Escape, Home/End) y cierre por mousedown exterior.
+// Escape, Home/End) y cierre por mousedown exterior. El panel abierto vuela
+// a la top layer (useDropdownPanel): dentro de un modal se superpone sin
+// recortarse ni deformar el modal.
 //
 // Compatibilidad con el nativo:
 // - El valor viaja como en el DOM: se emite String(option.value) y la opción
@@ -44,6 +47,9 @@ const panelId = `${selectId}-panel`
 const open = ref(false)
 const highlighted = ref(0)
 const root = ref<HTMLElement | null>(null)
+const panel = ref<HTMLElement | null>(null)
+
+useDropdownPanel(root, panel, open)
 
 const selectedIndex = computed(() =>
   props.options.findIndex((o) => String(o.value) === String(props.modelValue)),
@@ -103,7 +109,10 @@ function onKeydown(e: KeyboardEvent) {
 
   switch (e.key) {
     case 'Escape':
+      // Escape con el panel abierto cierra SOLO el panel (que no llegue al
+      // listener global de un modal contenedor y lo cierre también).
       e.preventDefault()
+      e.stopPropagation()
       close()
       break
     case 'ArrowDown':
@@ -166,7 +175,14 @@ onBeforeUnmount(() => document.removeEventListener('mousedown', onOutside))
         </span>
       </button>
 
-      <ul v-if="open" :id="panelId" class="base-select__panel" role="listbox">
+      <ul
+        v-if="open"
+        :id="panelId"
+        ref="panel"
+        class="base-select__panel"
+        popover="manual"
+        role="listbox"
+      >
         <li
           v-for="(option, index) in options"
           :id="optionId(index)"

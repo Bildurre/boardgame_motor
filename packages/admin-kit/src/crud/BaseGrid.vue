@@ -16,7 +16,9 @@ const props = withDefaults(
 )
 
 const presetCols: Record<string, ResponsiveCols> = {
-  cards: { base: 1, sm: 2, lg: 3 },
+  // Los index de entidades escalan 1 → 2 → 3 → 4 con el ancho REAL del
+  // contenedor `content` (en pantallas anchas llegan a cuatro columnas).
+  cards: { base: 1, sm: 2, md: 3, lg: 4 },
   'cards-wide': { base: 1, sm: 2, lg: 4 },
   'cards-narrow': { base: 1, sm: 2 },
   'cards-full': { base: 1, sm: 2, md: 3, lg: 4 },

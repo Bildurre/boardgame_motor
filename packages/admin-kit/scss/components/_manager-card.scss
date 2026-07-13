@@ -157,6 +157,26 @@
     margin: $space-1 0;
     width: 100%;
   }
+
+  // Botón-volver del panel (texto con flecha): del detalle de la card
+  // seleccionada al estado sin selección (los filtros del listado).
+  &__back {
+    display: inline-flex;
+    align-items: center;
+    gap: $space-1;
+    background: none;
+    border: none;
+    padding: 0;
+    color: $accent-500;
+    font-size: $fs-13;
+    cursor: pointer;
+    justify-self: start;
+
+    &:hover {
+      color: $accent-600;
+      text-decoration: underline;
+    }
+  }
 }
 
 .manager-detail {

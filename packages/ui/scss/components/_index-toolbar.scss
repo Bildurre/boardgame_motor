@@ -2,7 +2,7 @@
 
 // Barra de los index (IndexToolbar.vue). El propio toolbar es el contenedor
 // de las queries: por debajo de $bp-sm de ancho REAL de la barra, la búsqueda
-// pasa a su fila y debajo toggles + botón se reparten el ancho.
+// pasa a su fila y los toggles se reparten el ancho debajo.
 .index-toolbar {
   container-type: inline-size;
   margin-bottom: $space-4;
@@ -56,42 +56,8 @@
     flex-shrink: 0;
   }
 
-  &__filters {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: $space-2;
-    height: $input-height;
-    padding: 0 $space-3;
-    background: $input-bg;
-    border: 1px solid $input-border;
-    border-radius: $input-radius;
-    color: $text-2;
-    font-family: $k-font-sans;
-    font-size: $fs-14;
-    cursor: pointer;
-    transition: border-color 0.15s ease, color 0.15s ease;
-
-    &:hover { border-color: $input-border-hover; color: $text-1; }
-  }
-
-  &__badge {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    min-width: 18px;
-    height: 18px;
-    padding: 0 5px;
-    border-radius: $radius-pill;
-    background: $accent-500;
-    color: #fff;
-    font-size: $fs-11;
-    font-weight: $k-fw-semibold;
-    line-height: 1;
-  }
-
-  // Estrecho: la búsqueda ocupa su fila; debajo, toggles y botón se
-  // reparten el ancho proporcionalmente.
+  // Estrecho: la búsqueda ocupa su fila; debajo, los toggles se reparten
+  // el ancho proporcionalmente.
   @container (max-width: #{$bp-sm - 1px}) {
     &__inner { flex-wrap: wrap; }
     &__search { flex: 1 1 100%; }

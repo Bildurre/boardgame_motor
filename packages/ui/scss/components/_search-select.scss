@@ -46,6 +46,9 @@
 
   &.is-open &__chevron { transform: rotate(180deg); }
 
+  // Posición base (fallback sin Popover API): absoluto bajo el trigger. Al
+  // abrir, useDropdownPanel lo promociona a la top layer (popover) y lo ancla
+  // por coordenadas fijas: dentro de modales no lo recorta ningún overflow.
   &__dropdown {
     position: absolute;
     top: calc(100% + #{$space-1});

@@ -6,7 +6,9 @@
     "logout": "Irten",
     "downloads": "Deskargak",
     "menu": "Menua",
-    "admin": "Administrazioa"
+    "admin": "Administrazioa",
+    "filters": "Iragazkiak",
+    "closeFilters": "Itxi iragazkiak"
   },
   "list": {
     "empty": "Ez dago ezer erakusteko oraindik."

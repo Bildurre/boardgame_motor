@@ -6,7 +6,9 @@
     "logout": "Log out",
     "downloads": "Downloads",
     "menu": "Menu",
-    "admin": "Admin"
+    "admin": "Admin",
+    "filters": "Filters",
+    "closeFilters": "Close the filters"
   },
   "entities": {
     "characters": "Characters",

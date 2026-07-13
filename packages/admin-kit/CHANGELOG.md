@@ -3,6 +3,30 @@
 Kit de construcción del panel de administración (sobre `@edc-motor/ui`). Paquete
 **fuente** (se consume vía Vite). Versión de tren con `edc-motor/core` y `@edc-motor/ui`.
 
+## [Sin publicar]
+
+### Añadido
+
+- **`useCardDeselect(onDeselect, extraIgnore?)`**: deselección de la card
+  activa clickando la zona "vacía" del cuerpo de la vista (huecos del grid,
+  espacio bajo las cards, alrededor del toolbar…). Escucha en document y
+  solo actúa dentro de `.main-content`; ignora los clicks que nacen en una
+  card (`.manager-card`/`.entity-card`), un control interactivo o las
+  migas; `extraIgnore` añade selectores propios de la vista.
+- **`.manager-panel__back`**: botón-volver de texto con flecha para el
+  panel derecho (del detalle de la card seleccionada a los filtros del
+  listado).
+
+### Cambiado
+
+- **Index de entidades a 4 columnas**: el preset `cards` del `BaseGrid`
+  pasa de `{base:1, sm:2, lg:3}` a `{base:1, sm:2, md:3, lg:4}` — escala
+  1 → 2 → 3 → 4 con el ancho real del contenedor `content`.
+- **`.entity-card__media` cuadrada**: `aspect-ratio` de `16/9` a `1/1` y la
+  imagen de `object-fit: cover` a `contain` — con tarjetas más estrechas la
+  imagen queda contenida y centrada (más bien pequeña), nunca deformada ni
+  recortada.
+
 ## [0.4.8] — 2026-07-13
 
 ### Cambiado

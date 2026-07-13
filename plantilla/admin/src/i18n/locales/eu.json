@@ -75,7 +75,7 @@
     "imageDrag": "Arrastatu irudi bat edo egin klik",
     "close": "Itxi",
     "filters": "Iragazkiak",
-    "clearFilters": "Iragazkiak kendu",
+    "backToFilters": "Itzuli iragazkietara",
     "sort": {
       "latest": "Berrienak lehenengo",
       "oldest": "Zaharrenak lehenengo",

@@ -4,6 +4,53 @@ Componentes Vue 3 + SCSS para las webs públicas (y piezas compartidas con el
 admin). Paquete **fuente** (se consume vía Vite). Versión de tren con
 `edc-motor/core` y `@edc-motor/admin-kit`.
 
+## [Sin publicar]
+
+### Añadido
+
+- **`AppRightSidebar`** + **`useAppRightSidebar()`**: barra lateral derecha
+  contextual de la web pública, con la MISMA mecánica que la RightSidebar
+  del admin-kit. Composable singleton a nivel de módulo (como
+  useToast/useConfirm; los juegos consumen el paquete como fuente con
+  `optimizeDeps.exclude`): `hasContent`, `collapsed`, `mobileOpen`,
+  `overlay`, `title`, `isOpen`, `toggle()`, `reveal()`, `register()` /
+  `unregister()` / `useRegister(titulo)` con token de propiedad. La monta
+  App.vue dentro de `.site-main`; cada vista registra sus filtros y los
+  teletransporta a `#app-right-sidebar-target`. En ancho es columna
+  pegajosa junto al contenido (plegable); en estrecho (< 900px), drawer
+  superpuesto con telón, click fuera y Escape. El cascarón fija
+  `--app-right-sidebar-top` a la altura de su cabecera fija. Props
+  agnósticas de i18n (DC-29): `closeLabel` ("Cerrar el panel") y
+  `fallbackTitle` ("Filtros").
+- **`useDropdownPanel`** (interno, sin exportar): promociona el panel
+  abierto de un dropdown a la top layer del navegador (atributo `popover`)
+  y lo ancla por coordenadas fijas al trigger, reanclando en scroll/resize.
+  Sin soporte de popover no hace nada (queda el CSS absolute de siempre).
+
+### Cambiado
+
+- **`IndexToolbar` sin botón "Filtros"**: fuera las props
+  `showFilters`/`activeCount`/`filtersLabel` y el emit `open-filters` (con
+  su SCSS). Queda búsqueda + `SortToggles`; los filtros de los index viven
+  ahora en la barra derecha.
+
+### Arreglado
+
+- **Selects dentro de modales**: desplegar un `BaseSelect`/`SearchSelect`
+  en un modal recortaba el panel contra el overflow de `.modal__body` y le
+  añadía scroll fantasma (y el scrollbar disparaba reflows/container
+  queries que deformaban el modal). Los paneles usan `useDropdownPanel`:
+  se superponen sin tocar el layout del modal, siguen pegados al trigger al
+  scrollear (también fuera de modales) y Escape con el panel abierto cierra
+  solo el desplegable, no el modal contenedor.
+
+### Retirado
+
+- **`FiltersModal`** (salido en 0.4.8): los filtros de los index pasan del
+  modal a la barra derecha (RightSidebar del admin-kit en el admin;
+  `AppRightSidebar` en la web pública). Sus únicos consumidores (el
+  cascarón) migran en esta misma versión.
+
 ## [0.4.8] — 2026-07-13
 
 ### Añadido

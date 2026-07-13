@@ -84,7 +84,7 @@
     "imageDrag": "Drag an image or click",
     "close": "Close",
     "filters": "Filters",
-    "clearFilters": "Clear filters",
+    "backToFilters": "Back to filters",
     "sort": {
       "latest": "Newest first",
       "oldest": "Oldest first",

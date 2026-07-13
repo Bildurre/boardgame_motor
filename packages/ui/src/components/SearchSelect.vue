@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed, nextTick, onBeforeUnmount, ref, watch } from 'vue'
 import { Check, ChevronDown } from '@lucide/vue'
+import { useDropdownPanel } from '../composables/useDropdownPanel'
 
 // Select con buscador (combobox de selección ÚNICA): cerrado ocupa una
 // línea; al desplegar muestra un input de búsqueda y las opciones filtradas
@@ -8,7 +9,9 @@ import { Check, ChevronDown } from '@lucide/vue'
 // TagCombobox de kontuan (multi-etiquetas), del que hereda el teclado
 // (flechas + Enter + Escape) y el cierre por mousedown exterior. El filtrado
 // lo hace el PADRE (evento `search`, con debounce aquí): en cliente o contra
-// el servidor, y con `canLoadMore` pagina.
+// el servidor, y con `canLoadMore` pagina. El desplegable abierto vuela a la
+// top layer (useDropdownPanel): dentro de un modal se superpone sin
+// recortarse ni deformar el modal.
 // Agnóstico de i18n (DC-29): textos por prop, defaults en castellano.
 
 export interface SearchSelectOption {
@@ -47,6 +50,9 @@ const query = ref('')
 const highlighted = ref(0)
 const root = ref<HTMLElement | null>(null)
 const input = ref<HTMLInputElement | null>(null)
+const dropdown = ref<HTMLElement | null>(null)
+
+useDropdownPanel(root, dropdown, open)
 
 const selectedLabel = computed(
   () => props.options.find((o) => o.id === props.modelValue)?.label ?? '',
@@ -95,6 +101,9 @@ watch(
 
 function onKeydown(e: KeyboardEvent) {
   if (e.key === 'Escape') {
+    // Cierra SOLO el desplegable (que no llegue al listener global de un
+    // modal contenedor y lo cierre también).
+    e.stopPropagation()
     close()
     return
   }
@@ -136,7 +145,7 @@ onBeforeUnmount(() => {
       <ChevronDown :size="16" class="search-select__chevron" />
     </button>
 
-    <div v-if="open" class="search-select__dropdown">
+    <div v-if="open" ref="dropdown" class="search-select__dropdown" popover="manual">
       <input
         ref="input"
         v-model="query"

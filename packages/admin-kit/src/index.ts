@@ -5,6 +5,9 @@ export { default as AdminLayout } from './layout/AdminLayout.vue'
 // lo activa con useRightSidebar() y Teleport a #right-sidebar-target.
 export { default as RightSidebar } from './layout/RightSidebar.vue'
 export { useRightSidebar, type RightSidebarToken } from './composables/useRightSidebar'
+// Listados con panel derecho: click en la zona vacía del contenido para
+// deseleccionar la card activa (la card entera selecciona; el resto, no).
+export { useCardDeselect } from './composables/useCardDeselect'
 // Tarjeta colapsable de los gestores (previews/PDF), reutilizable.
 export { default as ManagerCard } from './components/ManagerCard.vue'
 // Index de entidades: grid de tarjetas (sin tablas) + filtros + estado vacío.

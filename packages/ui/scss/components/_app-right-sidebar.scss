@@ -1,0 +1,108 @@
+@use "tokens" as *;
+
+// Barra lateral derecha contextual de la web pública (AppRightSidebar.vue):
+// cada vista la registra con useAppRightSidebar() y App.vue la monta una vez
+// dentro de .site-main (flex row con .site-content). El cascarón fija
+// --app-right-sidebar-top a la altura de su cabecera fija; sin fijarla, la
+// barra arranca en el borde superior.
+
+.app-right-sidebar {
+  position: sticky;
+  top: 0;
+  align-self: flex-start;
+  height: 100dvh;
+  width: 320px;
+  flex-shrink: 0;
+  padding-top: var(--app-right-sidebar-top, 0px);
+  background: $surface;
+  border-left: 1px solid $border;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  transition: width 0.2s ease, transform 0.25s ease;
+
+  &--collapsed {
+    width: 0;
+    border-left: 0;
+  }
+
+  &__header {
+    display: flex;
+    align-items: center;
+    gap: $space-2;
+    height: 48px;
+    padding: 0 $space-2 0 $space-4;
+    border-bottom: 1px solid $border;
+    flex-shrink: 0;
+  }
+
+  &__title {
+    flex: 1;
+    font-size: $fs-14;
+    font-weight: $k-fw-semibold;
+    color: $text-1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  // Cerrar como el action-button del modal: sin caja, acento al hover.
+  &__close {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border: none;
+    background: none;
+    color: $text-2;
+    cursor: pointer;
+    border-radius: $radius-sm;
+    transition: background-color 0.15s ease, color 0.15s ease;
+
+    &:hover {
+      color: $accent-500;
+      background: color-mix(in srgb, $accent-500 12%, transparent);
+    }
+  }
+
+  &__body {
+    flex: 1;
+    overflow-y: auto;
+    padding: $space-4;
+  }
+
+  // El contenido registrado (selects de filtros…) se apila a una columna.
+  #app-right-sidebar-target {
+    display: grid;
+    gap: $space-3;
+  }
+
+  // Modo drawer (por debajo del umbral del componente): superpuesto al
+  // contenido, bajo la cabecera, con telón y cierre por click fuera/Escape.
+  &--drawer {
+    position: fixed;
+    top: var(--app-right-sidebar-top, 0px);
+    right: 0;
+    bottom: 0;
+    height: auto;
+    padding-top: 0;
+    z-index: 60; // por encima de la cabecera fija (50)
+    width: min(320px, 100vw);
+    transform: translateX(100%);
+
+    &.app-right-sidebar--drawer-open {
+      transform: translateX(0);
+    }
+  }
+}
+
+.app-right-sidebar-overlay {
+  position: fixed;
+  top: var(--app-right-sidebar-top, 0px);
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgb(0 0 0 / 40%);
+  z-index: 55;
+}

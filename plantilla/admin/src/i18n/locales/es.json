@@ -75,7 +75,7 @@
     "imageDrag": "Arrastra una imagen o haz clic",
     "close": "Cerrar",
     "filters": "Filtros",
-    "clearFilters": "Quitar filtros",
+    "backToFilters": "Volver a los filtros",
     "sort": {
       "latest": "Más recientes primero",
       "oldest": "Más antiguos primero",

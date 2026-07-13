@@ -23,9 +23,12 @@ export { default as ImageUpload } from './components/ImageUpload.vue'
 export { default as FontUpload } from './components/FontUpload.vue'
 export { default as BaseModal } from './components/BaseModal.vue'
 export { default as EditModal } from './components/EditModal.vue'
-export { default as FiltersModal } from './components/FiltersModal.vue'
 export { default as SortToggles, type SortValue } from './components/SortToggles.vue'
 export { default as IndexToolbar } from './components/IndexToolbar.vue'
+// Barra derecha contextual de la web pública (filtros de los index): App.vue
+// la monta junto al contenido; cada vista la activa con useAppRightSidebar()
+// y Teleport a #app-right-sidebar-target.
+export { default as AppRightSidebar } from './components/AppRightSidebar.vue'
 export { default as BaseTabs } from './components/BaseTabs.vue'
 export { default as BaseToast } from './components/BaseToast.vue'
 export { default as ToastContainer } from './components/ToastContainer.vue'
@@ -39,6 +42,7 @@ export { useToast, type Toast } from './composables/useToast'
 export { useConfirm, type ConfirmOptions } from './composables/useConfirm'
 export { useTheme, type ThemeMode } from './composables/useTheme'
 export { useHead, type HeadInput } from './composables/useHead'
+export { useAppRightSidebar, type AppRightSidebarToken } from './composables/useAppRightSidebar'
 
 // Bloques de presentación del CRM (doc 03).
 export * from './blocks'

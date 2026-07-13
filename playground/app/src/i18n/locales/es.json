@@ -6,7 +6,9 @@
     "logout": "Salir",
     "downloads": "Descargas",
     "menu": "Menú",
-    "admin": "Administración"
+    "admin": "Administración",
+    "filters": "Filtros",
+    "closeFilters": "Cerrar los filtros"
   },
   "entities": {
     "characters": "Personajes",

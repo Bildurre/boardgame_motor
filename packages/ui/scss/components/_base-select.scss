@@ -25,6 +25,9 @@
     &.is-placeholder { color: $input-placeholder; }
   }
 
+  // Posición base (fallback sin Popover API): absoluto bajo el trigger. Al
+  // abrir, useDropdownPanel lo promociona a la top layer (popover) y lo ancla
+  // por coordenadas fijas: dentro de modales no lo recorta ningún overflow.
   &__panel {
     position: absolute;
     top: calc(100% + #{$space-1});

@@ -12,6 +12,51 @@ El formato sigue [Keep a Changelog](https://keepachangelog.com/es/) y el
 versionado, [SemVer](https://semver.org/lang/es/) (mientras estemos en `0.x`,
 los cambios de API pueden llegar en versiones menores).
 
+## [Sin publicar]
+
+- **Fix** (`@edc-motor/ui`): al desplegar un `BaseSelect`/`SearchSelect`
+  dentro de un modal, el panel quedaba recortado por el overflow del cuerpo
+  y le añadía scroll fantasma (el scrollbar cambiaba el ancho interior y
+  disparaba reflows del modal). El panel abierto vuela ahora a la top layer
+  del navegador (atributo `popover`, nuevo composable interno
+  `useDropdownPanel`): se superpone a cualquier overflow sin tocar el
+  layout, sigue pegado al trigger al scrollear (también fuera de modales) y
+  Escape con el panel abierto cierra solo el desplegable, no el modal.
+- **Barra derecha contextual de la web pública** (`@edc-motor/ui`):
+  `AppRightSidebar` + `useAppRightSidebar()`, con la MISMA mecánica que la
+  del admin-kit (registro por vista con token y Teleport a
+  `#app-right-sidebar-target`; columna junto al contenido en ancho, drawer
+  superpuesto con telón + Escape en estrecho). Se despliega con el nuevo
+  botón Funnel del header del cascarón, que solo aparece si la vista actual
+  ha registrado contenido (sus selects de filtros). **Migración del
+  cascarón**: copiar de `plantilla/app/` `src/App.vue`,
+  `src/components/AppHeader.vue`, `src/assets/scss/main.scss` y
+  `src/assets/scss/components/_app-header.scss`, y añadir a los tres
+  `src/i18n/locales/*.json` las claves `nav.filters` y `nav.closeFilters`.
+- **Retirado `FiltersModal`** (`@edc-motor/ui`, salió en 0.4.8) y el botón
+  "Filtros" del `IndexToolbar` (props `showFilters`/`activeCount`/
+  `filtersLabel` y emit `open-filters`): los filtros de los index viven
+  ahora en la barra derecha (la del admin-kit en el admin;
+  `AppRightSidebar` en la web pública).
+- **Cascarón (admin): los filtros del listado, en el panel derecho.**
+  `PagesListView` enseña sin selección el "selecciona…" + separador + los
+  selects de filtros (aplican en vivo); con selección, el botón
+  "← Volver a los filtros" (deselecciona) + separador + el panel de la
+  card; y un click en la zona vacía del contenido también deselecciona
+  (nuevo `useCardDeselect` del admin-kit). `ListFiltersModal` desaparece y
+  `ListToolbar` queda en búsqueda + toggles de orden. **Migración del
+  cascarón**: copiar de `plantilla/admin/`
+  `src/views/pages/PagesListView.vue` y `src/components/ListToolbar.vue`,
+  BORRAR `src/components/ListFiltersModal.vue`, copiar
+  `src/assets/scss/views/_cards.scss` y, en los tres
+  `src/i18n/locales/*.json`, sustituir `common.clearFilters` por
+  `common.backToFilters`.
+- **Index de entidades más densos** (`@edc-motor/admin-kit`): el preset
+  `cards` del `BaseGrid` escala 1 → 2 → 3 → 4 columnas con el ancho real
+  del contenedor `content`, y la franja media del `EntityCard` pasa a
+  cuadrada (`aspect-ratio: 1/1`) con la imagen contenida
+  (`object-fit: contain`): más pequeña y entera, sin deformar ni recortar.
+
 ## [0.4.8] — 2026-07-13
 
 - **Sistema de filtros unificado de los index** en `@edc-motor/ui`:
