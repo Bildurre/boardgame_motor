@@ -1,0 +1,35 @@
+@use "tokens" as *;
+
+// Toggles de ordenación (SortToggles.vue): grupo segmentado a la altura de
+// los inputs (36px); el activo se tiñe de acento y su icono marca el sentido.
+.sort-toggles {
+  display: inline-flex;
+  gap: 2px;
+  height: $input-height;
+  padding: 2px;
+  background: $input-bg;
+  border: 1px solid $input-border;
+  border-radius: $input-radius;
+
+  &__btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: 1 1 auto;
+    min-width: 40px;
+    padding: 0 $space-2;
+    border: none;
+    border-radius: $radius-sm;
+    background: transparent;
+    color: $text-2;
+    cursor: pointer;
+    transition: background-color 0.15s ease, color 0.15s ease;
+
+    &:hover { color: $text-1; }
+
+    &.is-active {
+      background: color-mix(in srgb, $accent-500 14%, transparent);
+      color: $accent-500;
+    }
+  }
+}

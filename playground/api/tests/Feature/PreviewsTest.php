@@ -228,12 +228,12 @@ it('el selector del gestor busca por texto (?q)', function () {
 
     $admin = motorUser('admin');
 
-    $this->actingAs($admin)->getJson('/api/admin/previews/character/items?q=cersei')
+    $this->actingAs($admin)->getJson('/api/admin/previews/character/items?q=cersei&locale=es')
         ->assertOk()
         ->assertJsonCount(1, 'data')
         ->assertJsonPath('data.0.id', $otro->id);
 
-    $this->actingAs($admin)->getJson('/api/admin/previews/character/items?q=nadie')
+    $this->actingAs($admin)->getJson('/api/admin/previews/character/items?q=nadie&locale=es')
         ->assertOk()
         ->assertJsonCount(0, 'data');
 });

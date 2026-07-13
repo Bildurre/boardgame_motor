@@ -11,8 +11,32 @@ admin). Paquete **fuente** (se consume vía Vite). Versión de tren con
 - **`BasePagination`**: paginación compacta de listados (anterior / "x de y" /
   siguiente; con una sola página no pinta nada), para los index del admin y
   de la web.
+- **`SortToggles`**: dos toggles de ordenación para los index — fecha
+  (latest ⇄ oldest) y alfabético (name ⇄ name_desc). Pulsar el inactivo lo
+  activa en su primer estado; pulsar el activo invierte el sentido. Iconos
+  lucide direccionales, labels accesibles por prop, 36px de alto.
+- **`IndexToolbar`**: barra unificada de los index (admin y web) — búsqueda
+  con lupa a la derecha (v-model, emite inmediato como el FilterBar: el
+  debounce va en el consumidor), `SortToggles` integrado (`v-model:sort`) y
+  botón "Filtros" con badge de activos (`activeCount`; emite `open-filters`;
+  `showFilters` lo oculta en index sin filtros). Container query propia: en
+  estrecho la búsqueda ocupa su fila y debajo toggles + botón se reparten el
+  ancho.
+- **`FiltersModal`**: modal de filtros sobre `BaseModal` (Escape, click
+  fuera, aria-modal) SIN semántica de guardar — los campos del slot aplican
+  en vivo. Grid de columnas por container query del ancho del modal
+  (1 → 2 a 460px → 3 a 700px) y pie con "Quitar filtros" (emite `clear`,
+  solo con `activeCount > 0`) y "Cerrar".
 
 ### Cambiado
+
+- **Controles de formulario compactos**: los tokens pasan de 40px a
+  `$input-height: 36px` con padding 8px/10px (antes 10px/12px). Afecta a
+  inputs/selects/textarea globales (`_forms.scss`), `.form-field`,
+  `BaseSelect`, `SearchSelect` (trigger e input del panel), `NumericInput` y
+  `BaseButton` (min-height 36px; las variantes `text` quedan sin altura
+  mínima). `BasePagination` se queda a 32px a propósito (control secundario,
+  un punto por debajo).
 
 - **Iconos del wysiwyg al tamaño del texto**: regla global — `img.rt-icon`
   mide SIEMPRE 1.2x el font-size del texto que lo rodea, se renderice donde

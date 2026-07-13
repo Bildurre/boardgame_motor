@@ -83,6 +83,14 @@
     },
     "imageDrag": "Arrastatu irudi bat edo egin klik",
     "close": "Itxi",
+    "filters": "Iragazkiak",
+    "clearFilters": "Iragazkiak kendu",
+    "sort": {
+      "latest": "Berrienak lehenengo",
+      "oldest": "Zaharrenak lehenengo",
+      "nameAsc": "Alfabetikoa (A-Z)",
+      "nameDesc": "Alfabetikoa (Z-A)"
+    },
     "imageHint": "Geh. 4 MB",
     "confirm": "Berretsi"
   },
@@ -322,6 +330,12 @@
     "homeChip": "Hasiera",
     "published": "Argitaratuta",
     "draft": "Zirriborroa",
+    "filters": {
+      "status": "Egoera",
+      "all": "Egoera guztiak",
+      "published": "Argitaratuak",
+      "draft": "Zirriborroak"
+    },
     "setHome": "Ezarri hasiera gisa",
     "confirmDelete": "\"{name}\" zakarrontzira bidali?",
     "fields": {

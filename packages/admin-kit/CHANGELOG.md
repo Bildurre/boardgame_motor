@@ -3,9 +3,18 @@
 Kit de construcción del panel de administración (sobre `@edc-motor/ui`). Paquete
 **fuente** (se consume vía Vite). Versión de tren con `edc-motor/core` y `@edc-motor/ui`.
 
+<<<<<<< HEAD
 ## [0.4.7] — 2026-07-12
 
 - Sin cambios propios: versión de tren.
+=======
+## [Sin publicar]
+
+### Cambiado
+
+- **`FilterBar` compacto**: la caja de búsqueda pasa a `$input-height`
+  (36px) y padding 10px, alineada con los nuevos tokens compactos del ui.
+>>>>>>> claude/choique-disable-language-abgt8x
 
 ## [0.4.6] — 2026-07-12
 

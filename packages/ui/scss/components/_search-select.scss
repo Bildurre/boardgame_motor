@@ -16,7 +16,8 @@
     border-radius: $input-radius;
     color: $input-text;
     cursor: pointer;
-    padding: $space-2 $space-3;
+    height: $input-height;
+    padding: 0 $input-padding-x;
     text-align: left;
     font: inherit;
 
@@ -65,7 +66,8 @@
     border: 0;
     border-bottom: 1px solid $border;
     color: $input-text;
-    padding: $space-2 $space-3;
+    height: $input-height;
+    padding: 0 $input-padding-x;
     font: inherit;
     outline: none;
 
