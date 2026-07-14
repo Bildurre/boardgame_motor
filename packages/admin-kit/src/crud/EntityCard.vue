@@ -18,6 +18,11 @@ withDefaults(
     editable?: boolean
     /** Texto accesible del botón de editar (agnóstico de i18n, DC-29). */
     editLabel?: string
+    /**
+     * Color de acento de la entidad (p. ej. su facción, de los datos del
+     * juego): tiñe el borde de la tarjeta. Sin la prop, borde del tema.
+     */
+    accentColor?: string
   }>(),
   { editLabel: 'Editar' },
 )
@@ -39,8 +44,10 @@ defineSlots<{
     :class="{
       'entity-card--clickable': clickable,
       'entity-card--muted': muted,
+      'entity-card--accented': !!accentColor,
       'is-active': active,
     }"
+    :style="accentColor ? { '--entity-card-accent': accentColor } : undefined"
     @click="clickable ? $emit('view') : undefined"
   >
     <div v-if="$slots.media" class="entity-card__media"><slot name="media" /></div>

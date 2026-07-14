@@ -4,6 +4,7 @@ import { useRoute, useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import {
   DatabaseBackup,
+  Dices,
   FileText,
   Globe,
   LayoutDashboard,
@@ -16,7 +17,7 @@ import {
   Users,
   LogOut,
 } from '@lucide/vue'
-import { AdminLayout } from '@edc-motor/admin-kit'
+import { AdminLayout, NavGroup } from '@edc-motor/admin-kit'
 import { ToastContainer, ConfirmDialog, type Crumb } from '@edc-motor/ui'
 import { useAuthStore } from '@/stores/auth'
 import { useLocalesStore } from '@/stores/locales'
@@ -90,6 +91,11 @@ async function goToSite(event: MouseEvent) {
 function navActive(section: string) {
   return { active: route.meta.nav === section }
 }
+
+// El grupo "Juego" (taxonomías) se marca activo — y se auto-despliega — si la
+// ruta actual es de una de sus secciones (mismo meta.nav que navActive).
+const GAME_SECTIONS = ['houses', 'schemes', 'characters', 'icons']
+const gameActive = computed(() => GAME_SECTIONS.includes(route.meta.nav as string))
 </script>
 
 <template>
@@ -111,44 +117,32 @@ function navActive(section: string) {
         }}</span>
       </RouterLink>
 
-      <!-- Entidades del juego -->
+      <!-- Entidades del juego, agrupadas en un desplegable (NavGroup) -->
       <hr v-if="auth.can('manage-game')" class="sidebar-divider" />
-      <RouterLink
+      <NavGroup
         v-if="auth.can('manage-game')"
-        class="nav-item"
-        :class="navActive('houses')"
-        :to="{ name: 'houses' }"
+        :label="t('nav.game')"
+        storage-key="game"
+        :active="gameActive"
       >
-        <Home class="nav-icon" :size="20" /><span class="nav-label">{{ t('nav.houses') }}</span>
-      </RouterLink>
-      <RouterLink
-        v-if="auth.can('manage-game')"
-        class="nav-item"
-        :class="navActive('schemes')"
-        :to="{ name: 'schemes' }"
-      >
-        <ScrollText class="nav-icon" :size="20" /><span class="nav-label">{{
-          t('nav.schemes')
-        }}</span>
-      </RouterLink>
-      <RouterLink
-        v-if="auth.can('manage-game')"
-        class="nav-item"
-        :class="navActive('characters')"
-        :to="{ name: 'characters' }"
-      >
-        <Swords class="nav-icon" :size="20" /><span class="nav-label">{{
-          t('nav.characters')
-        }}</span>
-      </RouterLink>
-      <RouterLink
-        v-if="auth.can('manage-game')"
-        class="nav-item"
-        :class="navActive('icons')"
-        :to="{ name: 'icons' }"
-      >
-        <Shapes class="nav-icon" :size="20" /><span class="nav-label">{{ t('nav.icons') }}</span>
-      </RouterLink>
+        <template #icon><Dices class="nav-icon" :size="20" /></template>
+        <RouterLink class="nav-item" :class="navActive('houses')" :to="{ name: 'houses' }">
+          <Home class="nav-icon" :size="20" /><span class="nav-label">{{ t('nav.houses') }}</span>
+        </RouterLink>
+        <RouterLink class="nav-item" :class="navActive('schemes')" :to="{ name: 'schemes' }">
+          <ScrollText class="nav-icon" :size="20" /><span class="nav-label">{{
+            t('nav.schemes')
+          }}</span>
+        </RouterLink>
+        <RouterLink class="nav-item" :class="navActive('characters')" :to="{ name: 'characters' }">
+          <Swords class="nav-icon" :size="20" /><span class="nav-label">{{
+            t('nav.characters')
+          }}</span>
+        </RouterLink>
+        <RouterLink class="nav-item" :class="navActive('icons')" :to="{ name: 'icons' }">
+          <Shapes class="nav-icon" :size="20" /><span class="nav-label">{{ t('nav.icons') }}</span>
+        </RouterLink>
+      </NavGroup>
 
       <!-- Generados: imágenes PNG y PDF -->
       <hr v-if="auth.can('manage-game')" class="sidebar-divider" />

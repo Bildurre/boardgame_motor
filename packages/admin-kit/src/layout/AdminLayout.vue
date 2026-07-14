@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted, watch } from 'vue'
+import { ref, computed, onMounted, onUnmounted, provide, watch } from 'vue'
 import { useRoute, type RouteLocationRaw } from 'vue-router'
 import { ChevronLeft, ChevronRight, Menu, X } from '@lucide/vue'
 import {
@@ -11,6 +11,7 @@ import {
 } from '@edc-motor/ui'
 import RightSidebar from './RightSidebar.vue'
 import { useRightSidebar } from '../composables/useRightSidebar'
+import { SIDEBAR_RAIL } from './keys'
 
 // Layout del panel — portado del AppLayout de kontuan (DC-28): sidebar
 // colapsable en escritorio, drawer a pantalla completa en móvil, preferencias
@@ -84,6 +85,20 @@ function toggleSidebar() {
   sidebarCollapsed.value = !sidebarCollapsed.value
   localStorage.setItem('edc_admin_collapsed', sidebarCollapsed.value ? '1' : '0')
 }
+
+// Estado "carril de iconos" para los NavGroup del slot #nav (ver keys.ts).
+provide(
+  SIDEBAR_RAIL,
+  computed(() => sidebarCollapsed.value && !isMobile.value),
+)
+
+// En móvil, tocar un ENLACE del menú cierra el drawer; los toggles de grupo
+// (NavGroup) no navegan y deben dejarlo abierto.
+function onNavClick(event: MouseEvent) {
+  if (isMobile.value && (event.target as HTMLElement).closest('a')) {
+    sidebarMobileOpen.value = false
+  }
+}
 </script>
 
 <template>
@@ -131,7 +146,7 @@ function toggleSidebar() {
         </div>
         <hr v-if="!sidebarCollapsed || isMobile" class="sidebar-divider" />
 
-        <div class="sidebar-items" @click="isMobile && (sidebarMobileOpen = false)">
+        <div class="sidebar-items" @click="onNavClick">
           <slot name="nav" />
         </div>
       </nav>

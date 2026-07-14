@@ -3,6 +3,35 @@
 Kit de construcción del panel de administración (sobre `@edc-motor/ui`). Paquete
 **fuente** (se consume vía Vite). Versión de tren con `edc-motor/core` y `@edc-motor/ui`.
 
+## [Sin publicar]
+
+### Añadido
+
+- **`NavGroup`**: grupo plegable para el slot `#nav` del `AdminLayout`,
+  mezclable con nav-item sueltos. Cabecera-botón (slot `icon` + `label` +
+  chevron que rota) que despliega/pliega sus hijos con una animación
+  discreta (`grid-template-rows`), `aria-expanded`/`aria-controls` y manejo
+  nativo de teclado. El plegado se persiste en `localStorage` por
+  `storageKey` (`edc_admin_nav_<clave>`, por defecto plegado) y con la prop
+  `active` (la ruta actual es de un hijo, la app la calcula igual que el
+  `active` de sus nav-item) la cabecera se resalta y el grupo se
+  auto-despliega (sin persistir: solo los toggles del usuario guardan
+  preferencia). Con el sidebar colapsado a carril de iconos los hijos se
+  muestran siempre y la cabecera queda inerte (plegar sin etiquetas
+  ocultaría rutas).
+- **`accentColor` en `EntityCard`**: borde teñido con el color de la
+  entidad (p. ej. su facción, de los datos del juego). En reposo nunca va
+  puro — `color-mix` al 45 % con el `$border` del tema, sutil en claro y
+  oscuro —, al hover sube al 75 % sobre `$border-strong` y en la tarjeta
+  seleccionada (`is-active`) es pleno. Sin la prop, todo exactamente como
+  antes.
+
+### Arreglado
+
+- **`AdminLayout`**: en móvil el drawer del menú se cerraba con CUALQUIER
+  click dentro de la lista; ahora solo al tocar un enlace (los toggles de
+  `NavGroup` no navegan y deben dejarlo abierto).
+
 ## [0.4.10] — 2026-07-14
 
 ### Cambiado

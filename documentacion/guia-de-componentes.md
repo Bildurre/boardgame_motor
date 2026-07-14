@@ -443,9 +443,10 @@ if (!ok) return
   `homeRoute?` (destino del logo; def. `{ name: 'dashboard' }`),
   `homeCrumb?` (miga "home"; `null` la oculta), `breadcrumbs?` (migas ya
   traducidas que la app calcula con `t()`).
-- **Slots:** `nav` (enlaces, usa la clase `nav-item` + `nav-label`),
-  `actions` (zona derecha del navbar), `user` (pie del sidebar; recibe
-  `{ collapsed }`), por defecto (cuerpo de la página).
+- **Slots:** `nav` (enlaces, usa la clase `nav-item` + `nav-label`; admite
+  grupos plegables con `NavGroup`, abajo), `actions` (zona derecha del
+  navbar), `user` (pie del sidebar; recibe `{ collapsed }`), por defecto
+  (cuerpo de la página).
 - **Uso:**
 
 ```vue
@@ -465,6 +466,33 @@ if (!ok) return
   </template>
   <RouterView />
 </AdminLayout>
+```
+
+### NavGroup
+
+- **Finalidad:** grupo plegable para el slot `#nav` del `AdminLayout` (menús
+  con muchas taxonomías). Cabecera-botón con icono + etiqueta + chevron que
+  despliega/pliega sus hijos (nav-item normales); se mezcla con ítems
+  sueltos. Plegado persistido en `localStorage` por clave de grupo (por
+  defecto plegado); con `active` la cabecera se resalta y el grupo se
+  auto-despliega. Con el sidebar colapsado a carril de iconos los hijos se
+  muestran siempre.
+- **Props:** `label` (ya traducida), `storageKey` (clave del plegado:
+  `edc_admin_nav_<clave>`), `active?` (la ruta actual es de un hijo; la app
+  la calcula igual que el `active` de sus nav-item, p. ej. con `meta.nav`).
+- **Slots:** `icon` (icono de la cabecera), por defecto (los nav-item hijos).
+- **Uso:**
+
+```vue
+<template #nav>
+  <RouterLink class="nav-item" :to="{ name: 'dashboard' }">…</RouterLink>
+  <NavGroup :label="t('nav.game')" storage-key="game" :active="gameActive">
+    <template #icon><Dices class="nav-icon" :size="20" /></template>
+    <RouterLink class="nav-item" :class="navActive('houses')" :to="{ name: 'houses' }">
+      <Home class="nav-icon" :size="20" /><span class="nav-label">{{ t('nav.houses') }}</span>
+    </RouterLink>
+  </NavGroup>
+</template>
 ```
 
 ### Index de entidades (patrón sin tablas) — `FilterBar` + `BaseTabs` + `BaseGrid` + `EntityCard`
@@ -491,7 +519,10 @@ if (!ok) return
 - **Finalidad:** tarjeta de entidad. Mezcla kontuan (contenedor con borde/sombra,
   hover, slots) y CDL (cabecera título + acciones con divisoria, contenido con
   `badges` y `meta`). Franja `media` opcional arriba (emblema/imagen).
-- **Props:** `title`, `clickable?`, `muted?`. **Emite:** `view` (si `clickable`).
+- **Props:** `title`, `clickable?`, `muted?`, `accentColor?` (tiñe el borde
+  con el color de la entidad, p. ej. su facción: mezclado con el borde del
+  tema en reposo, más presente al hover y pleno en la seleccionada).
+  **Emite:** `view` (si `clickable`).
 - **Slots:** `media`, `actions`, `badges`, `meta`, por defecto.
 
 #### EmptyState

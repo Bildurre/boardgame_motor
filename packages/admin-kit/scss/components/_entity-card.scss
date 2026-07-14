@@ -20,6 +20,21 @@
   &--muted { opacity: 0.65; }
   &.is-active { border-color: $accent-500; }
 
+  // Borde teñido con el color de la entidad (prop accentColor, p. ej. su
+  // facción). El color viene de los datos del juego, así que en reposo nunca
+  // va puro: mezclado con el borde del tema queda sutil tanto en claro como
+  // en oscuro; gana presencia al hover y es pleno en la tarjeta seleccionada.
+  &--accented {
+    border-color: color-mix(in srgb, var(--entity-card-accent) 45%, $border);
+
+    &.entity-card--clickable:hover {
+      border-color: color-mix(in srgb, var(--entity-card-accent) 75%, $border-strong);
+    }
+    &.is-active {
+      border-color: var(--entity-card-accent);
+    }
+  }
+
   // Franja superior opcional (emblema/imagen). Cuadrada: con el grid de los
   // index a 4 columnas la tarjeta es más estrecha y la imagen queda contenida
   // (más bien pequeña) y centrada, nunca deformada ni recortada. Sin fondo:

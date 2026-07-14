@@ -145,6 +145,72 @@
   }
 }
 
+// Grupo plegable del menú (NavGroup): cabecera-botón con el mismo cuerpo que
+// un nav-item (más el chevron) y panel de hijos con sangría. La animación va
+// por grid-template-rows (0fr → 1fr): discreta y sin medir alturas en JS.
+.nav-group {
+  display: flex;
+  flex-direction: column;
+
+  &__toggle {
+    width: 100%;
+    background: none;
+    border: none;
+    font-family: inherit;
+    text-align: left;
+    cursor: pointer;
+  }
+
+  &__chevron {
+    margin-left: auto;
+    color: $text-3;
+    transition: transform 0.2s ease;
+  }
+
+  &--open > .nav-group__toggle .nav-group__chevron {
+    transform: rotate(90deg);
+  }
+
+  // Activo (la ruta actual es de un hijo): la cabecera toma el acento; solo
+  // plegado toma también el fondo (desplegado ya se resalta el propio hijo).
+  &--active > .nav-group__toggle {
+    color: $accent-600;
+  }
+  &--active:not(.nav-group--open) > .nav-group__toggle {
+    background: $accent-100;
+  }
+
+  &__panel {
+    display: grid;
+    grid-template-rows: 0fr;
+    transition: grid-template-rows 0.2s ease;
+  }
+
+  &--open > .nav-group__panel {
+    grid-template-rows: 1fr;
+  }
+
+  &__children {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-height: 0;
+    overflow: hidden;
+    // Plegado, fuera del tab-order; al plegar espera a que acabe la animación.
+    visibility: hidden;
+    transition: visibility 0s 0.2s;
+
+    .nav-item {
+      padding-left: $space-6 + $space-2;
+    }
+  }
+
+  &--open > .nav-group__panel > .nav-group__children {
+    visibility: visible;
+    transition: visibility 0s;
+  }
+}
+
 .sidebar-user {
   display: flex;
   align-items: center;
@@ -265,6 +331,22 @@
   }
   .nav-label {
     display: none;
+  }
+
+  // Carril de iconos: los grupos muestran siempre a sus hijos (lo fuerza
+  // NavGroup vía inject) y su cabecera queda inerte, sin chevron ni sangría.
+  .nav-group__chevron {
+    display: none;
+  }
+  .nav-group__toggle {
+    cursor: default;
+
+    &:hover {
+      background: transparent;
+    }
+  }
+  .nav-group__children .nav-item {
+    padding-left: $space-3;
   }
 }
 

@@ -1,6 +1,9 @@
 // @edc-motor/admin-kit — layout del panel + scaffolding CRUD (sobre @edc-motor/ui).
 
 export { default as AdminLayout } from './layout/AdminLayout.vue'
+// Grupo plegable para el slot #nav del AdminLayout: mezcla nav-item sueltos
+// y grupos (icono + etiqueta + chevron) con plegado persistido en localStorage.
+export { default as NavGroup } from './layout/NavGroup.vue'
 // Panel derecho contextual (patrón kontuan): AdminLayout lo monta; cada vista
 // lo activa con useRightSidebar() y Teleport a #right-sidebar-target.
 export { default as RightSidebar } from './layout/RightSidebar.vue'

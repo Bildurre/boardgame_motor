@@ -12,6 +12,23 @@ El formato sigue [Keep a Changelog](https://keepachangelog.com/es/) y el
 versionado, [SemVer](https://semver.org/lang/es/) (mientras estemos en `0.x`,
 los cambios de API pueden llegar en versiones menores).
 
+## [Sin publicar]
+
+- **Grupos plegables en el menú del admin** (`@edc-motor/admin-kit`): nuevo
+  `NavGroup` para el slot `#nav` del `AdminLayout` — cabecera con icono +
+  etiqueta + chevron que despliega/pliega sus hijos (mezclable con nav-item
+  sueltos), plegado persistido en `localStorage` por clave de grupo (por
+  defecto plegado) y auto-despliegue con resalte cuando la ruta actual es de
+  un hijo (prop `active`). Con el sidebar colapsado a carril de iconos los
+  hijos se muestran siempre. El playground agrupa así sus taxonomías bajo
+  "Juego". De propina, en móvil el drawer del menú ya solo se cierra al tocar
+  un enlace (no con cualquier click).
+- **Borde por entidad en `EntityCard`** (`@edc-motor/admin-kit`): nueva prop
+  `accentColor` — el borde se tiñe con el color de la entidad (p. ej. su
+  facción): mezclado con el borde del tema en reposo (sutil en claro y
+  oscuro), más presente al hover y pleno en la seleccionada. Sin la prop,
+  todo como antes. El playground lo usa en el index de casas (`item.color`).
+
 ## [0.4.10] — 2026-07-14
 
 - **Retoques del `EntityCard`** (`@edc-motor/admin-kit`): la franja media
