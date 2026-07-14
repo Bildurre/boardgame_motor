@@ -12,6 +12,10 @@ El formato sigue [Keep a Changelog](https://keepachangelog.com/es/) y el
 versionado, [SemVer](https://semver.org/lang/es/) (mientras estemos en `0.x`,
 los cambios de API pueden llegar en versiones menores).
 
+## [0.4.10] — 2026-07-14
+
+- Sin cambios propios: versión de tren.
+
 ## [0.4.9] — 2026-07-13
 
 - **Fix** (`@edc-motor/ui`): al desplegar un `BaseSelect`/`SearchSelect`
