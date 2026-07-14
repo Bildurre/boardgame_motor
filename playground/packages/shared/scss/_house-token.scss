@@ -56,11 +56,8 @@
 }
 
 // En el escenario de captura ocupa el viewport entero (PNG a medida). Las
-// esquinas fuera del círculo deben salir blancas (papel), no del tema oscuro.
-.render-stage:has(.house-token) {
-  background: #fff;
-}
-
+// esquinas fuera del círculo salen TRANSPARENTES (canal alfa del PNG): el
+// render omite el fondo de Chromium y html/body no pintan fondo en /_render.
 .render-stage .house-token {
   width: 100vw;
   height: 100vh;

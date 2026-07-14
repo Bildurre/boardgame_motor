@@ -26,6 +26,13 @@ Kit de construcción del panel de administración (sobre `@edc-motor/ui`). Paque
   imagen de `object-fit: cover` a `contain` — con tarjetas más estrechas la
   imagen queda contenida y centrada (más bien pequeña), nunca deformada ni
   recortada.
+- **Retoques del `EntityCard`**: la franja `__media` pierde el fondo
+  (`$surface-2`) — la imagen contenida se apoya directamente sobre la
+  superficie de la tarjeta; el lápiz de editar (`editable`) pasa a verde
+  (`$success`, con hover de fondo semitransparente al estilo de los
+  icon-btn del ui); y header y content respiran menos entre sí
+  (`padding-bottom` del header y `padding-top` del content bajan un
+  escalón, de `$space-3` a `$space-2`).
 
 ## [0.4.8] — 2026-07-13
 
