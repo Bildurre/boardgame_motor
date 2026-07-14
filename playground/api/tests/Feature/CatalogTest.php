@@ -1,7 +1,5 @@
 <?php
 
-use App\Models\Character;
-
 // Catálogo público genérico (/api/catalog/{key}): cualquier entidad del
 // registry de previews, sin auth, solo publicadas, ítem mínimo
 // {id, name, slug, preview} con paginación/búsqueda o modo aleatorio.
