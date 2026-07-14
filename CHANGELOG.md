@@ -14,7 +14,20 @@ los cambios de API pueden llegar en versiones menores).
 
 ## [0.4.10] — 2026-07-14
 
-- Sin cambios propios: versión de tren.
+- **Retoques del `EntityCard`** (`@edc-motor/admin-kit`): la franja media
+  pierde el fondo, el lápiz de editar pasa a verde (`$success`) y header y
+  content respiran menos entre sí (un escalón menos de padding en la
+  divisoria).
+- **Previews PNG con fondo transparente.** El `PreviewRenderer` del core ya
+  captura con `hideBackground()` (omite el fondo por defecto de Chromium),
+  pero la ruta `/_render` del cascarón pintaba el fondo del tema en
+  `html`/`body` y el PNG salía opaco. `RenderView.vue` fuerza ahora
+  `background: transparent` en `html`/`body`: el fondo lo decide el
+  componente de cada entidad — las plantillas que pintan el suyo (cartas,
+  héroes) salen igual que antes; las que no (contadores/tokens redondos),
+  con canal alfa de verdad en las esquinas. **Migración del cascarón**:
+  copiar de `plantilla/app/` `src/views/RenderView.vue` y regenerar las
+  previews afectadas.
 
 ## [0.4.9] — 2026-07-13
 
@@ -60,20 +73,6 @@ los cambios de API pueden llegar en versiones menores).
   del contenedor `content`, y la franja media del `EntityCard` pasa a
   cuadrada (`aspect-ratio: 1/1`) con la imagen contenida
   (`object-fit: contain`): más pequeña y entera, sin deformar ni recortar.
-- **Retoques del `EntityCard`** (`@edc-motor/admin-kit`): la franja media
-  pierde el fondo, el lápiz de editar pasa a verde (`$success`) y header y
-  content respiran menos entre sí (un escalón menos de padding en la
-  divisoria).
-- **Previews PNG con fondo transparente.** El `PreviewRenderer` del core ya
-  captura con `hideBackground()` (omite el fondo por defecto de Chromium),
-  pero la ruta `/_render` del cascarón pintaba el fondo del tema en
-  `html`/`body` y el PNG salía opaco. `RenderView.vue` fuerza ahora
-  `background: transparent` en `html`/`body`: el fondo lo decide el
-  componente de cada entidad — las plantillas que pintan el suyo (cartas,
-  héroes) salen igual que antes; las que no (contadores/tokens redondos),
-  con canal alfa de verdad en las esquinas. **Migración del cascarón**:
-  copiar de `plantilla/app/` `src/views/RenderView.vue` y regenerar las
-  previews afectadas.
 
 ## [0.4.8] — 2026-07-13
 
