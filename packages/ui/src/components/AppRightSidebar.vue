@@ -1,34 +1,43 @@
 <script setup lang="ts">
 import { computed, onBeforeUnmount, onMounted } from 'vue'
-import { X } from '@lucide/vue'
+import { Funnel, X } from '@lucide/vue'
 import { useAppRightSidebar } from '../composables/useAppRightSidebar'
 
 // Barra lateral derecha contextual de la web pública (misma mecánica que la
 // RightSidebar del admin-kit): cada vista la activa con
 // useAppRightSidebar().useRegister(titulo) y teletransporta su contenido
-// (típicamente sus selects de filtros) a #app-right-sidebar-target. En ancho
-// es una columna pegajosa junto al contenido; por debajo de
-// OVERLAY_BREAKPOINT pasa a drawer superpuesto con cierre por click fuera y
-// Escape. Se abre/cierra con el botón (Funnel) del header, que llama a
-// useAppRightSidebar().toggle(). La monta App.vue una vez, dentro de
-// .site-main; el cascarón fija --app-right-sidebar-top a la altura de su
-// cabecera fija.
+// (típicamente sus selects de filtros) a #app-right-sidebar-target.
+//
+// A diferencia del admin (marco fijo, scrollea el main), aquí el header se
+// auto-oculta y el footer va al final del documento: la barra es SIEMPRE
+// fija (top 0 → bottom 0, por encima de la cabecera) para no scrollear con
+// la página ni "acabarse" al llegar al pie. En ANCHO, desplegada, el
+// cascarón le hace hueco al contenido (padding-right de .site-content /
+// .site-header / .app-footer sobre la clase `--docked`); por debajo de
+// OVERLAY_BREAKPOINT es un drawer superpuesto con telón, click fuera y
+// Escape. Se abre y se cierra con el ASA anclada a la propia barra (Funnel
+// cerrada / X abierta), visible solo si la vista registró contenido; el
+// cascarón puede ajustar su altura con --app-right-sidebar-handle-top.
+// La monta App.vue una vez, dentro de .site-main.
 // Agnóstica de i18n (DC-29): textos por prop, defaults en castellano.
 
 const props = withDefaults(
   defineProps<{
+    /** Label del asa con la barra cerrada. */
+    openLabel?: string
+    /** Label del asa con la barra abierta. */
     closeLabel?: string
     /** Título por defecto si la vista registra sin título. */
     fallbackTitle?: string
   }>(),
-  { closeLabel: 'Cerrar el panel', fallbackTitle: 'Filtros' },
+  { openLabel: 'Abrir el panel', closeLabel: 'Cerrar el panel', fallbackTitle: 'Filtros' },
 )
 
 const { hasContent, collapsed, mobileOpen, overlay, title, isOpen, toggle, closeMobile } =
   useAppRightSidebar()
 
-// Por debajo de este ancho la barra se superpone (drawer) en vez de ocupar
-// columna: coincide con el corte móvil del header público (900px).
+// Por debajo de este ancho la barra se superpone (drawer) en vez de hacer
+// hueco: coincide con el corte móvil del header público (900px).
 const OVERLAY_BREAKPOINT = 900
 
 function checkOverlay() {
@@ -53,12 +62,12 @@ onBeforeUnmount(() => {
 })
 
 const panelTitle = computed(() => title.value || props.fallbackTitle)
+const handleLabel = computed(() => (isOpen.value ? props.closeLabel : props.openLabel))
 
-function handleClose(e: MouseEvent) {
-  // Evita dejar el foco dentro de un subárbol inert.
-  ;(e.currentTarget as HTMLElement | null)?.blur()
-  toggle()
-}
+// Desplegada en ANCHO: el cascarón le hace hueco (body:has en su scss).
+// hasContent va en la clase porque v-show (display: none) no saca al aside
+// de los selectores :has.
+const docked = computed(() => hasContent.value && !overlay.value && !collapsed.value)
 </script>
 
 <template>
@@ -72,26 +81,33 @@ function handleClose(e: MouseEvent) {
     v-show="hasContent"
     class="app-right-sidebar"
     :class="{
-      'app-right-sidebar--collapsed': collapsed && !overlay,
+      'app-right-sidebar--open': hasContent && isOpen,
+      'app-right-sidebar--docked': docked,
       'app-right-sidebar--drawer': overlay,
-      'app-right-sidebar--drawer-open': overlay && mobileOpen,
     }"
-    :inert="!isOpen"
   >
-    <div class="app-right-sidebar__header">
-      <span class="app-right-sidebar__title">{{ panelTitle }}</span>
-      <button
-        type="button"
-        class="app-right-sidebar__close"
-        :aria-label="closeLabel"
-        @click="handleClose"
-      >
-        <X :size="18" />
-      </button>
-    </div>
+    <!-- Asa anclada a la barra (viaja con ella al abrir/cerrar): fuera del
+         panel inerte para poder abrirla con la barra cerrada. -->
+    <button
+      type="button"
+      class="app-right-sidebar__handle"
+      :aria-label="handleLabel"
+      :title="handleLabel"
+      :aria-expanded="isOpen"
+      @click="toggle"
+    >
+      <X v-if="isOpen" :size="18" />
+      <Funnel v-else :size="18" />
+    </button>
 
-    <div class="app-right-sidebar__body">
-      <div id="app-right-sidebar-target" />
+    <div class="app-right-sidebar__panel" :inert="!isOpen">
+      <div class="app-right-sidebar__header">
+        <span class="app-right-sidebar__title">{{ panelTitle }}</span>
+      </div>
+
+      <div class="app-right-sidebar__body">
+        <div id="app-right-sidebar-target" />
+      </div>
     </div>
   </aside>
 </template>

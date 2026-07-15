@@ -1,15 +1,14 @@
 @use "tokens" as *;
 
-// Toggles de ordenación (SortToggles.vue): grupo segmentado a la altura de
-// los inputs (36px); el activo se tiñe de acento y su icono marca el sentido.
+// Toggles de ordenación (SortToggles.vue): dos botones SUELTOS estilo
+// action-button (sin caja ni borde, como los del header del admin), a la
+// altura táctil de los inputs (36px). El icono marca el sentido y el color
+// lo refuerza: activo ASCENDENTE en tinte suave de acento; activo
+// DESCENDENTE relleno de acento pleno (misma familia, otra intensidad —
+// funciona igual en claro y oscuro y con cualquier acento de juego).
 .sort-toggles {
   display: inline-flex;
-  gap: 2px;
-  height: $input-height;
-  padding: 2px;
-  background: $input-bg;
-  border: 1px solid $input-border;
-  border-radius: $input-radius;
+  gap: $space-2;
 
   &__btn {
     display: inline-flex;
@@ -17,19 +16,36 @@
     justify-content: center;
     flex: 1 1 auto;
     min-width: 40px;
+    height: $input-height;
     padding: 0 $space-2;
     border: none;
-    border-radius: $radius-sm;
-    background: transparent;
+    border-radius: $radius-md;
+    background: none;
     color: $text-2;
     cursor: pointer;
     transition: background-color 0.15s ease, color 0.15s ease;
 
-    &:hover { color: $text-1; }
-
-    &.is-active {
-      background: color-mix(in srgb, $accent-500 14%, transparent);
+    &:hover {
       color: $accent-500;
+      background: color-mix(in srgb, $accent-500 10%, transparent);
+    }
+
+    // Activo ascendente: acento sobre su tinte suave (el activo del tema).
+    &.is-active {
+      color: $accent-500;
+      background: color-mix(in srgb, $accent-500 14%, transparent);
+    }
+
+    // Activo descendente: el mismo acento, relleno (texto en $surface,
+    // como el contador de la colección del cascarón).
+    &.is-active.is-desc {
+      color: $surface;
+      background: $accent-500;
+
+      &:hover {
+        color: $surface;
+        background: $accent-600;
+      }
     }
   }
 }

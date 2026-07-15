@@ -12,6 +12,32 @@ El formato sigue [Keep a Changelog](https://keepachangelog.com/es/) y el
 versionado, [SemVer](https://semver.org/lang/es/) (mientras estemos en `0.x`,
 los cambios de API pueden llegar en versiones menores).
 
+## [Sin publicar]
+
+- **Barra derecha contextual de la web pública SIEMPRE fija, con asa propia**
+  (`@edc-motor/ui`): `AppRightSidebar` deja de ser una columna sticky que
+  scrolleaba con la página y "se acababa" al llegar al pie — ahora es fija a
+  toda la altura del viewport (top 0 → bottom 0), por encima de la cabecera
+  auto-ocultable, en TODOS los anchos. En ancho, desplegada, el cascarón le
+  hace hueco (padding-right con transición de contenido, cabecera y pie, sin
+  telón); en estrecho sigue el drawer superpuesto con telón, click fuera y
+  Escape. El botón Funnel sale del header: la barra trae su propia ASA
+  anclada al costado (Funnel cerrada / X abierta), nueva prop `openLabel`.
+  La API de `useAppRightSidebar()` no cambia. **Migración del cascarón**:
+  copiar de `plantilla/app/` — `src/App.vue`,
+  `src/components/AppHeader.vue`, `src/assets/scss/main.scss` y
+  `src/assets/scss/components/_app-header.scss` (las claves i18n
+  `nav.filters`/`nav.closeFilters` se conservan: App.vue las pasa como
+  labels del asa).
+- **`SortToggles` sueltos estilo action-button** (`@edc-motor/ui`): fuera el
+  grupo segmentado con borde; cada toggle es un botón limpio e individual, y
+  el color del activo distingue además ascendente (tinte suave de acento) de
+  descendente (acento relleno).
+- **Grid de entidades del admin hasta cinco columnas**
+  (`@edc-motor/admin-kit`): `BaseGrid` gana el escalón `xl` (`$bp-xl`,
+  1280px de ancho real del contenedor `content`) y el preset `cards` escala
+  1 → 2 → 3 → 4 → 5.
+
 ## [0.4.11] — 2026-07-15
 
 - **Grupos plegables en el menú del admin** (`@edc-motor/admin-kit`): nuevo

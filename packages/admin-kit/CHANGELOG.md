@@ -3,6 +3,16 @@
 Kit de construcción del panel de administración (sobre `@edc-motor/ui`). Paquete
 **fuente** (se consume vía Vite). Versión de tren con `edc-motor/core` y `@edc-motor/ui`.
 
+## [Sin publicar]
+
+### Cambiado
+
+- **`BaseGrid` hasta cinco columnas**: nuevo escalón `xl` en el sistema de
+  breakpoints del grid (`$bp-xl`, 1280px de ancho REAL del contenedor
+  `content`, como los demás) — `cols` acepta `{ xl: n }` y el preset `cards`
+  de los index de entidades escala 1 → 2 → 3 → 4 → **5** en pantallas muy
+  anchas. El resto de presets, como estaban.
+
 ## [0.4.11] — 2026-07-15
 
 ### Añadido

@@ -2,28 +2,44 @@
 
 // Barra lateral derecha contextual de la web pública (AppRightSidebar.vue):
 // cada vista la registra con useAppRightSidebar() y App.vue la monta una vez
-// dentro de .site-main (flex row con .site-content). El cascarón fija
-// --app-right-sidebar-top a la altura de su cabecera fija; sin fijarla, la
-// barra arranca en el borde superior.
+// dentro de .site-main. SIEMPRE fija a la derecha, a toda la altura del
+// viewport y POR ENCIMA de la cabecera auto-ocultable del cascarón (z 50):
+// así ni scrollea con la página, ni "se acaba" en el footer, ni baila cuando
+// el header aparece/desaparece. Cerrada queda fuera de pantalla
+// (translateX) y solo asoma el asa.
+//
+// El cascarón decide el hueco: con `--docked` (desplegada en ancho) da
+// padding-right a .site-content/.site-header/.app-footer vía body:has(); en
+// estrecho el componente añade telón y la barra se superpone (drawer).
+
+// Ancho compartido con el cascarón (el hueco del contenido lo usa).
+:root {
+  --app-right-sidebar-width: 320px;
+}
 
 .app-right-sidebar {
-  position: sticky;
+  position: fixed;
   top: 0;
-  align-self: flex-start;
-  height: 100dvh;
-  width: 320px;
-  flex-shrink: 0;
-  padding-top: var(--app-right-sidebar-top, 0px);
-  background: $surface;
-  border-left: 1px solid $border;
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-  transition: width 0.2s ease, transform 0.25s ease;
+  right: 0;
+  bottom: 0;
+  z-index: 60; // por encima de la cabecera fija del cascarón (50)
+  // En viewports mínimos deja sitio al asa (el telón cubre el resto).
+  width: min(var(--app-right-sidebar-width), 100vw - 36px);
+  transform: translateX(100%);
+  transition: transform 0.25s ease;
 
-  &--collapsed {
-    width: 0;
-    border-left: 0;
+  &--open {
+    transform: translateX(0);
+  }
+
+  // El panel de verdad (el aside deja overflow visible para el asa).
+  &__panel {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    background: $surface;
+    border-left: 1px solid $border;
+    overflow: hidden;
   }
 
   &__header {
@@ -31,7 +47,7 @@
     align-items: center;
     gap: $space-2;
     height: 48px;
-    padding: 0 $space-2 0 $space-4;
+    padding: 0 $space-4;
     border-bottom: 1px solid $border;
     flex-shrink: 0;
   }
@@ -46,30 +62,39 @@
     white-space: nowrap;
   }
 
-  // Cerrar como el action-button del modal: sin caja, acento al hover.
-  &__close {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 32px;
-    height: 32px;
-    border: none;
-    background: none;
-    color: $text-2;
-    cursor: pointer;
-    border-radius: $radius-sm;
-    transition: background-color 0.15s ease, color 0.15s ease;
-
-    &:hover {
-      color: $accent-500;
-      background: color-mix(in srgb, $accent-500 12%, transparent);
-    }
-  }
-
   &__body {
     flex: 1;
     overflow-y: auto;
     padding: $space-4;
+  }
+
+  // Asa de abrir/cerrar, anclada al costado izquierdo de la barra (como la
+  // de la RightSidebar del admin): al viajar CON la barra nunca se desancla
+  // de ella. Con la barra cerrada asoma pegada al borde del viewport. El
+  // cascarón puede bajarla/subirla con --app-right-sidebar-handle-top (por
+  // defecto, bajo una cabecera típica de dos filas).
+  &__handle {
+    position: absolute;
+    top: var(--app-right-sidebar-handle-top, 112px);
+    right: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 48px;
+    padding: 0;
+    background: $surface;
+    border: 1px solid $accent-500;
+    border-right: none;
+    border-radius: $radius-md 0 0 $radius-md;
+    color: $accent-500;
+    cursor: pointer;
+    transition: background-color 0.15s ease, color 0.15s ease;
+
+    &:hover {
+      background: $surface-2;
+      color: $accent-600;
+    }
   }
 
   // El contenido registrado (selects de filtros…) se apila a una columna.
@@ -78,35 +103,17 @@
     gap: $space-3;
   }
 
-  // Modo drawer (por debajo del umbral del componente): superpuesto al
-  // contenido, bajo la cabecera, con telón y cierre por click fuera/Escape.
-  &--drawer {
-    position: fixed;
-    top: var(--app-right-sidebar-top, 0px);
-    right: 0;
-    bottom: 0;
-    // El align-self: flex-start del modo columna aplica aquí como alineación
-    // de caja posicionada y encogería el alto al contenido en vez de
-    // estirarlo hasta bottom: 0.
-    align-self: auto;
-    height: auto;
-    padding-top: 0;
-    z-index: 60; // por encima de la cabecera fija (50)
-    width: min(320px, 100vw);
-    transform: translateX(100%);
-
-    &.app-right-sidebar--drawer-open {
-      transform: translateX(0);
-    }
+  // Modo drawer (por debajo del umbral del componente): superpuesta al
+  // contenido, con telón y cierre por asa, click fuera o Escape.
+  &--drawer.app-right-sidebar--open {
+    box-shadow: $shadow-lg;
   }
 }
 
+// Telón del drawer: por encima de la cabecera (50) y bajo la barra (60).
 .app-right-sidebar-overlay {
   position: fixed;
-  top: var(--app-right-sidebar-top, 0px);
-  left: 0;
-  right: 0;
-  bottom: 0;
+  inset: 0;
   background: rgb(0 0 0 / 40%);
   z-index: 55;
 }

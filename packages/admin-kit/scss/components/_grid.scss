@@ -28,4 +28,9 @@
       @container content (min-width: #{$bp-lg}) { grid-template-columns: repeat(#{$i}, 1fr); }
     }
   }
+  @for $i from 1 through 6 {
+    &--xl-#{$i} {
+      @container content (min-width: #{$bp-xl}) { grid-template-columns: repeat(#{$i}, 1fr); }
+    }
+  }
 }

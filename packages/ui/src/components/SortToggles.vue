@@ -5,7 +5,10 @@ import { ArrowDownAZ, ArrowDownZA, CalendarArrowDown, CalendarArrowUp } from '@l
 // Par de toggles de ordenación de los index: fecha (latest ⇄ oldest) y
 // alfabético (name ⇄ name_desc). Pulsar el inactivo lo activa en su primer
 // estado; pulsar el activo invierte el sentido. Los valores casan con el
-// ?sort del catálogo público del core.
+// ?sort del catálogo público del core. Botones SUELTOS estilo action-button
+// (scss): el activo se tiñe de acento y `is-desc` marca el sentido
+// DESCENDENTE (latest = más recientes primero, name_desc = Z-A) para que el
+// color lo refuerce además del icono.
 // Agnóstico de i18n (DC-29): textos por prop, defaults en castellano.
 
 export type SortValue = 'latest' | 'oldest' | 'name' | 'name_desc'
@@ -55,7 +58,7 @@ function toggleAlpha() {
     <button
       type="button"
       class="sort-toggles__btn"
-      :class="{ 'is-active': dateActive }"
+      :class="{ 'is-active': dateActive, 'is-desc': modelValue === 'latest' }"
       :aria-pressed="dateActive"
       :aria-label="dateLabel"
       :title="dateLabel"
@@ -67,7 +70,7 @@ function toggleAlpha() {
     <button
       type="button"
       class="sort-toggles__btn"
-      :class="{ 'is-active': alphaActive }"
+      :class="{ 'is-active': alphaActive, 'is-desc': modelValue === 'name_desc' }"
       :aria-pressed="alphaActive"
       :aria-label="alphaLabel"
       :title="alphaLabel"

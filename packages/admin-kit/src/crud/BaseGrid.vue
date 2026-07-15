@@ -3,7 +3,7 @@ import { computed } from 'vue'
 
 // Grid responsive de tarjetas (portado de kontuan). Responde al ancho del
 // contenedor `content` (no al viewport), así coincide con el espacio real.
-type Breakpoint = 'base' | 'sm' | 'md' | 'lg'
+type Breakpoint = 'base' | 'sm' | 'md' | 'lg' | 'xl'
 type ResponsiveCols = Partial<Record<Breakpoint, number>>
 
 const props = withDefaults(
@@ -16,9 +16,9 @@ const props = withDefaults(
 )
 
 const presetCols: Record<string, ResponsiveCols> = {
-  // Los index de entidades escalan 1 → 2 → 3 → 4 con el ancho REAL del
-  // contenedor `content` (en pantallas anchas llegan a cuatro columnas).
-  cards: { base: 1, sm: 2, md: 3, lg: 4 },
+  // Los index de entidades escalan 1 → 2 → 3 → 4 → 5 con el ancho REAL del
+  // contenedor `content` (en pantallas muy anchas llegan a cinco columnas).
+  cards: { base: 1, sm: 2, md: 3, lg: 4, xl: 5 },
   'cards-wide': { base: 1, sm: 2, lg: 4 },
   'cards-narrow': { base: 1, sm: 2 },
   'cards-full': { base: 1, sm: 2, md: 3, lg: 4 },

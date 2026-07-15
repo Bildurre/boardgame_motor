@@ -7,12 +7,12 @@ import { computed, onBeforeUnmount, ref } from 'vue'
  * Estado singleton a nivel de módulo (como useToast/useConfirm: los juegos
  * consumen el paquete como fuente con `optimizeDeps.exclude` para que solo
  * exista una copia):
- *   - escritorio: columna junto al contenido cuando la vista actual registra
- *     contenido; se puede plegar con `collapsed`.
+ *   - escritorio: barra fija a la derecha cuando la vista actual registra
+ *     contenido (el cascarón le hace hueco); se pliega con `collapsed`.
  *   - estrecho: oculta; entra como drawer superpuesto cuando `mobileOpen`.
  *
- * El botón del header (Funnel) llama a `toggle()`, que despliega/pliega según
- * el modo; `overlay` lo mantiene el componente AppRightSidebar con el ancho.
+ * El asa anclada a la propia barra llama a `toggle()`, que despliega/pliega
+ * según el modo; `overlay` lo mantiene AppRightSidebar con el ancho.
  *
  * La propiedad se rastrea con un token opaco para que el `unregister` de una
  * vista saliente nunca borre el contenido cuando otra vista ya ha registrado
@@ -46,7 +46,7 @@ export function useAppRightSidebar() {
     mobileOpen.value = !mobileOpen.value
   }
 
-  /** Abre/cierra según el modo: el botón del header no distingue anchos. */
+  /** Abre/cierra según el modo: el asa de la barra no distingue anchos. */
   function toggle() {
     if (overlay.value) toggleMobile()
     else toggleCollapsed()
