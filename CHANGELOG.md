@@ -12,6 +12,10 @@ El formato sigue [Keep a Changelog](https://keepachangelog.com/es/) y el
 versionado, [SemVer](https://semver.org/lang/es/) (mientras estemos en `0.x`,
 los cambios de API pueden llegar en versiones menores).
 
+## [0.4.12] — 2026-07-15
+
+- Sin cambios propios: versión de tren.
+
 ## [0.4.11] — 2026-07-15
 
 - **Grupos plegables en el menú del admin** (`@edc-motor/admin-kit`): nuevo
