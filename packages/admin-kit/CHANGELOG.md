@@ -3,6 +3,16 @@
 Kit de construcción del panel de administración (sobre `@edc-motor/ui`). Paquete
 **fuente** (se consume vía Vite). Versión de tren con `edc-motor/core` y `@edc-motor/ui`.
 
+## [Sin publicar]
+
+### Cambiado
+
+- **Card seleccionada más evidente** (`EntityCard` y `ManagerCard`): el
+  borde pasa al acento del tema y se dobla con un anillo de 1px (box-shadow,
+  sin mover el layout), más una sombra suave del acento. Con `accentColor`
+  (tinte de facción), la selección manda: la card seleccionada va SIEMPRE
+  con el acento del tema, no con el color de la entidad.
+
 ## [0.4.14] — 2026-07-16
 
 ### Cambiado

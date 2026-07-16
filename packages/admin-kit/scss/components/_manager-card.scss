@@ -58,6 +58,9 @@
 
   &.is-active {
     border-color: $accent-500;
+    box-shadow:
+      0 0 0 1px $accent-500,
+      0 2px 10px color-mix(in srgb, $accent-500 30%, transparent);
   }
 
   &__head {

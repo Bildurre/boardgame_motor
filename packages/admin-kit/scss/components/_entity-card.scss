@@ -18,7 +18,14 @@
     &:hover { border-color: $border-strong; box-shadow: $shadow-md; }
   }
   &--muted { opacity: 0.65; }
-  &.is-active { border-color: $accent-500; }
+  // Seleccionada: acento del tema, borde doblado con un anillo (sin mover
+  // el layout) y una sombra suave para despegarla de la rejilla.
+  &.is-active {
+    border-color: $accent-500;
+    box-shadow:
+      0 0 0 1px $accent-500,
+      0 2px 10px color-mix(in srgb, $accent-500 30%, transparent);
+  }
 
   // Borde teñido con el color de la entidad (prop accentColor, p. ej. su
   // facción). El color viene de los datos del juego, así que en reposo nunca
@@ -30,8 +37,10 @@
     &.entity-card--clickable:hover {
       border-color: color-mix(in srgb, var(--entity-card-accent) 75%, $border-strong);
     }
+    // La selección manda sobre el tinte de la entidad: mismo acento del
+    // tema que cualquier otra card seleccionada.
     &.is-active {
-      border-color: var(--entity-card-accent);
+      border-color: $accent-500;
     }
   }
 
