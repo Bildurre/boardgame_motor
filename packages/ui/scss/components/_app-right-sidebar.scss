@@ -2,15 +2,17 @@
 
 // Barra lateral derecha contextual de la web pública (AppRightSidebar.vue):
 // cada vista la registra con useAppRightSidebar() y App.vue la monta una vez
-// dentro de .site-main. SIEMPRE fija a la derecha, a toda la altura del
-// viewport y POR ENCIMA de la cabecera auto-ocultable del cascarón (z 50):
-// así ni scrollea con la página, ni "se acaba" en el footer, ni baila cuando
-// el header aparece/desaparece. Cerrada queda fuera de pantalla
-// (translateX) y solo asoma el asa.
+// dentro de .site-main. SIEMPRE fija a la derecha, POR DEBAJO de la cabecera
+// fija del cascarón: arranca en --app-right-sidebar-top (el cascarón la fija
+// a la altura real de su cabecera por breakpoint; sin fijarla, el borde
+// superior) y llega hasta abajo. Así ni scrollea con la página ni "se acaba"
+// en el footer, y la cabecera queda siempre a la vista y usable. Cerrada
+// queda fuera de pantalla (translateX) y solo asoma el asa.
 //
 // El cascarón decide el hueco: con `--docked` (desplegada en ancho) da
-// padding-right a .site-content/.site-header/.app-footer vía body:has(); en
-// estrecho el componente añade telón y la barra se superpone (drawer).
+// padding-right a .site-content/.app-footer vía body:has() — la cabecera NO
+// lo necesita: la barra ya no la tapa. En estrecho el componente añade telón
+// (también bajo la cabecera) y la barra se superpone (drawer).
 
 // Ancho compartido con el cascarón (el hueco del contenido lo usa).
 :root {
@@ -19,10 +21,10 @@
 
 .app-right-sidebar {
   position: fixed;
-  top: 0;
+  top: var(--app-right-sidebar-top, 0px);
   right: 0;
   bottom: 0;
-  z-index: 60; // por encima de la cabecera fija del cascarón (50)
+  z-index: 40; // por debajo de la cabecera fija del cascarón (50)
   // En viewports mínimos deja sitio al asa (el telón cubre el resto).
   width: min(var(--app-right-sidebar-width), 100vw - 36px);
   transform: translateX(100%);
@@ -70,12 +72,13 @@
 
   // Asa de abrir/cerrar, anclada al costado izquierdo de la barra (como la
   // de la RightSidebar del admin): al viajar CON la barra nunca se desancla
-  // de ella. Con la barra cerrada asoma pegada al borde del viewport. El
-  // cascarón puede bajarla/subirla con --app-right-sidebar-handle-top (por
-  // defecto, bajo una cabecera típica de dos filas).
+  // de ella. Con la barra cerrada asoma pegada al borde del viewport. El top
+  // es RELATIVO al techo de la barra (que ya arranca bajo la cabecera): por
+  // defecto asoma justo bajo ella; el cascarón puede moverla con
+  // --app-right-sidebar-handle-top.
   &__handle {
     position: absolute;
-    top: var(--app-right-sidebar-handle-top, 112px);
+    top: var(--app-right-sidebar-handle-top, #{$space-4});
     right: 100%;
     display: flex;
     align-items: center;
@@ -110,10 +113,14 @@
   }
 }
 
-// Telón del drawer: por encima de la cabecera (50) y bajo la barra (60).
+// Telón del drawer: bajo la cabecera (que sigue visible y clicable) y bajo
+// la barra (40).
 .app-right-sidebar-overlay {
   position: fixed;
-  inset: 0;
+  top: var(--app-right-sidebar-top, 0px);
+  right: 0;
+  bottom: 0;
+  left: 0;
   background: rgb(0 0 0 / 40%);
-  z-index: 55;
+  z-index: 35;
 }

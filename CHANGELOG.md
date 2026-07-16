@@ -14,16 +14,21 @@ los cambios de API pueden llegar en versiones menores).
 
 ## [Sin publicar]
 
-- **Barra derecha contextual de la web pública SIEMPRE fija, con asa propia**
-  (`@edc-motor/ui`): `AppRightSidebar` deja de ser una columna sticky que
-  scrolleaba con la página y "se acababa" al llegar al pie — ahora es fija a
-  toda la altura del viewport (top 0 → bottom 0), por encima de la cabecera
-  auto-ocultable, en TODOS los anchos. En ancho, desplegada, el cascarón le
-  hace hueco (padding-right con transición de contenido, cabecera y pie, sin
-  telón); en estrecho sigue el drawer superpuesto con telón, click fuera y
-  Escape. El botón Funnel sale del header: la barra trae su propia ASA
-  anclada al costado (Funnel cerrada / X abierta), nueva prop `openLabel`.
-  La API de `useAppRightSidebar()` no cambia. **Migración del cascarón**:
+- **Cabecera pública fija SIEMPRE visible y barra derecha contextual fija
+  por debajo, con asa propia** (`@edc-motor/ui` + cascarón): la cabecera de
+  la web pública deja de auto-ocultarse al scrollear (fuera el translateY y
+  su listener de scroll: fija arriba y siempre usable), y `AppRightSidebar`
+  deja de ser una columna sticky que scrolleaba con la página y "se acababa"
+  al llegar al pie — ahora es fija desde el borde inferior de la cabecera
+  (`--app-right-sidebar-top`, la fija el cascarón por breakpoint) hasta
+  abajo, por debajo de ella (z 40 < 50), en TODOS los anchos. En ancho,
+  desplegada, el cascarón le hace hueco (padding-right con transición de
+  contenido y pie; la cabecera no lo necesita: la barra no la tapa); en
+  estrecho sigue el drawer superpuesto con telón bajo la cabecera (que
+  queda visible y clicable), click fuera y Escape. El botón Funnel sale del
+  header: la barra trae su propia ASA anclada al costado (Funnel cerrada /
+  X abierta), asomando justo bajo la cabecera, nueva prop `openLabel`. La
+  API de `useAppRightSidebar()` no cambia. **Migración del cascarón**:
   copiar de `plantilla/app/` — `src/App.vue`,
   `src/components/AppHeader.vue`, `src/assets/scss/main.scss` y
   `src/assets/scss/components/_app-header.scss` (las claves i18n
@@ -33,10 +38,13 @@ los cambios de API pueden llegar en versiones menores).
   grupo segmentado con borde; cada toggle es un botón limpio e individual, y
   el color del activo distingue además ascendente (tinte suave de acento) de
   descendente (acento relleno).
-- **Grid de entidades del admin hasta cinco columnas**
-  (`@edc-motor/admin-kit`): `BaseGrid` gana el escalón `xl` (`$bp-xl`,
-  1280px de ancho real del contenedor `content`) y el preset `cards` escala
-  1 → 2 → 3 → 4 → 5.
+- **Grid de entidades del admin hasta cinco columnas, con escalera densa**
+  (`@edc-motor/admin-kit`): `BaseGrid` gana el escalón genérico `xl`
+  (`$bp-xl`, 1280px de ancho real del contenedor `content`) para `cols`, y
+  el preset `cards` escala 1 → 2 → 3 → 4 → 5 con una escalera densa propia
+  medida sobre el contenedor (3/4/5 columnas a 570/660/750px): con el marco
+  del admin (nav + panel derecho), las 5 columnas entran a ~1400px de
+  viewport en vez de a ~1930.
 
 ## [0.4.11] — 2026-07-15
 

@@ -2,6 +2,18 @@
 
 // Grid responsive (portado de kontuan). Columnas por breakpoint del contenedor
 // `content` para que coincida con el ancho real disponible.
+
+// Escalera DENSA del preset `cards` (índices de entidades), en ancho del
+// contenedor `content`. Medido empíricamente en el admin del playground con
+// nav izquierda (280) y panel derecho (320) desplegados: contenedor =
+// viewport − 648. Los escalones genéricos ($bp-md/$bp-lg/$bp-xl) daban 3/4/5
+// columnas a 1416/1672/1928 de viewport — tardísimo. Con estos, las tarjetas
+// (media cuadrada 1:1) quedan entre ~137 y ~272px de ancho y las 5 columnas
+// entran a ~1400px de viewport ("donde haya un breakpoint, 1400 quizás").
+$grid-cards-3: 570px; // ≈ 1218px de viewport con el marco completo
+$grid-cards-4: 660px; // ≈ 1308px
+$grid-cards-5: 750px; // ≈ 1398px
+
 .grid {
   display: grid;
   grid-template-columns: 1fr;
@@ -32,5 +44,14 @@
     &--xl-#{$i} {
       @container content (min-width: #{$bp-xl}) { grid-template-columns: repeat(#{$i}, 1fr); }
     }
+  }
+
+  // Preset `cards`: 1 → 2 → 3 → 4 → 5 con la escalera densa de arriba (el
+  // primer salto comparte el escalón genérico $bp-sm).
+  &--cards {
+    @container content (min-width: #{$bp-sm}) { grid-template-columns: repeat(2, 1fr); }
+    @container content (min-width: #{$grid-cards-3}) { grid-template-columns: repeat(3, 1fr); }
+    @container content (min-width: #{$grid-cards-4}) { grid-template-columns: repeat(4, 1fr); }
+    @container content (min-width: #{$grid-cards-5}) { grid-template-columns: repeat(5, 1fr); }
   }
 }

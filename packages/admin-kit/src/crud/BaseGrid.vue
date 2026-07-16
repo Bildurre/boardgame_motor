@@ -16,9 +16,6 @@ const props = withDefaults(
 )
 
 const presetCols: Record<string, ResponsiveCols> = {
-  // Los index de entidades escalan 1 → 2 → 3 → 4 → 5 con el ancho REAL del
-  // contenedor `content` (en pantallas muy anchas llegan a cinco columnas).
-  cards: { base: 1, sm: 2, md: 3, lg: 4, xl: 5 },
   'cards-wide': { base: 1, sm: 2, lg: 4 },
   'cards-narrow': { base: 1, sm: 2 },
   'cards-full': { base: 1, sm: 2, md: 3, lg: 4 },
@@ -28,6 +25,14 @@ const presetCols: Record<string, ResponsiveCols> = {
 
 const gridClasses = computed(() => {
   const classes = ['grid', `grid--gap-${props.gap}`]
+  // Los index de entidades escalan 1 → 2 → 3 → 4 → 5 con una escalera DENSA
+  // propia (ver .grid--cards en _grid.scss): el marco del admin deja al
+  // contenedor `content` mucho más estrecho que el viewport y los escalones
+  // genéricos llegaban tardísimo.
+  if (props.preset === 'cards') {
+    classes.push('grid--cards')
+    return classes
+  }
   const cols = props.preset ? presetCols[props.preset] : props.cols
   if (typeof cols === 'number') classes.push(`grid--base-${cols}`)
   else for (const [bp, n] of Object.entries(cols ?? {})) classes.push(`grid--${bp}-${n}`)

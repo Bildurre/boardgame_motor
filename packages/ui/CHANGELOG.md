@@ -8,15 +8,18 @@ admin). Paquete **fuente** (se consume vía Vite). Versión de tren con
 
 ### Cambiado
 
-- **`AppRightSidebar` SIEMPRE fija, con asa propia.** En el admin la barra
-  derecha funciona porque el marco es fijo y scrollea el main; en la web
-  pública el header se auto-oculta y el footer va al final del documento,
-  así que la columna sticky scrolleaba con la página y "se acababa" al
-  llegar al pie. Ahora la barra es `position: fixed` a la derecha, top 0 →
-  bottom 0 (toda la altura del viewport) y `z-index: 60`, por encima de la
-  cabecera del cascarón (50): ni baila ni deja hueco cuando el header
-  aparece/desaparece, y en páginas cortas no se corta con el footer.
-  Cerrada queda fuera de pantalla (`translateX(100%)`) y solo asoma el asa.
+- **`AppRightSidebar` SIEMPRE fija bajo la cabecera fija, con asa propia.**
+  En el admin la barra derecha funciona porque el marco es fijo y scrollea
+  el main; en la web pública el footer va al final del documento, así que
+  la columna sticky scrolleaba con la página y "se acababa" al llegar al
+  pie. Ahora la barra es `position: fixed` a la derecha, desde el borde
+  inferior de la cabecera del cascarón (que pasa a estar SIEMPRE visible,
+  sin auto-ocultado) hasta abajo: `top: var(--app-right-sidebar-top, 0px)`
+  → bottom 0, `z-index: 40`, por debajo de la cabecera (50). El cascarón
+  fija `--app-right-sidebar-top` a la altura real de su cabecera por
+  breakpoint. Ni scrollea, ni se corta con el footer en páginas cortas, ni
+  tapa nunca la cabecera. Cerrada queda fuera de pantalla
+  (`translateX(100%)`) y solo asoma el asa.
   - **Asa anclada a la propia barra** (nueva, sustituye al botón Funnel del
     header del cascarón): pestañita al costado izquierdo, estilo de la de la
     RightSidebar del admin-kit, que viaja con la barra — Funnel cerrada / X
@@ -24,17 +27,20 @@ admin). Paquete **fuente** (se consume vía Vite). Versión de tren con
     ("Abrir el panel") y la `closeLabel` de siempre. Solo asoma si la vista
     registró contenido. El botón X del header interno del panel desaparece
     (cerraba lo mismo que el asa).
-  - **Nuevas CSS vars**: `--app-right-sidebar-width` (320px, en `:root`; el
-    cascarón la usa para el hueco) y `--app-right-sidebar-handle-top`
-    (altura del asa, por defecto 112px; el cascarón la ancla bajo su
-    cabecera). `--app-right-sidebar-top` desaparece: la barra ya no arranca
-    bajo la cabecera.
+  - **CSS vars**: `--app-right-sidebar-top` (techo de la barra y del telón;
+    la fija el cascarón, por defecto 0), `--app-right-sidebar-width`
+    (320px, en `:root`; el cascarón la usa para el hueco) y
+    `--app-right-sidebar-handle-top` (altura del asa RELATIVA al techo de
+    la barra; por defecto `$space-4`, es decir, asomando justo bajo la
+    cabecera sin que el cascarón tenga que tocar nada).
   - **Nueva clase `app-right-sidebar--docked`** (desplegada en ancho, con
     contenido): el cascarón le hace hueco con
     `body:has(.app-right-sidebar--docked)` → `padding-right` en
-    `.site-content`/`.site-header`/`.app-footer`, con transición al ritmo
-    del transform (sin telón). En estrecho (< 900px), drawer superpuesto
-    como siempre: telón, click fuera y Escape.
+    `.site-content`/`.app-footer`, con transición al ritmo del transform
+    (sin telón). La cabecera NO necesita hueco: la barra queda por debajo.
+    En estrecho (< 900px), drawer superpuesto con telón que arranca bajo la
+    cabecera (sigue visible y clicable con el drawer abierto), click fuera
+    y Escape.
   - La API de `useAppRightSidebar()` **no cambia** (`register`/`unregister`/
     `useRegister`, target `#app-right-sidebar-target`, `toggle`, `reveal`…).
 - **`SortToggles` sueltos estilo action-button**: fuera el grupo segmentado

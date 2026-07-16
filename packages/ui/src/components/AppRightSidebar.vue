@@ -8,16 +8,19 @@ import { useAppRightSidebar } from '../composables/useAppRightSidebar'
 // useAppRightSidebar().useRegister(titulo) y teletransporta su contenido
 // (típicamente sus selects de filtros) a #app-right-sidebar-target.
 //
-// A diferencia del admin (marco fijo, scrollea el main), aquí el header se
-// auto-oculta y el footer va al final del documento: la barra es SIEMPRE
-// fija (top 0 → bottom 0, por encima de la cabecera) para no scrollear con
-// la página ni "acabarse" al llegar al pie. En ANCHO, desplegada, el
+// A diferencia del admin (marco fijo, scrollea el main), aquí el footer va
+// al final del documento: la barra es SIEMPRE fija (por debajo de la
+// cabecera fija del cascarón → bottom 0) para no scrollear con la página ni
+// "acabarse" al llegar al pie; el cascarón fija --app-right-sidebar-top a la
+// altura real de su cabecera por breakpoint. En ANCHO, desplegada, el
 // cascarón le hace hueco al contenido (padding-right de .site-content /
-// .site-header / .app-footer sobre la clase `--docked`); por debajo de
-// OVERLAY_BREAKPOINT es un drawer superpuesto con telón, click fuera y
-// Escape. Se abre y se cierra con el ASA anclada a la propia barra (Funnel
-// cerrada / X abierta), visible solo si la vista registró contenido; el
-// cascarón puede ajustar su altura con --app-right-sidebar-handle-top.
+// .app-footer sobre la clase `--docked`; la cabecera no lo necesita: la
+// barra no la tapa); por debajo de OVERLAY_BREAKPOINT es un drawer
+// superpuesto con telón (también bajo la cabecera, que sigue usable), click
+// fuera y Escape. Se abre y se cierra con el ASA anclada a la propia barra
+// (Funnel cerrada / X abierta), visible solo si la vista registró
+// contenido; el cascarón puede ajustar su altura con
+// --app-right-sidebar-handle-top (relativa al techo de la barra).
 // La monta App.vue una vez, dentro de .site-main.
 // Agnóstica de i18n (DC-29): textos por prop, defaults en castellano.
 
