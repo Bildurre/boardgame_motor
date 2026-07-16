@@ -12,9 +12,25 @@ El formato sigue [Keep a Changelog](https://keepachangelog.com/es/) y el
 versionado, [SemVer](https://semver.org/lang/es/) (mientras estemos en `0.x`,
 los cambios de API pueden llegar en versiones menores).
 
+## [Sin publicar]
+
+- **Herramientas: el flujo de ramas vuelve a ser `claude.sh` y la release se
+  protege.** `claude.sh` (raíz del monorepo, `plantilla/` y los juegos):
+  `--start` trae la rama o LA CREA desde main si no existe en remoto;
+  `--finish` mergea la punta REMOTA de la rama en main (da igual si la copia
+  local está desfasada), pushea y borra la rama local y remota.
+  `tools/release.sh` gana un candado anti-"tagear antes de mergear" (nos
+  pasó en 0.4.7, 0.4.9 y 0.4.12): aborta si alguna rama remota tiene
+  commits que main no tiene, listándolas; se salta a sabiendas con
+  `RELEASE_PERMITIR_RAMAS=1`. **Migración del cascarón**: copiar
+  `claude.sh` de `plantilla/`.
+
 ## [0.4.14] — 2026-07-16
 
-- Sin cambios propios: versión de tren.
+- **El grid de entidades del admin vuelve a los escalones canónicos**
+  (`@edc-motor/admin-kit`): el preset `cards` pasa a 2/3/4/5 columnas a
+  480/768/1024/1280px de contenedor (la escalera densa de 0.4.13 dejaba
+  las tarjetas demasiado estrechas).
 
 ## [0.4.13] — 2026-07-16
 
@@ -45,8 +61,8 @@ los cambios de API pueden llegar en versiones menores).
 - **Grid de entidades del admin hasta cinco columnas**
   (`@edc-motor/admin-kit`): `BaseGrid` gana el escalón genérico `xl`
   (`$bp-xl`, 1280px de ancho real del contenedor `content`) para `cols`, y
-  el preset `cards` escala 1 → 2 → 3 → 4 → 5 con los breakpoints canónicos
-  del contenedor (480/768/1024/1280).
+  el preset `cards` escala 1 → 2 → 3 → 4 → 5 con una escalera densa medida
+  sobre el contenedor (3/4/5 a 570/660/750px).
 
 ## [0.4.12] — 2026-07-15
 

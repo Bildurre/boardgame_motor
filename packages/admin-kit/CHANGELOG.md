@@ -5,7 +5,12 @@ Kit de construcción del panel de administración (sobre `@edc-motor/ui`). Paque
 
 ## [0.4.14] — 2026-07-16
 
-- Sin cambios propios: versión de tren.
+### Cambiado
+
+- **El preset `cards` deja la escalera densa por los breakpoints canónicos**
+  del contenedor `content` — 2/3/4/5 columnas a 480 (`$bp-sm`) / 768
+  (`$bp-md`) / 1024 (`$bp-lg`) / 1280 (`$bp-xl`): la escalera densa de
+  0.4.13 dejaba las tarjetas demasiado estrechas.
 
 ## [0.4.13] — 2026-07-16
 
@@ -14,10 +19,9 @@ Kit de construcción del panel de administración (sobre `@edc-motor/ui`). Paque
 - **`BaseGrid` hasta cinco columnas en el preset `cards`**: el sistema
   genérico de breakpoints del grid gana el escalón `xl` (`$bp-xl`, 1280px
   de ancho REAL del contenedor `content`, como los demás) — `cols` acepta
-  `{ xl: n }` — y el preset `cards` de los index de entidades escala
-  1 → 2 → 3 → 4 → **5** con los breakpoints canónicos del contenedor:
-  480 (`$bp-sm`) / 768 (`$bp-md`) / 1024 (`$bp-lg`) / 1280 (`$bp-xl`).
-  El resto de presets, como estaban.
+  `{ xl: n }` — y el preset `cards` escala 1 → 2 → 3 → 4 → **5** con una
+  escalera densa medida sobre el contenedor (3/4/5 a 570/660/750px). El
+  resto de presets, como estaban.
 
 ## [0.4.12] — 2026-07-15
 

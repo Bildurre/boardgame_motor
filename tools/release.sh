@@ -35,11 +35,31 @@ cd "$(dirname "$0")/.."
 [[ "$(git branch --show-current)" == "main" ]] || { echo "✖ Debes estar en main" >&2; exit 1; }
 [[ -z "$(git status --porcelain)" ]] || { echo "✖ Working tree sucio: commitea antes de lanzar la release" >&2; exit 1; }
 
-git fetch origin main --tags
+git fetch origin --prune --tags
 [[ "$(git rev-parse HEAD)" == "$(git rev-parse origin/main)" ]] || {
   echo "✖ Tu main no está al día con origin/main (haz git pull)" >&2; exit 1; }
 if git rev-parse "v$VERSION" >/dev/null 2>&1; then
   echo "✖ El tag v$VERSION ya existe" >&2; exit 1
+fi
+
+# Candado anti-"tagear antes de mergear" (nos pasó en 0.4.7, 0.4.9 y 0.4.12):
+# si alguna rama remota tiene commits que main no tiene, la release saldría
+# sin ese trabajo. Mergea antes (sh claude.sh --finish <rama>) o borra la
+# rama; para saltarte el candado a sabiendas: RELEASE_PERMITIR_RAMAS=1
+if [[ -z "${RELEASE_PERMITIR_RAMAS:-}" ]]; then
+  PENDIENTES=""
+  while read -r rama; do
+    [[ "$rama" == "origin/main" || "$rama" == origin/HEAD* ]] && continue
+    n="$(git rev-list --count "origin/main..$rama")"
+    (( n > 0 )) && PENDIENTES+="    $rama — $n commit(s) sin mergear"$'\n'
+  done < <(git branch -r --format='%(refname:short)')
+  if [[ -n "$PENDIENTES" ]]; then
+    echo "✖ Hay ramas remotas con trabajo que main NO tiene:" >&2
+    printf '%s' "$PENDIENTES" >&2
+    echo "  Mergea primero (sh claude.sh --finish <rama>) o borra la rama." >&2
+    echo "  Para releasear igualmente: RELEASE_PERMITIR_RAMAS=1 $0 $VERSION" >&2
+    exit 1
+  fi
 fi
 FECHA="$(date +%F)"
 
