@@ -12,6 +12,10 @@ El formato sigue [Keep a Changelog](https://keepachangelog.com/es/) y el
 versionado, [SemVer](https://semver.org/lang/es/) (mientras estemos en `0.x`,
 los cambios de API pueden llegar en versiones menores).
 
+## [0.4.14] — 2026-07-16
+
+- Sin cambios propios: versión de tren.
+
 ## [0.4.13] — 2026-07-16
 
 - **Cabecera pública fija SIEMPRE visible y barra derecha contextual fija
