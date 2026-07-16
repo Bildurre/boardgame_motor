@@ -14,6 +14,10 @@ los cambios de API pueden llegar en versiones menores).
 
 ## [Sin publicar]
 
+- **Card seleccionada más evidente en el admin** (`@edc-motor/admin-kit`):
+  borde en el acento del tema doblado con un anillo + sombra suave, también
+  cuando la card lleva tinte de facción (`accentColor`): la selección manda.
+
 - **Herramientas: el flujo de ramas vuelve a ser `claude.sh` y la release se
   protege.** `claude.sh` (raíz del monorepo, `plantilla/` y los juegos):
   `--start` trae la rama o LA CREA desde main si no existe en remoto;
