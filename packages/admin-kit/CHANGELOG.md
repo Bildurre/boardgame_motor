@@ -19,6 +19,10 @@ Kit de construcción del panel de administración (sobre `@edc-motor/ui`). Paque
   viewport con el marco completo. Las tarjetas (media cuadrada 1:1) quedan
   siempre entre ~137 y ~272px de ancho. El resto de presets, como estaban.
 
+## [0.4.12] — 2026-07-15
+
+- Sin cambios propios: versión de tren.
+
 ## [0.4.11] — 2026-07-15
 
 ### Añadido

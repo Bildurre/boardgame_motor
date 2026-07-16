@@ -53,6 +53,10 @@ admin). Paquete **fuente** (se consume vía Vite). Versión de tren con
   cualquier acento de juego. `aria-pressed` y títulos como estaban; nueva
   clase `is-desc` junto a `is-active`.
 
+## [0.4.12] — 2026-07-15
+
+- Sin cambios propios: versión de tren.
+
 ## [0.4.11] — 2026-07-15
 
 - Sin cambios propios: versión de tren.

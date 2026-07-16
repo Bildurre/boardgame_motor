@@ -46,6 +46,10 @@ los cambios de API pueden llegar en versiones menores).
   del admin (nav + panel derecho), las 5 columnas entran a ~1400px de
   viewport en vez de a ~1930.
 
+## [0.4.12] — 2026-07-15
+
+- Sin cambios propios: versión de tren.
+
 ## [0.4.11] — 2026-07-15
 
 - **Grupos plegables en el menú del admin** (`@edc-motor/admin-kit`): nuevo
