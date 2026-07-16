@@ -25,10 +25,8 @@ const presetCols: Record<string, ResponsiveCols> = {
 
 const gridClasses = computed(() => {
   const classes = ['grid', `grid--gap-${props.gap}`]
-  // Los index de entidades escalan 1 → 2 → 3 → 4 → 5 con una escalera DENSA
-  // propia (ver .grid--cards en _grid.scss): el marco del admin deja al
-  // contenedor `content` mucho más estrecho que el viewport y los escalones
-  // genéricos llegaban tardísimo.
+  // Los index de entidades escalan 1 → 2 → 3 → 4 → 5 con los breakpoints
+  // canónicos del contenedor `content` (ver .grid--cards en _grid.scss).
   if (props.preset === 'cards') {
     classes.push('grid--cards')
     return classes

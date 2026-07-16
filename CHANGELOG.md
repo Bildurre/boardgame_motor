@@ -38,13 +38,11 @@ los cambios de API pueden llegar en versiones menores).
   grupo segmentado con borde; cada toggle es un botón limpio e individual, y
   el color del activo distingue además ascendente (tinte suave de acento) de
   descendente (acento relleno).
-- **Grid de entidades del admin hasta cinco columnas, con escalera densa**
+- **Grid de entidades del admin hasta cinco columnas**
   (`@edc-motor/admin-kit`): `BaseGrid` gana el escalón genérico `xl`
   (`$bp-xl`, 1280px de ancho real del contenedor `content`) para `cols`, y
-  el preset `cards` escala 1 → 2 → 3 → 4 → 5 con una escalera densa propia
-  medida sobre el contenedor (3/4/5 columnas a 570/660/750px): con el marco
-  del admin (nav + panel derecho), las 5 columnas entran a ~1400px de
-  viewport en vez de a ~1930.
+  el preset `cards` escala 1 → 2 → 3 → 4 → 5 con los breakpoints canónicos
+  del contenedor (480/768/1024/1280).
 
 ## [0.4.12] — 2026-07-15
 
