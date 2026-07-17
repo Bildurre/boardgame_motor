@@ -4,6 +4,10 @@ Componentes Vue 3 + SCSS para las webs públicas (y piezas compartidas con el
 admin). Paquete **fuente** (se consume vía Vite). Versión de tren con
 `edc-motor/core` y `@edc-motor/admin-kit`.
 
+## [0.4.15] — 2026-07-17
+
+- Sin cambios propios: versión de tren.
+
 ## [0.4.14] — 2026-07-16
 
 - Sin cambios propios: versión de tren.
