@@ -893,10 +893,15 @@ el resto de tareas:
 Schedule::command('pdf:cleanup')->hourly(); // PDFs temporales (doc 02)
 ```
 
-**Restore** (DC-16, manual): paso a paso en `funcionalidades/06`
-(down → reponer BBDD y media → optimize:clear → up). **BBDD grandes**:
-`MOTOR_BACKUP_QUEUE=true` y la copia manual va en cola (respuesta 202; la
-vista sondea el listado hasta que aparece; hace falta un worker).
+**Restore**: desde el admin (acción RESTAURAR del panel de la copia, doble
+confirmación; `POST /api/admin/backups/{file}/restore` importa SOLO la BBDD
+del zip — el storage no se restaura) o a mano, paso a paso en
+`funcionalidades/06` (down → reponer BBDD y media → optimize:clear → up).
+La copia manual va SIEMPRE en cola (`RunBackupJob`, respuesta 202 y flag
+`pending` que la vista sondea): con un worker real no bloquea nada, y con la
+cola `sync` se difiere a después de la respuesta. También se pueden SUBIR
+copias externas (`POST /api/admin/backups/upload`, zip con la BBDD dentro,
+máx. `motor.backup.upload_max_mb`).
 
 ## 6quinquies. Web pública: locale, SEO y listados (Fase 6)
 

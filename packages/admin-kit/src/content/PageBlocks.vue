@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { computed, onMounted, reactive, ref } from 'vue'
+import { computed, onBeforeUnmount, onMounted, reactive, ref } from 'vue'
 import type { AxiosInstance } from 'axios'
-import { GripVertical, Plus, SquarePen, Trash2 } from '@lucide/vue'
+import { GripVertical, List, Plus, Printer, SquarePen, Trash2 } from '@lucide/vue'
 import { VueDraggable } from 'vue-draggable-plus'
 import {
   BaseButton,
@@ -15,6 +15,7 @@ import {
 } from '@edc-motor/ui'
 import SchemaFields, { type FieldSchema } from './SchemaFields.vue'
 import { useRightSidebar } from '../composables/useRightSidebar'
+import { useCardDeselect } from '../composables/useCardDeselect'
 
 // Gestor de bloques de una página (doc 03): paleta de tipos (motor + juego),
 // lista reordenable con drag (DC-17) y modal de edición GENERADO desde el
@@ -29,7 +30,11 @@ export interface PageBlocksLabels {
   cancel: string
   empty: string
   printable: string
+  printableShort: string
   indexable: string
+  indexableShort: string
+  yes: string
+  no: string
   common: string
   confirmDelete: string
   error: string
@@ -48,7 +53,11 @@ const defaultLabels: PageBlocksLabels = {
   cancel: 'Cancelar',
   empty: 'La página aún no tiene bloques.',
   printable: 'Entra en el PDF de la página',
+  printableShort: 'PDF',
   indexable: 'Aparece en el índice',
+  indexableShort: 'Índice',
+  yes: 'Sí',
+  no: 'No',
   common: 'Ajustes comunes',
   confirmDelete: '¿Borrar este bloque?',
   error: 'No se ha podido completar la acción.',
@@ -114,6 +123,10 @@ function selectBlock(block: BlockRow, event: MouseEvent) {
   sidebar.reveal()
 }
 
+// Click en la zona vacía del contenido (fuera de una fila o control):
+// deselecciona, como en los index (patrón useCardDeselect).
+useCardDeselect(() => (selectedId.value = null), '.page-blocks__item, .page-blocks__menu')
+
 /** Acción rápida del panel: alterna un flag sin abrir el modal. */
 async function toggleFlag(flag: 'is_printable' | 'is_indexable', value: boolean) {
   if (!selected.value) return
@@ -126,6 +139,26 @@ async function toggleFlag(flag: 'is_printable' | 'is_indexable', value: boolean)
 }
 const busy = ref(false)
 const paletteOpen = ref(false)
+
+// La paleta de "añadir bloque" se cierra con Escape y clicando fuera (los
+// clicks dentro — el propio botón incluido — no la tocan).
+function onDocumentClick(event: MouseEvent) {
+  if (!paletteOpen.value) return
+  const target = event.target instanceof Element ? event.target : null
+  if (target?.closest('.page-blocks__palette')) return
+  paletteOpen.value = false
+}
+function onDocumentKeydown(event: KeyboardEvent) {
+  if (event.key === 'Escape' && paletteOpen.value) paletteOpen.value = false
+}
+onMounted(() => {
+  document.addEventListener('click', onDocumentClick)
+  document.addEventListener('keydown', onDocumentKeydown)
+})
+onBeforeUnmount(() => {
+  document.removeEventListener('click', onDocumentClick)
+  document.removeEventListener('keydown', onDocumentKeydown)
+})
 
 // Modal de edición (crear/editar comparten formulario).
 const modalOpen = ref(false)
@@ -374,11 +407,20 @@ defineExpose({ reload: load })
         @click="(e) => selectBlock(block, e)"
       >
         <span class="page-blocks__grip"><GripVertical :size="16" /></span>
+        <button
+          type="button"
+          class="page-blocks__edit"
+          :title="L.edit"
+          :aria-label="L.edit"
+          @click="openEdit(block)"
+        >
+          <SquarePen :size="15" />
+        </button>
         <span class="page-blocks__type">{{ typeName(block.type) }}</span>
         <span class="page-blocks__summary">{{ summary(block) }}</span>
         <span class="page-blocks__flags">
-          <span v-if="block.is_printable" class="chip is-ok">PDF</span>
-          <span v-if="block.is_indexable" class="chip">IDX</span>
+          <span v-if="block.is_printable" class="chip is-ok">{{ L.printableShort }}</span>
+          <span v-if="block.is_indexable" class="chip">{{ L.indexableShort }}</span>
         </span>
       </article>
     </VueDraggable>
@@ -433,11 +475,31 @@ defineExpose({ reload: load })
           <p class="manager-panel__empty">{{ L.panelEmpty }}</p>
         </slot>
         <template v-else>
-          <p class="manager-panel__kicker">{{ typeName(selected.type) }}</p>
+          <p class="manager-panel__kicker">{{ L.panelTitle }}</p>
 
-          <!-- Acciones PRIMERO; después, secciones separadas (patrón panel) -->
+          <!-- Acciones PRIMERO (los interruptores arriba); después,
+               secciones separadas (patrón panel) -->
           <div class="manager-detail__actions">
-            <BaseButton :disabled="busy" @click="openEdit(selected)">
+            <BaseButton
+              variant="success"
+              :class="selected.is_printable ? 'is-on' : 'is-off'"
+              :aria-pressed="selected.is_printable"
+              :disabled="busy"
+              @click="toggleFlag('is_printable', !selected.is_printable)"
+            >
+              <template #icon><Printer :size="14" /></template>
+              {{ L.printableShort }}
+            </BaseButton>
+            <BaseButton
+              :class="selected.is_indexable ? 'is-on' : 'is-off'"
+              :aria-pressed="selected.is_indexable"
+              :disabled="busy"
+              @click="toggleFlag('is_indexable', !selected.is_indexable)"
+            >
+              <template #icon><List :size="14" /></template>
+              {{ L.indexableShort }}
+            </BaseButton>
+            <BaseButton variant="info" :disabled="busy" @click="openEdit(selected)">
               <template #icon><SquarePen :size="14" /></template>
               {{ L.edit }}
             </BaseButton>
@@ -449,19 +511,17 @@ defineExpose({ reload: load })
 
           <hr class="manager-panel__divider" />
 
-          <h3 class="manager-detail__title">{{ summary(selected) || typeName(selected.type) }}</h3>
+          <!-- El título del panel es el TIPO del bloque (el contenido va en
+               su sección, abajo) -->
+          <h3 class="manager-detail__title">{{ typeName(selected.type) }}</h3>
 
-          <!-- Acciones rápidas sin modal -->
-          <BaseCheckbox
-            :model-value="selected.is_printable"
-            :label="L.printable"
-            @update:model-value="(v) => toggleFlag('is_printable', v)"
-          />
-          <BaseCheckbox
-            :model-value="selected.is_indexable"
-            :label="L.indexable"
-            @update:model-value="(v) => toggleFlag('is_indexable', v)"
-          />
+          <!-- Estado de los interruptores, en texto -->
+          <p class="manager-detail__meta">
+            <strong>{{ L.printable }}</strong> {{ selected.is_printable ? L.yes : L.no }}
+          </p>
+          <p class="manager-detail__meta">
+            <strong>{{ L.indexable }}</strong> {{ selected.is_indexable ? L.yes : L.no }}
+          </p>
 
           <!-- Contenido: cada campo del bloque con su valor (truncado) -->
           <hr v-if="selectedFields.length" class="manager-panel__divider" />

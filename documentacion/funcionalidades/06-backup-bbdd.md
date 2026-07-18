@@ -5,16 +5,23 @@
 > `Edc\Core\Backup\MotorBackup::applyConfig()` (disco `backups` local por
 > defecto, retención `keep_days`, media opcional; SQLite entra como fichero
 > en el zip — el dump exige el binario `sqlite3`). API en
-> `/api/admin/backups` (listar/crear/descargar/borrar, solo `manage-web`) +
-> vista **Copias** en el admin (crear con un clic, panel derecho con
-> descargar/borrar). La copia AUTOMÁTICA se configura desde esa misma vista
-> (activada, frecuencia diaria/semanal, día, hora y retención; servicio
-> `BackupSettings` sobre la tabla settings + `PUT /api/admin/backups/
-> schedule`) y la programa el motor en `MotorBackup::schedule()` — el juego
-> solo necesita el cron de `schedule:run`. Con `MOTOR_BACKUP_QUEUE=true` la
-> copia manual va EN COLA (RunBackupJob, respuesta 202 y sondeo del listado
-> en la vista) para BBDD grandes; restore guiado documentado abajo.
-> **Doc completado.**
+> `/api/admin/backups` (listar/crear/subir/restaurar/descargar/borrar, solo
+> `manage-web`) + vista **Copias** en el admin (crear con un clic, panel
+> derecho con restaurar/descargar/borrar). La copia AUTOMÁTICA se configura
+> desde esa misma vista (activada, frecuencia diaria/semanal, día, hora y
+> retención; servicio `BackupSettings` sobre la tabla settings + `PUT
+> /api/admin/backups/schedule`) y la programa el motor en
+> `MotorBackup::schedule()` — el juego solo necesita el cron de
+> `schedule:run`. La copia manual va SIEMPRE en cola (`RunBackupJob`,
+> respuesta 202 y flag `pending` que la vista sondea; con la cola `sync` se
+> difiere a después de la respuesta). Cada copia lleva su ORIGEN
+> (manual/auto/subida, por el prefijo del nombre). Se pueden SUBIR copias
+> externas (`POST upload`, zip validado con la BBDD dentro, máx.
+> `motor.backup.upload_max_mb`) y RESTAURAR una copia desde el admin con
+> doble confirmación (`POST {file}/restore`, `BackupRestorer`: sustituye el
+> fichero SQLite o vacía el esquema e importa el dump SQL; SOLO la BBDD — el
+> storage del zip no se restaura — y puede invalidar los tokens de sesión);
+> restore manual guiado documentado abajo. **Doc completado.**
 
 ## Qué hace
 

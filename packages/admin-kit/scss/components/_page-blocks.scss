@@ -53,11 +53,11 @@
   // cambian a la vez a un layout apilado (grid-areas por container query).
   &__item {
     display: grid;
-    grid-template-columns: auto minmax(0, 1fr) auto;
+    grid-template-columns: auto auto minmax(0, 1fr);
     grid-template-areas:
-      "grip type    buttons"
-      "grip summary summary"
-      "grip flags   flags";
+      "grip edit type"
+      "grip edit summary"
+      "grip edit flags";
     align-items: center;
     gap: $space-1 $space-2;
     border: 1px solid $border;
@@ -69,8 +69,8 @@
     transition: border-color 0.15s ease;
 
     @container content (min-width: 640px) {
-      grid-template-columns: auto auto minmax(0, 1fr) auto auto;
-      grid-template-areas: "grip type summary flags buttons";
+      grid-template-columns: auto auto auto minmax(0, 1fr) auto;
+      grid-template-areas: "grip edit type summary flags";
     }
 
     &:hover { border-color: $border-strong; }
@@ -86,6 +86,24 @@
     &:active { cursor: grabbing; }
   }
 
+  // Editar a la IZQUIERDA de cada fila: abre el form del bloque sin pasar
+  // por el panel (mismo lenguaje que .card-enter del cascarón).
+  &__edit {
+    grid-area: edit;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: none;
+    border: none;
+    border-radius: $radius-sm;
+    padding: $space-1;
+    color: $accent-500;
+    cursor: pointer;
+    transition: background-color 0.15s ease;
+
+    &:hover { background: color-mix(in srgb, $accent-500 12%, transparent); }
+  }
+
   &__type { grid-area: type; font-weight: $k-fw-semibold; white-space: nowrap; }
 
   &__summary {
@@ -99,13 +117,6 @@
   }
 
   &__flags { grid-area: flags; display: flex; gap: $space-1; }
-
-  &__buttons {
-    grid-area: buttons;
-    margin-left: auto;
-    display: flex;
-    gap: $space-1;
-  }
 
   &__common {
     border-top: 1px dashed $border;

@@ -7,6 +7,20 @@ Kit de construcción del panel de administración (sobre `@edc-motor/ui`). Paque
 
 ### Añadido
 
+- **`PageBlocks` refinado**: botón de EDITAR a la IZQUIERDA de cada fila de
+  bloque (abre el form sin pasar por el panel); la paleta de "añadir bloque"
+  se cierra con Escape y clicando fuera; click en la zona vacía del
+  contenido DESELECCIONA el bloque activo (`useCardDeselect`, como los
+  index); el título del panel derecho es el TIPO del bloque (no su
+  contenido); los checkboxes "entra en el PDF" y "aparece en el índice"
+  pasan a botones-interruptor del bloque de acciones, con su estado en
+  TEXTO en el panel y badges en la fila. `PageBlocksLabels` gana
+  `printableShort`, `indexableShort`, `yes` y `no`.
+- **Botones-interruptor del panel derecho**: en `.manager-detail__actions`,
+  un `edc-button` con `.is-on` se pinta RELLENO de su color (estado
+  activado) y con `.is-off` el contorno se atenúa — mismo contorno/hover que
+  los botones de acción del panel, con el on/off visible de un vistazo.
+
 - **Preset `cards-dense` de `BaseGrid`**: el DOBLE de columnas que `cards` en
   todos los breakpoints del contenedor `content` — 2 → 4 → 6 → 8 → 10 a
   base/480/768/1024/1280px. Para piezas pequeñas (el gestor de iconos del
@@ -31,6 +45,14 @@ Kit de construcción del panel de administración (sobre `@edc-motor/ui`). Paque
   `label` (el servidor manda por id) y combobox de dueñas de PDF por `label`.
 - **`.manager-grid` escala como el preset `cards`**: 1 → 2 → 3 → 4 → 5
   columnas a 480/768/1024/1280px del contenedor `content` (antes 1 → 2).
+
+### Corregido
+
+- **Doble separador en los paneles derechos**: cuando una sección
+  `.manager-detail` sigue a un `manager-panel__divider` (p. ej. el Contenido
+  del bloque seleccionado o los Bloques de la página), su divisoria dashed
+  propia — la línea de "puntos suspensivos" — sobraba y se quita; queda solo
+  el divider del panel.
 
 ## [0.4.15] — 2026-07-17
 

@@ -14,6 +14,51 @@ los cambios de API pueden llegar en versiones menores).
 
 ## [Sin publicar]
 
+- **Páginas y bloques: interruptores en el panel y bloques más manejables**
+  (`@edc-motor/admin-kit` + cascarón): los checks de publicada/imprimible
+  del panel derecho (listado y single) pasan a BOTONES-INTERRUPTOR arriba,
+  junto a las acciones (contorno de su color; encendido = relleno), y la
+  card del listado gana el label "imprimible" (mantiene publicada/borrador).
+  En el índice de bloques del single: botón de EDITAR a la izquierda de cada
+  fila, la paleta de "añadir bloque" se cierra con Escape/click fuera, click
+  en la zona vacía deselecciona el bloque (patrón de los index), el título
+  del panel del bloque es su TIPO, y los checks "entra en el PDF"/"aparece
+  en el índice" pasan a interruptores con su estado en texto y badges en la
+  fila. Fuera el doble separador ("puntos suspensivos") de las secciones del
+  panel. **Migración del cascarón**: copiar
+  `plantilla/admin/src/views/pages/PagesListView.vue` y
+  `PageSingleView.vue`, y añadir las claves i18n nuevas (`common.yes/no`,
+  `pages.printable`, `pages.blocks.printableShort/indexableShort`).
+
+- **Usuarios: cards como las de entidades y verificado como interruptor**
+  (cascarón): la card reordena al lenguaje EntityCard/ManagerCard — BADGES
+  (rol + verificado/sin verificar) arriba y el email en el meta debajo — en
+  el grid preset cards (1 → 5); el check de "email verificado" pasa a
+  botón-interruptor en el panel (usa el endpoint `toggle-verified` del
+  core), con badge en la card y su estado en texto en la barra derecha.
+  **Migración del cascarón**: copiar
+  `plantilla/admin/src/views/users/UsersView.vue` y añadir la clave i18n
+  `users.verifiedBadge`.
+
+- **Copias de seguridad: asíncronas, con origen, subida y RESTAURAR**
+  (`edc-motor/core` + cascarón): crear una copia ya NO bloquea la web — va
+  SIEMPRE en cola (`RunBackupJob`, 202; con cola `sync`, diferida tras la
+  respuesta) y el gestor refleja el estado con el flag `pending` (sondeo sin
+  bloquear). Cada copia lleva badge de ORIGEN (manual/automática/subida,
+  derivado del prefijo del nombre). Nueva card "Subir copia" al lado de la
+  de copia automática (en columna en estrecho): importa un zip validado
+  (extensión, tamaño, BBDD dentro) vía `POST api/admin/backups/upload`. Y
+  acción RESTAURAR en la barra derecha con DOBLE confirmación:
+  `POST api/admin/backups/{file}/restore` importa la BBDD del zip machacando
+  la actual (fichero SQLite tal cual o dump SQL; solo BBDD — el storage no
+  se restaura — y puede cerrar la sesión; límites documentados en el propio
+  panel). **Migración del cascarón**: copiar
+  `plantilla/admin/src/views/backups/BackupsView.vue`,
+  `plantilla/admin/src/assets/scss/views/_backups.scss`,
+  `plantilla/api/tests/Feature/BackupsTest.php` y añadir las claves i18n
+  nuevas de `backups.*`; si el juego usaba `MOTOR_BACKUP_QUEUE`, la clave
+  desaparece (ya no hay modo síncrono).
+
 - **La lupa de los buscadores pasa a la IZQUIERDA** (`@edc-motor/ui` +
   `@edc-motor/admin-kit`): en `IndexToolbar` y en el `FilterBar` del admin el
   icono va al lado izquierdo del input y el texto (placeholder y valor)

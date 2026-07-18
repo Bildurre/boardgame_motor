@@ -208,6 +208,13 @@
   border-top: 1px dashed $border;
   padding-top: $space-3;
 
+  // Tras un divider del panel, la divisoria dashed propia sobra (quedaba un
+  // doble separador — línea + "puntos suspensivos"): fuera.
+  .manager-panel__divider + & {
+    border-top: 0;
+    padding-top: 0;
+  }
+
   &__title {
     margin: 0;
     font-size: $fs-16;
@@ -294,6 +301,19 @@
           background: $color;
           border-color: $color;
           color: $text-1;
+        }
+
+        // Interruptores (aria-pressed): encendido = RELLENO del color (como
+        // el hover); apagado = contorno ATENUADO — el estado se ve de un
+        // vistazo junto a los botones de acción normales.
+        &.is-on {
+          background: $color;
+          border-color: $color;
+          color: $text-1;
+        }
+
+        &.is-off {
+          border-color: color-mix(in srgb, $color 45%, transparent);
         }
       }
     }
