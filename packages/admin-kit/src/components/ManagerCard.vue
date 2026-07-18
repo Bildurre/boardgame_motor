@@ -1,12 +1,14 @@
 <script setup lang="ts">
 import { PanelRight } from '@lucide/vue'
 
-// Tarjeta de los gestores del admin (previews y PDF): NO colapsa. Muestra el
-// título (+ chip opcional), el resumen (slot meta) y las acciones "de todas"
-// en el pie (slot actions). TODA la tarjeta selecciona (excepto los botones,
-// enlaces e inputs interiores): su detalle —selector de elementos, etc.— se
-// abre en el panel derecho del layout.
-// Se coloca dentro de .manager-grid (1-2 columnas según el contenedor).
+// Tarjeta de los gestores del admin (previews y PDF): NO colapsa. Mismo
+// lenguaje visual que EntityCard: cabecera con el título (+ chip opcional) y
+// divisoria; debajo, las BADGES (chips de estado, slot badges) y el meta
+// (datos secundarios) en ese orden; acciones "de todas" en el pie (slot
+// actions). TODA la tarjeta selecciona (excepto los botones, enlaces e
+// inputs interiores): su detalle —selector de elementos, etc.— se abre en el
+// panel derecho del layout.
+// Se coloca dentro de .manager-grid (preset cards: 1 → 5 columnas).
 
 defineProps<{
   title: string
@@ -42,8 +44,14 @@ function onClick(event: MouseEvent) {
       <PanelRight :size="16" class="manager-card__hint" />
     </div>
 
-    <div v-if="$slots.meta" class="manager-card__meta">
-      <slot name="meta" />
+    <!-- Como EntityCard: badges (chips) arriba, meta debajo -->
+    <div v-if="$slots.badges || $slots.meta" class="manager-card__content">
+      <div v-if="$slots.badges" class="manager-card__badges">
+        <slot name="badges" />
+      </div>
+      <div v-if="$slots.meta" class="manager-card__meta">
+        <slot name="meta" />
+      </div>
     </div>
 
     <div v-if="$slots.default" class="manager-card__body">

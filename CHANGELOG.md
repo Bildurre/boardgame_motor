@@ -12,6 +12,46 @@ El formato sigue [Keep a Changelog](https://keepachangelog.com/es/) y el
 versionado, [SemVer](https://semver.org/lang/es/) (mientras estemos en `0.x`,
 los cambios de API pueden llegar en versiones menores).
 
+## [Sin publicar]
+
+- **La lupa de los buscadores pasa a la IZQUIERDA** (`@edc-motor/ui` +
+  `@edc-motor/admin-kit`): en `IndexToolbar` y en el `FilterBar` del admin el
+  icono va al lado izquierdo del input y el texto (placeholder y valor)
+  empieza a su derecha, con hueco propio (padding-left): nada se monta.
+
+- **Paleta nueva del `PaletteColorPicker`** (`@edc-motor/ui`; lo usan el color
+  de facción, los colores de acento de Ajustes y los campos `color` de los
+  bloques): espectro cálido → frío — `#f15959`, `#f1753a`, `#88b033`,
+  `#29ab5f`, `#31a28e`, `#3999cd`, `#408cfd`, `#7a64c8`, `#a75da5` — y el
+  gris al final (el `#64748B` heredado). El swatch de valor libre (custom) se
+  conserva.
+
+- **Cambio de idioma GLOBAL en los formularios traducibles** (`@edc-motor/ui`):
+  los campos traducibles conservan sus tabs de locale, y `EditModal` estrena
+  en su cabecera un selector compacto (`FormLocaleSwitch`, solo si el
+  formulario contiene campos traducibles) que cambia el tab de TODOS a la
+  vez. Mecánica provide/inject (`provideFormLocale()` /
+  `useFormLocaleField()`): los `TranslatableInput`/`TranslatableImage` se
+  suscriben solos (también dentro de `SchemaFields`/`PageBlocks`), así los
+  juegos no tocan nada; el tab individual de cada campo sigue siendo local.
+
+- **Gestor de iconos con grid denso y sin paginación** (`@edc-motor/admin-kit`
+  + cascarón): nuevo preset `cards-dense` de `BaseGrid` — el DOBLE de
+  columnas que `cards` en todos los breakpoints (2 → 4 → 6 → 8 → 10) — y el
+  index de iconos lo usa; se listan TODOS los iconos (el endpoint `/icons` ya
+  venía sin paginar). **Migración del cascarón**: copiar
+  `plantilla/admin/src/views/icons/IconsListView.vue` (solo cambia el preset
+  del grid).
+
+- **Gestores de previews y PDF: arranque sin vacíos, selects alfabéticos y
+  cards al estilo EntityCard** (`@edc-motor/admin-kit`): al cargar se
+  selecciona la PRIMERA tarjeta (tipo/export) y el combobox del panel arranca
+  con su primer elemento elegido; criterio general de los selects del admin —
+  sin un orden explícito, opciones ALFABÉTICAS (tarjetas y combobox de ambos
+  gestores); `ManagerCard` adopta el lenguaje visual de `EntityCard`
+  (cabecera con divisoria, badges arriba y meta debajo — nuevo slot `badges`)
+  y `.manager-grid` escala 1 → 5 columnas como el preset `cards`.
+
 ## [0.4.15] — 2026-07-17
 
 - **Card seleccionada más evidente en el admin** (`@edc-motor/admin-kit`):

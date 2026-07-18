@@ -124,7 +124,9 @@ async function del(icon: Icon) {
 
     <EmptyState v-if="!loading && !store.icons.length" :title="t('common.empty')" />
 
-    <BaseGrid v-else preset="cards-full" gap="md">
+    <!-- Grid denso (el doble de columnas que `cards`): las cards de icono
+         son pequeñas y se listan TODOS los iconos, sin paginación. -->
+    <BaseGrid v-else preset="cards-dense" gap="md">
       <EntityCard v-for="icon in store.icons" :key="icon.id" :title="icon.name">
         <template #media>
           <div class="icon-tile"><img v-if="icon.url" :src="icon.url" :alt="icon.name" /></div>

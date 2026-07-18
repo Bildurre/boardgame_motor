@@ -3,7 +3,7 @@ import { Search } from '@lucide/vue'
 import SortToggles, { type SortValue } from './SortToggles.vue'
 
 // Barra unificada de los index (admin y web pública): búsqueda (lupa a la
-// derecha, como el FilterBar del admin-kit) y toggles de ordenación. Los
+// izquierda, como el FilterBar del admin-kit) y toggles de ordenación. Los
 // filtros del listado viven en la barra derecha (RightSidebar del admin /
 // AppRightSidebar de la web), no aquí. En ancho es una fila
 // [búsqueda][toggles]; en estrecho (container query propia) la búsqueda
@@ -43,6 +43,7 @@ const emit = defineEmits<{
   <div class="index-toolbar">
     <div class="index-toolbar__inner">
       <div class="index-toolbar__search">
+        <Search :size="16" class="index-toolbar__search-icon" />
         <input
           type="search"
           :value="modelValue"
@@ -50,7 +51,6 @@ const emit = defineEmits<{
           class="index-toolbar__search-input"
           @input="emit('update:modelValue', ($event.target as HTMLInputElement).value)"
         />
-        <Search :size="16" class="index-toolbar__search-icon" />
       </div>
 
       <div v-if="showSort" class="index-toolbar__actions">

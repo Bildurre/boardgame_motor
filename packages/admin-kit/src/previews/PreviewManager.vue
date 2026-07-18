@@ -109,12 +109,26 @@ function typeName(type: TypeStatus): string {
   return props.typeLabels[type.key] ?? type.model
 }
 
+// Criterio de los selects del admin: sin un orden explícito, ALFABÉTICO.
+// Vale también para las tarjetas, que hacen de selector de tipo.
+const sortedTypes = computed(() =>
+  [...types.value].sort((a, b) => typeName(a).localeCompare(typeName(b))),
+)
+
 // Tipo activo (tarjeta seleccionada) y su selector en el panel.
 const activeType = ref<string | null>(null)
 const search = ref('')
 const items = ref<PreviewItem[]>([])
 const page = ref({ current: 1, last: 1 })
 const selectedId = ref<number | null>(null)
+
+// Opciones del combobox del panel: el servidor manda por id; aquí salen
+// ALFABÉTICAS (criterio general de los selects del admin sin orden propio).
+const itemOptions = computed(() =>
+  items.value
+    .map((i) => ({ id: i.id, label: i.label }))
+    .sort((a, b) => a.label.localeCompare(b.label)),
+)
 
 const activeStatus = computed(() => types.value.find((t) => t.key === activeType.value) ?? null)
 const selectedItem = computed(() => items.value.find((i) => i.id === selectedId.value) ?? null)
@@ -131,6 +145,9 @@ async function loadStatus() {
   try {
     const { data } = await props.api.get('/admin/previews')
     types.value = data.data
+    // El selector de tipo (las tarjetas) arranca con el PRIMERO seleccionado,
+    // no vacío (sin abrir el panel: eso lo hace el click del usuario).
+    if (!activeType.value && sortedTypes.value.length) activate(sortedTypes.value[0].key)
   } catch {
     toast.danger(L.error)
   } finally {
@@ -146,19 +163,32 @@ async function loadItems(pageNumber = 1) {
     })
     items.value = pageNumber === 1 ? data.data : [...items.value, ...data.data]
     page.value = { current: data.meta.current_page, last: data.meta.last_page }
+    // El select de elemento arranca con el PRIMERO (alfabético) seleccionado,
+    // no vacío; buscando o con algo ya elegido, no se toca.
+    if (
+      pageNumber === 1 &&
+      !search.value &&
+      selectedId.value === null &&
+      itemOptions.value.length
+    ) {
+      selectedId.value = Number(itemOptions.value[0].id)
+    }
   } catch {
     toast.danger(L.error)
   }
 }
 
+/** Activa un tipo: resetea búsqueda y selección y carga sus elementos. */
+function activate(key: string) {
+  activeType.value = key
+  search.value = ''
+  items.value = []
+  selectedId.value = null
+  loadItems()
+}
+
 function select(type: TypeStatus) {
-  if (activeType.value !== type.key) {
-    activeType.value = type.key
-    search.value = ''
-    items.value = []
-    selectedId.value = null
-    loadItems()
-  }
+  if (activeType.value !== type.key) activate(type.key)
   sidebar.reveal()
 }
 
@@ -295,22 +325,24 @@ defineExpose({ refreshAll })
 
     <div class="manager-grid">
       <ManagerCard
-        v-for="type in types"
+        v-for="type in sortedTypes"
         :key="type.key"
         :title="typeName(type)"
         :active="activeType === type.key"
         @select="select(type)"
       >
-        <!-- Total + generadas por idioma, de un vistazo -->
-        <template #meta>
-          <span class="manager-stat"
-            >{{ L.total }} <strong>{{ type.total }}</strong></span
-          >
+        <!-- Como EntityCard: badges (generadas por idioma) arriba, meta (total) debajo -->
+        <template #badges>
           <span
             v-for="(count, locale) in type.locales"
             :key="locale"
             :class="['chip', count === type.total ? 'is-ok' : 'is-missing']"
             >{{ String(locale).toUpperCase() }} {{ count }}/{{ type.total }}</span
+          >
+        </template>
+        <template #meta>
+          <span class="manager-stat"
+            >{{ L.total }} <strong>{{ type.total }}</strong></span
           >
         </template>
       </ManagerCard>
@@ -346,7 +378,7 @@ defineExpose({ refreshAll })
 
           <SearchSelect
             :model-value="selectedId"
-            :options="items.map((i) => ({ id: i.id, label: i.label }))"
+            :options="itemOptions"
             :placeholder="L.selectItem"
             :search-placeholder="L.searchPlaceholder"
             :no-results="L.noResults"

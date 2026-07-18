@@ -3,6 +3,22 @@
 .edit-modal {
   &__form { display: contents; }
 
+  // Cabecera propia: título + selector de locale global de los campos
+  // traducibles (solo aparece si el formulario contiene alguno).
+  &__header {
+    display: flex;
+    align-items: center;
+    gap: $space-3;
+    min-width: 0;
+    flex: 1;
+
+    .modal__title {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+  }
+
   &__body {
     display: flex;
     flex-direction: column;

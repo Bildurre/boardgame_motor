@@ -16,17 +16,20 @@
 
   &__search-icon {
     position: absolute;
-    right: $input-padding-x;
+    left: $input-padding-x;
     top: 50%;
     transform: translateY(-50%);
     color: $text-3;
     pointer-events: none;
   }
 
-  &__search-input {
+  // Doble clase: gana al input[type="search"] genérico de _forms.scss
+  // (0,1,1) sin depender del orden de carga — si no, el padding de la lupa
+  // no se aplica y el texto se monta con el icono.
+  &__search #{&}__search-input {
     width: 100%;
     height: $input-height;
-    padding: 0 34px 0 $input-padding-x; // hueco a la derecha para la lupa
+    padding: 0 $input-padding-x 0 34px; // hueco a la izquierda para la lupa
     background: $surface-2;
     color: $text-1;
     border: 1px solid $border;

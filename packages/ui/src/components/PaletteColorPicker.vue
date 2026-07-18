@@ -16,19 +16,19 @@ const props = withDefaults(
 
 const emit = defineEmits<{ 'update:modelValue': [value: string] }>()
 
-// Paleta base (mismos tonos que kontuan).
+// Paleta base: espectro cálido → frío, con el gris al final (el tono "Slate"
+// heredado de kontuan). Los valores viajan como HEX, no como clave.
 const PALETTE = [
-  { name: 'Slate', hex: '#64748B' },
-  { name: 'Red', hex: '#EF4444' },
-  { name: 'Orange', hex: '#F97316' },
-  { name: 'Amber', hex: '#F59E0B' },
-  { name: 'Yellow', hex: '#EAB308' },
-  { name: 'Green', hex: '#22C55E' },
-  { name: 'Teal', hex: '#14B8A6' },
-  { name: 'Blue', hex: '#3B82F6' },
-  { name: 'Indigo', hex: '#6366F1' },
-  { name: 'Violet', hex: '#8B5CF6' },
-  { name: 'Pink', hex: '#EC4899' },
+  { name: 'Rojo', hex: '#f15959' },
+  { name: 'Naranja', hex: '#f1753a' },
+  { name: 'Lima', hex: '#88b033' },
+  { name: 'Verde', hex: '#29ab5f' },
+  { name: 'Esmeralda', hex: '#31a28e' },
+  { name: 'Cian', hex: '#3999cd' },
+  { name: 'Azul', hex: '#408cfd' },
+  { name: 'Violeta', hex: '#7a64c8' },
+  { name: 'Magenta', hex: '#a75da5' },
+  { name: 'Gris', hex: '#64748B' },
 ]
 
 const norm = (v: string | null) => (v ?? '').toLowerCase()

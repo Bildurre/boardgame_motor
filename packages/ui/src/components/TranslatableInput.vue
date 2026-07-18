@@ -2,6 +2,7 @@
 import { ref, computed, onMounted, onBeforeUnmount, defineAsyncComponent } from 'vue'
 import { ChevronDown } from '@lucide/vue'
 import type { RichTextLabels } from './RichTextInput.vue'
+import { useFormLocaleField } from '../composables/useFormLocale'
 
 // Editor WYSIWYG cargado en diferido: TipTap solo se descarga si algún campo
 // traducible usa type="wysiwyg".
@@ -45,6 +46,15 @@ const emit = defineEmits<{ 'update:modelValue': [Record<string, string>] }>()
 const codes = computed(() => props.locales.map((l) => l.code))
 const active = ref(codes.value[0] ?? 'es')
 const open = ref(false)
+
+// Locale global del formulario (si el contenedor lo provee, p. ej. EditModal):
+// una difusión cambia el tab activo; el selector propio sigue siendo local.
+useFormLocaleField(
+  computed(() => props.locales),
+  (code) => {
+    active.value = code
+  },
+)
 const dropdownRef = ref<HTMLElement>()
 const inputId = props.id || `translatable-${Math.random().toString(36).slice(2, 9)}`
 

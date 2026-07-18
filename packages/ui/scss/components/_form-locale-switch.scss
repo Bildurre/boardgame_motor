@@ -1,0 +1,38 @@
+@use "tokens" as *;
+
+// Selector compacto de locale GLOBAL de un formulario (FormLocaleSwitch):
+// segmentado de códigos, mismo lenguaje visual que el trigger de locale de
+// los campos traducibles (_translatable-input.scss). Vive en la cabecera del
+// EditModal (solo si el formulario contiene campos traducibles).
+.form-locale-switch {
+  display: inline-flex;
+  align-items: stretch;
+  background: $surface-2;
+  border: 1px solid $border;
+  border-radius: $radius-sm;
+  overflow: hidden;
+  flex-shrink: 0;
+
+  &__option {
+    padding: 2px $space-2;
+    border: none;
+    background: transparent;
+    color: $text-3;
+    font-size: $fs-11;
+    font-weight: $k-fw-bold;
+    letter-spacing: $k-track-wide;
+    cursor: pointer;
+    transition: background-color 0.15s, color 0.15s;
+
+    & + & { border-left: 1px solid $border; }
+
+    &:hover { background: $surface-3; color: $text-1; }
+
+    // Resalta la ÚLTIMA elección global (los tabs individuales pueden haberse
+    // movido después: esto es un mando, no un espejo).
+    &.is-active {
+      background: $accent-500;
+      color: $text-1;
+    }
+  }
+}

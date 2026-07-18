@@ -142,8 +142,18 @@ const tabs = [
   Cancelar/Guardar. Las altas y ediciones de entidades son **modales** (no rutas),
   abiertas desde el listado. Agnóstico de i18n: las etiquetas van por props.
 - **Props:** `modelValue` (v-model abierto/cerrado), `title`, `size?`, `loading?`,
-  `submitLabel?` / `cancelLabel?`, `submitVariant?`.
+  `submitLabel?` / `cancelLabel?`, `submitVariant?`, `localeSwitchLabel?`
+  (texto accesible del selector de locale global).
 - **Emite:** `update:modelValue`, `submit`. **Slot** por defecto = cuerpo del form.
+- **Locale global del formulario:** EditModal provee (provide/inject,
+  `provideFormLocale()`) un estado compartido al que los campos traducibles
+  (`TranslatableInput`/`TranslatableImage`, también dentro de
+  `SchemaFields`/`PageBlocks`) se **suscriben solos**: si el formulario
+  contiene alguno, en la cabecera aparece un selector compacto
+  (`FormLocaleSwitch`) que cambia el tab de locale de TODOS los campos a la
+  vez; el tab de cada campo sigue funcionando individualmente. Los juegos no
+  tienen que tocar nada; un contenedor propio puede montar lo mismo con
+  `provideFormLocale()` + `<FormLocaleSwitch />` (ambos en `@edc-motor/ui`).
 - **Uso (un FormModal por entidad envuelve EditModal):**
 
 ```vue
@@ -257,7 +267,10 @@ color. Úsalos siempre en formularios (en modal o donde sea).
 
 - **Finalidad:** campo de texto/textarea multi-idioma (portado de kontuan). Usa
   el estilo `.form-field` y un **selector desplegable** de locale con contador de
-  rellenados (p. ej. `ES 1/3`). Edita un objeto `{ es, eu, en }`.
+  rellenados (p. ej. `ES 1/3`). Edita un objeto `{ es, eu, en }`. Si un
+  contenedor provee el **locale global de formulario** (EditModal lo hace
+  solo, ver arriba), el campo se suscribe automáticamente: el selector global
+  cambia su tab activo; su selector propio sigue siendo local.
 - **Modelo:** `v-model` (`Record<string, string>`).
 - **Props:** `locales: { code, name }[]`, `label?`,
   `type?: 'text' | 'textarea' | 'wysiwyg'` (def. `text`; `wysiwyg` usa
@@ -511,8 +524,10 @@ if (!ok) return
 - **Finalidad:** grid responsive de tarjetas (portado de kontuan). Responde al
   ancho del _container_ `content`, no al viewport.
 - **Props:** `cols?` (número u objeto `{ base, sm, md, lg }`),
-  `gap?: 'sm'|'md'|'lg'`, `preset?` (`cards` = 1→2→3, `cards-wide`,
-  `cards-narrow`, `cards-full`, `halves`, `thirds`).
+  `gap?: 'sm'|'md'|'lg'`, `preset?` (`cards` = 1→2→3→4→5 con los breakpoints
+  canónicos del contenedor, `cards-dense` = el doble — 2→4→6→8→10, para
+  piezas pequeñas como el gestor de iconos —, `cards-wide`, `cards-narrow`,
+  `cards-full`, `halves`, `thirds`).
 
 #### EntityCard
 
@@ -580,12 +595,14 @@ vive en el composable `useEntityList` (ver la guía de montar una web, §4.4).
 
 - **Finalidad:** tarjeta **fija** (no colapsa) compartida por los gestores:
   **toda la tarjeta selecciona** (emite `select`, prop `active`) salvo los
-  botones/enlaces/inputs interiores; título + `chip` opcional, resumen
-  siempre visible (slot `meta`) y pie de acciones "de todas" (slot
-  `actions`). Se coloca dentro de
-  `.manager-grid` (1 columna en estrecho, **2 a partir del ancho del
-  contenedor** `content` — container query, no viewport). El detalle de la
-  tarjeta activa vive en el panel derecho.
+  botones/enlaces/inputs interiores; mismo lenguaje visual que `EntityCard`:
+  cabecera con divisoria (título + `chip` opcional), **badges arriba** (slot
+  `badges`, chips de estado) y **meta debajo** (slot `meta`, datos
+  secundarios), más el pie de acciones "de todas" (slot `actions`). Se coloca
+  dentro de `.manager-grid` (mismos escalones que el preset `cards`:
+  1→2→3→4→5 columnas según el ancho del contenedor `content` — container
+  query, no viewport). El detalle de la tarjeta activa vive en el panel
+  derecho.
 
 ### PageBlocks + panel derecho de páginas
 
@@ -672,7 +689,10 @@ vive en el composable `useEntityList` (ver la guía de montar una web, §4.4).
   borrar). Sin multiselección: lo masivo son los botones "todas". Barra
   global con Actualizar y **limpieza de huérfanos**. Consume
   `GET/POST/DELETE /api/admin/previews/...`; confirmaciones (ConfirmDialog) y
-  toasts con los mensajes del servidor.
+  toasts con los mensajes del servidor. **Arranque sin vacíos:** al cargar se
+  selecciona la PRIMERA tarjeta (tipo) y el combobox arranca con su primer
+  elemento elegido. **Criterio de los selects del admin:** sin un orden
+  explícito, las opciones (tarjetas y combobox) salen en orden **alfabético**.
 - **Props:** `api: AxiosInstance` (el cliente del admin),
   `labels?: Partial<PreviewManagerLabels>` (textos, DC-29; defaults en castellano)
   y `typeLabels?: Record<string, string>` (nombre traducido de cada tipo del
@@ -698,7 +718,10 @@ vive en el composable `useEntityList` (ver la guía de montar una web, §4.4).
   Generar, y los PDF por idioma (estado, fecha, error completo, Descargar /
   Regenerar / Borrar). Toda la gestión de PDF vive aquí (nada en los
   singles); añadir un export = registrarlo en el backend + su etiqueta en
-  `typeLabels`.
+  `typeLabels`. **Arranque sin vacíos:** al cargar se selecciona el PRIMER
+  export y, en los por-entidad, la primera dueña del combobox. **Criterio de
+  los selects del admin:** sin un orden explícito, opciones **alfabéticas**
+  (tarjetas por etiqueta traducida; dueñas por `label`).
 - **Props:** `api: AxiosInstance`, `labels?: Partial<PdfManagerLabels>` (DC-29)
   y `typeLabels?: Record<string, string>` (nombre traducido por export).
 - **Uso** (ver `PdfsView` del playground):

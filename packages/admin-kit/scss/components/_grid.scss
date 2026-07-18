@@ -43,4 +43,16 @@
     @container content (min-width: #{$bp-lg}) { grid-template-columns: repeat(4, 1fr); }
     @container content (min-width: #{$bp-xl}) { grid-template-columns: repeat(5, 1fr); }
   }
+
+  // Preset `cards-dense` (piezas pequeñas, p. ej. el gestor de iconos): el
+  // DOBLE de columnas que `cards` en todos los breakpoints — 2 → 4 → 6 → 8
+  // → 10 con los mismos escalones del contenedor `content`.
+  &--cards-dense {
+    grid-template-columns: repeat(2, 1fr);
+
+    @container content (min-width: #{$bp-sm}) { grid-template-columns: repeat(4, 1fr); }
+    @container content (min-width: #{$bp-md}) { grid-template-columns: repeat(6, 1fr); }
+    @container content (min-width: #{$bp-lg}) { grid-template-columns: repeat(8, 1fr); }
+    @container content (min-width: #{$bp-xl}) { grid-template-columns: repeat(10, 1fr); }
+  }
 }

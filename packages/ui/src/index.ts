@@ -15,6 +15,17 @@ export { default as NumericInput } from './components/NumericInput.vue'
 export { default as PaletteColorPicker } from './components/PaletteColorPicker.vue'
 export { default as TranslatableInput } from './components/TranslatableInput.vue'
 export { default as TranslatableImage } from './components/TranslatableImage.vue'
+// Locale global de un formulario: EditModal lo provee solo (selector compacto
+// en su cabecera) y los campos traducibles se suscriben solos; cualquier otro
+// contenedor puede montar lo mismo con provideFormLocale() + FormLocaleSwitch.
+export { default as FormLocaleSwitch } from './components/FormLocaleSwitch.vue'
+export {
+  provideFormLocale,
+  useFormLocaleField,
+  FormLocaleKey,
+  type FormLocale,
+  type FormLocaleContext,
+} from './composables/useFormLocale'
 // El WYSIWYG carga DIFERIDO (TipTap pesa ~450 KB): así la web pública no lo
 // arrastra a su bundle y el admin lo trocea en su propio chunk.
 export const RichTextInput = defineAsyncComponent(() => import('./components/RichTextInput.vue'))

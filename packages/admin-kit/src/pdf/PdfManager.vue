@@ -127,6 +127,12 @@ function typeName(exp: ExportInfo): string {
   return props.typeLabels[exp.type] ?? exp.type
 }
 
+// Criterio de los selects del admin: sin un orden explícito, ALFABÉTICO.
+// Vale también para las tarjetas, que hacen de selector de export.
+const sortedExports = computed(() =>
+  [...exports.value].sort((a, b) => typeName(a).localeCompare(typeName(b))),
+)
+
 /** Quedan piezas por generar (algún idioma por debajo del total). */
 function hasMissing(exp: ExportInfo): boolean {
   return Object.values(exp.stats.locales).some((ready) => ready < exp.stats.total)
@@ -134,13 +140,17 @@ function hasMissing(exp: ExportInfo): boolean {
 
 const activeExport = computed(() => exports.value.find((e) => e.type === activeType.value) ?? null)
 
-/** Fuentes filtradas por el buscador del panel (filtro en cliente). */
+/**
+ * Fuentes del combobox del panel: filtradas por el buscador (en cliente) y
+ * ALFABÉTICAS (criterio general de los selects del admin sin orden propio).
+ */
 const filteredSources = computed(() => {
   if (!activeExport.value) return []
   const q = sourceSearch.value.trim().toLowerCase()
-  return q
+  const sources = q
     ? activeExport.value.sources.filter((s) => s.label.toLowerCase().includes(q))
     : activeExport.value.sources
+  return [...sources].sort((a, b) => a.label.localeCompare(b.label))
 })
 
 /** Filas visibles en el panel: las del export global o las de la dueña elegida. */
@@ -169,6 +179,9 @@ async function loadCatalog() {
     exports.value = data.data
     // Los globales cargan sus filas ya (el panel las pinta directamente).
     await Promise.all(exports.value.filter((e) => e.global).map((e) => loadRows(e.type, null)))
+    // El selector de export (las tarjetas) arranca con el PRIMERO seleccionado,
+    // no vacío (sin abrir el panel: eso lo hace el click del usuario).
+    if (!activeType.value && sortedExports.value.length) activate(sortedExports.value[0])
   } catch {
     toast.danger(L.error)
   } finally {
@@ -176,12 +189,23 @@ async function loadCatalog() {
   }
 }
 
+/**
+ * Activa un export: resetea el buscador y, en los exports por entidad, deja
+ * el select de la dueña con el PRIMER elemento (alfabético) seleccionado —
+ * nunca vacío — cargando sus filas.
+ */
+function activate(exp: ExportInfo) {
+  activeType.value = exp.type
+  sourceSearch.value = ''
+  selectedSourceId.value = null
+  const first = exp.global
+    ? null
+    : [...exp.sources].sort((a, b) => a.label.localeCompare(b.label))[0]
+  if (first) selectSource(first.id)
+}
+
 function select(exp: ExportInfo) {
-  if (activeType.value !== exp.type) {
-    activeType.value = exp.type
-    sourceSearch.value = ''
-    selectedSourceId.value = null
-  }
+  if (activeType.value !== exp.type) activate(exp)
   sidebar.reveal()
 }
 
@@ -298,23 +322,25 @@ defineExpose({ refreshAll })
 
     <div class="manager-grid">
       <ManagerCard
-        v-for="exp in exports"
+        v-for="exp in sortedExports"
         :key="exp.type"
         :title="typeName(exp)"
         :chip="exp.layout"
         :active="activeType === exp.type"
         @select="select(exp)"
       >
-        <!-- Resumen como el de las previews: total + listos por idioma -->
-        <template #meta>
-          <span class="manager-stat"
-            >{{ L.total }} <strong>{{ exp.stats.total }}</strong></span
-          >
+        <!-- Como EntityCard: badges (listos por idioma) arriba, meta (total) debajo -->
+        <template #badges>
           <span
             v-for="(ready, locale) in exp.stats.locales"
             :key="locale"
             :class="['chip', ready === exp.stats.total ? 'is-ok' : 'is-missing']"
             >{{ String(locale).toUpperCase() }} {{ ready }}/{{ exp.stats.total }}</span
+          >
+        </template>
+        <template #meta>
+          <span class="manager-stat"
+            >{{ L.total }} <strong>{{ exp.stats.total }}</strong></span
           >
         </template>
       </ManagerCard>

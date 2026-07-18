@@ -4,6 +4,31 @@ Componentes Vue 3 + SCSS para las webs públicas (y piezas compartidas con el
 admin). Paquete **fuente** (se consume vía Vite). Versión de tren con
 `edc-motor/core` y `@edc-motor/admin-kit`.
 
+## [Sin publicar]
+
+### Añadido
+
+- **Locale global de formulario** (provide/inject): `provideFormLocale()`
+  crea el contexto (clave `FormLocaleKey`) y `useFormLocaleField()` suscribe
+  un campo — `TranslatableInput` y `TranslatableImage` ya lo llaman solos, y
+  sus tabs individuales siguen siendo locales. Nuevo componente
+  `FormLocaleSwitch` (segmentado compacto de códigos; solo se pinta si hay
+  campos traducibles suscritos y más de un locale), y `EditModal` provee el
+  contexto y lo monta en su cabecera (nueva prop `localeSwitchLabel?` para el
+  texto accesible, DC-29). Cualquier otro contenedor puede montar lo mismo
+  con `provideFormLocale()` + `<FormLocaleSwitch />`.
+
+### Cambiado
+
+- **`IndexToolbar`: la lupa pasa a la IZQUIERDA del input** y el texto
+  (placeholder y valor) empieza a su derecha (padding-left de 34px), sin
+  montarse con el icono.
+- **`PaletteColorPicker`: paleta nueva** en espectro cálido → frío —
+  `#f15959`, `#f1753a`, `#88b033`, `#29ab5f`, `#31a28e`, `#3999cd`,
+  `#408cfd`, `#7a64c8`, `#a75da5` — con el gris al final (se mantiene el
+  `#64748B` heredado de kontuan). El swatch de valor libre (custom) no
+  cambia.
+
 ## [0.4.15] — 2026-07-17
 
 - Sin cambios propios: versión de tren.

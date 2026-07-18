@@ -2,6 +2,7 @@
 import { ref, computed, onMounted, onBeforeUnmount } from 'vue'
 import { ChevronDown } from '@lucide/vue'
 import ImageUpload from './ImageUpload.vue'
+import { useFormLocaleField } from '../composables/useFormLocale'
 
 // Imagen traducible (una URL por locale): mismo selector desplegable de
 // locale que TranslatableInput, con un ImageUpload para el idioma activo.
@@ -36,6 +37,15 @@ const active = ref(codes.value[0] ?? 'es')
 const open = ref(false)
 const dropdownRef = ref<HTMLElement>()
 const uploading = ref(false)
+
+// Locale global del formulario (si el contenedor lo provee, p. ej. EditModal):
+// una difusión cambia el tab activo; el selector propio sigue siendo local.
+useFormLocaleField(
+  computed(() => props.locales),
+  (code) => {
+    active.value = code
+  },
+)
 
 const currentUrl = computed(() => props.modelValue?.[active.value] || null)
 const filledCount = computed(() => codes.value.filter((c) => !!props.modelValue?.[c]).length)

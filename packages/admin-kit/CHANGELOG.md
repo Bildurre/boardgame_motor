@@ -3,6 +3,35 @@
 Kit de construcción del panel de administración (sobre `@edc-motor/ui`). Paquete
 **fuente** (se consume vía Vite). Versión de tren con `edc-motor/core` y `@edc-motor/ui`.
 
+## [Sin publicar]
+
+### Añadido
+
+- **Preset `cards-dense` de `BaseGrid`**: el DOBLE de columnas que `cards` en
+  todos los breakpoints del contenedor `content` — 2 → 4 → 6 → 8 → 10 a
+  base/480/768/1024/1280px. Para piezas pequeñas (el gestor de iconos del
+  cascarón lo usa, listando TODOS los iconos sin paginación).
+- **`ManagerCard` gana el slot `badges`**: como en `EntityCard`, los chips de
+  estado van ARRIBA y el meta (datos secundarios) debajo, dentro de un
+  `__content` común; la cabecera gana la divisoria de `EntityCard`.
+
+### Cambiado
+
+- **`FilterBar`: la lupa pasa a la IZQUIERDA del input** y el texto
+  (placeholder y valor) empieza a su derecha (padding-left de 34px), sin
+  montarse con el icono.
+- **Gestores de previews y PDF sin arranque vacío**: al cargar se selecciona
+  la PRIMERA tarjeta (tipo/export) — sin abrir el panel en móvil — y el
+  combobox del panel arranca con su primer elemento elegido (en las previews
+  al cargar la primera página; en PDF, la primera entidad dueña de los
+  exports por entidad).
+- **Criterio de los selects del admin**: sin un orden explícito, las opciones
+  salen en orden ALFABÉTICO. Aplicado en ambos gestores: tarjetas por
+  etiqueta traducida (`typeLabels`), combobox de elementos de previews por
+  `label` (el servidor manda por id) y combobox de dueñas de PDF por `label`.
+- **`.manager-grid` escala como el preset `cards`**: 1 → 2 → 3 → 4 → 5
+  columnas a 480/768/1024/1280px del contenedor `content` (antes 1 → 2).
+
 ## [0.4.15] — 2026-07-17
 
 ### Cambiado
