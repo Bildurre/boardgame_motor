@@ -12,6 +12,13 @@ El formato sigue [Keep a Changelog](https://keepachangelog.com/es/) y el
 versionado, [SemVer](https://semver.org/lang/es/) (mientras estemos en `0.x`,
 los cambios de API pueden llegar en versiones menores).
 
+## [Sin publicar]
+
+- **La alineación de título/subtítulo ahora sí se aplica** (`@edc-motor/ui`):
+  faltaba `width: 100%` (en el cuerpo del CTA el elemento encogía a su
+  contenido y el `text-align` no se veía), y en formato estrecho la
+  alineación elegida se revierte a la izquierda, sea la que sea.
+
 ## [0.4.22] — 2026-07-19
 
 - **Cita: el tamaño grande ahora sí se aplica, y el autor a la derecha sin

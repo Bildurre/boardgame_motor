@@ -20,9 +20,11 @@
 
   // Tipografía de bloque: texto $fs-16, subtítulo $fs-20, título $fs-28
   // (la cabecera sube a 32/24). Los títulos nunca se justifican.
-  &__title { margin: 0; font-size: $fs-28; }
+  // width 100%: en grids con justify-items start (el cuerpo del CTA) el
+  // elemento encoge a su contenido y el text-align no se vería.
+  &__title { margin: 0; font-size: $fs-28; width: 100%; }
   // pre-line: el subtítulo es un textarea — sus saltos de línea cuentan.
-  &__subtitle { margin: 0; color: $text-2; font-size: $fs-20; white-space: pre-line; }
+  &__subtitle { margin: 0; color: $text-2; font-size: $fs-20; white-space: pre-line; width: 100%; }
   &__text { color: $text-1; font-size: $fs-16; }
 
   &--align-justify &__title,
@@ -30,13 +32,25 @@
 
   // Alineación PROPIA de título/subtítulo (campos comunes title_align y
   // subtitle_align): con valor explícito manda sobre la del bloque (por eso
-  // va DESPUÉS del ajuste del justificado).
-  &--title-left &__title { text-align: left; }
-  &--title-center &__title { text-align: center; }
-  &--title-right &__title { text-align: right; }
-  &--subtitle-left &__subtitle { text-align: left; }
-  &--subtitle-center &__subtitle { text-align: center; }
-  &--subtitle-right &__subtitle { text-align: right; }
+  // va DESPUÉS del ajuste del justificado). En ESTRECHO se revierte a la
+  // izquierda, se haya elegido lo que se haya elegido.
+  &--title-left &__title,
+  &--title-center &__title,
+  &--title-right &__title,
+  &--subtitle-left &__subtitle,
+  &--subtitle-center &__subtitle,
+  &--subtitle-right &__subtitle {
+    text-align: left;
+  }
+
+  @media (min-width: $bp-sm) {
+    &--title-left &__title { text-align: left; }
+    &--title-center &__title { text-align: center; }
+    &--title-right &__title { text-align: right; }
+    &--subtitle-left &__subtitle { text-align: left; }
+    &--subtitle-center &__subtitle { text-align: center; }
+    &--subtitle-right &__subtitle { text-align: right; }
+  }
 
   &__label {
     display: inline-block;

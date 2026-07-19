@@ -4,6 +4,16 @@ Componentes Vue 3 + SCSS para las webs públicas (y piezas compartidas con el
 admin). Paquete **fuente** (se consume vía Vite). Versión de tren con
 `edc-motor/core` y `@edc-motor/admin-kit`.
 
+## [Sin publicar]
+
+### Corregido
+
+- **La alineación propia de título/subtítulo ahora sí se ve**: en grids con
+  `justify-items: start` (el cuerpo del CTA) el elemento encogía a su
+  contenido y el `text-align` no tenía efecto — título y subtítulo pasan a
+  `width: 100%`. Además, en ESTRECHO (< 480px) la alineación elegida se
+  revierte a la IZQUIERDA, sea cual sea.
+
 ## [0.4.22] — 2026-07-19
 
 ### Corregido
