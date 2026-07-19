@@ -12,6 +12,17 @@ El formato sigue [Keep a Changelog](https://keepachangelog.com/es/) y el
 versionado, [SemVer](https://semver.org/lang/es/) (mientras estemos en `0.x`,
 los cambios de API pueden llegar en versiones menores).
 
+## [Sin publicar]
+
+- **Bloques: título, subtítulo y autor con alineación propia, y cita
+  rediseñada** (`edc-motor/core` + `@edc-motor/ui`): título y subtítulo
+  ganan alineación PROPIA en los ajustes comunes (izquierda/centrado/
+  derecha, con "La del bloque" por defecto — lo guardado no cambia), que
+  manda sobre la del bloque; y el bloque de CITA pierde el adorno del borde
+  izquierdo, sube el texto a $fs-32 (el token más cercano a ~40px) en color
+  de acento, y el autor va en cursiva con alineación propia (nuevo campo
+  `author_align`).
+
 ## [0.4.19] — 2026-07-19
 
 - **Editor de bloques: subtítulos multilínea, justificado por defecto y CTA

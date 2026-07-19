@@ -30,7 +30,7 @@ it('la paleta lista los tipos del motor y los del juego con su esquema', functio
     $header = collect($response->json('data'))->firstWhere('key', 'header');
     // Título y subtítulo nunca son obligatorios (ni en la cabecera).
     expect($header['fields'][0])->toMatchArray(['key' => 'title', 'type' => 'text', 'translatable' => true, 'required' => false])
-        ->and($header['common'])->toHaveCount(3); // align + width + background
+        ->and($header['common'])->toHaveCount(5); // align + title/subtitle_align + width + background
 });
 
 // --- CRUD de páginas ---

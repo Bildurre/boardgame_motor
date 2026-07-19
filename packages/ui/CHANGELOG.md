@@ -4,6 +4,20 @@ Componentes Vue 3 + SCSS para las webs públicas (y piezas compartidas con el
 admin). Paquete **fuente** (se consume vía Vite). Versión de tren con
 `edc-motor/core` y `@edc-motor/admin-kit`.
 
+## [Sin publicar]
+
+### Cambiado
+
+- **Título y subtítulo con alineación propia**: `BlockShell` pinta
+  `block--title-left/center/right` y `block--subtitle-…` cuando los campos
+  comunes traen un valor explícito (mandan sobre la alineación del bloque,
+  incluido el "a la izquierda" del justificado); con "La del bloque" todo
+  sigue igual.
+- **Bloque de cita rediseñado**: fuera el adorno del borde izquierdo; la
+  cita pasa a $fs-32 (el token más cercano a ~40px) y al COLOR DE ACENTO;
+  el autor va en cursiva y con alineación propia
+  (`block__author--left/center/right`, campo `author_align`).
+
 ## [0.4.19] — 2026-07-19
 
 ### Cambiado

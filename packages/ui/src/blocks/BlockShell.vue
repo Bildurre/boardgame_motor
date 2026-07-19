@@ -12,6 +12,13 @@ const width = computed(() => `block--w-${(props.settings.width as string) || 'wi
 // Sin valor guardado, JUSTIFICADO (el default del campo común del motor).
 const align = computed(() => `block--align-${(props.settings.align as string) || 'justify'}`)
 
+// Alineación propia de título/subtítulo (campos comunes): solo pinta clase
+// con un valor explícito — "inherit" (o nada) deja mandar a la del bloque.
+const headingAlign = (key: 'title_align' | 'subtitle_align', prefix: string) => {
+  const value = props.settings[key] as string | undefined
+  return value && value !== 'inherit' ? `block--${prefix}-${value}` : ''
+}
+
 const style = computed<CSSProperties>(() => {
   const background = props.settings.background as string | undefined
   return {
@@ -24,7 +31,11 @@ const style = computed<CSSProperties>(() => {
 </script>
 
 <template>
-  <section class="block" :class="[width, align]" :style="style">
+  <section
+    class="block"
+    :class="[width, align, headingAlign('title_align', 'title'), headingAlign('subtitle_align', 'subtitle')]"
+    :style="style"
+  >
     <div class="block__inner">
       <slot />
     </div>

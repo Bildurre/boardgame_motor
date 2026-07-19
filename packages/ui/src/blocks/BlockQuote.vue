@@ -12,7 +12,13 @@ defineProps<{ settings: Record<string, unknown>; data?: Record<string, unknown> 
     <blockquote class="block__quote">
       <img v-if="settings.image" class="block__avatar" :src="String(settings.image)" alt="" />
       <div class="rich-content" v-html="settings.quote" />
-      <footer v-if="settings.author" class="block__author">— {{ settings.author }}</footer>
+      <footer
+        v-if="settings.author"
+        class="block__author"
+        :class="`block__author--${settings.author_align || 'left'}`"
+      >
+        — {{ settings.author }}
+      </footer>
     </blockquote>
   </BlockShell>
 </template>
