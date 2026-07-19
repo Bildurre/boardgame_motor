@@ -4,11 +4,13 @@ import { ChevronDown } from '@lucide/vue'
 import ImageUpload from './ImageUpload.vue'
 import { useFormLocaleField } from '../composables/useFormLocale'
 
-// Imagen traducible (una URL por locale): mismo selector desplegable de
-// locale que TranslatableInput, con un ImageUpload para el idioma activo.
-// La subida la pone quien lo usa (prop `upload`): este componente solo
-// gestiona el mapa locale => URL. En el render, el motor localiza el valor
-// con fallback al locale por defecto (localizeSettings).
+// Imagen traducible (una por locale): mismo selector desplegable de locale
+// que TranslatableInput, con un ImageUpload para el idioma activo. DIFERIDO:
+// este componente NO sube nada — el mapa del v-model lleva la URL guardada
+// (string) o el File pendiente por locale, y quien lo usa sube los File al
+// GUARDAR. Quitar la imagen de un locale borra su clave del mapa (también
+// diferido). En el render, el motor localiza el valor con fallback al locale
+// por defecto (localizeSettings).
 interface Locale {
   code: string
   name: string
@@ -16,27 +18,21 @@ interface Locale {
 
 const props = withDefaults(
   defineProps<{
-    modelValue?: Record<string, string>
+    modelValue?: Record<string, string | File>
     locales: Locale[]
     label?: string
     required?: boolean
-    /** Sube el fichero (con la URL a la que sustituye, para que el backend
-     *  borre la anterior) y devuelve la URL pública que se guarda. */
-    upload: (file: File, replaces?: string | null) => Promise<string>
-    /** Borra el fichero al pulsar "quitar" (opcional). */
-    removeFile?: (url: string) => void | Promise<void>
     error?: string
   }>(),
   { modelValue: () => ({}), required: false },
 )
 
-const emit = defineEmits<{ 'update:modelValue': [Record<string, string>] }>()
+const emit = defineEmits<{ 'update:modelValue': [Record<string, string | File>] }>()
 
 const codes = computed(() => props.locales.map((l) => l.code))
 const active = ref(codes.value[0] ?? 'es')
 const open = ref(false)
 const dropdownRef = ref<HTMLElement>()
-const uploading = ref(false)
 
 // Locale global del formulario (si el contenedor lo provee, p. ej. EditModal):
 // una difusión cambia el tab activo; el selector propio sigue siendo local.
@@ -47,7 +43,10 @@ useFormLocaleField(
   },
 )
 
-const currentUrl = computed(() => props.modelValue?.[active.value] || null)
+const current = computed(() => props.modelValue?.[active.value] ?? null)
+// La URL guardada y el File pendiente del locale activo, para el ImageUpload.
+const currentFile = computed(() => (current.value instanceof File ? current.value : null))
+const currentUrl = computed(() => (typeof current.value === 'string' ? current.value : null))
 const filledCount = computed(() => codes.value.filter((c) => !!props.modelValue?.[c]).length)
 const hasContent = (code: string) => !!props.modelValue?.[code]
 
@@ -56,30 +55,20 @@ function selectLocale(code: string) {
   open.value = false
 }
 
-function setUrl(url: string | null) {
+/** Deja el mapa en su estado final deseado: File pendiente, o sin clave. */
+function setValue(value: string | File | null) {
   const next = { ...props.modelValue }
-  if (url) next[active.value] = url
+  if (value) next[active.value] = value
   else delete next[active.value]
   emit('update:modelValue', next)
 }
 
-async function onFile(file: File | null) {
-  if (!file) {
-    onRemove()
-    return
-  }
-  uploading.value = true
-  try {
-    setUrl(await props.upload(file, currentUrl.value))
-  } finally {
-    uploading.value = false
-  }
+function onFile(file: File | null) {
+  setValue(file)
 }
 
 function onRemove() {
-  const url = currentUrl.value
-  if (url && props.removeFile) Promise.resolve(props.removeFile(url)).catch(() => {})
-  setUrl(null)
+  setValue(null)
 }
 
 function onClickOutside(e: MouseEvent) {
@@ -127,9 +116,9 @@ onBeforeUnmount(() => document.removeEventListener('click', onClickOutside))
 
     <ImageUpload
       :key="active"
-      :model-value="null"
+      :model-value="currentFile"
       :current-url="currentUrl"
-      :error="uploading ? undefined : error"
+      :error="error"
       @update:model-value="onFile"
       @remove="onRemove"
     />

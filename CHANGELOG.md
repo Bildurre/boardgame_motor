@@ -14,6 +14,33 @@ los cambios de API pueden llegar en versiones menores).
 
 ## [Sin publicar]
 
+- **Inputs de imagen de los formularios: la actual a la vista y guardado
+  DIFERIDO** (`@edc-motor/ui` + `@edc-motor/admin-kit` + `edc-motor/core` +
+  cascarón): al abrir un formulario de edición el input muestra SIEMPRE la
+  imagen que ya tiene la entidad (miniatura + nombre del fichero; el gestor
+  de iconos la enseñaba vacía), y elegir o quitar una imagen ya NO toca el
+  servidor hasta pulsar GUARDAR — el `File` se retiene en el estado del
+  formulario (vista previa por object URL) y viaja con el submit; cancelar
+  no deja ni cambios ni ficheros huérfanos. Aplica en todos los flujos: las
+  entidades del juego siguen en multipart (con el nuevo `remove_image` del
+  trait `HasImage` para quitar, también diferido); el fondo de página, el
+  logo/favicon de Ajustes y las imágenes de bloques del CRM (simples y
+  traducibles) se suben en el submit con los helpers nuevos del admin-kit
+  (`uploadContentImage`/`uploadPendingImages`…), que además borran del disco
+  lo sustituido/quitado SOLO tras guardar en firme y deshacen las subidas si
+  el guardado falla. RUPTURA en `TranslatableImage`: su `v-model` pasa a
+  `Record<string, string | File>` y desaparecen las props
+  `upload`/`removeFile`. **Migración del cascarón**: copiar
+  `plantilla/admin/src/views/settings/SettingsView.vue`,
+  `plantilla/admin/src/components/pages/PageFormModal.vue` y
+  `plantilla/admin/src/views/icons/IconsListView.vue`; en los form-modals de
+  entidades PROPIOS del juego, pasar la imagen actual al `ImageUpload`
+  (`:current-url`) y diferir el quitar (flag en `@remove` que añade
+  `remove_image=1` al FormData del guardar — el backend ya lo entiende sin
+  tocar nada, lo resuelve el trait); cualquier uso propio de
+  `TranslatableImage` debe dejar de pasarle `upload`/`removeFile` y resolver
+  los `File` pendientes al guardar (helpers de `@edc-motor/admin-kit`).
+
 - **Páginas y bloques: interruptores en el panel y bloques más manejables**
   (`@edc-motor/admin-kit` + cascarón): los checks de publicada/imprimible
   del panel derecho (listado y single) pasan a BOTONES-INTERRUPTOR arriba,

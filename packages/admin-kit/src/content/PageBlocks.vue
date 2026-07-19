@@ -14,6 +14,7 @@ import {
   type RichTextLabels,
 } from '@edc-motor/ui'
 import SchemaFields, { type FieldSchema } from './SchemaFields.vue'
+import { collectImageUrls, deleteContentImage, uploadPendingImages } from './deferredImages'
 import { useRightSidebar } from '../composables/useRightSidebar'
 import { useCardDeselect } from '../composables/useCardDeselect'
 
@@ -304,13 +305,22 @@ function openEdit(block: BlockRow) {
   modalOpen.value = true
 }
 
+// Guardado DIFERIDO de las imágenes del bloque: los inputs dejan el File en
+// `form` y NADA viaja hasta aquí — se suben los pendientes, se persiste el
+// bloque con las URLs resueltas y solo entonces se borran del disco las
+// imágenes que el bloque ya no referencia. Si algo falla, las subidas nuevas
+// se deshacen (el form conserva los File para reintentar) y cancelar el
+// modal no deja rastro en el servidor.
 async function save() {
   if (!modalType.value) return
   busy.value = true
+  const fields = [...modalType.value.fields, ...modalType.value.common]
+  const uploaded: string[] = []
   try {
+    const settings = await uploadPendingImages(props.api, fields, form.value, uploaded)
     const payload = {
       type: modalType.value.key,
-      settings: form.value,
+      settings,
       is_printable: formPrintable.value,
       is_indexable: formIndexable.value,
       parent_id: formParent.value,
@@ -320,9 +330,17 @@ async function save() {
     } else {
       await props.api.post(`/admin/pages/${props.pageId}/blocks`, payload)
     }
+    // Guardado en firme: fuera del disco lo que el bloque ya no referencia
+    // (sustituidas y quitadas), robusto ante filas de repeater reordenadas.
+    const kept = new Set(collectImageUrls(fields, settings))
+    const before = collectImageUrls(fields, editing.value?.settings ?? {})
+    await Promise.all(
+      before.filter((url) => !kept.has(url)).map((url) => deleteContentImage(props.api, url)),
+    )
     modalOpen.value = false
     await load()
   } catch {
+    await Promise.all(uploaded.map((url) => deleteContentImage(props.api, url)))
     toast.danger(L.error)
   } finally {
     busy.value = false

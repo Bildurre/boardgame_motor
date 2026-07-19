@@ -20,6 +20,22 @@ admin). Paquete **fuente** (se consume vía Vite). Versión de tren con
 
 ### Cambiado
 
+- **`ImageUpload`: diferido y con la imagen actual siempre a la vista**:
+  elegir fichero ya solo deja el `File` en el `v-model` (vista previa por
+  object URL, SIN petición al servidor) — quien lo usa lo envía al pulsar
+  GUARDAR. La vista previa se deriva del `v-model` (controlado: si el padre
+  repone un `File`, la miniatura reaparece — lo aprovecha
+  `TranslatableImage` al cambiar de idioma), y bajo la miniatura se muestra
+  el **nombre del fichero** (el del `File` pendiente o el extraído de
+  `current-url`, clase `image-upload__name`). El botón de quitar sigue
+  emitiendo `remove` para que la vista lo difiera también.
+- **`TranslatableImage`: contrato diferido** (RUPTURA): el mapa del `v-model`
+  pasa a `Record<string, string | File>` — URL guardada o `File` pendiente
+  por locale — y desaparecen las props `upload` y `removeFile`: el
+  componente ya NO sube ni borra nada; quien lo usa resuelve los `File` en
+  el submit (en el motor, `PageBlocks`/Ajustes con los helpers de
+  `@edc-motor/admin-kit`). Quitar la imagen de un locale borra su clave del
+  mapa (también diferido).
 - **`IndexToolbar`: la lupa pasa a la IZQUIERDA del input** y el texto
   (placeholder y valor) empieza a su derecha (padding-left de 34px), sin
   montarse con el icono.

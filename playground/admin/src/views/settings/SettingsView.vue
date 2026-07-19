@@ -13,6 +13,7 @@ import {
   TranslatableInput,
   useToast,
 } from '@edc-motor/ui'
+import { deleteContentImage, uploadContentImage } from '@edc-motor/admin-kit'
 import { api } from '@/lib/api'
 import { useEditorLabels } from '@/lib/editorLabels'
 import { useLocalesStore } from '@/stores/locales'
@@ -30,8 +31,17 @@ const saving = ref(false)
 
 const title = ref<Record<string, string>>({})
 const description = ref<Record<string, string>>({})
-const logo = ref<Record<string, string>>({})
-const favicon = ref<string | null>(null)
+// Logo y favicon DIFERIDOS: el estado lleva la URL guardada (string) o el
+// File pendiente; NADA viaja al servidor hasta el botón GUARDAR (quitar
+// también se difiere). `saved*` recuerda lo persistido para borrar del disco
+// lo sustituido/quitado SOLO tras un guardado en firme.
+const logo = ref<Record<string, string | File>>({})
+const favicon = ref<string | File | null>(null)
+const savedLogo = ref<Record<string, string>>({})
+const savedFavicon = ref<string | null>(null)
+
+const faviconFile = computed(() => (favicon.value instanceof File ? favicon.value : null))
+const faviconUrl = computed(() => (typeof favicon.value === 'string' ? favicon.value : null))
 const accentMode = ref<'fixed' | 'random'>('fixed')
 const accentColor = ref('#6c5ce7')
 const accentColors = ref<string[]>([])
@@ -130,42 +140,6 @@ function removeCustomFont(font: CustomFont) {
   if (fontBody.value === font.key) fontBody.value = 'system'
 }
 
-async function upload(file: File, replaces?: string | null): Promise<string | null> {
-  try {
-    const form = new FormData()
-    form.append('image', file)
-    // El backend borra el fichero sustituido: sin huérfanos.
-    if (replaces) form.append('replaces', replaces)
-    const { data } = await api.post('/admin/content/uploads', form)
-    return data.url
-  } catch {
-    toast.danger(t('common.errors.action'))
-    return null
-  }
-}
-
-/** Borra la subida del disco (el botón "quitar"); en silencio si falla. */
-async function removeUpload(url: string): Promise<void> {
-  await api.delete('/admin/content/uploads', { data: { url } }).catch(() => {})
-}
-
-// Subida para TranslatableImage (una URL por idioma): lanza si falla para
-// que el componente no borre el valor del locale activo.
-async function uploadLogo(file: File, replaces?: string | null): Promise<string> {
-  const url = await upload(file, replaces)
-  if (!url) throw new Error('upload failed')
-  return url
-}
-
-async function uploadFavicon(file: File | null) {
-  if (!file) {
-    if (favicon.value) removeUpload(favicon.value)
-    favicon.value = null
-    return
-  }
-  favicon.value = (await upload(file, favicon.value)) ?? favicon.value
-}
-
 async function load() {
   loading.value = true
   try {
@@ -173,8 +147,10 @@ async function load() {
     const s = data.data
     title.value = s.title ?? {}
     description.value = s.description ?? {}
-    logo.value = s.logo ?? {}
+    logo.value = { ...(s.logo ?? {}) }
+    savedLogo.value = { ...(s.logo ?? {}) }
     favicon.value = s.favicon
+    savedFavicon.value = s.favicon
     accentMode.value = s.accent_mode
     accentColor.value = s.accent_color
     accentColors.value = s.accent_colors ?? []
@@ -193,12 +169,30 @@ async function load() {
 
 async function save() {
   saving.value = true
+  const uploaded: string[] = []
   try {
+    // Los File pendientes (logo por idioma y favicon) se suben AHORA, en el
+    // submit; en la configuración se persisten las URLs resueltas.
+    const logoResolved: Record<string, string> = {}
+    for (const [code, value] of Object.entries(logo.value)) {
+      if (value instanceof File) {
+        const url = await uploadContentImage(api, value)
+        uploaded.push(url)
+        logoResolved[code] = url
+      } else if (value) {
+        logoResolved[code] = value
+      }
+    }
+    let faviconResolved: string | null = faviconUrl.value
+    if (favicon.value instanceof File) {
+      faviconResolved = await uploadContentImage(api, favicon.value)
+      uploaded.push(faviconResolved)
+    }
     await api.put('/admin/settings/site', {
       title: title.value,
       description: description.value,
-      logo: logo.value,
-      favicon: favicon.value,
+      logo: logoResolved,
+      favicon: faviconResolved,
       accent_mode: accentMode.value,
       accent_color: accentColor.value,
       accent_colors: accentColors.value,
@@ -208,8 +202,27 @@ async function save() {
       custom_fonts: customFonts.value.map(({ key, name, file }) => ({ key, name, file })),
       footer_text: footerText.value,
     })
+    // Guardado en firme: fuera del disco lo que la configuración ya no
+    // referencia (logos sustituidos/quitados y el favicon anterior).
+    const kept = new Set([
+      ...Object.values(logoResolved),
+      ...(faviconResolved ? [faviconResolved] : []),
+    ])
+    const before = [
+      ...Object.values(savedLogo.value),
+      ...(savedFavicon.value ? [savedFavicon.value] : []),
+    ]
+    await Promise.all(
+      before.filter((url) => url && !kept.has(url)).map((url) => deleteContentImage(api, url)),
+    )
+    logo.value = { ...logoResolved }
+    savedLogo.value = { ...logoResolved }
+    favicon.value = faviconResolved
+    savedFavicon.value = faviconResolved
     toast.success(t('settings.toast.saved'))
   } catch {
+    // Guardado fallido: se deshacen las subidas (los File siguen en el form).
+    await Promise.all(uploaded.map((url) => deleteContentImage(api, url)))
     toast.danger(t('settings.toast.saveError'))
   } finally {
     saving.value = false
@@ -251,23 +264,22 @@ onMounted(async () => {
             :rows="2"
           />
           <div class="settings-view__uploads">
-            <!-- Logo por idioma (fallback al por defecto en la web) -->
+            <!-- Logo por idioma (fallback al por defecto en la web); diferido:
+                 los File pendientes viajan con el botón Guardar -->
             <TranslatableImage
               v-model="logo"
               :locales="locales.locales"
               :label="t('settings.fields.logo')"
-              :upload="uploadLogo"
-              :remove-file="removeUpload"
             />
             <ImageUpload
-              :model-value="null"
-              :current-url="favicon"
+              :model-value="faviconFile"
+              :current-url="faviconUrl"
               :label="t('settings.fields.favicon')"
               accept=".png,.svg"
               :drag-text="t('common.imageDrag')"
               :hint-text="t('settings.fields.faviconHint')"
-              @update:model-value="uploadFavicon"
-              @remove="uploadFavicon(null)"
+              @update:model-value="(f: File | null) => (favicon = f)"
+              @remove="favicon = null"
             />
           </div>
         </section>

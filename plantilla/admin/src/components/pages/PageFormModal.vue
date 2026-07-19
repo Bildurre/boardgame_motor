@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, watch } from 'vue'
+import { computed, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import {
   BaseCheckbox,
@@ -9,6 +9,7 @@ import {
   TranslatableInput,
   useToast,
 } from '@edc-motor/ui'
+import { deleteContentImage, uploadContentImage } from '@edc-motor/admin-kit'
 import { api } from '@/lib/api'
 import { useLocalesStore } from '@/stores/locales'
 
@@ -49,30 +50,20 @@ const metaTitle = ref<Record<string, string>>({})
 const metaDescription = ref<Record<string, string>>({})
 const parentId = ref<string>('')
 const template = ref('default')
-const backgroundImage = ref<string | null>(null)
+// Imagen de fondo DIFERIDA: el estado lleva la URL guardada (string) o el
+// File pendiente; NADA viaja al servidor hasta el GUARDAR (cancelar el modal
+// no deja rastro). "Quitar" también se difiere (el estado queda a null).
+const backgroundImage = ref<string | File | null>(null)
+const savedBackground = ref<string | null>(null)
 const isPublished = ref(false)
 const isPrintable = ref(false)
 
-/** Sube la imagen de fondo al momento (misma ruta que las de los bloques);
- *  el backend borra la sustituida y el "quitar" la borra del disco. */
-async function uploadBackground(file: File | null) {
-  if (!file) {
-    if (backgroundImage.value) {
-      api.delete('/admin/content/uploads', { data: { url: backgroundImage.value } }).catch(() => {})
-    }
-    backgroundImage.value = null
-    return
-  }
-  try {
-    const form = new FormData()
-    form.append('image', file)
-    if (backgroundImage.value) form.append('replaces', backgroundImage.value)
-    const { data } = await api.post('/admin/content/uploads', form)
-    backgroundImage.value = data.url
-  } catch {
-    toast.danger(t('common.errors.action'))
-  }
-}
+const backgroundFile = computed(() =>
+  backgroundImage.value instanceof File ? backgroundImage.value : null,
+)
+const backgroundUrl = computed(() =>
+  typeof backgroundImage.value === 'string' ? backgroundImage.value : null,
+)
 
 // Plantillas del juego (config del motor): el select solo aparece si hay más
 // de una. Etiquetas localizables por convención (pages.templates.{clave}).
@@ -93,6 +84,7 @@ watch(
     parentId.value = props.page?.parent_id ? String(props.page.parent_id) : ''
     template.value = props.page?.template ?? 'default'
     backgroundImage.value = props.page?.background_image ?? null
+    savedBackground.value = props.page?.background_image ?? null
     isPublished.value = props.page?.is_published ?? false
     isPrintable.value = props.page?.is_printable ?? false
     if (!templates.value.length) {
@@ -108,7 +100,14 @@ watch(
 
 async function save() {
   saving.value = true
+  const uploaded: string[] = []
   try {
+    // El fondo pendiente se sube AHORA (dos pasos, pero solo en el submit).
+    let background = backgroundImage.value
+    if (background instanceof File) {
+      background = await uploadContentImage(api, background)
+      uploaded.push(background)
+    }
     const payload = {
       title: title.value,
       description: description.value,
@@ -116,16 +115,22 @@ async function save() {
       meta_description: metaDescription.value,
       parent_id: parentId.value ? Number(parentId.value) : null,
       template: template.value,
-      background_image: backgroundImage.value,
+      background_image: background,
       is_published: isPublished.value,
       is_printable: isPrintable.value,
     }
     if (props.page) await api.put(`/admin/pages/${props.page.id}`, payload)
     else await api.post('/admin/pages', payload)
+    // Guardado en firme: el fondo sustituido o quitado, fuera del disco.
+    if (savedBackground.value && savedBackground.value !== background) {
+      await deleteContentImage(api, savedBackground.value)
+    }
     toast.success(t('pages.toast.saved'))
     emit('saved')
     emit('update:modelValue', false)
   } catch {
+    // Guardado fallido: se deshace la subida (el File sigue en el form).
+    await Promise.all(uploaded.map((url) => deleteContentImage(api, url)))
     toast.danger(t('pages.toast.saveError'))
   } finally {
     saving.value = false
@@ -175,13 +180,13 @@ async function save() {
       :options="templates.map((tpl) => ({ value: tpl.key, label: templateLabel(tpl) }))"
     />
     <ImageUpload
-      :model-value="null"
-      :current-url="backgroundImage"
+      :model-value="backgroundFile"
+      :current-url="backgroundUrl"
       :label="t('pages.fields.backgroundImage')"
       :drag-text="t('common.imageDrag')"
       :hint-text="t('pages.fields.backgroundImageHint')"
-      @update:model-value="uploadBackground"
-      @remove="uploadBackground(null)"
+      @update:model-value="(f: File | null) => (backgroundImage = f)"
+      @remove="backgroundImage = null"
     />
     <TranslatableInput
       v-model="metaTitle"

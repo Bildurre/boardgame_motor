@@ -24,3 +24,11 @@ export { useResource, type ResourceMeta } from './crud/useResource'
 // CRM de páginas y bloques (doc 03): editor dirigido por esquema.
 export { default as SchemaFields, type FieldSchema } from './content/SchemaFields.vue'
 export { default as PageBlocks, type PageBlocksLabels } from './content/PageBlocks.vue'
+// Subidas de imagen diferidas al guardar (uploads de contenido sin huérfanos):
+// las usan PageBlocks y las vistas del cascarón (Ajustes, form de página).
+export {
+  uploadContentImage,
+  deleteContentImage,
+  uploadPendingImages,
+  collectImageUrls,
+} from './content/deferredImages'

@@ -289,20 +289,20 @@ color. Úsalos siempre en formularios (en modal o donde sea).
 
 ### TranslatableImage
 
-- **Finalidad:** imagen **multi-idioma** (una URL por locale): mismo selector
+- **Finalidad:** imagen **multi-idioma** (una por locale): mismo selector
   desplegable de locale que TranslatableInput (contador `ES 1/3`) con un
-  `ImageUpload` para el idioma activo. Edita `{ es: url, eu: url, … }`; el
-  render del motor localiza con fallback al locale por defecto
-  (`localizeSettings`). Lo usa `SchemaFields` para los campos
-  `Field::image()->translatable()` de los bloques.
-- **Modelo:** `v-model` (`Record<string, string>`).
-- **Props:** `locales: { code, name }[]`, `label?`, `required?`, `error?` y
-  `upload: (file: File) => Promise<string>` — la subida la pone quien lo usa
-  (SchemaFields la manda a `POST /admin/content/uploads`).
+  `ImageUpload` para el idioma activo. **Diferida**: NO sube nada — el mapa
+  del `v-model` lleva la URL guardada (`string`) o el `File` pendiente por
+  locale, y quien lo usa sube los `File` **al guardar** (quitar la imagen de
+  un locale borra su clave, también diferido). El render del motor localiza
+  con fallback al locale por defecto (`localizeSettings`). Lo usa
+  `SchemaFields` para los campos `Field::image()->translatable()` de los
+  bloques (PageBlocks resuelve los pendientes en el submit).
+- **Modelo:** `v-model` (`Record<string, string | File>`).
+- **Props:** `locales: { code, name }[]`, `label?`, `required?`, `error?`.
 
 ```vue
-<TranslatableImage v-model="form.image" :locales="locales.locales"
-  label="Imagen" :upload="uploadFn" />
+<TranslatableImage v-model="form.image" :locales="locales.locales" label="Imagen" />
 ```
 
 ### FontUpload
@@ -323,11 +323,16 @@ color. Úsalos siempre en formularios (en modal o donde sea).
 
 ### ImageUpload
 
-- **Finalidad:** subida de imagen con **arrastrar-y-soltar o clic** (portado de
-  kontuan): zona _dropzone_ con previsualización y botón de quitar. Devuelve un
-  `File` (o `null`) para enviar por `FormData`; muestra la imagen actual con
-  `current-url`.
-- **Modelo:** `v-model` (`File | null`). **Emite:** `remove`.
+- **Finalidad:** input de imagen con **arrastrar-y-soltar o clic** (portado de
+  kontuan): zona _dropzone_ con previsualización y botón de quitar.
+  **Diferido**: elegir fichero NO sube nada — deja el `File` en el `v-model`
+  (con object URL para la vista previa) y la vista lo envía **al guardar**
+  (`FormData` o subida en el submit). La imagen ya guardada se muestra con
+  `current-url` (miniatura + nombre del fichero); "quitar" solo emite
+  `remove` para que la vista lo difiera también (p. ej. `remove_image` al
+  guardar).
+- **Modelo:** `v-model` (`File | null`, controlado: la vista previa se deriva
+  del valor). **Emite:** `remove`.
 - **Props:** `currentUrl?`, `label?`, `accept?` (def. `image/*`), `maxSize?`
   (MB, def. 4), `error?`, y los textos traducibles `dragText?` / `hintText?`.
 - **Uso:**

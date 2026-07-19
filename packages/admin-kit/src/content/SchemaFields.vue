@@ -49,7 +49,7 @@ const props = withDefaults(
     fields: FieldSchema[]
     modelValue: Record<string, unknown>
     locales: { code: string; name: string }[]
-    /** Cliente de la API del admin (sube las imágenes de contenido). */
+    /** Cliente de la API del admin (opciones de los campos `entity`). */
     api: AxiosInstance
     /** Iconos del juego para el WYSIWYG. */
     icons?: RichIcon[]
@@ -77,36 +77,33 @@ function translations(field: FieldSchema): Record<string, string> {
   return value as Record<string, string>
 }
 
+// --- Imágenes DIFERIDAS: elegir fichero deja el File en el modelo (URL al
+// guardar: PageBlocks los sube en el submit con uploadPendingImages) ---
+
+/** File pendiente de un campo imagen no traducible (si lo hay). */
+function imageFile(field: FieldSchema): File | null {
+  const value = props.modelValue[field.key]
+  return value instanceof File ? value : null
+}
+
+/** URL guardada de un campo imagen no traducible (si la hay). */
+function imageCurrentUrl(field: FieldSchema): string | null {
+  const value = props.modelValue[field.key]
+  return typeof value === 'string' && value ? value : null
+}
+
+/** Mapa locale => URL guardada o File pendiente de una imagen traducible. */
+function imageTranslations(field: FieldSchema): Record<string, string | File> {
+  const value = props.modelValue[field.key]
+  if (!value || typeof value !== 'object') return {}
+  return value as Record<string, string | File>
+}
+
 function selectOptions(field: FieldSchema): SelectOption[] {
   return Object.entries(field.options ?? {}).map(([value, text]) => ({
     value,
     label: props.translate?.(`blockOptions.${field.key}.${value}`, text) ?? text,
   }))
-}
-
-/** Sube la imagen al momento; en settings queda la URL pública. */
-async function upload(file: File, replaces?: string | null): Promise<string> {
-  const form = new FormData()
-  form.append('image', file)
-  // El backend borra el fichero sustituido: sin huérfanos.
-  if (replaces) form.append('replaces', replaces)
-  const { data } = await props.api.post('/admin/content/uploads', form)
-  return data.url
-}
-
-/** Borra la subida del disco (el botón "quitar"); en silencio si falla. */
-async function removeUpload(url: string): Promise<void> {
-  await props.api.delete('/admin/content/uploads', { data: { url } }).catch(() => {})
-}
-
-async function uploadImage(field: FieldSchema, file: File | null) {
-  const current = (props.modelValue[field.key] as string | null) ?? null
-  if (!file) {
-    if (current) removeUpload(current)
-    set(field.key, null)
-    return
-  }
-  set(field.key, await upload(file, current))
 }
 
 // --- Anidados (group / repeater) ---
@@ -296,25 +293,24 @@ function addLabel(): string {
         @update:model-value="(v) => set(field.key, v)"
       />
 
-      <!-- Imagen traducible: una URL por locale (fallback al default al renderizar) -->
+      <!-- Imagen traducible: una por locale (fallback al default al renderizar).
+           Diferida: el mapa lleva File pendientes hasta el guardar -->
       <TranslatableImage
         v-else-if="field.type === 'image' && field.translatable"
-        :model-value="translations(field)"
+        :model-value="imageTranslations(field)"
         :locales="locales"
         :label="label(field)"
         :required="field.required"
-        :upload="upload"
-        :remove-file="removeUpload"
         @update:model-value="(v) => set(field.key, v)"
       />
 
       <div v-else-if="field.type === 'image'" class="schema-fields__image">
         <span class="form-field__label">{{ label(field) }}</span>
         <ImageUpload
-          :model-value="null"
-          :current-url="(modelValue[field.key] as string) ?? null"
-          @update:model-value="(f: File | null) => uploadImage(field, f)"
-          @remove="uploadImage(field, null)"
+          :model-value="imageFile(field)"
+          :current-url="imageCurrentUrl(field)"
+          @update:model-value="(f: File | null) => set(field.key, f)"
+          @remove="set(field.key, null)"
         />
       </div>
     </template>

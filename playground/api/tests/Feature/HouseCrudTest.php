@@ -1,6 +1,8 @@
 <?php
 
 use App\Models\House;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Storage;
 
 function makeHouse(array $overrides = []): House
 {
@@ -98,6 +100,53 @@ it('la web pública solo ve casas publicadas', function () {
     $this->getJson('/api/houses')->assertOk()->assertJsonCount(1, 'data');
     $this->getJson('/api/houses/casa-stark')->assertOk();
     $this->getJson('/api/houses/casa-lannister')->assertNotFound();
+});
+
+// La imagen viaja SOLO con el guardado (los formularios la difieren): el
+// alta y la edición la aceptan en multipart, sustituir borra la anterior del
+// disco y `remove_image` la quita también al guardar (trait HasImage del core).
+it('difiere la imagen al guardado: crea, conserva, sustituye y quita con remove_image', function () {
+    Storage::fake('public');
+    $admin = motorUser('admin');
+    $disk = Storage::disk('public');
+
+    // Alta con imagen (multipart): queda asociada y expuesta como URL.
+    $this->actingAs($admin)->post('/api/admin/houses', [
+        'name' => ['es' => 'Casa Tully'],
+        'image' => UploadedFile::fake()->image('escudo.png'),
+    ])->assertCreated();
+
+    $house = House::firstOrFail();
+    $primera = $house->getFirstMedia('image');
+    expect($primera)->not->toBeNull()
+        ->and($disk->exists($primera->getPathRelativeToRoot()))->toBeTrue();
+
+    // Editar SIN tocar la imagen: se conserva.
+    $this->actingAs($admin)->post('/api/admin/houses/casa-tully', [
+        '_method' => 'PUT',
+        'name' => ['es' => 'Casa Tully'],
+    ])->assertOk()->assertJsonPath('data.image', fn ($url) => $url !== null);
+
+    // Sustituir: entra la nueva y la anterior desaparece del disco (singleFile).
+    $this->actingAs($admin)->post('/api/admin/houses/casa-tully', [
+        '_method' => 'PUT',
+        'name' => ['es' => 'Casa Tully'],
+        'image' => UploadedFile::fake()->image('escudo-nuevo.png'),
+    ])->assertOk();
+    $house->refresh();
+    $segunda = $house->getFirstMedia('image');
+    expect($segunda->file_name)->toBe('escudo-nuevo.png')
+        ->and($house->media()->count())->toBe(1)
+        ->and($disk->exists($primera->getPathRelativeToRoot()))->toBeFalse();
+
+    // Quitar (diferido desde el form): remove_image al guardar la elimina.
+    $this->actingAs($admin)->post('/api/admin/houses/casa-tully', [
+        '_method' => 'PUT',
+        'name' => ['es' => 'Casa Tully'],
+        'remove_image' => '1',
+    ])->assertOk()->assertJsonPath('data.image', null);
+    expect($house->refresh()->getFirstMedia('image'))->toBeNull()
+        ->and($disk->exists($segunda->getPathRelativeToRoot()))->toBeFalse();
 });
 
 it('el CRUD de admin exige rol admin o editor', function () {

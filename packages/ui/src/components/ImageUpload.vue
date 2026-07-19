@@ -1,8 +1,11 @@
 <script setup lang="ts">
-import { computed, onBeforeUnmount, ref } from 'vue'
+import { computed, onBeforeUnmount, ref, watch } from 'vue'
 import { Trash2 } from '@lucide/vue'
 
 // Subida de imagen con arrastrar-y-soltar o clic (portado de kontuan).
+// DIFERIDO: elegir fichero NO sube nada — el File queda en el v-model (con
+// object URL para la vista previa) y quien lo usa lo envía al GUARDAR. La
+// imagen ya guardada se muestra con `currentUrl` (miniatura + nombre).
 // Agnóstico de i18n: los textos van por props.
 const props = withDefaults(
   defineProps<{
@@ -41,6 +44,40 @@ const displayUrl = computed(() => (removed.value ? null : previewUrl.value || pr
 // El error externo (validación del servidor) manda sobre el interno.
 const shownError = computed(() => props.error || localError.value)
 
+// Nombre del fichero bajo la miniatura: el del File pendiente o, si se
+// muestra la imagen guardada, el nombre extraído de su URL.
+const displayName = computed(() => {
+  if (removed.value) return null
+  if (props.modelValue) return props.modelValue.name
+  if (!previewUrl.value && props.currentUrl) {
+    try {
+      const path = decodeURIComponent(props.currentUrl.split('?')[0].split('#')[0])
+      return path.split('/').pop() || null
+    } catch {
+      return null
+    }
+  }
+  return null
+})
+
+// La vista previa se deriva del v-model (controlado): si el padre repone un
+// File (p. ej. TranslatableImage al volver a un idioma con imagen pendiente)
+// la miniatura reaparece sin re-elegir el fichero.
+watch(
+  () => props.modelValue,
+  (file) => {
+    if (previewUrl.value) {
+      URL.revokeObjectURL(previewUrl.value)
+      previewUrl.value = null
+    }
+    if (file) {
+      previewUrl.value = URL.createObjectURL(file)
+      removed.value = false
+    }
+  },
+  { immediate: true },
+)
+
 function handleFile(file: File) {
   // Validación en cliente: tamaño y tipo, con feedback (no se ignora en silencio).
   if (file.size > props.maxSize * 1024 * 1024) {
@@ -52,9 +89,6 @@ function handleFile(file: File) {
     return
   }
   localError.value = null
-  removed.value = false
-  if (previewUrl.value) URL.revokeObjectURL(previewUrl.value)
-  previewUrl.value = URL.createObjectURL(file)
   emit('update:modelValue', file)
 }
 
@@ -137,6 +171,7 @@ onBeforeUnmount(() => {
         </div>
       </template>
     </div>
+    <p v-if="displayName" class="image-upload__name">{{ displayName }}</p>
     <p v-if="shownError" class="image-upload__error">{{ shownError }}</p>
   </div>
 </template>

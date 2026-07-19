@@ -7,6 +7,16 @@ Kit de construcción del panel de administración (sobre `@edc-motor/ui`). Paque
 
 ### Añadido
 
+- **Helpers de subida de imagen DIFERIDA** (`content/deferredImages`):
+  `uploadContentImage(api, file)` (POST `/admin/content/uploads` → URL),
+  `deleteContentImage(api, url)` (borrado silencioso),
+  `uploadPendingImages(api, fields, value, uploaded)` (resuelve los `File`
+  pendientes de unos settings según su esquema, recursivo en
+  group/repeater; va apuntando las URLs nuevas en `uploaded` para poder
+  deshacerlas si el guardado falla) y `collectImageUrls(fields, value)`
+  (URLs de imagen presentes en unos settings). Los usan `PageBlocks` y las
+  vistas del cascarón (Ajustes y form de página).
+
 - **`PageBlocks` refinado**: botón de EDITAR a la IZQUIERDA de cada fila de
   bloque (abre el form sin pasar por el panel); la paleta de "añadir bloque"
   se cierra con Escape y clicando fuera; click en la zona vacía del
@@ -31,6 +41,15 @@ Kit de construcción del panel de administración (sobre `@edc-motor/ui`). Paque
 
 ### Cambiado
 
+- **Imágenes de bloque diferidas al GUARDAR** (`SchemaFields` +
+  `PageBlocks`): los campos `image` (simples y traducibles) ya no suben al
+  elegir — el `File` queda en los settings del formulario y `PageBlocks` lo
+  resuelve en el submit: sube los pendientes, persiste el bloque con las
+  URLs y SOLO tras guardar en firme borra del disco las imágenes que el
+  bloque ya no referencia (robusto ante filas de repeater reordenadas). Si
+  el guardado falla se deshacen las subidas nuevas, y CANCELAR el modal no
+  deja rastro en el servidor (sin huérfanos). La prop `api` de
+  `SchemaFields` queda para las opciones de los campos `entity`.
 - **`FilterBar`: la lupa pasa a la IZQUIERDA del input** y el texto
   (placeholder y valor) empieza a su derecha (padding-left de 34px), sin
   montarse con el icono.

@@ -80,6 +80,17 @@
 
   &__icon { width: 32px; height: 32px; color: $text-3; }
   &__text { font-size: $fs-12; color: $text-2; }
+
+  // Nombre del fichero (pendiente o guardado) bajo la miniatura.
+  &__name {
+    max-width: 160px;
+    overflow: hidden;
+    font-size: $fs-12;
+    color: $text-3;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
   &__hint { font-size: $fs-12; color: $text-3; }
   &__error { font-size: $fs-12; color: $danger; }
 }

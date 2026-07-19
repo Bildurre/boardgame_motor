@@ -151,8 +151,11 @@ async function del(icon: Icon) {
       @submit="save"
     >
       <BaseInput v-model="form.name" :label="t('icons.nameLabel')" required :error="errors.name" />
+      <!-- Al editar se muestra la imagen ACTUAL del icono; elegir otra solo
+           la sustituye al guardar (la imagen es obligatoria: sin "quitar") -->
       <ImageUpload
         v-model="form.image"
+        :current-url="editing?.url ?? null"
         :label="editing ? t('icons.imageReplaceLabel') : t('icons.imageLabel')"
         accept=".svg,.png,.jpg,.jpeg,.webp"
         :max-size="2"
