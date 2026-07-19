@@ -12,7 +12,7 @@ El formato sigue [Keep a Changelog](https://keepachangelog.com/es/) y el
 versionado, [SemVer](https://semver.org/lang/es/) (mientras estemos en `0.x`,
 los cambios de API pueden llegar en versiones menores).
 
-## [Sin publicar]
+## [0.4.20] — 2026-07-19
 
 - **Bloques: título, subtítulo y autor con alineación propia, y cita
   rediseñada** (`edc-motor/core` + `@edc-motor/ui`): título y subtítulo
