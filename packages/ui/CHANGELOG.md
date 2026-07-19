@@ -4,6 +4,17 @@ Componentes Vue 3 + SCSS para las webs públicas (y piezas compartidas con el
 admin). Paquete **fuente** (se consume vía Vite). Versión de tren con
 `edc-motor/core` y `@edc-motor/admin-kit`.
 
+## [Sin publicar]
+
+### Cambiado
+
+- **Más aire entre los elementos de los bloques**: nuevo token
+  `$block-gap` ($space-6, 24px) que unifica la separación interior de los
+  bloques — el grid del bloque (antes 20px), la tarjeta del CTA/text-card
+  (antes 16px) y el cuerpo del CTA (antes 12px). Y el botón del CTA
+  respira aparte: margen extra encima ($space-5) para que su hueco total
+  casi DOBLE la separación normal.
+
 ## [0.4.20] — 2026-07-19
 
 ### Cambiado

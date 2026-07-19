@@ -113,6 +113,11 @@ $input-border-hover: $border-strong;
 $input-border-focus: $accent-500;
 $input-focus-ring: $focus-ring;
 
+// Separación entre los ELEMENTOS de un bloque del CRM (título, subtítulo,
+// texto, botón…): un único token para todos los huecos interiores de los
+// bloques (antes cada zona llevaba el suyo: 20/16/12px).
+$block-gap: $space-6; // 24px
+
 // ---------------------------------------------------------
 // Texto que CONTRASTA con un fondo arbitrario (el acento elegido en
 // Ajustes, el color de una acción…): el navegador resuelve claro u oscuro

@@ -11,7 +11,7 @@
     margin: 0 auto;
     padding: 0 $space-4;
     display: grid;
-    gap: $space-5; // separación entre los elementos del bloque
+    gap: $block-gap; // separación entre los elementos del bloque
   }
 
   // Anchura del contenido (campo común `width`): coherente entre bloques.
@@ -61,7 +61,7 @@
     box-shadow: $shadow-sm;
     padding: $space-8;
     display: grid;
-    gap: $space-4;
+    gap: $block-gap;
 
     .edc-button { justify-self: start; text-decoration: none; }
   }
@@ -166,9 +166,13 @@
   // Cuerpo del CTA (texto + botón) dentro de su media-layout.
   &__cta-body {
     display: grid;
-    gap: $space-3;
+    gap: $block-gap;
     justify-items: start;
     align-content: center; // centrado frente a la imagen sangrada
+
+    // El botón respira más que el resto: su hueco total (gap + margen)
+    // casi DOBLA la separación normal entre elementos del bloque.
+    .block-button { margin-top: $space-5; }
   }
 
   // Botón del CTA: en estrecho va SIEMPRE centrado (como el del related);
