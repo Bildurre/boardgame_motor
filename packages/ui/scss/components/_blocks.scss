@@ -250,6 +250,53 @@
     border-radius: 0 0 $radius-lg $radius-lg;
   }
 
+  // CTA con imagen en ESTRECHO: da igual la posición elegida — la imagen va
+  // ARRIBA, a sangre por los laterales de la tarjeta y con proporción 2:1
+  // (recortada, no deformada). Va DESPUÉS de las reglas por posición para
+  // ganarles en el empate de especificidad.
+  @container content (max-width: #{$bp-sm}) {
+    &--cta[class*="block--image-"] .block__card .block__media-layout {
+      > .block__image,
+      > .block__image-frame {
+        order: -1;
+        justify-self: stretch;
+        display: block; // el marco es un span: inline dejaría hueco de línea
+        width: calc(100% + #{$space-8 * 2});
+        max-width: none;
+        margin: 0 (-$space-8);
+        border-radius: 0;
+        overflow: hidden;
+      }
+
+      > .block__image {
+        aspect-ratio: 2 / 1;
+        object-fit: cover;
+      }
+
+      // En columnas la imagen vive dentro del marco: la proporción la pone
+      // la propia imagen y el marco (estático en estrecho) la acompaña.
+      > .block__image-frame .block__image {
+        display: block; // inline dejaría el hueco de línea bajo la imagen
+        width: 100%;
+        height: auto;
+        max-width: none;
+        aspect-ratio: 2 / 1;
+        object-fit: cover;
+        border-radius: 0;
+      }
+    }
+
+    // Sin título encima (el media-layout abre la tarjeta): también a sangre
+    // por arriba, siguiendo el radio de la tarjeta.
+    &--cta[class*="block--image-"] .block__card > .block__media-layout:first-child {
+      > .block__image,
+      > .block__image-frame {
+        margin-top: -$space-8;
+        border-radius: $radius-lg $radius-lg 0 0;
+      }
+    }
+  }
+
   // Cita: sin adorno de borde, en GRANDE ($fs-32, el token más cercano a
   // los ~40px pedidos) y del color de acento.
   &--quote .block__quote {

@@ -14,6 +14,10 @@ los cambios de API pueden llegar en versiones menores).
 
 ## [Sin publicar]
 
+- **CTA con imagen en estrecho: siempre arriba, a sangre y en 2:1**
+  (`@edc-motor/ui`): da igual dónde esté posicionada — en estrecho la
+  imagen sube arriba, llega a los bordes de la tarjeta y se recorta a
+  proporción 2:1.
 - **La alineación de título/subtítulo ahora sí se aplica** (`@edc-motor/ui`):
   faltaba `width: 100%` (en el cuerpo del CTA el elemento encogía a su
   contenido y el `text-align` no se veía), y en formato estrecho la

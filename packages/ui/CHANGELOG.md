@@ -8,6 +8,11 @@ admin). Paquete **fuente** (se consume vía Vite). Versión de tren con
 
 ### Corregido
 
+- **CTA con imagen en estrecho: siempre arriba, a sangre y en 2:1**: por
+  debajo del breakpoint sm la imagen va ARRIBA da igual la posición
+  elegida (izquierda/derecha/abajo incluidas), sangrando hasta los bordes
+  laterales de la tarjeta (y el superior si no hay título encima), con
+  `aspect-ratio: 2/1` y recorte `cover` (no se deforma).
 - **La alineación propia de título/subtítulo ahora sí se ve**: en grids con
   `justify-items: start` (el cuerpo del CTA) el elemento encogía a su
   contenido y el `text-align` no tenía efecto — título y subtítulo pasan a
