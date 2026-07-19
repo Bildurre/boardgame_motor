@@ -1,6 +1,6 @@
 {
   "name": "@edc-motor/admin-kit",
-  "version": "0.4.20",
+  "version": "0.4.21",
   "description": "EdC Motor — kit del panel de administración: layout, gestores CRUD, imágenes, PDF, páginas, configuración, usuarios y copias (paquete fuente: lo compila el consumidor con Vite)",
   "license": "GPL-3.0-only",
   "type": "module",
@@ -33,7 +33,7 @@
     "access": "public"
   },
   "dependencies": {
-    "@edc-motor/ui": "^0.4.20",
+    "@edc-motor/ui": "^0.4.21",
     "axios": "^1.7.0",
     "vue-draggable-plus": "^0.6.1"
   },
