@@ -12,7 +12,7 @@ El formato sigue [Keep a Changelog](https://keepachangelog.com/es/) y el
 versionado, [SemVer](https://semver.org/lang/es/) (mientras estemos en `0.x`,
 los cambios de API pueden llegar en versiones menores).
 
-## [Sin publicar]
+## [0.4.17] — 2026-07-19
 
 - **Cards sin badges ni meta, sin parte inferior vacía**
   (`@edc-motor/admin-kit`): `EntityCard` y `ManagerCard` evalúan el

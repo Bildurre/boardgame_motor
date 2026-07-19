@@ -1,6 +1,6 @@
 {
   "name": "@edc-motor/ui",
-  "version": "0.4.16",
+  "version": "0.4.17",
   "description": "EdC Motor — componentes públicos Vue 3 + tokens SCSS para webs de juegos de mesa (paquete fuente: lo compila el consumidor con Vite)",
   "license": "GPL-3.0-only",
   "type": "module",
