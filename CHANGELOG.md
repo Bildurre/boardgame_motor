@@ -12,7 +12,7 @@ El formato sigue [Keep a Changelog](https://keepachangelog.com/es/) y el
 versionado, [SemVer](https://semver.org/lang/es/) (mientras estemos en `0.x`,
 los cambios de API pueden llegar en versiones menores).
 
-## [Sin publicar]
+## [0.4.19] — 2026-07-19
 
 - **Editor de bloques: subtítulos multilínea, justificado por defecto y CTA
   con botón a medida** (`edc-motor/core` + `@edc-motor/ui` +
