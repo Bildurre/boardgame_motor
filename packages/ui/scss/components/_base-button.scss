@@ -49,13 +49,16 @@
     }
   }
 
+  // Relleno de color: el texto NO es fijo — claro u oscuro según el fondo
+  // real (contrast-text de tokens), que el acento lo elige el usuario.
   &--primary {
     background: $color-accent;
-    color: #fff;
+    @include contrast-text($color-accent);
 
     // Hover bien visible: accent-600 apenas se distingue del 500.
     &:hover:not(:disabled) {
       background: color-mix(in srgb, $color-accent 72%, black);
+      @include contrast-text(color-mix(in srgb, $color-accent 72%, black));
     }
   }
 
@@ -94,23 +97,16 @@
   }
 }
 
-.edc-button--danger {
-  background: $danger;
-  color: #fff;
-  &:hover:not(:disabled) { background: color-mix(in srgb, $danger 72%, black); }
-}
-.edc-button--success {
-  background: $success;
-  color: #06281a;
-  &:hover:not(:disabled) { background: color-mix(in srgb, $success 72%, black); }
-}
-.edc-button--info {
-  background: $info;
-  color: #fff;
-  &:hover:not(:disabled) { background: color-mix(in srgb, $info 72%, black); }
-}
-.edc-button--warning {
-  background: $warning;
-  color: #2b2005;
-  &:hover:not(:disabled) { background: color-mix(in srgb, $warning 72%, black); }
+// Variantes semánticas rellenas: mismo criterio que --primary, el texto lo
+// decide el fondo (antes iba fijado a mano y a veces no contrastaba).
+@each $variant, $color in (danger: $danger, success: $success, info: $info, warning: $warning) {
+  .edc-button--#{$variant} {
+    background: $color;
+    @include contrast-text($color);
+
+    &:hover:not(:disabled) {
+      background: color-mix(in srgb, #{$color} 72%, black);
+      @include contrast-text(color-mix(in srgb, #{$color} 72%, black));
+    }
+  }
 }

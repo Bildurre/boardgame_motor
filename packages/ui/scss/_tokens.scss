@@ -112,3 +112,16 @@ $input-border: $border;
 $input-border-hover: $border-strong;
 $input-border-focus: $accent-500;
 $input-focus-ring: $focus-ring;
+
+// ---------------------------------------------------------
+// Texto que CONTRASTA con un fondo arbitrario (el acento elegido en
+// Ajustes, el color de una acción…): el navegador resuelve claro u oscuro
+// según la luminosidad REAL del fondo (relative color syntax): blanco puro
+// bajo L≈49.44 y negro puro por encima — el umbral donde el contraste real
+// cambia de bando. La primera declaración es el FALLBACK (texto oscuro)
+// para navegadores sin `lch(from …)`.
+// ---------------------------------------------------------
+@mixin contrast-text($bg) {
+  color: #111827;
+  color: lch(from #{$bg} calc((49.44 - l) * infinity) 0 0);
+}

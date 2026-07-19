@@ -303,10 +303,12 @@
         border-color: $color;
         color: $color;
 
+        // Relleno: el texto lo decide el fondo (contrast-text), no el tema
+        // — $text-1 del tema oscuro no se leía sobre warning/success.
         &:hover:not(:disabled) {
           background: $color;
           border-color: $color;
-          color: $text-1;
+          @include contrast-text($color);
         }
 
         // Interruptores (aria-pressed): encendido = RELLENO del color (como
@@ -315,7 +317,7 @@
         &.is-on {
           background: $color;
           border-color: $color;
-          color: $text-1;
+          @include contrast-text($color);
         }
 
         &.is-off {

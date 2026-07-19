@@ -116,8 +116,43 @@
   }
 
   // Variante compacta (bloque related): tarjetas y huecos más contenidos.
+  // El bloque trae SIEMPRE 6 ítems y es el grid quien decide cuántos enseña
+  // para que la rejilla salga siempre completa, sin filas cojas:
+  // 4 en 2×2 (estrecho) → 6 en 3×2 (md) → 4 en 4×1 (lg) → 5 en 5×1 (xl).
   &--compact &__grid {
     gap: $space-3;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+
+    @media (min-width: $bp-md) {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    @media (min-width: $bp-lg) {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+
+    @media (min-width: $bp-xl) {
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+    }
+  }
+
+  // Qué huecos se ven en cada tramo (los demás, ocultos): 4 → 6 → 4 → 5.
+  &--compact &__slot:nth-child(n + 5) {
+    display: none;
+
+    @media (min-width: $bp-md) {
+      display: block;
+    }
+
+    @media (min-width: $bp-lg) {
+      display: none;
+    }
+  }
+
+  &--compact &__slot:nth-child(5) {
+    @media (min-width: $bp-xl) {
+      display: block;
+    }
   }
 
   &--compact &__fallback {

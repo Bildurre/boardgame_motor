@@ -3,6 +3,15 @@
 Kit de construcción del panel de administración (sobre `@edc-motor/ui`). Paquete
 **fuente** (se consume vía Vite). Versión de tren con `edc-motor/core` y `@edc-motor/ui`.
 
+## [Sin publicar]
+
+### Corregido
+
+- **Action-buttons del panel derecho: texto legible al rellenarse**: en
+  hover y en los interruptores `.is-on`, el color del texto lo decide el
+  FONDO (mixin `contrast-text` de los tokens del ui) en vez de `$text-1` —
+  en tema oscuro el texto casi blanco no se leía sobre warning/success.
+
 ## [0.4.17] — 2026-07-19
 
 ### Corregido

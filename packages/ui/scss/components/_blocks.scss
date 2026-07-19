@@ -277,9 +277,11 @@
 
   // El "fondo" de los estados cruzados es la SUPERFICIE ($surface, el
   // segundo tono), no el fondo de página puro: menos negro / menos blanco.
+  // Relleno de acento: el texto lo decide el FONDO (contrast-text), no el
+  // tema — con acentos claros, $text-1 del tema oscuro no se leía.
   &--primary {
     background: $accent-500;
-    color: $text-1;
+    @include contrast-text($accent-500);
 
     &:hover {
       background: $surface;
@@ -293,7 +295,7 @@
 
     &:hover {
       background: $accent-500;
-      color: $text-1;
+      @include contrast-text($accent-500);
     }
   }
 }

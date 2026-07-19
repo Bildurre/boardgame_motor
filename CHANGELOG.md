@@ -12,6 +12,24 @@ El formato sigue [Keep a Changelog](https://keepachangelog.com/es/) y el
 versionado, [SemVer](https://semver.org/lang/es/) (mientras estemos en `0.x`,
 los cambios de API pueden llegar en versiones menores).
 
+## [Sin publicar]
+
+- **Botones rellenos con texto legible SIEMPRE** (`@edc-motor/ui` +
+  `@edc-motor/admin-kit`): nuevo mixin `contrast-text($bg)` en los tokens —
+  el navegador elige texto claro u oscuro según la luminosidad real del
+  fondo (relative color syntax; fallback oscuro sin soporte). Lo usan los
+  `edc-button` rellenos (primary y semánticos, con sus hovers), los
+  `block-button` de la web pública y los action-buttons del panel derecho
+  del admin al rellenarse (hover / interruptor encendido): se acabó el texto
+  fijado a mano que no contrastaba con acentos claros o en tema oscuro.
+- **El bloque "Relacionados" pierde el selector de número y su grid sale
+  siempre completo** (`edc-motor/core` + `@edc-motor/ui`): el bloque trae
+  SIEMPRE 6 elementos y el grid enseña los que caben en filas completas
+  según el ancho — 4 en 2×2 (estrecho), 6 en 3×2, 4 en 4×1 y 5 en 5×1
+  (breakpoints 768/1024/1280); el resto se oculta. El `count` de bloques ya
+  guardados se ignora y se descarta solo al volver a guardar (la validación
+  deriva del esquema). Los índices del catálogo siguen con su 2 → 3 → 4.
+
 ## [0.4.17] — 2026-07-19
 
 - **Cards sin badges ni meta, sin parte inferior vacía**

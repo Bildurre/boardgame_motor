@@ -4,6 +4,30 @@ Componentes Vue 3 + SCSS para las webs públicas (y piezas compartidas con el
 admin). Paquete **fuente** (se consume vía Vite). Versión de tren con
 `edc-motor/core` y `@edc-motor/admin-kit`.
 
+## [Sin publicar]
+
+### Añadido
+
+- **Mixin `contrast-text($bg)` en los tokens SCSS**: texto claro u oscuro
+  según la luminosidad REAL del fondo, resuelta por el navegador (relative
+  color syntax, `lch(from …)`) — blanco bajo L≈49.44 y negro por encima, el
+  umbral donde el contraste real cambia de bando. Fallback (navegadores sin
+  soporte): texto oscuro. Disponible para los juegos vía `@use "tokens"`.
+
+### Cambiado
+
+- **Los botones RELLENOS dejan de fijar el color del texto a mano**
+  (`contrast-text`): `edc-button` `--primary` (y su hover oscurecido),
+  `--danger`/`--success`/`--info`/`--warning`, y `block-button` `--primary`
+  (+ el hover de `--secondary`, que rellena de acento). Con el acento claro
+  de Ajustes o el tema oscuro, el texto fijado (blanco / `$text-1`) podía no
+  leerse; ahora lo decide el fondo.
+- **El grid del bloque `related` siempre sale completo, sin filas cojas**
+  (`PreviewGrid --compact`): el bloque trae SIEMPRE 6 ítems (ver core) y el
+  grid decide cuántos enseña por ancho de viewport — 4 en 2×2 (estrecho),
+  6 en 3×2 (≥768), 4 en 4×1 (≥1024) y 5 en 5×1 (≥1280); los sobrantes se
+  ocultan con `nth-child`. Los demás grids de previews siguen 2 → 3 → 4.
+
 ## [0.4.17] — 2026-07-19
 
 - Sin cambios propios: versión de tren.

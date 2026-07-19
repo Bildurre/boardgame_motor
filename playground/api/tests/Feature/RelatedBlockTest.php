@@ -36,40 +36,41 @@ it('está registrado con las claves del registry de previews como opciones', fun
     $field = collect($schema['fields'])->firstWhere('key', 'preview_key');
     expect(array_keys($field['options']))
         ->toContain('character', 'scheme', 'house', 'house-counter');
+
+    // Sin campo de número de elementos: siempre 6 (el grid recorta por ancho).
+    expect(collect($schema['fields'])->pluck('key'))->not->toContain('count');
 });
 
-it('latest devuelve las más recientes publicadas, respetando count', function () {
-    $old = makeCharacter(['name' => ['es' => 'Viejo'], 'is_published' => true]);
-    $mid = makeCharacter(['name' => ['es' => 'Medio'], 'is_published' => true]);
-    $new = makeCharacter(['name' => ['es' => 'Nuevo'], 'is_published' => true]);
+it('latest devuelve las 6 más recientes publicadas', function () {
+    $published = collect(range(1, 7))->map(
+        fn (int $i) => makeCharacter(['name' => ['es' => "Personaje {$i}"], 'is_published' => true])
+    );
     makeCharacter(['name' => ['es' => 'Borrador'], 'is_published' => false]);
 
-    $block = makeRelatedBlock([
-        'preview_key' => 'character',
-        'mode' => 'latest',
-        'count' => 2,
-    ]);
+    $block = makeRelatedBlock(['preview_key' => 'character', 'mode' => 'latest']);
 
     $data = app(BlockTypeRegistry::class)->get('related')->resolveData($block, 'es');
 
     expect($data['key'])->toBe('character')
-        ->and(collect($data['items'])->pluck('id')->all())->toBe([$new->id, $mid->id])
+        ->and(collect($data['items'])->pluck('id')->all())
+        ->toBe($published->reverse()->take(6)->pluck('id')->values()->all())
         ->and($data['items'][0])->toBe([
-            'id' => $new->id,
-            'name' => 'Nuevo',
-            'slug' => 'nuevo',
+            'id' => $published->last()->id,
+            'name' => 'Personaje 7',
+            'slug' => 'personaje-7',
             'preview' => null,
         ]);
 });
 
-it('random devuelve count publicadas al azar (default 4)', function () {
-    $published = collect(range(1, 6))->map(
+it('random devuelve 6 publicadas al azar (el count de settings viejos se ignora)', function () {
+    $published = collect(range(1, 8))->map(
         fn (int $i) => makeCharacter(['name' => ['es' => "Personaje {$i}"], 'is_published' => true])
     );
     makeCharacter(['name' => ['es' => 'Borrador'], 'is_published' => false]);
 
     $type = app(BlockTypeRegistry::class)->get('related');
 
+    // Un bloque guardado antes del cambio aún trae count: no manda.
     $block = makeRelatedBlock([
         'preview_key' => 'character',
         'mode' => 'random',
@@ -77,12 +78,8 @@ it('random devuelve count publicadas al azar (default 4)', function () {
     ]);
     $data = $type->resolveData($block, 'es');
 
-    expect($data['items'])->toHaveCount(3)
+    expect($data['items'])->toHaveCount(6)
         ->and(collect($data['items'])->pluck('id')->diff($published->pluck('id')))->toBeEmpty();
-
-    // Sin count en settings: el default del campo (4) manda.
-    $block = makeRelatedBlock(['preview_key' => 'character', 'mode' => 'random']);
-    expect($type->resolveData($block, 'es')['items'])->toHaveCount(4);
 });
 
 it('no revienta si la clave ya no está en el registry', function () {
