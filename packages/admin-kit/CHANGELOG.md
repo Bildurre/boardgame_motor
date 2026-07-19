@@ -3,6 +3,17 @@
 Kit de construcción del panel de administración (sobre `@edc-motor/ui`). Paquete
 **fuente** (se consume vía Vite). Versión de tren con `edc-motor/core` y `@edc-motor/ui`.
 
+## [Sin publicar]
+
+### Corregido
+
+- **Cards sin badges ni meta, sin parte inferior vacía** (`EntityCard` y
+  `ManagerCard`): los slots se evalúan por su CONTENIDO real (helper
+  `slotHasContent`), no por si el padre declara el `<template #…>` — con
+  todo v-if falso o un v-for vacío dentro, la zona inferior (padding +
+  hueco) ya no se pinta. Además, cuando la cabecera es lo último de la
+  card, su divisoria desaparece y el padding inferior se iguala al resto.
+
 ## [0.4.16] — 2026-07-19
 
 ### Añadido

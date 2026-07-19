@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { PanelRight } from '@lucide/vue'
 
+import { slotHasContent } from '../composables/slotHasContent'
+
 // Tarjeta de los gestores del admin (previews y PDF): NO colapsa. Mismo
 // lenguaje visual que EntityCard: cabecera con el título (+ chip opcional) y
 // divisoria; debajo, las BADGES (chips de estado, slot badges) y el meta
@@ -44,21 +46,22 @@ function onClick(event: MouseEvent) {
       <PanelRight :size="16" class="manager-card__hint" />
     </div>
 
-    <!-- Como EntityCard: badges (chips) arriba, meta debajo -->
-    <div v-if="$slots.badges || $slots.meta" class="manager-card__content">
-      <div v-if="$slots.badges" class="manager-card__badges">
+    <!-- Como EntityCard: badges (chips) arriba, meta debajo. slotHasContent
+         y no $slots.x: sin contenido real, sin parte inferior vacía. -->
+    <div v-if="slotHasContent($slots.badges) || slotHasContent($slots.meta)" class="manager-card__content">
+      <div v-if="slotHasContent($slots.badges)" class="manager-card__badges">
         <slot name="badges" />
       </div>
-      <div v-if="$slots.meta" class="manager-card__meta">
+      <div v-if="slotHasContent($slots.meta)" class="manager-card__meta">
         <slot name="meta" />
       </div>
     </div>
 
-    <div v-if="$slots.default" class="manager-card__body">
+    <div v-if="slotHasContent($slots.default)" class="manager-card__body">
       <slot />
     </div>
 
-    <footer v-if="$slots.actions" class="manager-card__actions">
+    <footer v-if="slotHasContent($slots.actions)" class="manager-card__actions">
       <slot name="actions" />
     </footer>
   </section>

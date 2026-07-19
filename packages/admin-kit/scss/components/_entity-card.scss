@@ -67,6 +67,13 @@
     padding: $space-3 $space-4 $space-2;
     border-bottom: 1px solid $border;
     min-width: 0;
+
+    // Sin badges ni meta la cabecera es lo último de la card: la divisoria
+    // sobra y el padding inferior recupera el del resto de lados.
+    &:last-child {
+      border-bottom: none;
+      padding-bottom: $space-3;
+    }
   }
 
   &__title {

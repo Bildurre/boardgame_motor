@@ -7,6 +7,8 @@
 // solo para entidades con imagen/preview — sin imagen, sin franja.
 import { SquarePen } from '@lucide/vue'
 
+import { slotHasContent } from '../composables/slotHasContent'
+
 withDefaults(
   defineProps<{
     title: string
@@ -50,7 +52,7 @@ defineSlots<{
     :style="accentColor ? { '--entity-card-accent': accentColor } : undefined"
     @click="clickable ? $emit('view') : undefined"
   >
-    <div v-if="$slots.media" class="entity-card__media"><slot name="media" /></div>
+    <div v-if="slotHasContent($slots.media)" class="entity-card__media"><slot name="media" /></div>
 
     <div class="entity-card__header">
       <h3 class="entity-card__title">{{ title }}</h3>
@@ -69,9 +71,14 @@ defineSlots<{
       </div>
     </div>
 
-    <div v-if="$slots.badges || $slots.meta || $slots.default" class="entity-card__content">
-      <div v-if="$slots.badges" class="entity-card__badges"><slot name="badges" /></div>
-      <div v-if="$slots.meta" class="entity-card__meta"><slot name="meta" /></div>
+    <!-- slotHasContent y no $slots.x: con el template declarado pero todo
+         v-if falso dentro, la card no debe pintar la parte inferior vacía -->
+    <div
+      v-if="slotHasContent($slots.badges) || slotHasContent($slots.meta) || slotHasContent($slots.default)"
+      class="entity-card__content"
+    >
+      <div v-if="slotHasContent($slots.badges)" class="entity-card__badges"><slot name="badges" /></div>
+      <div v-if="slotHasContent($slots.meta)" class="entity-card__meta"><slot name="meta" /></div>
       <slot />
     </div>
   </div>

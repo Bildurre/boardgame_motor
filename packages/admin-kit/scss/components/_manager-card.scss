@@ -75,6 +75,12 @@
     padding: $space-3 $space-4 $space-2;
     border-bottom: 1px solid $border;
     min-width: 0;
+
+    // Card sin nada debajo de la cabecera: ni divisoria ni padding cojo.
+    &:last-child {
+      border-bottom: none;
+      padding-bottom: $space-3;
+    }
   }
 
   &__title {

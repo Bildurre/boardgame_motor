@@ -12,6 +12,14 @@ El formato sigue [Keep a Changelog](https://keepachangelog.com/es/) y el
 versionado, [SemVer](https://semver.org/lang/es/) (mientras estemos en `0.x`,
 los cambios de API pueden llegar en versiones menores).
 
+## [Sin publicar]
+
+- **Cards sin badges ni meta, sin parte inferior vacía**
+  (`@edc-motor/admin-kit`): `EntityCard` y `ManagerCard` evalúan el
+  contenido REAL de sus slots — declarar el template con todo v-if falso ya
+  no deja la zona inferior vacía, y sin nada bajo la cabecera la divisoria
+  desaparece.
+
 ## [0.4.16] — 2026-07-19
 
 - **Inputs de imagen de los formularios: la actual a la vista y guardado
