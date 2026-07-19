@@ -12,6 +12,15 @@ El formato sigue [Keep a Changelog](https://keepachangelog.com/es/) y el
 versionado, [SemVer](https://semver.org/lang/es/) (mientras estemos en `0.x`,
 los cambios de API pueden llegar en versiones menores).
 
+## [Sin publicar]
+
+- **Cita en peso 600 e índice automático con jerarquía tipográfica**
+  (`edc-motor/core` + `@edc-motor/ui`): el texto de la cita pasa a peso
+  600; el índice va en peso 500 con tamaños por nivel (24/22/20px, el
+  tercero para nivel 3 o más) y sus entradas se etiquetan por TÍTULO del
+  bloque > subtítulo > primer contenido truncado (de un wysiwyg, solo el
+  texto de su primera etiqueta).
+
 ## [0.4.23] — 2026-07-19
 
 - **CTA con imagen en estrecho: siempre arriba, a sangre y en 2:1**

@@ -306,6 +306,7 @@
     font-family: var(--font-special, inherit);
     font-size: $fs-32;
     font-style: italic;
+    font-weight: $k-fw-semibold;
     color: $accent-500;
 
     // La cita llega como richtext y .rich-content fija su propio cuerpo
@@ -331,9 +332,15 @@
   padding-left: 1.2em;
   display: grid;
   gap: $space-1;
+  font-weight: $k-fw-medium;
 
   a { color: $accent-500; text-decoration: none; }
   a:hover { text-decoration: underline; }
+
+  // Tamaño por nivel: 24 → 22 (sin token entre 20 y 24) → 20 (3 o más).
+  .block__index-level-1 { font-size: $fs-24; }
+  .block__index-level-2 { font-size: 22px; }
+  .block__index-level-3 { font-size: $fs-20; }
 
   // Entradas de bloques hijos: sangradas bajo su padre.
   .block__index-child { margin-left: $space-5; }

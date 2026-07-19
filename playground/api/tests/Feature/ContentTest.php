@@ -406,6 +406,31 @@ it('el bloque índice enlaza a los bloques posteriores indexables', function () 
         ->assertJsonPath('data.blocks.1.data.items.0.label', 'Capítulo 1');
 });
 
+it('el índice etiqueta por título > subtítulo > primer párrafo del contenido', function () {
+    $admin = motorUser('admin');
+    $page = makePage();
+
+    $this->actingAs($admin)->postJson("/api/admin/pages/{$page->id}/blocks", [
+        'type' => 'index', 'settings' => [],
+    ]);
+    // Sin título: manda el subtítulo (aunque haya contenido).
+    $this->actingAs($admin)->postJson("/api/admin/pages/{$page->id}/blocks", [
+        'type' => 'text',
+        'settings' => ['subtitle' => ['es' => 'El subtítulo'], 'body' => ['es' => '<p>Cuerpo</p>']],
+    ]);
+    // Sin título ni subtítulo: SOLO el texto de la primera etiqueta del wysiwyg.
+    $this->actingAs($admin)->postJson("/api/admin/pages/{$page->id}/blocks", [
+        'type' => 'text',
+        'settings' => ['body' => ['es' => '<p>Solo <strong>este</strong> texto</p><p>No este otro</p>']],
+    ]);
+
+    $slug = $page->getTranslation('slug', 'es');
+    $this->getJson("/api/pages/{$slug}")
+        ->assertOk()
+        ->assertJsonPath('data.blocks.0.data.items.0.label', 'El subtítulo')
+        ->assertJsonPath('data.blocks.0.data.items.1.label', 'Solo este texto');
+});
+
 it('el CRM exige admin', function () {
     $page = makePage();
 

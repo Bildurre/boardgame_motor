@@ -14,10 +14,14 @@ defineProps<{
     <h2 v-if="settings.title" class="block__title">{{ settings.title }}</h2>
     <p v-if="settings.subtitle" class="block__subtitle">{{ settings.subtitle }}</p>
     <component :is="settings.numbered ? 'ol' : 'ul'" class="block__index">
+      <!-- Nivel visual por profundidad (tamaños decrecientes; 3 = 3 o más) -->
       <li
         v-for="item in data.items ?? []"
         :key="item.id"
-        :class="{ 'block__index-child': (item.depth ?? 0) > 0 }"
+        :class="[
+          `block__index-level-${Math.min((item.depth ?? 0) + 1, 3)}`,
+          { 'block__index-child': (item.depth ?? 0) > 0 },
+        ]"
       >
         <a :href="`#block-${item.id}`">{{ item.label }}</a>
       </li>

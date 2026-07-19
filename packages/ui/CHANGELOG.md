@@ -4,6 +4,17 @@ Componentes Vue 3 + SCSS para las webs públicas (y piezas compartidas con el
 admin). Paquete **fuente** (se consume vía Vite). Versión de tren con
 `edc-motor/core` y `@edc-motor/admin-kit`.
 
+## [Sin publicar]
+
+### Cambiado
+
+- **La cita en peso 600** (`font-weight: $k-fw-semibold` en
+  `.block__quote`).
+- **Índice automático con jerarquía tipográfica**: peso 500
+  (`$k-fw-medium`) y tamaño por nivel — 24px el nivel 1, 22px el 2 (no hay
+  token entre 20 y 24) y 20px del 3 en adelante (clases
+  `block__index-level-1/2/3`, la 3 agrupa "3 o más").
+
 ## [0.4.23] — 2026-07-19
 
 ### Corregido
