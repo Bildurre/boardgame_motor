@@ -22,7 +22,7 @@
   }
 
   .block__related-button {
-    justify-self: start;
+    justify-self: center; // estrecho: los botones de bloque van centrados
 
     @media (min-width: $bp-sm) {
       justify-self: end;

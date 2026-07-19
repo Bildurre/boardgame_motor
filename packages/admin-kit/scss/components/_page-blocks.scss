@@ -118,22 +118,20 @@
 
   &__flags { grid-area: flags; display: flex; gap: $space-1; }
 
+  // Sección de ajustes comunes: SIEMPRE visible al fondo del formulario
+  // (antes era un <details> plegado), con su titulito discreto.
   &__common {
     border-top: 1px dashed $border;
     padding-top: $space-3;
-
-    summary {
-      cursor: pointer;
-      color: $text-2;
-      font-size: $fs-13;
-      margin-bottom: $space-3;
-    }
-
     display: grid;
     gap: $space-3;
 
-    // display:grid no gobierna el contenido desplegado de un <details>: el
-    // aire de los checkboxes (bajo el selector de color) y del select del
+    &-title {
+      color: $text-2;
+      font-size: $fs-13;
+    }
+
+    // El aire de los checkboxes (bajo el selector de color) y del select del
     // padre va a mano, y cada checkbox en su propia línea.
     > .checkbox {
       display: flex;

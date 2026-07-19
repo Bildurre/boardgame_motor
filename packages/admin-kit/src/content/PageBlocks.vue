@@ -463,8 +463,10 @@ defineExpose({ reload: load })
           :translate="translate"
         />
 
-        <details class="page-blocks__common">
-          <summary>{{ L.common }}</summary>
+        <!-- Sección SIEMPRE visible al fondo del formulario (antes era un
+             details plegado y los ajustes pasaban desapercibidos) -->
+        <div class="page-blocks__common">
+          <span class="page-blocks__common-title">{{ L.common }}</span>
           <SchemaFields
             v-model="form"
             :fields="modalType.common"
@@ -480,7 +482,7 @@ defineExpose({ reload: load })
             :options="[{ value: '', label: L.parentNone }, ...parentOptions]"
             @update:model-value="(v: string) => (formParent = v ? Number(v) : null)"
           />
-        </details>
+        </div>
       </template>
     </EditModal>
 

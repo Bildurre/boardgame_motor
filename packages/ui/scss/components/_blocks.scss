@@ -21,7 +21,8 @@
   // Tipografía de bloque: texto $fs-16, subtítulo $fs-20, título $fs-28
   // (la cabecera sube a 32/24). Los títulos nunca se justifican.
   &__title { margin: 0; font-size: $fs-28; }
-  &__subtitle { margin: 0; color: $text-2; font-size: $fs-20; }
+  // pre-line: el subtítulo es un textarea — sus saltos de línea cuentan.
+  &__subtitle { margin: 0; color: $text-2; font-size: $fs-20; white-space: pre-line; }
   &__text { color: $text-1; font-size: $fs-16; }
 
   &--align-justify &__title,
@@ -160,10 +161,30 @@
     align-content: center; // centrado frente a la imagen sangrada
   }
 
+  // Botón del CTA: en estrecho va SIEMPRE centrado (como el del related);
+  // de $bp-sm para arriba manda su campo "Alineación del botón".
+  &__cta-button--left,
+  &__cta-button--center,
+  &__cta-button--right {
+    justify-self: center;
+  }
+
+  @media (min-width: $bp-sm) {
+    &__cta-button--left { justify-self: start; }
+    &__cta-button--center { justify-self: center; }
+    &__cta-button--right { justify-self: end; }
+  }
+
   // La imagen del CTA sangra hasta el borde de la tarjeta según su posición:
   // en columnas toca arriba, abajo y su lateral (el título viaja a la
   // columna de texto); arriba/abajo toca los laterales. Esquinas siguiendo
   // el radio de la tarjeta.
+  // La tarjeta del CTA lleva un halo SUTIL del acento, igual por los cuatro
+  // bordes (sin offset), además de su sombra de profundidad normal.
+  &--cta .block__card {
+    box-shadow: $shadow-sm, 0 0 18px color-mix(in srgb, $accent-500 30%, transparent);
+  }
+
   &--cta.block--image-right .block__media-layout .block__image-frame,
   &--cta.block--image-left .block__media-layout .block__image-frame {
     @container content (min-width: #{$bp-sm}) {
@@ -267,6 +288,9 @@
   align-items: center;
   gap: $space-2;
   padding: $space-2 $space-5;
+
+  // "Botón grande" (campo button_large del CTA): más aire interior.
+  &--large { padding: $space-4 $space-8; }
   border: 1px solid $accent-500;
   border-radius: $radius-md;
   font-size: $fs-18;

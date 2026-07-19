@@ -3,6 +3,15 @@
 Kit de construcción del panel de administración (sobre `@edc-motor/ui`). Paquete
 **fuente** (se consume vía Vite). Versión de tren con `edc-motor/core` y `@edc-motor/ui`.
 
+## [Sin publicar]
+
+### Cambiado
+
+- **"Ajustes comunes" del formulario de bloque SIEMPRE visible**: deja de
+  ser un `<details>` plegado — es una sección fija al fondo del formulario
+  con su titulito discreto, así la alineación/anchura/fondo y los flags no
+  pasan desapercibidos.
+
 ## [0.4.18] — 2026-07-19
 
 ### Corregido

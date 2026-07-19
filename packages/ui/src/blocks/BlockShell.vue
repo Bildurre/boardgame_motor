@@ -9,7 +9,8 @@ import { computed, type CSSProperties } from 'vue'
 const props = defineProps<{ settings: Record<string, unknown> }>()
 
 const width = computed(() => `block--w-${(props.settings.width as string) || 'wide'}`)
-const align = computed(() => `block--align-${(props.settings.align as string) || 'left'}`)
+// Sin valor guardado, JUSTIFICADO (el default del campo común del motor).
+const align = computed(() => `block--align-${(props.settings.align as string) || 'justify'}`)
 
 const style = computed<CSSProperties>(() => {
   const background = props.settings.background as string | undefined
@@ -17,7 +18,7 @@ const style = computed<CSSProperties>(() => {
     '--block-bg': background
       ? `color-mix(in srgb, ${background} var(--block-tint, 15%), transparent)`
       : 'transparent',
-    textAlign: ((props.settings.align as string) || 'left') as CSSProperties['textAlign'],
+    textAlign: ((props.settings.align as string) || 'justify') as CSSProperties['textAlign'],
   }
 })
 </script>

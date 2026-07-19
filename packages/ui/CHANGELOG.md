@@ -4,6 +4,27 @@ Componentes Vue 3 + SCSS para las webs públicas (y piezas compartidas con el
 admin). Paquete **fuente** (se consume vía Vite). Versión de tren con
 `edc-motor/core` y `@edc-motor/admin-kit`.
 
+## [Sin publicar]
+
+### Cambiado
+
+- **Bloques justificados por defecto**: `BlockShell` alinea `justify` cuando
+  el bloque no trae `align` guardado (igual que el nuevo default del campo
+  común del core). Títulos y subtítulos siguen en `left` con justificado,
+  como estaba.
+- **El subtítulo de los bloques respeta los saltos de línea**
+  (`white-space: pre-line` en `.block__subtitle`): acompaña al campo, que
+  pasa a textarea en el core.
+- **La tarjeta del CTA gana un halo sutil del acento**: sombra del color de
+  acento sin offset (igual por los cuatro bordes, `0 0 18px` al 30 %)
+  además de su sombra de profundidad de siempre.
+- **Botón del CTA alineable y en tamaño grande**: `BlockCta` aplica
+  `button_align` (clases `block__cta-button--left/center/right` sobre el
+  grid del cuerpo) y `button_large` (`block-button--large`, más padding
+  interior). En formato ESTRECHO (< 480px) los botones de bloque van
+  SIEMPRE centrados: el del CTA ignora su alineación y el del `related`
+  (que en ancho va a la derecha de la cabecera) también se centra.
+
 ## [0.4.18] — 2026-07-19
 
 ### Añadido

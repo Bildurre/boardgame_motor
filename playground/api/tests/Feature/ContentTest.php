@@ -333,7 +333,7 @@ it('sirve la página publicada por slug con settings localizados y datos resuelt
             ->assertJsonPath('data.slugs.en', 'characters')
             ->assertJsonPath('data.blocks.0.component', 'characters-grid')
             ->assertJsonPath('data.blocks.0.settings.title', 'Todas las cartas')
-            ->assertJsonPath('data.blocks.0.settings.align', 'left') // default del común
+            ->assertJsonPath('data.blocks.0.settings.align', 'justify') // default del común
             ->assertJsonPath('data.blocks.0.settings.width', 'wide') // default de anchura
             ->assertJsonPath('data.blocks.0.data.characters.0.name.es', $character->getTranslation('name', 'es'));
     }

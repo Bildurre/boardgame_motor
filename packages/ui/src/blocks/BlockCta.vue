@@ -44,10 +44,16 @@ const layoutStyle = computed(() => {
             <p v-if="settings.subtitle" class="block__subtitle">{{ settings.subtitle }}</p>
           </template>
           <div v-if="settings.body" class="block__text rich-content" v-html="settings.body" />
+          <!-- Alineación propia (button_align; en estrecho el CSS centra
+               siempre) y tamaño grande opcional (button_large) -->
           <a
             v-if="settings.button_text && settings.button_url"
             class="block-button"
-            :class="`block-button--${settings.button_variant || 'primary'}`"
+            :class="[
+              `block-button--${settings.button_variant || 'primary'}`,
+              `block__cta-button--${settings.button_align || 'left'}`,
+              settings.button_large ? 'block-button--large' : '',
+            ]"
             :href="String(settings.button_url)"
           >
             {{ settings.button_text }}

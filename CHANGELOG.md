@@ -12,6 +12,22 @@ El formato sigue [Keep a Changelog](https://keepachangelog.com/es/) y el
 versionado, [SemVer](https://semver.org/lang/es/) (mientras estemos en `0.x`,
 los cambios de API pueden llegar en versiones menores).
 
+## [Sin publicar]
+
+- **Editor de bloques: subtítulos multilínea, justificado por defecto y CTA
+  con botón a medida** (`edc-motor/core` + `@edc-motor/ui` +
+  `@edc-motor/admin-kit`): el subtítulo de todos los bloques pasa a
+  TEXTAREA y el render respeta sus saltos de línea; la alineación por
+  defecto de los bloques es JUSTIFICADO (los guardados con alineación
+  explícita no cambian); el CTA gana "Alineación del botón"
+  (izquierda/centrado/derecha) y "Botón grande" (más padding interior); en
+  formato estrecho los botones de bloque (CTA, related…) van SIEMPRE
+  centrados; la tarjeta del CTA gana un halo sutil del color de acento,
+  igual por los cuatro bordes; y los "Ajustes comunes" del formulario dejan de ser un
+  desplegable — sección fija, siempre visible, al fondo. **Migración del
+  juego**: si tiene bloques propios con subtítulo
+  (`Field::text('subtitle')`), pasarlos a `Field::textarea('subtitle')`.
+
 ## [0.4.18] — 2026-07-19
 
 - **Botones rellenos con texto legible SIEMPRE** (`@edc-motor/ui` +
