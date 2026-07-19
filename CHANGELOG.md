@@ -12,7 +12,7 @@ El formato sigue [Keep a Changelog](https://keepachangelog.com/es/) y el
 versionado, [SemVer](https://semver.org/lang/es/) (mientras estemos en `0.x`,
 los cambios de API pueden llegar en versiones menores).
 
-## [Sin publicar]
+## [0.4.22] — 2026-07-19
 
 - **Cita: el tamaño grande ahora sí se aplica, y el autor a la derecha sin
   guion** (`edc-motor/core` + `@edc-motor/ui`): el `.rich-content` interior
