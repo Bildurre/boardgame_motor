@@ -12,7 +12,7 @@ El formato sigue [Keep a Changelog](https://keepachangelog.com/es/) y el
 versionado, [SemVer](https://semver.org/lang/es/) (mientras estemos en `0.x`,
 los cambios de API pueden llegar en versiones menores).
 
-## [Sin publicar]
+## [0.4.23] — 2026-07-19
 
 - **CTA con imagen en estrecho: siempre arriba, a sangre y en 2:1**
   (`@edc-motor/ui`): da igual dónde esté posicionada — en estrecho la
