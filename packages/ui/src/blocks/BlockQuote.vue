@@ -15,9 +15,9 @@ defineProps<{ settings: Record<string, unknown>; data?: Record<string, unknown> 
       <footer
         v-if="settings.author"
         class="block__author"
-        :class="`block__author--${settings.author_align || 'left'}`"
+        :class="`block__author--${settings.author_align || 'right'}`"
       >
-        — {{ settings.author }}
+        {{ settings.author }}
       </footer>
     </blockquote>
   </BlockShell>

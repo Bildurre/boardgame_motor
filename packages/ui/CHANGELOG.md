@@ -4,6 +4,16 @@ Componentes Vue 3 + SCSS para las webs públicas (y piezas compartidas con el
 admin). Paquete **fuente** (se consume vía Vite). Versión de tren con
 `edc-motor/core` y `@edc-motor/admin-kit`.
 
+## [Sin publicar]
+
+### Corregido
+
+- **La cita ahora sí sale en grande**: el texto llega como richtext y el
+  `.rich-content` interior machacaba el cuerpo con su `$fs-16`; dentro de
+  `.block__quote` pasa a heredar el tamaño de la cita ($fs-32). Además el
+  autor pierde el guion "—" delante y su alineación por defecto pasa a la
+  DERECHA.
+
 ## [0.4.21] — 2026-07-19
 
 ### Cambiado

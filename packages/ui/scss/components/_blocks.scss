@@ -246,6 +246,10 @@
     font-size: $fs-32;
     font-style: italic;
     color: $accent-500;
+
+    // La cita llega como richtext y .rich-content fija su propio cuerpo
+    // ($fs-16): aquí debe heredar el tamaño grande de la cita.
+    .rich-content { font-size: inherit; }
   }
   &__author {
     margin-top: $space-2;
