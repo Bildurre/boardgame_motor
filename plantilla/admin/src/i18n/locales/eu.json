@@ -233,7 +233,9 @@
     "open": "Ireki",
     "printable": "Inprimagarria",
     "moveUp": "Igo",
-    "moveDown": "Jaitsi"
+    "moveDown": "Jaitsi",
+    "childOf": "{name}(r)en alaba",
+    "moveToRoot": "Atera errora"
   },
   "blockTypes": {
     "header": "Goiburua",
@@ -452,16 +454,15 @@
   },
   "menu": {
     "title": "Menua",
-    "hint": "Konfiguratu webgunearen menua: ordenatu, ezkutatu edo taldekatu orriak eta atalak.",
-    "newGroup": "Talde berria",
-    "newGroupTitle": "Talde berria",
-    "editGroupTitle": "Editatu taldea",
-    "groupLabel": "Taldearen izena",
-    "confirmDelete": "Talde hau ezabatu? Bere elementuak errora pasatuko dira.",
+    "hint": "Konfiguratu webgunearen menua: arrastatu edo erabili geziak orriak eta atalak ordenatu eta habiaratzeko, eta ezkutatu erakutsi nahi ez duzuna.",
     "empty": "Menuak ez du elementurik oraindik.",
-    "root": "— Erroa —",
     "hidden": "Ezkutuan",
     "visible": "Ikusgai",
-    "group": "Taldea"
+    "discard": "Baztertu",
+    "unsaved": "Gorde gabeko aldaketak",
+    "confirmLeave": "Menuan gorde gabeko aldaketak daude. Irten hala ere?",
+    "toast": {
+      "saved": "Menua gordeta."
+    }
   }
 }

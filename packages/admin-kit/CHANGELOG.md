@@ -3,6 +3,28 @@
 Kit de construcción del panel de administración (sobre `@edc-motor/ui`). Paquete
 **fuente** (se consume vía Vite). Versión de tren con `edc-motor/core` y `@edc-motor/ui`.
 
+## [Sin publicar]
+
+### Cambiado
+
+- **`MenuManager` rediseñado**: fuera los grupos (una página madre hace de
+  desplegable); la jerarquía sale SIEMPRE de las páginas del CRM y una ruta
+  puede colgar de una página raíz. Trabaja sobre una copia LOCAL del árbol
+  — flechas, drag & drop nativo (asa `GripVertical`; soltar entre filas
+  reordena, soltar ENCIMA de una página raíz anida, al hueco raíz saca) y
+  el interruptor de visibilidad solo mutan el estado local; NADA se guarda
+  hasta pulsar "Guardar" (un único `PUT /admin/menu`), con "Descartar" y
+  aviso de cambios sin guardar. Nueva prop `displayLocale`: los títulos en
+  el idioma actual del admin, con fallback al primer valor no vacío.
+- **`PageBlocks`: anidado en VARIOS niveles y `displayLocale`**: el drag &
+  drop (ahora nativo — la dependencia `vue-draggable-plus` se retira del
+  paquete) admite soltar ENCIMA de cualquier fila para anidar sin límite de
+  niveles (solo se prohíbe uno mismo/un descendiente), moviendo el subárbol
+  entero y persistiendo al momento; filas sangradas por profundidad real
+  (`--depth`) y el select "Bloque padre" excluye descendientes con prefijo
+  por nivel. Los resúmenes y textos traducibles se pintan en el
+  `displayLocale` del admin.
+
 ## [0.4.24] — 2026-07-20
 
 ### Añadido

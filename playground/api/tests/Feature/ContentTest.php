@@ -129,7 +129,7 @@ it('valida los bloques con las reglas derivadas del esquema', function () {
     ])->assertCreated();
 });
 
-it('anida bloques de un nivel y el índice los saca indentados', function () {
+it('anida bloques en varios niveles (sin límite, solo se prohíben los ciclos) y el índice saca la profundidad real', function () {
     $admin = motorUser('admin');
     $page = makePage();
 
@@ -143,34 +143,43 @@ it('anida bloques de un nivel y el índice los saca indentados', function () {
         'settings' => ['title' => ['es' => 'Padre'], 'body' => ['es' => '<p>a</p>']],
     ])->assertCreated()->json('data.id');
 
-    // Hijo colgando del padre.
     $hijo = $this->actingAs($admin)->postJson("/api/admin/pages/{$page->id}/blocks", [
         'type' => 'text',
         'settings' => ['title' => ['es' => 'Hijo'], 'body' => ['es' => '<p>b</p>']],
         'parent_id' => $padre,
     ])->assertCreated()->json('data.id');
 
-    // Encadenar (nieto) no se permite; ni un padre de otra página.
-    $this->actingAs($admin)->postJson("/api/admin/pages/{$page->id}/blocks", [
+    // Encadenar SÍ se permite (nieto, tercer nivel): sin límite de niveles.
+    $nieto = $this->actingAs($admin)->postJson("/api/admin/pages/{$page->id}/blocks", [
         'type' => 'text',
-        'settings' => ['body' => ['es' => '<p>c</p>']],
+        'settings' => ['title' => ['es' => 'Nieto'], 'body' => ['es' => '<p>c</p>']],
         'parent_id' => $hijo,
-    ])->assertUnprocessable();
+    ])->assertCreated()->json('data.id');
+
+    // Un padre de otra página, no.
     $otra = makePage();
     $this->actingAs($admin)->postJson("/api/admin/pages/{$otra->id}/blocks", [
         'type' => 'text',
-        'settings' => ['body' => ['es' => '<p>c</p>']],
+        'settings' => ['body' => ['es' => '<p>d</p>']],
         'parent_id' => $padre,
     ])->assertUnprocessable();
 
-    // El render público saca el índice con depth 0/1 (hijo indentado).
+    // Un bloque no puede ser su propio padre…
+    $this->actingAs($admin)->putJson("/api/admin/blocks/{$hijo}", ['parent_id' => $hijo])
+        ->assertUnprocessable();
+    // …ni colgar de uno de sus propios descendientes (ciclo): padre bajo su nieto.
+    $this->actingAs($admin)->putJson("/api/admin/blocks/{$padre}", ['parent_id' => $nieto])
+        ->assertUnprocessable();
+
+    // El render público saca el índice con la profundidad real (0/1/2).
     $page->update(['is_published' => true]);
     $slug = $page->getTranslation('slug', 'es');
     $blocks = $this->getJson("/api/pages/{$slug}?locale=es")->assertOk()->json('data.blocks');
     $index = collect($blocks)->firstWhere('type', 'index');
-    expect($index['data']['items'])->toHaveCount(2)
+    expect($index['data']['items'])->toHaveCount(3)
         ->and($index['data']['items'][0])->toMatchArray(['label' => 'Padre', 'depth' => 0])
-        ->and($index['data']['items'][1])->toMatchArray(['label' => 'Hijo', 'depth' => 1]);
+        ->and($index['data']['items'][1])->toMatchArray(['label' => 'Hijo', 'depth' => 1])
+        ->and($index['data']['items'][2])->toMatchArray(['label' => 'Nieto', 'depth' => 2]);
 });
 
 it('el saneado tira los párrafos vacíos del wysiwyg', function () {

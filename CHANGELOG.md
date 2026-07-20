@@ -12,6 +12,35 @@ El formato sigue [Keep a Changelog](https://keepachangelog.com/es/) y el
 versionado, [SemVer](https://semver.org/lang/es/) (mientras estemos en `0.x`,
 los cambios de API pueden llegar en versiones menores).
 
+## [Sin publicar]
+
+- **Rediseño del gestor de menú: sin grupos, jerarquía del CRM y guardado
+  en local** (`edc-motor/core` + `@edc-motor/admin-kit` + cascarón): fuera
+  los grupos — una página madre hace de desplegable —; el anidado del menú
+  deriva SIEMPRE de `pages.parent_id`, bidireccional (mover una página bajo
+  otra en el gestor escribe su padre en el CRM y viceversa; las rutas
+  también pueden colgar de una página raíz); el gestor trabaja en LOCAL con
+  drag & drop nativo + flechas y nada se persiste hasta pulsar Guardar (un
+  único PUT con el árbol entero; Descartar revierte; aviso de cambios sin
+  guardar). Migración `2026_07_20_000002` (con guardas) limpia los grupos
+  de quien migró la 0.4.24.
+- **Drag & drop también en páginas y bloques del CRM** (`@edc-motor/
+  admin-kit` + cascarón): las cards de páginas se reordenan arrastrando y
+  se anidan soltando una encima de otra (un nivel, con salida a raíz y
+  señal visual de la jerarquía; persistencia inmediata); los bloques ganan
+  anidamiento SIN LÍMITE de niveles arrastrando encima de otra fila — el
+  subárbol viaja entero, filas sangradas por profundidad y el índice
+  automático refleja la profundidad real con su sangría por nivel.
+- **Los textos traducibles del admin, en el locale actual**: cards y panel
+  de páginas, filas de bloques y gestor de menú pintan título/resumen en el
+  idioma activo del admin, con fallback al primer valor no vacío.
+  **Migración del cascarón**: copiar `plantilla/admin/src/views/menu/MenuView.vue`,
+  `views/pages/PagesListView.vue`, `views/pages/PageSingleView.vue`,
+  `assets/scss/views/_pages.scss` y `plantilla/app/src/components/AppHeader.vue`;
+  actualizar las claves i18n del menú (fuera las de grupos, dentro las de
+  guardar/descartar/cambios y las del drag & drop de páginas) y ejecutar
+  `php artisan migrate`.
+
 ## [0.4.24] — 2026-07-20
 
 - **Páginas reordenables desde el admin** (`plantilla/admin` + `playground/admin`):

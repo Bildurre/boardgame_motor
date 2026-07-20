@@ -1,8 +1,9 @@
 <script setup lang="ts">
 import BlockShell from './BlockShell.vue'
 
-// Índice automático: enlaces de ancla a los bloques posteriores de la página,
-// con sangría por nivel (bloques hijos → depth 1).
+// Índice automático: enlaces de ancla a los bloques posteriores de la
+// página, con sangría por nivel (sin límite de profundidad: la escribe
+// IndexBlock::resolveData subiendo por la cadena de padres del bloque).
 defineProps<{
   settings: Record<string, unknown>
   data: { items?: { id: number; label: string; depth?: number }[] }
@@ -14,10 +15,12 @@ defineProps<{
     <h2 v-if="settings.title" class="block__title">{{ settings.title }}</h2>
     <p v-if="settings.subtitle" class="block__subtitle">{{ settings.subtitle }}</p>
     <component :is="settings.numbered ? 'ol' : 'ul'" class="block__index">
-      <!-- Nivel visual por profundidad (tamaños decrecientes; 3 = 3 o más) -->
+      <!-- Tamaño por nivel (24/22/20, el 3 agrupa "3 o más"); la SANGRÍA, en
+           cambio, escala con la profundidad real (--depth, sin tope). -->
       <li
         v-for="item in data.items ?? []"
         :key="item.id"
+        :style="{ '--depth': item.depth ?? 0 }"
         :class="[
           `block__index-level-${Math.min((item.depth ?? 0) + 1, 3)}`,
           { 'block__index-child': (item.depth ?? 0) > 0 },

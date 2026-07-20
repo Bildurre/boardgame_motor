@@ -2,7 +2,6 @@
 import { computed, onBeforeUnmount, onMounted, reactive, ref } from 'vue'
 import type { AxiosInstance } from 'axios'
 import { GripVertical, List, Plus, Printer, SquarePen, Trash2 } from '@lucide/vue'
-import { VueDraggable } from 'vue-draggable-plus'
 import {
   BaseButton,
   BaseCheckbox,
@@ -19,9 +18,18 @@ import { useRightSidebar } from '../composables/useRightSidebar'
 import { useCardDeselect } from '../composables/useCardDeselect'
 
 // Gestor de bloques de una página (doc 03): paleta de tipos (motor + juego),
-// lista reordenable con drag (DC-17) y modal de edición GENERADO desde el
-// esquema de campos del tipo. Añadir un tipo de bloque no toca este código.
-// Agnóstico de i18n (DC-29): textos por prop; gancho translate para nombres.
+// lista reordenable con drag & drop NATIVO (HTML5, sin dependencias) y modal
+// de edición GENERADO desde el esquema de campos del tipo. Añadir un tipo de
+// bloque no toca este código. Anidado en VARIOS niveles, sin límite (solo se
+// prohíben los ciclos): el drag persiste al soltar (sin botón Guardar, a
+// diferencia del MenuManager) — soltar entre filas reordena
+// (`POST .../blocks/reorder`, la lista aplanada en preorden); soltar ENCIMA
+// de cualquier fila anida el bloque bajo ella (con sus propios
+// descendientes, que se mueven en bloque) vía `PUT /admin/blocks/{id}`,
+// mismas reglas que el select "Bloque padre": nunca uno mismo ni un
+// descendiente propio. Agnóstico de i18n (DC-29): textos por prop; gancho
+// translate para nombres; `displayLocale` (idioma actual del admin) para
+// los textos traducibles del resumen/campos.
 
 export interface PageBlocksLabels {
   add: string
@@ -74,6 +82,9 @@ const props = withDefaults(
     api: AxiosInstance
     pageId: number
     locales: { code: string; name: string }[]
+    /** Idioma actual del admin (vue-i18n): textos traducibles en él, con
+     *  fallback al primer valor no vacío (patrón `firstText` del AppHeader). */
+    displayLocale: string
     icons?: RichIcon[]
     richLabels?: Partial<RichTextLabels>
     labels?: Partial<PageBlocksLabels>
@@ -170,19 +181,30 @@ const formPrintable = ref(true)
 const formIndexable = ref(true)
 const formParent = ref<number | null>(null)
 
-// Padres elegibles: bloques raíz de la página (un solo nivel de anidado),
-// nunca uno mismo.
+// Padres elegibles: CUALQUIER bloque de la página (sin límite de niveles),
+// salvo uno mismo o uno de sus propios descendientes (crearía un ciclo).
+// Etiqueta con prefijo de rayas según su profundidad, para ver la jerarquía
+// en un <select> nativo (no admite sangría real por opción).
 const parentOptions = computed(() => {
   const self = editing.value?.id
   return blocks.value
-    .filter((b) => !b.parent_id && b.id !== self)
-    .map((b) => ({ value: String(b.id), label: `${typeName(b.type)} — ${summary(b) || b.id}` }))
+    .filter((b) => b.id !== self && !(self !== undefined && isDescendant(b.id, self)))
+    .map((b) => ({
+      value: String(b.id),
+      label: `${'— '.repeat(depthOf(b))}${typeName(b.type)} — ${summary(b) || b.id}`,
+    }))
 })
 
 function typeName(key: string): string {
   const type = types.value.find((t) => t.key === key)
   const fallback = type?.name ?? key
   return props.translate?.(`blockTypes.${key}`, fallback) ?? fallback
+}
+
+/** Texto en `displayLocale`, con fallback al primer valor no vacío. */
+function displayText(map: Record<string, string> | null | undefined): string {
+  if (!map) return ''
+  return map[props.displayLocale] || Object.values(map).find(Boolean) || ''
 }
 
 /** Resumen del bloque en la lista: el primer texto traducible con valor. */
@@ -192,18 +214,18 @@ function summary(block: BlockRow): string {
     if (!['text', 'textarea', 'richtext'].includes(field.type)) continue
     const value = block.settings?.[field.key]
     if (field.translatable && value && typeof value === 'object') {
-      const text = Object.values(value as Record<string, string>).find(Boolean)
+      const text = displayText(value as Record<string, string>)
       if (text) return text.replace(/<[^>]*>/g, '').slice(0, 80)
     }
   }
   return ''
 }
 
-/** URL de un campo imagen (traducible o no): la primera con valor. */
+/** URL de un campo imagen (traducible o no): la del locale actual. */
 function imageUrl(field: FieldSchema, block: BlockRow): string {
   const raw = block.settings?.[field.key]
   if (raw && typeof raw === 'object') {
-    return Object.values(raw as Record<string, string>).find(Boolean) ?? ''
+    return displayText(raw as Record<string, string>)
   }
   return raw ? String(raw) : ''
 }
@@ -218,7 +240,7 @@ function fieldValue(field: FieldSchema, block: BlockRow): string {
   const raw = block.settings?.[field.key]
   if (raw === null || raw === undefined || raw === '') return ''
   if (field.translatable && typeof raw === 'object') {
-    const text = Object.values(raw as Record<string, string>).find(Boolean) ?? ''
+    const text = displayText(raw as Record<string, string>)
     return text
       .replace(/<[^>]*>/g, ' ')
       .replace(/\s+/g, ' ')
@@ -255,16 +277,56 @@ const selectedFields = computed(() => {
     .filter((entry) => entry.value)
 })
 
-/** Hijos justo debajo de su padre (en su orden relativo): anidado visible. */
+/** Preorden del árbol (sin límite de niveles): cada bloque, seguido AL
+ *  MOMENTO de todos sus descendientes (recursivo), en su orden relativo. El
+ *  reorder del servidor persiste exactamente este orden aplanado, así que
+ *  `order` ya es un preorden — el índice público (IndexBlock) no necesita
+ *  reordenar, solo calcular la profundidad. */
 function arrange(list: BlockRow[]): BlockRow[] {
-  const parents = list.filter((b) => !b.parent_id)
-  const out: BlockRow[] = []
-  for (const parent of parents) {
-    out.push(parent, ...list.filter((b) => b.parent_id === parent.id))
+  const byParent = new Map<number | null, BlockRow[]>()
+  for (const block of list) {
+    const key = block.parent_id
+    if (!byParent.has(key)) byParent.set(key, [])
+    byParent.get(key)!.push(block)
   }
-  // Huérfanos (padre borrado en otra sesión): al final, sin perderse.
+  const out: BlockRow[] = []
+  function walk(parentId: number | null) {
+    for (const block of byParent.get(parentId) ?? []) {
+      out.push(block)
+      walk(block.id)
+    }
+  }
+  walk(null)
+  // Huérfanos (padre borrado en otra sesión, o un ciclo residual): al final.
   out.push(...list.filter((b) => !out.includes(b)))
   return out
+}
+
+/** Profundidad real del bloque, subiendo por la cadena de padres. */
+function depthOf(block: BlockRow): number {
+  let depth = 0
+  let current: BlockRow | undefined = block
+  const seen = new Set<number>()
+  while (current?.parent_id) {
+    if (seen.has(current.id)) break
+    seen.add(current.id)
+    current = blocks.value.find((b) => b.id === current!.parent_id)
+    if (current) depth++
+  }
+  return depth
+}
+
+/** ¿`candidateId` cuelga (a cualquier profundidad) de `ancestorId`? */
+function isDescendant(candidateId: number, ancestorId: number): boolean {
+  let current = blocks.value.find((b) => b.id === candidateId)
+  const seen = new Set<number>()
+  while (current?.parent_id) {
+    if (current.parent_id === ancestorId) return true
+    if (seen.has(current.id)) break
+    seen.add(current.id)
+    current = blocks.value.find((b) => b.id === current!.parent_id)
+  }
+  return false
 }
 
 async function load() {
@@ -364,8 +426,7 @@ async function remove(block: BlockRow) {
   }
 }
 
-/** El drag reordena en cliente; los hijos se recolocan bajo su padre y se
- *  persiste la lista de ids resultante. */
+/** Persiste el orden actual (la lista completa de ids, ya reagrupada). */
 async function persistOrder() {
   blocks.value = arrange(blocks.value)
   try {
@@ -375,6 +436,108 @@ async function persistOrder() {
   } catch {
     toast.danger(L.error)
     await load()
+  }
+}
+
+// --- Drag & drop nativo (HTML5, sin dependencias) --------------------------
+// Fila arrastrable con asa (GripVertical): soltar en el tercio superior/
+// inferior de otra fila reordena como hermana; soltar en el tercio central
+// de CUALQUIER fila la convierte en su padre — sin límite de niveles, solo
+// se prohíbe soltar sobre uno mismo o un descendiente propio (ciclo). Al
+// mover un bloque se mueve con él TODO su subárbol (persiste al momento,
+// sin botón Guardar).
+const dragged = ref<BlockRow | null>(null)
+const dropTarget = ref<{ id: number; position: 'before' | 'after' | 'inside' } | null>(null)
+
+/** Único requisito para soltar sobre `target`: no ser el arrastrado ni un descendiente suyo. */
+function canDropOn(target: BlockRow): boolean {
+  if (!dragged.value) return false
+  if (target.id === dragged.value.id) return false
+  return !isDescendant(target.id, dragged.value.id)
+}
+
+function onDragStart(block: BlockRow, event: DragEvent) {
+  dragged.value = block
+  event.dataTransfer?.setData('text/plain', String(block.id))
+  if (event.dataTransfer) event.dataTransfer.effectAllowed = 'move'
+}
+
+function onDragOver(block: BlockRow, event: DragEvent) {
+  if (!canDropOn(block)) {
+    dropTarget.value = null
+    return
+  }
+  const rect = (event.currentTarget as HTMLElement).getBoundingClientRect()
+  const ratio = (event.clientY - rect.top) / rect.height
+  const position: 'before' | 'after' | 'inside' =
+    ratio > 0.3 && ratio < 0.7 ? 'inside' : ratio < 0.5 ? 'before' : 'after'
+  dropTarget.value = { id: block.id, position }
+}
+
+function onDragLeave(block: BlockRow, event: DragEvent) {
+  const related = event.relatedTarget as Node | null
+  const current = event.currentTarget as HTMLElement
+  if (related && current.contains(related)) return
+  if (dropTarget.value?.id === block.id) dropTarget.value = null
+}
+
+function onDragEnd() {
+  dragged.value = null
+  dropTarget.value = null
+}
+
+async function onDrop(block: BlockRow, event: DragEvent) {
+  event.preventDefault()
+  const target = dropTarget.value
+  const source = dragged.value
+  dragged.value = null
+  dropTarget.value = null
+  if (!target || !source || target.id !== block.id) return
+  if (source.id === target.id || isDescendant(target.id, source.id)) return
+
+  const oldParentId = source.parent_id
+  const sourceIdx = blocks.value.findIndex((b) => b.id === source.id)
+  if (sourceIdx === -1) return
+  const sourceDepth = depthOf(source)
+
+  // Extrae el subárbol completo (el bloque + todos sus descendientes: la
+  // tirada contigua que le sigue con más profundidad que él, ya que el
+  // array se mantiene en preorden) para moverlo en bloque.
+  let end = sourceIdx + 1
+  while (end < blocks.value.length && depthOf(blocks.value[end]) > sourceDepth) end++
+  const subtree = blocks.value.splice(sourceIdx, end - sourceIdx)
+
+  let newParentId: number | null
+  if (target.position === 'inside') {
+    newParentId = target.id
+    const targetBlock = blocks.value.find((b) => b.id === target.id)
+    const targetDepth = targetBlock ? depthOf(targetBlock) : 0
+    let insertAt = blocks.value.findIndex((b) => b.id === target.id) + 1
+    while (insertAt < blocks.value.length && depthOf(blocks.value[insertAt]) > targetDepth) {
+      insertAt++
+    }
+    subtree[0].parent_id = newParentId
+    blocks.value.splice(insertAt, 0, ...subtree)
+  } else {
+    const targetIdx = blocks.value.findIndex((b) => b.id === target.id)
+    newParentId = targetIdx >= 0 ? blocks.value[targetIdx].parent_id : null
+    subtree[0].parent_id = newParentId
+    const insertAt = target.position === 'after' ? targetIdx + 1 : targetIdx
+    blocks.value.splice(insertAt < 0 ? blocks.value.length : insertAt, 0, ...subtree)
+  }
+
+  busy.value = true
+  try {
+    if (newParentId !== oldParentId) {
+      await props.api.put(`/admin/blocks/${source.id}`, { parent_id: newParentId })
+    }
+    await persistOrder()
+    await load()
+  } catch {
+    toast.danger(L.error)
+    await load()
+  } finally {
+    busy.value = false
   }
 }
 
@@ -410,19 +573,27 @@ defineExpose({ reload: load })
 
     <p v-if="!blocks.length" class="page-blocks__empty">{{ L.empty }}</p>
 
-    <VueDraggable
-      v-model="blocks"
-      class="page-blocks__list"
-      handle=".page-blocks__grip"
-      :animation="150"
-      @end="persistOrder"
-    >
+    <div class="page-blocks__list">
       <article
         v-for="block in blocks"
         :key="block.id"
         class="page-blocks__item"
-        :class="{ 'is-active': selectedId === block.id, 'is-child': block.parent_id }"
+        draggable="true"
+        :style="{ '--depth': depthOf(block) }"
+        :class="{
+          'is-active': selectedId === block.id,
+          'is-child': depthOf(block) > 0,
+          'is-dragging': dragged?.id === block.id,
+          'drop-before': dropTarget?.id === block.id && dropTarget.position === 'before',
+          'drop-after': dropTarget?.id === block.id && dropTarget.position === 'after',
+          'drop-inside': dropTarget?.id === block.id && dropTarget.position === 'inside',
+        }"
         @click="(e) => selectBlock(block, e)"
+        @dragstart="onDragStart(block, $event)"
+        @dragover.prevent="onDragOver(block, $event)"
+        @dragleave="onDragLeave(block, $event)"
+        @drop="onDrop(block, $event)"
+        @dragend="onDragEnd"
       >
         <span class="page-blocks__grip"><GripVertical :size="16" /></span>
         <button
@@ -441,7 +612,7 @@ defineExpose({ reload: load })
           <span v-if="block.is_indexable" class="chip">{{ L.indexableShort }}</span>
         </span>
       </article>
-    </VueDraggable>
+    </div>
 
     <!-- Modal generado desde el esquema del tipo -->
     <EditModal

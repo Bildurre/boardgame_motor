@@ -342,8 +342,10 @@
   .block__index-level-2 { font-size: 22px; }
   .block__index-level-3 { font-size: $fs-20; }
 
-  // Entradas de bloques hijos: sangradas bajo su padre.
-  .block__index-child { margin-left: $space-5; }
+  // Entradas anidadas: sangría POR NIVEL (profundidad real, sin límite) —
+  // `--depth` lo pone BlockIndex.vue en línea; el tamaño de letra sí se
+  // limita a 3 niveles (block__index-level-1/2/3, el 3 agrupa "3 o más").
+  .block__index-child { margin-left: calc(var(--depth, 1) * #{$space-5}); }
 }
 
 // FAQ (doc 03): acordeón nativo details/summary del bloque `faq`.

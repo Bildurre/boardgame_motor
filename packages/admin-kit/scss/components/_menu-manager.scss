@@ -1,15 +1,26 @@
 @use "tokens" as *;
 
-// Configurador del menú público (doc 10 ampliado): filas tipo PageBlocks
-// (icono + etiqueta + badges + acciones), sin drag — el orden se mueve con
-// flechas, dentro de cada nivel (raíz o hijos de un grupo).
+// Configurador del menú público (doc 10 ampliado, rediseño sin grupos):
+// filas tipo PageBlocks (asa + icono + etiqueta + badges + acciones),
+// arrastrables (drag & drop nativo) además de las flechas. Nada se persiste
+// hasta "Guardar": la barra superior trae el aviso de cambios sin guardar y
+// Descartar/Guardar.
 .menu-manager {
   display: grid;
   gap: $space-3;
 
   &__bar {
     display: flex;
+    align-items: center;
     justify-content: flex-end;
+    gap: $space-3;
+  }
+
+  &__dirty {
+    color: $warning;
+    font-size: $fs-13;
+    font-weight: $k-fw-semibold;
+    margin-right: auto;
   }
 
   &__empty { color: $text-3; margin: 0; }
@@ -29,15 +40,47 @@
     background: $surface;
     padding: $space-2 $space-3;
     min-width: 0;
-    transition: border-color 0.15s ease;
+    position: relative;
+    transition: border-color 0.15s ease, opacity 0.15s ease;
 
     &:hover { border-color: $border-strong; }
     &.is-hidden { opacity: 0.65; }
+    &.is-dragging { opacity: 0.4; }
+
+    // Indicador de inserción: línea antes/después de la fila.
+    &.drop-before::before,
+    &.drop-after::after {
+      content: "";
+      position: absolute;
+      left: $space-2;
+      right: $space-2;
+      height: 2px;
+      background: $accent-500;
+      border-radius: $radius-pill;
+    }
+    &.drop-before::before { top: -$space-1; }
+    &.drop-after::after { bottom: -$space-1; }
+
+    // Destino válido para anidar: resalta toda la fila.
+    &.drop-inside {
+      border-color: $accent-500;
+      background: color-mix(in srgb, $accent-500 10%, $surface);
+    }
   }
 
-  // Hijos de un grupo: sangrados justo debajo de él (mismo lenguaje que los
-  // bloques hijos de PageBlocks).
+  // Hijas de una página: sangradas justo debajo de ella (mismo lenguaje que
+  // los bloques hijos de PageBlocks).
   &__item.is-child { margin-left: $space-7; }
+
+  &__grip {
+    display: inline-flex;
+    color: $text-3;
+    flex: 0 0 auto;
+    cursor: grab;
+    touch-action: none;
+
+    &:active { cursor: grabbing; }
+  }
 
   &__icon {
     display: inline-flex;
@@ -94,40 +137,5 @@
       border-color: $success;
       @include contrast-text($success);
     }
-    &:disabled { opacity: 0.6; cursor: default; }
-  }
-
-  &__group-select {
-    min-width: 160px;
-
-    .form-field__select { min-height: 34px; }
-  }
-
-  &__group-actions {
-    display: flex;
-    gap: $space-1;
-  }
-
-  &__edit,
-  &__delete {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    background: none;
-    border: none;
-    border-radius: $radius-sm;
-    padding: $space-1;
-    cursor: pointer;
-    transition: background-color 0.15s ease;
-  }
-
-  &__edit {
-    color: $accent-500;
-    &:hover { background: color-mix(in srgb, $accent-500 12%, transparent); }
-  }
-
-  &__delete {
-    color: $danger;
-    &:hover { background: color-mix(in srgb, $danger 12%, transparent); }
   }
 }

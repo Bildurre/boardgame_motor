@@ -4,6 +4,15 @@ Componentes Vue 3 + SCSS para las webs públicas (y piezas compartidas con el
 admin). Paquete **fuente** (se consume vía Vite). Versión de tren con
 `edc-motor/core` y `@edc-motor/admin-kit`.
 
+## [Sin publicar]
+
+### Cambiado
+
+- **Índice automático con sangría por profundidad real**: `BlockIndex`
+  pinta `--depth` por entrada y la sangría escala por nivel (sin tope,
+  acompañando al anidado multinivel de bloques); los tamaños por nivel
+  (24/22/20, el tercero para "3 o más") se quedan como estaban.
+
 ## [0.4.24] — 2026-07-20
 
 ### Cambiado

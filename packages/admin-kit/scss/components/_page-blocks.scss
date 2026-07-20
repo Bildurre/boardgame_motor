@@ -65,8 +65,9 @@
     background: $surface;
     padding: $space-2 $space-3;
     min-width: 0;
+    position: relative;
     cursor: pointer; // toda la fila selecciona (panel derecho)
-    transition: border-color 0.15s ease;
+    transition: border-color 0.15s ease, opacity 0.15s ease;
 
     @container content (min-width: 640px) {
       grid-template-columns: auto auto auto minmax(0, 1fr) auto;
@@ -75,6 +76,28 @@
 
     &:hover { border-color: $border-strong; }
     &.is-active { border-color: $accent-500; }
+    &.is-dragging { opacity: 0.4; }
+
+    // Indicador de inserción (antes/después) y de destino válido (encima,
+    // anida bajo esa fila) del drag & drop nativo — mismo lenguaje que el
+    // MenuManager.
+    &.drop-before::before,
+    &.drop-after::after {
+      content: "";
+      position: absolute;
+      left: $space-2;
+      right: $space-2;
+      height: 2px;
+      background: $accent-500;
+      border-radius: $radius-pill;
+    }
+    &.drop-before::before { top: -$space-1; }
+    &.drop-after::after { bottom: -$space-1; }
+
+    &.drop-inside {
+      border-color: $accent-500;
+      background: color-mix(in srgb, $accent-500 10%, $surface);
+    }
   }
 
   &__grip {
@@ -141,8 +164,9 @@
     > .form-field { margin-top: $space-3; }
   }
 
-  // Bloques hijos (parent_id): tarjeta sangrada bajo su padre.
-  &__item.is-child { margin-left: $space-7; }
+  // Bloques anidados (parent_id, sin límite de niveles): sangría por
+  // profundidad REAL — `--depth` lo pone el componente en línea.
+  &__item.is-child { margin-left: calc(var(--depth, 1) * #{$space-7}); }
 }
 
 .schema-fields {
@@ -196,6 +220,3 @@
     font-weight: 600;
   }
 }
-
-// Item fantasma del drag (vue-draggable-plus / SortableJS).
-.sortable-ghost { opacity: 0.4; }
