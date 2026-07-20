@@ -12,7 +12,7 @@ El formato sigue [Keep a Changelog](https://keepachangelog.com/es/) y el
 versionado, [SemVer](https://semver.org/lang/es/) (mientras estemos en `0.x`,
 los cambios de API pueden llegar en versiones menores).
 
-## [Sin publicar]
+## [0.4.25] — 2026-07-20
 
 - **Rediseño del gestor de menú: sin grupos, jerarquía del CRM y guardado
   en local** (`edc-motor/core` + `@edc-motor/admin-kit` + cascarón): fuera
