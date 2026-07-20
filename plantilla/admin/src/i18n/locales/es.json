@@ -7,7 +7,8 @@
     "pages": "paginas",
     "settings": "configuracion",
     "backups": "copias",
-    "users": "usuarios"
+    "users": "usuarios",
+    "menu": "menu"
   },
   "breadcrumbs": {
     "home": "Inicio",
@@ -17,7 +18,8 @@
     "pages": "Páginas",
     "settings": "Configuración",
     "backups": "Copias de seguridad",
-    "users": "Usuarios"
+    "users": "Usuarios",
+    "menu": "Menú"
   },
   "nav": {
     "dashboard": "Panel",
@@ -28,7 +30,8 @@
     "settings": "Configuración",
     "backups": "Copias",
     "users": "Usuarios",
-    "viewSite": "Ver la web"
+    "viewSite": "Ver la web",
+    "menu": "Menú"
   },
   "icons": {
     "title": "Iconos",
@@ -228,7 +231,9 @@
     "panelEmpty": "Selecciona una página para ver sus acciones.",
     "panelBlocks": "Bloques",
     "open": "Abrir",
-    "printable": "Imprimible"
+    "printable": "Imprimible",
+    "moveUp": "Subir",
+    "moveDown": "Bajar"
   },
   "settings": {
     "title": "Configuración",
@@ -368,5 +373,19 @@
   },
   "blockEditor": {
     "addRow": "Añadir"
+  },
+  "menu": {
+    "title": "Menú",
+    "hint": "Configura el menú de la web: reordena, oculta o agrupa páginas y secciones.",
+    "newGroup": "Nuevo grupo",
+    "newGroupTitle": "Nuevo grupo",
+    "editGroupTitle": "Editar grupo",
+    "groupLabel": "Nombre del grupo",
+    "confirmDelete": "¿Borrar este grupo? Sus elementos pasarán a la raíz.",
+    "empty": "El menú aún no tiene elementos.",
+    "root": "— Raíz —",
+    "hidden": "Oculto",
+    "visible": "Visible",
+    "group": "Grupo"
   }
 }

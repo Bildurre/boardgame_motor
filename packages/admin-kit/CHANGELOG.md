@@ -3,6 +3,20 @@
 Kit de construcción del panel de administración (sobre `@edc-motor/ui`). Paquete
 **fuente** (se consume vía Vite). Versión de tren con `edc-motor/core` y `@edc-motor/ui`.
 
+## [Sin publicar]
+
+### Añadido
+
+- **`MenuManager`** (`content/MenuManager.vue`, doc 10 ampliado): configurador
+  del menú de la web pública sobre `/api/admin/menu*`. Filas tipo PageBlocks
+  (sin drag): icono según tipo (página/ruta/grupo), etiqueta, badges "Oculto"
+  y "Borrador", subir/bajar dentro de su nivel, interruptor de visibilidad
+  (`.is-on`/`.is-off`), select de grupo (— Raíz — o un grupo existente) y, en
+  grupos, editar label (modal con `TranslatableInput`) y borrar (con
+  confirm). Botón "Nuevo grupo" arriba. Agnóstico de i18n (DC-29): todos los
+  textos por prop (`labels`) y `routeLabels` (etiqueta de cada `route_key`)
+  los pone el juego. SCSS nuevo en `scss/components/_menu-manager.scss`.
+
 ## [0.4.23] — 2026-07-19
 
 - Sin cambios propios: versión de tren.

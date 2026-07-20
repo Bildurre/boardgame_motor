@@ -24,6 +24,9 @@ export { useResource, type ResourceMeta } from './crud/useResource'
 // CRM de páginas y bloques (doc 03): editor dirigido por esquema.
 export { default as SchemaFields, type FieldSchema } from './content/SchemaFields.vue'
 export { default as PageBlocks, type PageBlocksLabels } from './content/PageBlocks.vue'
+// Configurador del menú público (doc 10 ampliado): páginas del CRM + rutas
+// del juego, reordenables y agrupables. Agnóstico de i18n (DC-29).
+export { default as MenuManager, type MenuManagerLabels } from './content/MenuManager.vue'
 // Subidas de imagen diferidas al guardar (uploads de contenido sin huérfanos):
 // las usan PageBlocks y las vistas del cascarón (Ajustes, form de página).
 export {

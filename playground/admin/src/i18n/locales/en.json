@@ -10,7 +10,8 @@
     "pages": "pages",
     "settings": "settings",
     "backups": "backups",
-    "users": "users"
+    "users": "users",
+    "menu": "menu"
   },
   "breadcrumbs": {
     "home": "Home",
@@ -23,7 +24,8 @@
     "pages": "Pages",
     "settings": "Settings",
     "backups": "Backups",
-    "users": "Users"
+    "users": "Users",
+    "menu": "Menu"
   },
   "nav": {
     "dashboard": "Dashboard",
@@ -38,7 +40,8 @@
     "settings": "Settings",
     "backups": "Backups",
     "users": "Users",
-    "viewSite": "View site"
+    "viewSite": "View site",
+    "menu": "Menu"
   },
   "icons": {
     "title": "Icons",
@@ -383,7 +386,9 @@
     "panelEmpty": "Pick a page to see its actions.",
     "panelBlocks": "Blocks",
     "open": "Open",
-    "printable": "Printable"
+    "printable": "Printable",
+    "moveUp": "Move up",
+    "moveDown": "Move down"
   },
   "blockTypes": {
     "header": "Header",
@@ -599,5 +604,22 @@
   },
   "blockEditor": {
     "addRow": "Add"
+  },
+  "menu": {
+    "title": "Menu",
+    "hint": "Configure the site menu: reorder, hide or group pages and sections.",
+    "newGroup": "New group",
+    "newGroupTitle": "New group",
+    "editGroupTitle": "Edit group",
+    "groupLabel": "Group name",
+    "confirmDelete": "Delete this group? Its items will move to the root.",
+    "empty": "The menu has no items yet.",
+    "root": "— Root —",
+    "hidden": "Hidden",
+    "visible": "Visible",
+    "group": "Group",
+    "routes": {
+      "downloads": "Downloads"
+    }
   }
 }

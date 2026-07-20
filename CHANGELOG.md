@@ -14,6 +14,41 @@ los cambios de API pueden llegar en versiones menores).
 
 ## [Sin publicar]
 
+- **Páginas reordenables desde el admin** (`plantilla/admin` + `playground/admin`):
+  el panel derecho de la página seleccionada trae ahora "Subir"/"Bajar" —
+  intercambia con la hermana anterior/siguiente (mismo `parent_id`) contra el
+  endpoint `POST /admin/pages/reorder` que ya existía en el motor.
+- **Menú de la web configurable desde el admin** (`edc-motor/core` +
+  `@edc-motor/admin-kit` + cascarón): un menú de navegación de la web pública
+  que mezcla páginas del CRM y "rutas" propias del juego (índices de
+  entidades, descargas…), reordenable, con visibilidad por item y agrupable
+  bajo carpetas. Backend: tabla `menu_items`, `MenuSync` (mantiene un item por
+  página no-home y por cada `motor.menu.routes` del juego, añade al final y
+  retira huérfanos), endpoints admin (`/api/admin/menu*`) y público
+  (`GET /api/menu`, cacheado como `pages/nav` y con la misma invalidación).
+  Admin: `MenuManager` (admin-kit), filas con subir/bajar, visibilidad,
+  select de grupo y gestión de grupos (crear/editar label/borrar). App:
+  `AppHeader.vue` consume `/api/menu` en vez de `/pages/nav` (que sigue vivo,
+  retrocompatible); los grupos reutilizan el patrón de submenú al hover que
+  antes tenían las páginas con hijas.
+  **Migración del cascarón** — ver `packages/core/CHANGELOG.md` y
+  `packages/admin-kit/CHANGELOG.md` para el detalle de ficheros a copiar; en
+  resumen, cada juego debe:
+  - Declarar `motor.menu.routes` en su `api/config/motor.php` (las claves
+    de sus `entitySections` + las suyas propias, p. ej. `downloads`).
+  - Copiar `admin/src/views/menu/MenuView.vue`, sumar la ruta `/menu` (en
+    `router/i18n-paths.ts`) y la entrada de navegación (grupo "La web", en
+    `App.vue`, icono `ListTree`), con su propio mapa `routeLabels`.
+  - Copiar las claves i18n nuevas del admin: `nav.menu`, `routes.menu`,
+    `breadcrumbs.menu`, `pages.moveUp`, `pages.moveDown` y la sección
+    `menu.*` completa (`title`, `hint`, `newGroup`, `newGroupTitle`,
+    `editGroupTitle`, `groupLabel`, `confirmDelete`, `empty`, `root`,
+    `hidden`, `visible`, `group`) en `es`/`en`/`eu`.
+  - Sustituir en `app/src/components/AppHeader.vue` el fetch a
+    `/pages/nav` por `/menu` y construir el mapa route_key → ruta + etiqueta
+    (entitySections + descargas de tu juego; una clave sin mapear se omite
+    sola, sin romper el resto del menú).
+  - Ejecutar `php artisan migrate` (tabla nueva `menu_items`).
 - **Cita en peso 600 e índice automático con jerarquía tipográfica**
   (`edc-motor/core` + `@edc-motor/ui`): el texto de la cita pasa a peso
   600; el índice va en peso 500 con tamaños por nivel (24/22/20px, el

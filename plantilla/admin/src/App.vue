@@ -8,6 +8,7 @@ import {
   Globe,
   LayoutDashboard,
   Images,
+  ListTree,
   Settings,
   Shapes,
   Users,
@@ -148,6 +149,14 @@ function navActive(section: string) {
         :to="{ name: 'pages' }"
       >
         <FileText class="nav-icon" :size="20" /><span class="nav-label">{{ t('nav.pages') }}</span>
+      </RouterLink>
+      <RouterLink
+        v-if="auth.can('manage-web')"
+        class="nav-item"
+        :class="navActive('menu')"
+        :to="{ name: 'menu' }"
+      >
+        <ListTree class="nav-icon" :size="20" /><span class="nav-label">{{ t('nav.menu') }}</span>
       </RouterLink>
       <RouterLink
         v-if="auth.can('manage-web')"

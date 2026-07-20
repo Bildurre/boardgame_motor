@@ -10,7 +10,8 @@
     "pages": "orriak",
     "settings": "konfigurazioa",
     "backups": "kopiak",
-    "users": "erabiltzaileak"
+    "users": "erabiltzaileak",
+    "menu": "menua"
   },
   "breadcrumbs": {
     "home": "Hasiera",
@@ -23,7 +24,8 @@
     "pages": "Orriak",
     "settings": "Konfigurazioa",
     "backups": "Segurtasun-kopiak",
-    "users": "Erabiltzaileak"
+    "users": "Erabiltzaileak",
+    "menu": "Menua"
   },
   "nav": {
     "dashboard": "Panela",
@@ -38,7 +40,8 @@
     "settings": "Konfigurazioa",
     "backups": "Kopiak",
     "users": "Erabiltzaileak",
-    "viewSite": "Ikusi webgunea"
+    "viewSite": "Ikusi webgunea",
+    "menu": "Menua"
   },
   "icons": {
     "title": "Ikonoak",
@@ -383,7 +386,9 @@
     "panelEmpty": "Aukeratu orri bat bere ekintzak ikusteko.",
     "panelBlocks": "Blokeak",
     "open": "Ireki",
-    "printable": "Inprimagarria"
+    "printable": "Inprimagarria",
+    "moveUp": "Igo",
+    "moveDown": "Jaitsi"
   },
   "blockTypes": {
     "header": "Goiburua",
@@ -599,5 +604,22 @@
   },
   "blockEditor": {
     "addRow": "Gehitu"
+  },
+  "menu": {
+    "title": "Menua",
+    "hint": "Konfiguratu webgunearen menua: ordenatu, ezkutatu edo taldekatu orriak eta atalak.",
+    "newGroup": "Talde berria",
+    "newGroupTitle": "Talde berria",
+    "editGroupTitle": "Editatu taldea",
+    "groupLabel": "Taldearen izena",
+    "confirmDelete": "Talde hau ezabatu? Bere elementuak errora pasatuko dira.",
+    "empty": "Menuak ez du elementurik oraindik.",
+    "root": "— Erroa —",
+    "hidden": "Ezkutuan",
+    "visible": "Ikusgai",
+    "group": "Taldea",
+    "routes": {
+      "downloads": "Deskargak"
+    }
   }
 }
