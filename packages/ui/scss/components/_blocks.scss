@@ -18,14 +18,19 @@
   &--w-narrow .block__inner { max-width: 800px; }
   &--w-full .block__inner { max-width: none; padding-inline: $space-6; }
 
-  // Tipografía de bloque: texto $fs-16, subtítulo $fs-20, título $fs-28
-  // (la cabecera sube a 32/24). Los títulos nunca se justifican.
+  // Tipografía de bloque, escalada ~×1.125 sobre la original para que el
+  // texto BASE sea de 18px: texto $fs-18, subtítulo 22, título $fs-32 (la
+  // cabecera sube a 36/28). Los títulos nunca se justifican.
   // width 100%: en grids con justify-items start (el cuerpo del CTA) el
   // elemento encoge a su contenido y el text-align no se vería.
-  &__title { margin: 0; font-size: $fs-28; width: 100%; }
+  &__title { margin: 0; font-size: $fs-32; width: 100%; }
   // pre-line: el subtítulo es un textarea — sus saltos de línea cuentan.
-  &__subtitle { margin: 0; color: $text-2; font-size: $fs-20; white-space: pre-line; width: 100%; }
-  &__text { color: $text-1; font-size: $fs-16; }
+  &__subtitle { margin: 0; color: $text-2; font-size: 22px; white-space: pre-line; width: 100%; }
+  &__text { color: $text-1; font-size: $fs-18; }
+
+  // El wysiwyg fija su propio cuerpo ($fs-16): dentro de un bloque manda la
+  // base de bloque (18px). La cita lo re-sube luego a su tamaño.
+  .rich-content { font-size: $fs-18; }
 
   &--align-justify &__title,
   &--align-justify &__subtitle { text-align: left; }
@@ -52,17 +57,20 @@
     &--subtitle-right &__subtitle { text-align: right; }
   }
 
+  // Etiqueta de la tarjeta de texto: SIN chip — solo texto coloreado de
+  // acento, con alineación propia (campo label_align del bloque).
   &__label {
-    display: inline-block;
-    justify-self: start;
-    font-size: $fs-12;
+    display: block;
+    width: 100%;
+    font-size: $fs-13;
     font-weight: $k-fw-semibold;
     text-transform: uppercase;
     letter-spacing: 0.05em;
     color: $accent-500;
-    border: 1px solid color-mix(in srgb, $accent-500 45%, transparent);
-    border-radius: $radius-pill;
-    padding: 2px $space-3;
+
+    &--left { text-align: left; }
+    &--center { text-align: center; }
+    &--right { text-align: right; }
   }
 
   &__card {
@@ -80,8 +88,8 @@
     .edc-button { justify-self: start; text-decoration: none; }
   }
 
-  &--header .block__title { font-size: $fs-32; }
-  &--header .block__subtitle { font-size: $fs-24; }
+  &--header .block__title { font-size: $fs-36; }
+  &--header .block__subtitle { font-size: $fs-28; }
 
   &__media-layout { display: grid; gap: $space-4; }
   &__image {
@@ -90,9 +98,11 @@
     justify-self: center;
   }
 
+  // Columnas solo de $bp-md (768) para arriba: por debajo el bloque pasa a
+  // VERTICAL y la imagen va SIEMPRE encima del texto (regla más abajo).
   &--image-left .block__media-layout,
   &--image-right .block__media-layout {
-    @container content (min-width: #{$bp-sm}) {
+    @container content (min-width: #{$bp-md}) {
       // Reparto izquierda:derecha del campo image_columns (--img-cols).
       grid-template-columns: var(--img-cols, minmax(0, 2fr) minmax(0, 3fr));
       align-items: stretch;
@@ -101,6 +111,16 @@
   &--image-right .block__media-layout .block__image-frame,
   &--image-right .block__media-layout .block__image { order: 2; }
   &--image-bottom .block__media-layout .block__image { order: 2; }
+
+  // En vertical (contenedor < 768) la imagen SIEMPRE encima del texto, da
+  // igual su posición configurada (derecha/abajo incluidas). Después de las
+  // reglas de order de arriba para ganarles el empate.
+  @container content (max-width: #{$bp-md}) {
+    &[class*="block--image-"] .block__media-layout > .block__image,
+    &[class*="block--image-"] .block__media-layout > .block__image-frame {
+      order: -1;
+    }
+  }
 
   // Marco de la imagen en columnas: el ALTO lo marca el texto de al lado
   // (la imagen absoluta no aporta altura) y el modo de escalado hace el resto.
@@ -121,8 +141,8 @@
   &--fit-cover &__image-frame .block__image { object-fit: cover; }
   &--fit-fill &__image-frame .block__image { object-fit: fill; }
 
-  // En una columna (estrecho) la imagen vuelve al flujo normal.
-  @container content (max-width: #{$bp-sm}) {
+  // En una columna (vertical, < 768) la imagen vuelve al flujo normal.
+  @container content (max-width: #{$bp-md}) {
     &__image-frame {
       position: static;
       min-height: 0;
@@ -137,7 +157,9 @@
   }
 
   // Imagen flotada: el texto la rodea y sigue por debajo (cleartext, como
-  // CDL). En estrecho la imagen va arriba a lo ancho, sin flotar.
+  // CDL), con un margen de $space-4 (16px) hacia el texto por los lados que
+  // lo tocan. En vertical (< 768) la imagen va arriba a lo ancho, sin
+  // flotar.
   &--image-clear-left .block__media-layout,
   &--image-clear-right .block__media-layout {
     display: block;
@@ -145,17 +167,17 @@
     // Clearfix: el bloque no se corta si la imagen es más alta que el texto.
     &::after { content: ""; display: table; clear: both; }
 
-    .block__image { margin-bottom: $space-3; }
+    .block__image { margin-bottom: $space-4; }
   }
   &--image-clear-left .block__media-layout .block__image {
-    @container content (min-width: #{$bp-sm}) {
+    @container content (min-width: #{$bp-md}) {
       float: left;
       max-width: 50%;
       margin-right: $space-4;
     }
   }
   &--image-clear-right .block__media-layout .block__image {
-    @container content (min-width: #{$bp-sm}) {
+    @container content (min-width: #{$bp-md}) {
       float: right;
       max-width: 50%;
       margin-left: $space-4;
@@ -204,18 +226,20 @@
   }
 
   // La imagen del CTA sangra hasta el borde de la tarjeta según su posición:
-  // en columnas toca arriba, abajo y su lateral (el título viaja a la
-  // columna de texto); arriba/abajo toca los laterales. Esquinas siguiendo
-  // el radio de la tarjeta.
-  // La tarjeta del CTA lleva un halo SUTIL del acento, igual por los cuatro
-  // bordes (sin offset), además de su sombra de profundidad normal.
-  &--cta .block__card {
+  // en columnas toca abajo y su lateral (título y subtítulo van SIEMPRE a
+  // ancho completo por encima del grid; solo si la tarjeta ABRE con la
+  // imagen sangra también por arriba); arriba/abajo toca los laterales.
+  // Esquinas siguiendo el radio de la tarjeta.
+  // Las tarjetas del CTA y de la tarjeta de texto llevan un halo SUTIL del
+  // acento, igual por los cuatro bordes, además de su sombra normal.
+  &--cta .block__card,
+  &--text-card .block__card {
     box-shadow: $shadow-sm, 0 0 18px color-mix(in srgb, $accent-500 30%, transparent);
   }
 
   &--cta.block--image-right .block__media-layout .block__image-frame,
   &--cta.block--image-left .block__media-layout .block__image-frame {
-    @container content (min-width: #{$bp-sm}) {
+    @container content (min-width: #{$bp-md}) {
       overflow: hidden;
       min-height: 0;
 
@@ -223,14 +247,28 @@
     }
   }
   &--cta.block--image-right .block__media-layout .block__image-frame {
-    @container content (min-width: #{$bp-sm}) {
-      margin: (-$space-8) (-$space-8) (-$space-8) 0;
-      border-radius: 0 $radius-lg $radius-lg 0;
+    @container content (min-width: #{$bp-md}) {
+      margin: 0 (-$space-8) (-$space-8) 0;
+      border-radius: 0 0 $radius-lg 0;
     }
   }
   &--cta.block--image-left .block__media-layout .block__image-frame {
-    @container content (min-width: #{$bp-sm}) {
-      margin: (-$space-8) 0 (-$space-8) (-$space-8);
+    @container content (min-width: #{$bp-md}) {
+      margin: 0 0 (-$space-8) (-$space-8);
+      border-radius: 0 0 0 $radius-lg;
+    }
+  }
+  // Sin nada por encima (el media-layout abre la tarjeta): sangra también
+  // por arriba, con el radio completo de su lateral.
+  &--cta.block--image-right .block__card > .block__media-layout:first-child .block__image-frame {
+    @container content (min-width: #{$bp-md}) {
+      margin-top: -$space-8;
+      border-radius: 0 $radius-lg $radius-lg 0;
+    }
+  }
+  &--cta.block--image-left .block__card > .block__media-layout:first-child .block__image-frame {
+    @container content (min-width: #{$bp-md}) {
+      margin-top: -$space-8;
       border-radius: $radius-lg 0 0 $radius-lg;
     }
   }
@@ -250,11 +288,11 @@
     border-radius: 0 0 $radius-lg $radius-lg;
   }
 
-  // CTA con imagen en ESTRECHO: da igual la posición elegida — la imagen va
-  // ARRIBA, a sangre por los laterales de la tarjeta y con proporción 2:1
-  // (recortada, no deformada). Va DESPUÉS de las reglas por posición para
-  // ganarles en el empate de especificidad.
-  @container content (max-width: #{$bp-sm}) {
+  // CTA con imagen en VERTICAL (< 768): da igual la posición elegida — la
+  // imagen va ARRIBA, a sangre por los laterales de la tarjeta y con
+  // proporción 2:1 (recortada, no deformada). Va DESPUÉS de las reglas por
+  // posición para ganarles en el empate de especificidad.
+  @container content (max-width: #{$bp-md}) {
     &--cta[class*="block--image-"] .block__card .block__media-layout {
       > .block__image,
       > .block__image-frame {
@@ -297,14 +335,14 @@
     }
   }
 
-  // Cita: sin adorno de borde, en GRANDE ($fs-32, el token más cercano a
-  // los ~40px pedidos) y del color de acento.
+  // Cita: sin adorno de borde, en GRANDE ($fs-36, la escala de bloque
+  // subida ~×1.125) y del color de acento.
   &--quote .block__quote {
     margin: 0;
     // Fuente "especial" de la configuración de la web (doc 10); las fuentes
     // decorativas piden un cuerpo mayor.
     font-family: var(--font-special, inherit);
-    font-size: $fs-32;
+    font-size: $fs-36;
     font-style: italic;
     font-weight: $k-fw-semibold;
     color: $accent-500;
@@ -319,7 +357,7 @@
     // El autor no hereda la fuente especial de la cita.
     font-family: var(--font-body, inherit);
     font-style: italic;
-    font-size: $fs-14;
+    font-size: $fs-16;
 
     &--left { text-align: left; }
     &--center { text-align: center; }
@@ -337,10 +375,24 @@
   a { color: $accent-500; text-decoration: none; }
   a:hover { text-decoration: underline; }
 
-  // Tamaño por nivel: 24 → 22 (sin token entre 20 y 24) → 20 (3 o más).
-  .block__index-level-1 { font-size: $fs-24; }
-  .block__index-level-2 { font-size: 22px; }
-  .block__index-level-3 { font-size: $fs-20; }
+  // Numerado: la numeración anidada (1, 1.1, 1.2.1…) la pinta el
+  // componente — fuera los números nativos del ol.
+  &--numbered {
+    list-style: none;
+    padding-left: 0;
+  }
+
+  .block__index-number {
+    margin-right: $space-2;
+    color: $text-2;
+    font-variant-numeric: tabular-nums;
+  }
+
+  // Tamaño por nivel, en la escala de bloque (~×1.125): 27 → 25 → 22
+  // (el 3 agrupa "3 o más").
+  .block__index-level-1 { font-size: 27px; }
+  .block__index-level-2 { font-size: 25px; }
+  .block__index-level-3 { font-size: 22px; }
 
   // Entradas anidadas: sangría POR NIVEL (profundidad real, sin límite) —
   // `--depth` lo pone BlockIndex.vue en línea; el tamaño de letra sí se
@@ -361,6 +413,7 @@
 
 .block__faq-question {
   padding: $space-3 $space-4;
+  font-size: $fs-18;
   font-weight: 600;
   cursor: pointer;
 
@@ -386,7 +439,7 @@
   &--large { padding: $space-4 $space-8; }
   border: 1px solid $accent-500;
   border-radius: $radius-md;
-  font-size: $fs-18;
+  font-size: $fs-20;
   font-weight: 600;
   text-decoration: none;
   cursor: pointer;

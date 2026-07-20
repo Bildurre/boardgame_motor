@@ -4,6 +4,33 @@ Componentes Vue 3 + SCSS para las webs públicas (y piezas compartidas con el
 admin). Paquete **fuente** (se consume vía Vite). Versión de tren con
 `edc-motor/core` y `@edc-motor/admin-kit`.
 
+## [Sin publicar]
+
+### Cambiado
+
+- **Tipografía de bloques subida ~×1.125 (base 18px)**: texto y wysiwyg de
+  bloque a $fs-18, subtítulo 22px, título $fs-32, cabecera 36/28 (nuevos
+  tokens $fs-36 y $fs-40 en la escala), cita $fs-36, índice 27/25/22,
+  autor $fs-16, botón de bloque $fs-20 y pregunta del FAQ $fs-18.
+- **Las negritas del wysiwyg, en color de acento** (`.rich-content strong/b`).
+- **Índice numerado con numeración ANIDADA** (1, 1.1, 1.2, 1.2.1…):
+  la calcula `BlockIndex` sobre la lista plana con profundidades (fuera los
+  números nativos del `ol`), con los números en `tabular-nums`.
+- **Bloques con imagen: a vertical en 768 y la imagen SIEMPRE encima**: las
+  columnas, los flotados y el modo vertical del CTA pasan del breakpoint sm
+  (480) al md (768) del contenedor; al apilarse, la imagen va encima del
+  texto da igual su posición configurada (derecha/abajo incluidas). Las
+  imágenes flotadas (clear) dejan $space-4 (16px) de margen con el texto
+  también por debajo.
+- **Las columnas del CTA respetan título y subtítulo**: van SIEMPRE a ancho
+  completo por encima del grid (el reparto es solo imagen ↔ contenido); la
+  imagen sangra por su lateral y por abajo, y por arriba solo si la tarjeta
+  abre con ella.
+- **Etiqueta de la tarjeta de texto sin chip**: solo texto en acento
+  (uppercase, $fs-13), con alineación propia
+  (`block__label--left/center/right`, campo `label_align`); y la tarjeta de
+  texto gana el mismo halo sutil de acento que la del CTA.
+
 ## [0.4.25] — 2026-07-20
 
 ### Cambiado

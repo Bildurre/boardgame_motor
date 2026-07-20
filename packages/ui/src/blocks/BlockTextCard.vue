@@ -12,7 +12,13 @@ defineProps<{ settings: Record<string, unknown>; data?: Record<string, unknown> 
     :class="settings.image ? `block--image-${settings.image_position || 'top'}` : ''"
   >
     <div class="block__card">
-      <span v-if="settings.label" class="block__label">{{ settings.label }}</span>
+      <span
+        v-if="settings.label"
+        class="block__label"
+        :class="`block__label--${settings.label_align || 'left'}`"
+      >
+        {{ settings.label }}
+      </span>
       <h2 v-if="settings.title" class="block__title">{{ settings.title }}</h2>
       <p v-if="settings.subtitle" class="block__subtitle">{{ settings.subtitle }}</p>
       <div class="block__media-layout">

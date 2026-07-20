@@ -7,6 +7,12 @@
   font-size: $fs-16;
   line-height: $k-lh-body;
 
+  // Las NEGRITAS del wysiwyg, en el color de acento.
+  strong,
+  b {
+    color: $accent-500;
+  }
+
   // Aire entre TODOS los elementos del wysiwyg (párrafos, listas, títulos…).
   p,
   ul,

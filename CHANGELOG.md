@@ -12,6 +12,20 @@ El formato sigue [Keep a Changelog](https://keepachangelog.com/es/) y el
 versionado, [SemVer](https://semver.org/lang/es/) (mientras estemos en `0.x`,
 los cambios de API pueden llegar en versiones menores).
 
+## [Sin publicar]
+
+- **Bloques: tipografía más grande, negritas en acento, índice anidado y
+  layout de imágenes afinado** (`edc-motor/core` + `@edc-motor/ui`): toda la
+  tipografía de bloques sube ~×1.125 para que el texto base sea de 18px
+  (nuevos tokens $fs-36/$fs-40); las negritas del wysiwyg van en color de
+  acento; el índice numerado usa numeración anidada (1, 1.1, 1.2.1…); los
+  bloques con imagen pasan a vertical bajo 768px del contenedor con la
+  imagen SIEMPRE encima del texto, las flotadas dejan 16px de margen con el
+  texto, y en columnas el título y el subtítulo van siempre a ancho completo
+  (el grid es solo imagen ↔ contenido); la etiqueta de la tarjeta de texto
+  pierde el chip (texto en acento con alineación propia, nuevo campo
+  `label_align`) y su tarjeta gana el halo de acento del CTA.
+
 ## [0.4.25] — 2026-07-20
 
 - **Rediseño del gestor de menú: sin grupos, jerarquía del CRM y guardado
