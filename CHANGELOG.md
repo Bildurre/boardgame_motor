@@ -12,7 +12,7 @@ El formato sigue [Keep a Changelog](https://keepachangelog.com/es/) y el
 versionado, [SemVer](https://semver.org/lang/es/) (mientras estemos en `0.x`,
 los cambios de API pueden llegar en versiones menores).
 
-## [Sin publicar]
+## [0.4.27] — 2026-07-21
 
 - **Bloques: escala tipográfica final y layouts de imagen afinados**
   (`@edc-motor/ui`): el texto base VUELVE a 16px (la subida a 18 de 0.4.26
