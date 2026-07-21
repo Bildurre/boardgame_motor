@@ -16,6 +16,11 @@ admin). Paquete **fuente** (se consume vía Vite). Versión de tren con
 - **Índice numerado con numeración ANIDADA** (1, 1.1, 1.2, 1.2.1…):
   la calcula `BlockIndex` sobre la lista plana con profundidades (fuera los
   números nativos del `ol`), con los números en `tabular-nums`.
+- **Las imágenes junto al texto, ancladas ARRIBA (mientras no estén en
+  vertical)**: en columnas, el marco estirado a la altura del texto
+  centraba la imagen en vertical con "contain" — pasa a `object-position:
+  top` (también con "cover"); y las flotadas (clear) quedan explícitamente
+  ancladas arriba del texto que las rodea.
 - **Bloques con imagen: a vertical en 768 y la imagen SIEMPRE encima**: las
   columnas, los flotados y el modo vertical del CTA pasan del breakpoint sm
   (480) al md (768) del contenedor; al apilarse, la imagen va encima del

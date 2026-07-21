@@ -25,6 +25,11 @@ los cambios de API pueden llegar en versiones menores).
   (el grid es solo imagen ↔ contenido); la etiqueta de la tarjeta de texto
   pierde el chip (texto en acento con alineación propia, nuevo campo
   `label_align`) y su tarjeta gana el halo de acento del CTA.
+- **Las imágenes junto al texto, ancladas arriba** (`@edc-motor/ui`):
+  mientras el bloque no esté en vertical, la imagen va SIEMPRE arriba — en
+  columnas el escalado "contain"/"cover" ancla la imagen al borde superior
+  del marco (antes "contain" la centraba), y las flotadas (clear) quedan
+  fijadas arriba del texto que las rodea.
 
 ## [0.4.25] — 2026-07-20
 

@@ -137,8 +137,10 @@
     }
   }
 
-  &--fit-contain &__image-frame .block__image { object-fit: contain; }
-  &--fit-cover &__image-frame .block__image { object-fit: cover; }
+  // object-position top: con el marco estirado a la altura del texto,
+  // "contain" centraba la imagen en vertical — SIEMPRE anclada arriba.
+  &--fit-contain &__image-frame .block__image { object-fit: contain; object-position: top; }
+  &--fit-cover &__image-frame .block__image { object-fit: cover; object-position: top; }
   &--fit-fill &__image-frame .block__image { object-fit: fill; }
 
   // En una columna (vertical, < 768) la imagen vuelve al flujo normal.
@@ -174,6 +176,10 @@
       float: left;
       max-width: 50%;
       margin-right: $space-4;
+      // Anclada ARRIBA mientras el texto la rodea (sin hueco previo ni
+      // alineación heredada que la descuelgue).
+      margin-top: 0;
+      vertical-align: top;
     }
   }
   &--image-clear-right .block__media-layout .block__image {
@@ -181,6 +187,8 @@
       float: right;
       max-width: 50%;
       margin-left: $space-4;
+      margin-top: 0;
+      vertical-align: top;
     }
   }
 
