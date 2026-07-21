@@ -12,6 +12,38 @@ El formato sigue [Keep a Changelog](https://keepachangelog.com/es/) y el
 versionado, [SemVer](https://semver.org/lang/es/) (mientras estemos en `0.x`,
 los cambios de API pueden llegar en versiones menores).
 
+## [Sin publicar]
+
+- **Bloques: escala tipográfica final y layouts de imagen afinados**
+  (`@edc-motor/ui`): el texto base VUELVE a 16px (la subida a 18 de 0.4.26
+  se sustituye) — subtítulo 24 (28 en cabecera), título 32, el h2 del
+  bloque header a 40, escala del wysiwyg h2-h6 32/24/22/20/18, cita a 32,
+  índice de vuelta a 24/22/20. El justificado pasa a IZQUIERDA en estrecho
+  (<480; la alineación va ahora por clase, no por style en línea). El CTA
+  en columnas recupera la imagen a TODA la altura de la tarjeta (título y
+  subtítulo en la columna de texto); "contener" respeta el tamaño natural
+  de la imagen (ancho de columna, alto propio, anclada arriba) y las
+  flotadas llevan 16px de margen por los tres lados libres. Ancho
+  "estrecho" a 880px, las tarjetas (CTA, tarjeta de texto y cita) ~10% más
+  angostas con tope 1080/780 y diferencia proporcional, menos aire entre
+  bloques en estrecho (56→40) y la cabecera del related a tres filas bajo
+  600px.
+- **Formulario de bloque reorganizado y asas de los índices**
+  (`@edc-motor/admin-kit` + `@edc-motor/ui` + cascarón): General arriba
+  (anchura+padre / interruptores / color+alineación), cada alineación
+  junto a su campo, la imagen con sus ajustes a dos columnas y el modal de
+  bloque en la talla `wide` nueva de `EditModal` (940px). Las cards de
+  páginas ganan el asa a la izquierda y pierden los botones Subir/Bajar
+  del panel (el drag & drop ya reordena); el asa se colorea al hover en
+  los tres índices y los cursores distinguen seleccionar (pointer) de
+  arrastrar (grab). **Migración del cascarón**: copiar
+  `plantilla/admin/src/views/pages/PagesListView.vue` y
+  `plantilla/admin/src/assets/scss/views/_pages.scss`.
+- **`PageRenderer` pinta los bloques en su orden real** (`edc-motor/core`):
+  el render público los agrupaba por nivel (nietos al final de la página);
+  ahora respeta el preorden plano de `order` — el anidamiento solo afecta
+  al índice automático, nunca al orden visual.
+
 ## [0.4.26] — 2026-07-21
 
 - **Bloques: tipografía más grande, negritas en acento, índice anidado y

@@ -11,7 +11,7 @@ const props = withDefaults(
   defineProps<{
     modelValue: boolean
     title?: string
-    size?: 'sm' | 'md' | 'lg'
+    size?: 'sm' | 'md' | 'lg' | 'wide'
     closeLabel?: string
   }>(),
   { size: 'md', closeLabel: 'Cerrar' },

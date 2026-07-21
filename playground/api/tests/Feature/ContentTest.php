@@ -321,6 +321,44 @@ it('reordena los bloques con la lista de ids', function () {
 
 // --- Render público ---
 
+it('el render público pinta los bloques en preorden por `order`, sin agrupar por nivel', function () {
+    $admin = motorUser('admin');
+    $page = makePage();
+
+    // Árbol de 3 niveles con HERMANOS intercalados: P1 -> C1 -> G1 (nieto),
+    // y P2 raíz DESPUÉS de P1. Que C1 sea hijo de P1 (y G1 nieto) solo debe
+    // afectar a la sangría del índice — el preorden correcto pinta TODO el
+    // subárbol de P1 (con el nieto incluido) antes que P2, nunca P1+C1
+    // agrupados por nivel con G1 desplazado al final.
+    $p1 = $this->actingAs($admin)->postJson("/api/admin/pages/{$page->id}/blocks", [
+        'type' => 'header', 'settings' => ['title' => ['es' => 'Uno']],
+    ])->assertCreated()->json('data.id');
+
+    $c1 = $this->actingAs($admin)->postJson("/api/admin/pages/{$page->id}/blocks", [
+        'type' => 'text',
+        'settings' => ['title' => ['es' => 'Dos'], 'body' => ['es' => '<p>x</p>']],
+        'parent_id' => $p1,
+    ])->assertCreated()->json('data.id');
+
+    $g1 = $this->actingAs($admin)->postJson("/api/admin/pages/{$page->id}/blocks", [
+        'type' => 'text',
+        'settings' => ['title' => ['es' => 'Tres'], 'body' => ['es' => '<p>x</p>']],
+        'parent_id' => $c1,
+    ])->assertCreated()->json('data.id');
+
+    $p2 = $this->actingAs($admin)->postJson("/api/admin/pages/{$page->id}/blocks", [
+        'type' => 'header', 'settings' => ['title' => ['es' => 'Cuatro']],
+    ])->assertCreated()->json('data.id');
+
+    $page->update(['is_published' => true]);
+    $slug = $page->getTranslation('slug', 'es');
+    $blocks = $this->getJson("/api/pages/{$slug}?locale=es")->assertOk()->json('data.blocks');
+
+    // Mismo orden que el admin (arrange()) y que el índice: preorden puro.
+    expect(collect($blocks)->pluck('id')->all())->toBe([$p1, $c1, $g1, $p2])
+        ->and(collect($blocks)->pluck('settings.title')->all())->toBe(['Uno', 'Dos', 'Tres', 'Cuatro']);
+});
+
 it('sirve la página publicada por slug con settings localizados y datos resueltos', function () {
     config(['motor.previews.enabled' => false]);
     $admin = motorUser('admin');

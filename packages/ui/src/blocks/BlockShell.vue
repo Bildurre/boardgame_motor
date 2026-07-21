@@ -19,13 +19,15 @@ const headingAlign = (key: 'title_align' | 'subtitle_align', prefix: string) => 
   return value && value !== 'inherit' ? `block--${prefix}-${value}` : ''
 }
 
+// La alineación va por CLASE (block--align-*, _blocks.scss), no por style en
+// línea: un style inline no se puede pisar desde CSS (bloqueaba el cambio a
+// izquierda del justificado en estrecho, DC-03 ampliado).
 const style = computed<CSSProperties>(() => {
   const background = props.settings.background as string | undefined
   return {
     '--block-bg': background
       ? `color-mix(in srgb, ${background} var(--block-tint, 15%), transparent)`
       : 'transparent',
-    textAlign: ((props.settings.align as string) || 'justify') as CSSProperties['textAlign'],
   }
 })
 </script>
@@ -33,7 +35,12 @@ const style = computed<CSSProperties>(() => {
 <template>
   <section
     class="block"
-    :class="[width, align, headingAlign('title_align', 'title'), headingAlign('subtitle_align', 'subtitle')]"
+    :class="[
+      width,
+      align,
+      headingAlign('title_align', 'title'),
+      headingAlign('subtitle_align', 'subtitle'),
+    ]"
     :style="style"
   >
     <div class="block__inner">

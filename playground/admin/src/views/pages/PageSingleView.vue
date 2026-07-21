@@ -54,7 +54,7 @@ const blockLabels = computed<Partial<PageBlocksLabels>>(() => ({
   indexableShort: t('pages.blocks.indexableShort'),
   yes: t('common.yes'),
   no: t('common.no'),
-  common: t('pages.blocks.common'),
+  common: t('pages.blocks.general'),
   confirmDelete: t('pages.blocks.confirmDelete'),
   error: t('common.errors.action'),
   panelTitle: t('pages.blocks.panelTitle'),

@@ -217,7 +217,7 @@
       "empty": "La página aún no tiene bloques.",
       "printable": "Entra en el PDF de la página",
       "indexable": "Aparece en el índice",
-      "common": "Ajustes comunes",
+      "general": "General",
       "confirmDelete": "¿Borrar este bloque?",
       "panelTitle": "Bloque",
       "panelEmpty": "Selecciona un bloque para ver sus acciones.",

@@ -43,9 +43,13 @@
     position: relative;
     transition: border-color 0.15s ease, opacity 0.15s ease;
 
+    // Filas NO clickables (no seleccionan panel, solo se arrastran): el
+    // cursor invita a agarrar en cualquier punto de la fila.
+    cursor: grab;
+
     &:hover { border-color: $border-strong; }
     &.is-hidden { opacity: 0.65; }
-    &.is-dragging { opacity: 0.4; }
+    &.is-dragging { opacity: 0.4; cursor: grabbing; }
 
     // Indicador de inserción: línea antes/después de la fila.
     &.drop-before::before,
@@ -78,7 +82,9 @@
     flex: 0 0 auto;
     cursor: grab;
     touch-action: none;
+    transition: color 0.15s ease;
 
+    &:hover { color: $accent-500; }
     &:active { cursor: grabbing; }
   }
 

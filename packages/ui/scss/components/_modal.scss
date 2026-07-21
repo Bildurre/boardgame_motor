@@ -26,6 +26,9 @@
   &--sm { max-width: 380px; }
   &--md { max-width: 560px; }
   &--lg { max-width: 820px; }
+  // Formularios con más columnas (el modal de bloque, EditModal): más ancho
+  // que el resto, pero sin llegar a ocupar toda la pantalla.
+  &--wide { max-width: 940px; }
 
   &__header {
     flex-shrink: 0;
@@ -50,11 +53,16 @@
   }
 
   // El cuerpo es la única zona que scrollea (cabecera y pie quedan fijos).
+  // Contenedor con nombre (container query, no viewport): los formularios de
+  // dentro (SchemaFields/PageBlocks) apilan sus filas de dos columnas según
+  // el ANCHO REAL del modal, no el del viewport.
   &__body {
     flex: 1 1 auto;
     min-height: 0;
     overflow-y: auto;
     padding: $space-5;
+    container-type: inline-size;
+    container-name: modal-body;
   }
 
   &__footer {

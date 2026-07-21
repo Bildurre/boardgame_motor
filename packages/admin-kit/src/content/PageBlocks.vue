@@ -67,7 +67,7 @@ const defaultLabels: PageBlocksLabels = {
   indexableShort: 'Índice',
   yes: 'Sí',
   no: 'No',
-  common: 'Ajustes comunes',
+  common: 'General',
   confirmDelete: '¿Borrar este bloque?',
   error: 'No se ha podido completar la acción.',
   panelTitle: 'Bloque',
@@ -180,6 +180,39 @@ const form = ref<Record<string, unknown>>({})
 const formPrintable = ref(true)
 const formIndexable = ref(true)
 const formParent = ref<number | null>(null)
+
+// --- Formulario del modal: General ARRIBA + alineaciones junto a su campo -
+// `title_align`/`subtitle_align` son campos COMUNES del motor pero
+// title/subtitle son del TIPO: se inyectan aquí junto a su campo (SchemaFields
+// ya sabe emparejar un `<base>_align` con `<base>` con que ambos estén en la
+// misma lista) y se retiran de la sección general (author_align→author,
+// label_align→label y button_align→button_text ya viven en el propio tipo,
+// SchemaFields los empareja sin ayuda). El `align` general no tiene campo
+// objetivo: se queda en General, junto al color de fondo.
+function commonField(key: string): FieldSchema | undefined {
+  return modalType.value?.common.find((f) => f.key === key)
+}
+
+const typeFieldsWithAligns = computed<FieldSchema[]>(() => {
+  if (!modalType.value) return []
+  const injected = (['title_align', 'subtitle_align'] as const)
+    .map((key) => commonField(key))
+    .filter((f): f is FieldSchema => !!f)
+  return [...modalType.value.fields, ...injected]
+})
+
+const generalWidthFields = computed<FieldSchema[]>(() => {
+  const field = commonField('width')
+  return field ? [field] : []
+})
+const generalBackgroundFields = computed<FieldSchema[]>(() => {
+  const field = commonField('background')
+  return field ? [field] : []
+})
+const generalAlignFields = computed<FieldSchema[]>(() => {
+  const field = commonField('align')
+  return field ? [field] : []
+})
 
 // Padres elegibles: CUALQUIER bloque de la página (sin límite de niveles),
 // salvo uno mismo o uno de sus propios descendientes (crearía un ciclo).
@@ -614,46 +647,74 @@ defineExpose({ reload: load })
       </article>
     </div>
 
-    <!-- Modal generado desde el esquema del tipo -->
+    <!-- Modal generado desde el esquema del tipo: más ancho que el resto de
+         formularios del admin (más columnas por la sección de imagen y las
+         filas de alineación). -->
     <EditModal
       v-model="modalOpen"
       :title="modalType ? typeName(modalType.key) : ''"
+      size="wide"
       :submit-label="L.save"
       :cancel-label="L.cancel"
       :loading="busy"
       @submit="save"
     >
       <template v-if="modalType">
+        <!-- General ARRIBA del todo (antes iba al fondo, como "Ajustes
+             comunes", y pasaba desapercibida): anchura + bloque padre;
+             los interruptores; color de fondo + alineación general del
+             bloque. Los campos del tipo van DESPUÉS. -->
+        <div class="page-blocks__common">
+          <span class="page-blocks__common-title">{{ L.common }}</span>
+
+          <div class="page-blocks__common-row">
+            <SchemaFields
+              v-model="form"
+              :fields="generalWidthFields"
+              :locales="locales"
+              :api="api"
+              :translate="translate"
+            />
+            <BaseSelect
+              :model-value="formParent === null ? '' : String(formParent)"
+              :label="L.parent"
+              :options="[{ value: '', label: L.parentNone }, ...parentOptions]"
+              @update:model-value="(v: string) => (formParent = v ? Number(v) : null)"
+            />
+          </div>
+
+          <div class="page-blocks__common-row">
+            <BaseCheckbox v-model="formPrintable" :label="L.printable" />
+            <BaseCheckbox v-model="formIndexable" :label="L.indexable" />
+          </div>
+
+          <div class="page-blocks__common-row">
+            <SchemaFields
+              v-model="form"
+              :fields="generalBackgroundFields"
+              :locales="locales"
+              :api="api"
+              :translate="translate"
+            />
+            <SchemaFields
+              v-model="form"
+              :fields="generalAlignFields"
+              :locales="locales"
+              :api="api"
+              :translate="translate"
+            />
+          </div>
+        </div>
+
         <SchemaFields
           v-model="form"
-          :fields="modalType.fields"
+          :fields="typeFieldsWithAligns"
           :locales="locales"
           :api="api"
           :icons="icons"
           :rich-labels="richLabels"
           :translate="translate"
         />
-
-        <!-- Sección SIEMPRE visible al fondo del formulario (antes era un
-             details plegado y los ajustes pasaban desapercibidos) -->
-        <div class="page-blocks__common">
-          <span class="page-blocks__common-title">{{ L.common }}</span>
-          <SchemaFields
-            v-model="form"
-            :fields="modalType.common"
-            :locales="locales"
-            :api="api"
-            :translate="translate"
-          />
-          <BaseCheckbox v-model="formPrintable" :label="L.printable" />
-          <BaseCheckbox v-model="formIndexable" :label="L.indexable" />
-          <BaseSelect
-            :model-value="formParent === null ? '' : String(formParent)"
-            :label="L.parent"
-            :options="[{ value: '', label: L.parentNone }, ...parentOptions]"
-            @update:model-value="(v: string) => (formParent = v ? Number(v) : null)"
-          />
-        </div>
       </template>
     </EditModal>
 

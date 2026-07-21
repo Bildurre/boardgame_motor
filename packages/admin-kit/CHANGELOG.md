@@ -3,6 +3,26 @@
 Kit de construcción del panel de administración (sobre `@edc-motor/ui`). Paquete
 **fuente** (se consume vía Vite). Versión de tren con `edc-motor/core` y `@edc-motor/ui`.
 
+## [Sin publicar]
+
+### Cambiado
+
+- **Formulario de bloque reorganizado** (`PageBlocks` + `SchemaFields`):
+  la sección "General" sube ARRIBA del todo (fila 1: anchura + bloque
+  padre; fila 2: los interruptores PDF/índice; fila 3: color de fondo +
+  alineación general); cada alineación se pinta JUNTO a su campo —
+  `SchemaFields` empareja genéricamente un `<base>_align` con su `<base>`
+  (o `<base>_text`) de la misma lista, y `PageBlocks` inyecta los
+  `title_align`/`subtitle_align` comunes junto a los campos del tipo —; la
+  imagen y sus ajustes (posición, escalado, reparto) se agrupan a DOS
+  columnas; y el modal de bloque abre en la talla `wide` nueva de
+  `EditModal` (940px). En un modal angosto todo apila (container
+  `modal-body` nuevo en el modal del ui).
+- **Asas e interacción de las listas**: el asa (`GripVertical`) se colorea
+  de ACENTO al pasar el ratón (menú y bloques; las cards de páginas del
+  cascarón igual); cursor `pointer` en filas que seleccionan panel
+  (bloques) y `grab`/`grabbing` en las que solo se arrastran (menú).
+
 ## [0.4.26] — 2026-07-21
 
 - Sin cambios propios: versión de tren.

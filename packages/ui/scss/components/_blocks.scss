@@ -2,8 +2,14 @@
 
 // Bloques públicos del CRM (doc 03): estilos base, cada juego los ajusta.
 .block {
-  // Aire vertical entre bloques (CDL usa 4rem; aquí algo más contenido).
+  // Aire vertical entre bloques (CDL usa 4rem; aquí algo más contenido). En
+  // estrecho (contenedor `content') baja un poco: los bloques respiran
+  // menos apretados en pantallas pequeñas.
   padding-block: $space-8 + $space-6; // 56px
+
+  @container content (max-width: #{$bp-sm - 1px}) {
+    padding-block: $space-8 + $space-2; // 40px
+  }
   background: var(--block-bg, transparent);
 
   &__inner {
@@ -15,22 +21,46 @@
   }
 
   // Anchura del contenido (campo común `width`): coherente entre bloques.
-  &--w-narrow .block__inner { max-width: 800px; }
+  &--w-narrow .block__inner { max-width: 880px; }
   &--w-full .block__inner { max-width: none; padding-inline: $space-6; }
 
-  // Tipografía de bloque, escalada ~×1.125 sobre la original para que el
-  // texto BASE sea de 18px: texto $fs-18, subtítulo 22, título $fs-32 (la
-  // cabecera sube a 36/28). Los títulos nunca se justifican.
+  // Las tarjetas (CTA, tarjeta de texto y cita) son algo más angostas que el
+  // resto en cada preset (wide/narrow), con la diferencia PROPORCIONAL (no
+  // un recorte fijo que desaparece de golpe): min(tope, 90%) — 90% ≈ la
+  // relación 1080/1200 del preset ancho, así que en pantallas grandes manda
+  // el tope (120px/100px más angosto que el resto) y, según se estrecha,
+  // manda el porcentaje y la diferencia decrece sin saltos. "Ancho
+  // completo" no lleva tope: full es full.
+  &--cta.block--w-wide .block__inner,
+  &--text-card.block--w-wide .block__inner,
+  &--quote.block--w-wide .block__inner { max-width: min(1080px, 90%); }
+  &--cta.block--w-narrow .block__inner,
+  &--text-card.block--w-narrow .block__inner,
+  &--quote.block--w-narrow .block__inner { max-width: min(780px, 90%); }
+
+  // Tipografía de bloque: texto BASE $fs-16 (el mismo cuerpo que el wysiwyg
+  // por defecto — sin override aquí), subtítulo $fs-24 (entre el título y
+  // la base), título $fs-32 (la cabecera sube a 40/28). Los títulos nunca
+  // se justifican.
   // width 100%: en grids con justify-items start (el cuerpo del CTA) el
   // elemento encoge a su contenido y el text-align no se vería.
   &__title { margin: 0; font-size: $fs-32; width: 100%; }
   // pre-line: el subtítulo es un textarea — sus saltos de línea cuentan.
-  &__subtitle { margin: 0; color: $text-2; font-size: 22px; white-space: pre-line; width: 100%; }
-  &__text { color: $text-1; font-size: $fs-18; }
+  &__subtitle { margin: 0; color: $text-2; font-size: $fs-24; white-space: pre-line; width: 100%; }
+  &__text { color: $text-1; font-size: $fs-16; }
 
-  // El wysiwyg fija su propio cuerpo ($fs-16): dentro de un bloque manda la
-  // base de bloque (18px). La cita lo re-sube luego a su tamaño.
-  .rich-content { font-size: $fs-18; }
+  // Alineación del bloque (campo común `align`): por CLASE (BlockShell ya
+  // no la mete como style en línea) para poder pisarla en estrecho.
+  &--align-left { text-align: left; }
+  &--align-center { text-align: center; }
+  &--align-right { text-align: right; }
+  &--align-justify { text-align: justify; }
+
+  // Justificado, a la IZQUIERDA por debajo de $bp-sm — mismo criterio (y
+  // mismo mecanismo, @media de viewport) que título/subtítulo, más abajo.
+  @media (max-width: $bp-sm - 1px) {
+    &--align-justify { text-align: left; }
+  }
 
   &--align-justify &__title,
   &--align-justify &__subtitle { text-align: left; }
@@ -88,7 +118,7 @@
     .edc-button { justify-self: start; text-decoration: none; }
   }
 
-  &--header .block__title { font-size: $fs-36; }
+  &--header .block__title { font-size: $fs-40; }
   &--header .block__subtitle { font-size: $fs-28; }
 
   &__media-layout { display: grid; gap: $space-4; }
@@ -122,8 +152,11 @@
     }
   }
 
-  // Marco de la imagen en columnas: el ALTO lo marca el texto de al lado
-  // (la imagen absoluta no aporta altura) y el modo de escalado hace el resto.
+  // Marco de la imagen en columnas: por defecto (cubrir/rellenar) el ALTO
+  // lo marca el texto de al lado (la imagen absoluta no aporta altura) y el
+  // modo de escalado hace el resto — object-position top: con el marco
+  // estirado, "cubrir" centraba la imagen en vertical, SIEMPRE anclada
+  // arriba.
   &__image-frame {
     position: relative;
     min-height: 200px; // que no colapse con textos muy cortos
@@ -136,12 +169,29 @@
       max-width: none;
     }
   }
-
-  // object-position top: con el marco estirado a la altura del texto,
-  // "contain" centraba la imagen en vertical — SIEMPRE anclada arriba.
-  &--fit-contain &__image-frame .block__image { object-fit: contain; object-position: top; }
   &--fit-cover &__image-frame .block__image { object-fit: cover; object-position: top; }
   &--fit-fill &__image-frame .block__image { object-fit: fill; }
+
+  // "Contener" es la excepción: la imagen respeta su tamaño NATURAL — ancho
+  // de columna, alto según su propia proporción — sin ampliarse ni
+  // encogerse para casar con el marco (si es más alta que el texto la fila
+  // crece; si es más baja, queda aire debajo). Por eso escapa del marco
+  // absoluto: vuelve al flujo normal, anclada arriba (align-self) del grid
+  // de columnas.
+  &--fit-contain &__image-frame {
+    @container content (min-width: #{$bp-md}) {
+      position: static;
+      min-height: 0;
+      align-self: start;
+
+      .block__image {
+        position: static;
+        width: 100%;
+        height: auto;
+        max-width: none;
+      }
+    }
+  }
 
   // En una columna (vertical, < 768) la imagen vuelve al flujo normal.
   @container content (max-width: #{$bp-md}) {
@@ -175,10 +225,9 @@
     @container content (min-width: #{$bp-md}) {
       float: left;
       max-width: 50%;
-      margin-right: $space-4;
-      // Anclada ARRIBA mientras el texto la rodea (sin hueco previo ni
-      // alineación heredada que la descuelgue).
-      margin-top: 0;
+      // Respiro de $space-4 (16px) por arriba, abajo y hacia el texto
+      // (derecha); pegada a su lado exterior (izquierda, sin margen).
+      margin: $space-4 $space-4 $space-4 0;
       vertical-align: top;
     }
   }
@@ -186,8 +235,7 @@
     @container content (min-width: #{$bp-md}) {
       float: right;
       max-width: 50%;
-      margin-left: $space-4;
-      margin-top: 0;
+      margin: $space-4 0 $space-4 $space-4;
       vertical-align: top;
     }
   }
@@ -234,10 +282,10 @@
   }
 
   // La imagen del CTA sangra hasta el borde de la tarjeta según su posición:
-  // en columnas toca abajo y su lateral (título y subtítulo van SIEMPRE a
-  // ancho completo por encima del grid; solo si la tarjeta ABRE con la
-  // imagen sangra también por arriba); arriba/abajo toca los laterales.
-  // Esquinas siguiendo el radio de la tarjeta.
+  // en columnas toca TODA la altura (arriba, abajo y su lateral — título y
+  // subtítulo viven dentro de `.block__cta-body`, junto al texto, en la
+  // columna de contenido); arriba/abajo toca los laterales. Esquinas
+  // siguiendo el radio de la tarjeta.
   // Las tarjetas del CTA y de la tarjeta de texto llevan un halo SUTIL del
   // acento, igual por los cuatro bordes, además de su sombra normal.
   &--cta .block__card,
@@ -256,27 +304,13 @@
   }
   &--cta.block--image-right .block__media-layout .block__image-frame {
     @container content (min-width: #{$bp-md}) {
-      margin: 0 (-$space-8) (-$space-8) 0;
-      border-radius: 0 0 $radius-lg 0;
+      margin: (-$space-8) (-$space-8) (-$space-8) 0;
+      border-radius: 0 $radius-lg $radius-lg 0;
     }
   }
   &--cta.block--image-left .block__media-layout .block__image-frame {
     @container content (min-width: #{$bp-md}) {
-      margin: 0 0 (-$space-8) (-$space-8);
-      border-radius: 0 0 0 $radius-lg;
-    }
-  }
-  // Sin nada por encima (el media-layout abre la tarjeta): sangra también
-  // por arriba, con el radio completo de su lateral.
-  &--cta.block--image-right .block__card > .block__media-layout:first-child .block__image-frame {
-    @container content (min-width: #{$bp-md}) {
-      margin-top: -$space-8;
-      border-radius: 0 $radius-lg $radius-lg 0;
-    }
-  }
-  &--cta.block--image-left .block__card > .block__media-layout:first-child .block__image-frame {
-    @container content (min-width: #{$bp-md}) {
-      margin-top: -$space-8;
+      margin: (-$space-8) 0 (-$space-8) (-$space-8);
       border-radius: $radius-lg 0 0 $radius-lg;
     }
   }
@@ -343,14 +377,14 @@
     }
   }
 
-  // Cita: sin adorno de borde, en GRANDE ($fs-36, la escala de bloque
-  // subida ~×1.125) y del color de acento.
+  // Cita: sin adorno de borde, en GRANDE ($fs-32, el mismo tamaño que un
+  // título de bloque) y del color de acento.
   &--quote .block__quote {
     margin: 0;
     // Fuente "especial" de la configuración de la web (doc 10); las fuentes
     // decorativas piden un cuerpo mayor.
     font-family: var(--font-special, inherit);
-    font-size: $fs-36;
+    font-size: $fs-32;
     font-style: italic;
     font-weight: $k-fw-semibold;
     color: $accent-500;
@@ -365,7 +399,7 @@
     // El autor no hereda la fuente especial de la cita.
     font-family: var(--font-body, inherit);
     font-style: italic;
-    font-size: $fs-16;
+    font-size: $fs-14;
 
     &--left { text-align: left; }
     &--center { text-align: center; }
@@ -396,11 +430,11 @@
     font-variant-numeric: tabular-nums;
   }
 
-  // Tamaño por nivel, en la escala de bloque (~×1.125): 27 → 25 → 22
-  // (el 3 agrupa "3 o más").
-  .block__index-level-1 { font-size: 27px; }
-  .block__index-level-2 { font-size: 25px; }
-  .block__index-level-3 { font-size: 22px; }
+  // Tamaño por nivel: 24 → 22 (no hay token entre 20 y 24) → 20 (el 3
+  // agrupa "3 o más").
+  .block__index-level-1 { font-size: $fs-24; }
+  .block__index-level-2 { font-size: 22px; }
+  .block__index-level-3 { font-size: $fs-20; }
 
   // Entradas anidadas: sangría POR NIVEL (profundidad real, sin límite) —
   // `--depth` lo pone BlockIndex.vue en línea; el tamaño de letra sí se
@@ -421,7 +455,6 @@
 
 .block__faq-question {
   padding: $space-3 $space-4;
-  font-size: $fs-18;
   font-weight: 600;
   cursor: pointer;
 
@@ -447,7 +480,7 @@
   &--large { padding: $space-4 $space-8; }
   border: 1px solid $accent-500;
   border-radius: $radius-md;
-  font-size: $fs-20;
+  font-size: $fs-18;
   font-weight: 600;
   text-decoration: none;
   cursor: pointer;

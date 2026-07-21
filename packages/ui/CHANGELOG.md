@@ -4,6 +4,49 @@ Componentes Vue 3 + SCSS para las webs públicas (y piezas compartidas con el
 admin). Paquete **fuente** (se consume vía Vite). Versión de tren con
 `edc-motor/core` y `@edc-motor/admin-kit`.
 
+## [Sin publicar]
+
+### Cambiado
+
+- **Tipografía de bloques revisada** (sustituye a la escala de 0.4.26): el
+  texto y el wysiwyg de bloque VUELVEN a base $fs-16; subtítulo $fs-24
+  ($fs-28 en la cabecera); título $fs-32 y el h2 del bloque header sube a
+  $fs-40; el wysiwyg (`.rich-content`, global) fija su escala de
+  encabezados h2 $fs-32 · h3 $fs-24 · h4 22px (sin token) · h5 $fs-20 ·
+  h6 $fs-18; la cita baja de 36 a $fs-32; el índice vuelve a 24/22/20;
+  autor $fs-14 y botón de bloque $fs-18.
+- **Alineación del bloque por CLASE, no por `style` en línea**
+  (`BlockShell` + `_blocks.scss`), y el JUSTIFICADO pasa a la IZQUIERDA
+  por debajo de 480px, como ya hacían título y subtítulo.
+- **La imagen del CTA en columnas, otra vez a TODA la altura de la
+  tarjeta**: título y subtítulo vuelven a la columna de texto (dentro de
+  `.block__cta-body`, en todos los anchos) y la imagen sangra por su
+  lateral, arriba y abajo. El "título a ancho completo por encima del
+  grid" queda solo para la tarjeta de texto.
+- **"Contener" respeta el tamaño NATURAL de la imagen**: en columnas deja
+  el marco absoluto — la imagen va en flujo (ancho de su columna, alto
+  según su proporción, anclada arriba), sin ampliarse ni encogerse; si es
+  más alta que el texto la fila crece, si es más baja queda aire debajo.
+  "Cubrir"/"rellenar" siguen con el marco estirado al alto del texto. Las
+  FLOTADAS (clear) llevan $space-4 (16px) de margen por los tres lados
+  libres (arriba, abajo y hacia el texto), pegadas a su lado exterior.
+- **Anchuras de bloque**: el preset "estrecho" sube de 800 a 880px, y las
+  tarjetas (CTA, tarjeta de texto y cita) son algo más angostas que el
+  resto EN CADA preset con diferencia PROPORCIONAL
+  (`max-width: min(tope, 90%)`): 1080px en ancho, 780px en estrecho.
+  "Ancho completo" no lleva tope.
+- **Menos aire entre bloques en estrecho**: `padding-block` de 56 a 40px
+  por debajo de 480 del contenedor `content`.
+- **Cabecera del bloque "Relacionados" a 600px** (antes 480; container
+  query del contenedor `content`): por debajo, título, subtítulo y botón
+  en TRES filas.
+- **`EditModal` con talla `wide`**: nueva prop `size` (`normal`/`wide`) y
+  `BaseModal` gana la talla `wide` (940px) — la usa el formulario de
+  bloque del admin-kit. RUPTURA suave: `EditModal` ya no reenvía las
+  tallas `sm`/`md`/`lg` de `BaseModal` — un juego que usara
+  `size="lg"` en sus form-modals debe pasar a `size="wide"` (los usos
+  sin `size` no cambian).
+
 ## [0.4.26] — 2026-07-21
 
 ### Cambiado

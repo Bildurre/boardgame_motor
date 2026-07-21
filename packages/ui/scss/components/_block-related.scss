@@ -1,7 +1,7 @@
 @use "tokens" as *;
 
 // Bloque `related` (BlockRelated.vue): cabecera en rejilla (títulos + botón
-// al índice a la derecha en ≥sm, patrón del relateds de CDL) sobre una
+// al índice a la derecha en ≥600, patrón del relateds de CDL) sobre una
 // PreviewGrid compacta.
 .block--related {
   .block__related-header {
@@ -9,7 +9,11 @@
     grid-template-columns: 1fr;
     gap: $space-4;
 
-    @media (min-width: $bp-sm) {
+    // 600px es un umbral PROPIO de esta cabecera (sin token: no encaja en
+    // $bp-sm/$bp-md) — por debajo, título + subtítulo + botón caen en TRES
+    // filas (una columna); container query sobre `content` (el ancho real
+    // del bloque), coherente con el resto de bloques con imagen.
+    @container content (min-width: 600px) {
       grid-template-columns: 1fr auto;
       align-items: center;
     }
@@ -24,14 +28,14 @@
   .block__related-button {
     justify-self: center; // estrecho: los botones de bloque van centrados
 
-    @media (min-width: $bp-sm) {
+    @container content (min-width: 600px) {
       justify-self: end;
     }
   }
 
   // Centrado/derecha del campo común `align`: la cabecera acompaña.
   &.block--align-center .block__related-header {
-    @media (min-width: $bp-sm) {
+    @container content (min-width: 600px) {
       grid-template-columns: 1fr;
     }
   }

@@ -27,16 +27,24 @@ const layoutStyle = computed(() => {
     ]"
   >
     <div class="block__card">
-      <!-- Título y subtítulo SIEMPRE a ancho completo, encima del grid: el
-           reparto en columnas es solo entre la imagen y el contenido. -->
-      <h2 v-if="settings.title" class="block__title">{{ settings.title }}</h2>
-      <p v-if="settings.subtitle" class="block__subtitle">{{ settings.subtitle }}</p>
+      <!-- En columnas, título y subtítulo viajan a la columna de texto para
+           que la imagen pueda sangrar a TODA la altura de la tarjeta (a
+           todo ancho, en todos los anchos de pantalla: es una decisión de
+           plantilla por settings, no por el ancho del contenedor). -->
+      <template v-if="!inColumns">
+        <h2 v-if="settings.title" class="block__title">{{ settings.title }}</h2>
+        <p v-if="settings.subtitle" class="block__subtitle">{{ settings.subtitle }}</p>
+      </template>
       <div class="block__media-layout" :style="layoutStyle">
         <span v-if="settings.image && inColumns" class="block__image-frame">
           <img class="block__image" :src="String(settings.image)" alt="" />
         </span>
         <img v-else-if="settings.image" class="block__image" :src="String(settings.image)" alt="" />
         <div class="block__cta-body">
+          <template v-if="inColumns">
+            <h2 v-if="settings.title" class="block__title">{{ settings.title }}</h2>
+            <p v-if="settings.subtitle" class="block__subtitle">{{ settings.subtitle }}</p>
+          </template>
           <div v-if="settings.body" class="block__text rich-content" v-html="settings.body" />
           <!-- Alineación propia (button_align; en estrecho el CSS centra
                siempre) y tamaño grande opcional (button_large) -->

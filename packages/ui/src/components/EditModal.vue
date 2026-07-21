@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { computed } from 'vue'
 import BaseModal from './BaseModal.vue'
 import { Save, X } from '@lucide/vue'
 import BaseButton from './BaseButton.vue'
@@ -11,7 +12,8 @@ const props = withDefaults(
   defineProps<{
     modelValue: boolean
     title: string
-    size?: 'sm' | 'md' | 'lg'
+    /** 'wide' para formularios con más columnas (el modal de bloque). */
+    size?: 'normal' | 'wide'
     loading?: boolean
     submitLabel?: string
     cancelLabel?: string
@@ -20,7 +22,7 @@ const props = withDefaults(
     localeSwitchLabel?: string
   }>(),
   {
-    size: 'md',
+    size: 'normal',
     loading: false,
     submitLabel: 'Guardar',
     cancelLabel: 'Cancelar',
@@ -28,6 +30,11 @@ const props = withDefaults(
     localeSwitchLabel: undefined,
   },
 )
+
+// EditModal tiene su propia escala de tamaño (normal/wide, sobre el
+// contenido del FORMULARIO); BaseModal sigue con la suya (sm/md/lg/wide,
+// genérica) — normal se apoya en su 'md' por defecto.
+const modalSize = computed(() => (props.size === 'wide' ? 'wide' : 'md'))
 
 const emit = defineEmits<{ 'update:modelValue': [boolean]; submit: [] }>()
 
@@ -46,7 +53,7 @@ function close() {
   <BaseModal
     :model-value="modelValue"
     :title="title"
-    :size="size"
+    :size="modalSize"
     @update:model-value="(v) => !loading && emit('update:modelValue', v)"
   >
     <!-- Cabecera propia: título + selector de locale global (si hay campos

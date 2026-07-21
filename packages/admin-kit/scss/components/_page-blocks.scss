@@ -105,7 +105,9 @@
     display: inline-flex;
     color: $text-3;
     cursor: grab;
+    transition: color 0.15s ease;
 
+    &:hover { color: $accent-500; }
     &:active { cursor: grabbing; }
   }
 
@@ -141,11 +143,13 @@
 
   &__flags { grid-area: flags; display: flex; gap: $space-1; }
 
-  // Sección de ajustes comunes: SIEMPRE visible al fondo del formulario
-  // (antes era un <details> plegado), con su titulito discreto.
+  // Sección "General": ARRIBA del formulario (antes al fondo, como "Ajustes
+  // comunes", y pasaba desapercibida), con su titulito discreto — fila 1:
+  // anchura + bloque padre; fila 2: los interruptores; fila 3: color de
+  // fondo + alineación general del bloque. Los campos del TIPO van después.
   &__common {
-    border-top: 1px dashed $border;
-    padding-top: $space-3;
+    border-bottom: 1px dashed $border;
+    padding-bottom: $space-4;
     display: grid;
     gap: $space-3;
 
@@ -153,15 +157,21 @@
       color: $text-2;
       font-size: $fs-13;
     }
+  }
 
-    // El aire de los checkboxes (bajo el selector de color) y del select del
-    // padre va a mano, y cada checkbox en su propia línea.
-    > .checkbox {
-      display: flex;
-      margin-top: $space-2;
+  // Cada fila de General: dos columnas iguales, apiladas en un modal
+  // angosto (container query sobre el cuerpo del modal, no el viewport).
+  &__common-row {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: $space-3;
+    align-items: start;
+
+    > .checkbox { display: flex; }
+
+    @container modal-body (max-width: #{$bp-sm - 1px}) {
+      grid-template-columns: 1fr;
     }
-    > .checkbox:first-of-type { margin-top: $space-4; }
-    > .form-field { margin-top: $space-3; }
   }
 
   // Bloques anidados (parent_id, sin límite de niveles): sangría por
@@ -172,6 +182,50 @@
 .schema-fields {
   display: grid;
   gap: $space-4;
+
+  // Envoltorio de CADA campo (doc 03 ampliado): normalmente transparente
+  // (una columna, como siempre) — gana forma cuando el campo se agrupa con
+  // su alineación o con los ajustes de la imagen.
+  &__field { min-width: 0; }
+
+  &__field-main { min-width: 0; }
+
+  // Alineación junto a su campo: input flexible + select de ancho
+  // contenido (~180px). En un modal angosto (container query sobre el
+  // cuerpo del modal, no el viewport) se apilan, el select debajo.
+  &__field--row {
+    display: flex;
+    align-items: flex-end;
+    gap: $space-3;
+
+    .schema-fields__field-main { flex: 1 1 0; }
+  }
+
+  &__field-align { flex: 0 0 180px; }
+
+  // Imagen a dos columnas: el input a la izquierda, sus ajustes (posición,
+  // escalado, reparto de columnas) apilados a la derecha.
+  &__field--image-group {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: $space-3;
+    align-items: start;
+  }
+
+  &__field-image-settings {
+    display: grid;
+    gap: $space-3;
+  }
+
+  @container modal-body (max-width: #{$bp-sm - 1px}) {
+    &__field--row {
+      flex-direction: column;
+      align-items: stretch;
+    }
+    &__field-align { flex-basis: auto; }
+
+    &__field--image-group { grid-template-columns: 1fr; }
+  }
 
   &__color,
   &__image {
