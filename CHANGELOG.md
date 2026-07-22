@@ -12,7 +12,7 @@ El formato sigue [Keep a Changelog](https://keepachangelog.com/es/) y el
 versionado, [SemVer](https://semver.org/lang/es/) (mientras estemos en `0.x`,
 los cambios de API pueden llegar en versiones menores).
 
-## [Sin publicar]
+## [0.4.28] — 2026-07-22
 
 - **Paneles derechos: los flags dejan de ser "acciones"** (`@edc-motor/
   admin-kit` + cascarón): en páginas (listado y single), en el panel de
