@@ -33,15 +33,21 @@
     "access": "public"
   },
   "dependencies": {
-    "axios": "^1.7.0",
-    "@tiptap/vue-3": "^2.11.0",
-    "@tiptap/starter-kit": "^2.11.0",
     "@tiptap/extension-image": "^2.11.0",
-    "@tiptap/pm": "^2.11.0"
+    "@tiptap/extension-link": "^2.11.0",
+    "@tiptap/extension-table": "^2.11.0",
+    "@tiptap/extension-table-cell": "^2.11.0",
+    "@tiptap/extension-table-header": "^2.11.0",
+    "@tiptap/extension-table-row": "^2.11.0",
+    "@tiptap/extension-underline": "^2.11.0",
+    "@tiptap/pm": "^2.11.0",
+    "@tiptap/starter-kit": "^2.11.0",
+    "@tiptap/vue-3": "^2.11.0",
+    "axios": "^1.7.0"
   },
   "peerDependencies": {
-    "vue": "^3.5.0",
     "@lucide/vue": "^1.0.0",
+    "vue": "^3.5.0",
     "vue-router": "^5.0.0"
   }
 }

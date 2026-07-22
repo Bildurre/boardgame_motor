@@ -195,21 +195,57 @@
   // cuerpo del modal, no el viewport) se apilan, el select debajo.
   &__field--row {
     display: flex;
-    align-items: flex-end;
+    // ARRIBA (no al fondo): con un textarea alto (p. ej. el subtítulo) el
+    // select de alineación debe quedar a la altura de las etiquetas, no
+    // descolgado al fondo de la fila.
+    align-items: flex-start;
     gap: $space-3;
 
     .schema-fields__field-main { flex: 1 1 0; }
   }
 
-  &__field-align { flex: 0 0 180px; }
+  // Ancho justo para "Centrado"/"Izquierda" + etiqueta en es/en/eu sin
+  // cortarse (180px sobraba de aire).
+  &__field-align { flex: 0 0 140px; }
 
   // Imagen a dos columnas: el input a la izquierda, sus ajustes (posición,
-  // escalado, reparto de columnas) apilados a la derecha.
+  // escalado, reparto de columnas) apilados a la derecha. `stretch` (no
+  // `start`) para que la columna de la imagen pueda llenar el alto de la
+  // fila — la cadena de contenedores hasta el cuadro de arrastre lleva
+  // `flex: 1` para que la dropzone crezca con ella.
   &__field--image-group {
     display: grid;
     grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
     gap: $space-3;
-    align-items: start;
+    align-items: stretch;
+
+    .schema-fields__field-main {
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
+    }
+
+    // El campo imagen (label + ImageUpload) y el propio ImageUpload
+    // (`@edc-motor/ui`) se apuntan al `flex: 1` de la columna; SUELTO
+    // (form-modals normales, TranslatableImage) el componente no vive en
+    // esta cadena y conserva su tamaño natural (160×160).
+    .schema-fields__image {
+      display: flex;
+      flex-direction: column;
+      gap: $space-1;
+      flex: 1;
+      min-height: 0;
+    }
+
+    .image-upload {
+      flex: 1;
+      min-height: 0;
+    }
+
+    .image-upload__zone {
+      flex: 1;
+      width: 100%;
+    }
   }
 
   &__field-image-settings {

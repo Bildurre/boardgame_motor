@@ -49,6 +49,15 @@
     li + li { margin-block-start: $space-1; }
   }
 
+  // Cita: borde a la izquierda + texto atenuado en cursiva (mismo criterio
+  // que la vista de edición de RichTextInput).
+  blockquote {
+    padding-left: $space-4;
+    border-left: 3px solid $border-strong;
+    color: $text-2;
+    font-style: italic;
+  }
+
   // Iconos del juego insertados en línea por el editor (<img class="rt-icon">).
   img.rt-icon {
     display: inline-block;
@@ -56,5 +65,30 @@
     height: 1.2em;
     vertical-align: -0.24em;
     margin: 0 1px;
+  }
+
+  // Tabla del wysiwyg: ancho completo, bordes finos y cabecera destacada.
+  // `display: block` + `overflow-x: auto` en la propia tabla (no en un
+  // envoltorio aparte: menos marcado extra) evita que desborde en estrecho
+  // sin perder el ancho completo cuando sí cabe. Las clases de fila que
+  // use cada juego (p. ej. `green-bg`) las estila el JUEGO, no el motor.
+  table {
+    display: block;
+    overflow-x: auto;
+    width: 100%;
+    margin-block: $space-3;
+    border-collapse: collapse;
+
+    td,
+    th {
+      padding: $space-2 $space-3;
+      border: 1px solid $border;
+      text-align: left;
+    }
+
+    th {
+      font-weight: $k-fw-semibold;
+      background: $surface-2;
+    }
   }
 }

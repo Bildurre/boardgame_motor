@@ -4,6 +4,53 @@ Componentes Vue 3 + SCSS para las webs públicas (y piezas compartidas con el
 admin). Paquete **fuente** (se consume vía Vite). Versión de tren con
 `edc-motor/core` y `@edc-motor/admin-kit`.
 
+## [Sin publicar]
+
+### Añadido
+
+- **`RichTextInput`: tablas, encabezados h2-h5, subrayado, listas anidadas,
+  cita y enlaces**. Extensiones oficiales de TipTap (`@tiptap/extension-
+  table` + `-table-row`/`-table-header`/`-table-cell`, `^2.11`, sin resize
+  de columnas — metía ruido visual y no hace falta): insertar tabla
+  (3×3 con cabecera), añadir/quitar fila y columna, alternar fila de
+  cabecera y borrar tabla (controles contextuales: los de editar solo
+  aparecen con el cursor dentro de una tabla). `StarterKit` amplía sus
+  niveles de título a `[2, 3, 4, 5]` (botones H2-H5). Subrayado
+  (`@tiptap/extension-underline`). Sangrar/des-sangrar (`Indent`/
+  `Outdent`): anidan o sacan un item de lista (`sinkListItem`/
+  `liftListItem`), y des-sangrar con un blockquote activo lo saca
+  (`lift`); toggle de cita añadido a la toolbar. Enlaces
+  (`@tiptap/extension-link`): botón con mini-popover (URL + aplicar,
+  mismo patrón que el selector de iconos) y botón de quitar enlace; TODOS
+  los enlaces creados desde el editor llevan `target="_blank"` +
+  `rel="noopener noreferrer"` por defecto (también los `mailto:`, donde
+  son inocuos — así no hace falta distinguir el esquema al aplicarlos).
+  Todos los botones nuevos llevan icono de lucide y texto por
+  `RichTextLabels` (prop `labels`), como el resto de la toolbar —
+  **RUPTURA**: la clave `heading` se sustituye por `heading2`/`heading3`/
+  `heading4`/`heading5` (un consumidor que pasara `labels.heading` debe
+  repartirlo entre las cuatro). El modo HTML (fuente) YA EXISTÍA (toggle
+  con icono `Code`, textarea monoespaciado, `setContent` al volver a
+  visual) — es la vía para pegar HTML directo (tablas incluidas); pasa
+  por el saneador del servidor al guardar, no se sanea en cliente.
+- **Tabla del wysiwyg, visible y editable** (`_rich-text.scss`, editor) y
+  **estilo público de tabla** (`_rich-content.scss`, `.rich-content`):
+  ancho completo, `border-collapse: collapse`, bordes (`$border-strong`
+  en el editor, `$border` en público), `th` semibold con fondo sutil
+  (`$surface-2`), `td`/`th` con padding `$space-2`/`$space-3`, y overflow
+  horizontal seguro en estrecho (`display: block; overflow-x: auto` en la
+  propia tabla). Las clases de fila que use cada juego (p. ej.
+  `green-bg`) las estila el JUEGO, no el motor.
+
+### Cambiado
+
+- **Selects: flecha → CHEVRON** (`BaseSelect` + todo lo que comparte
+  `.form-field__select-wrapper`, admin y app por igual — es el único
+  sitio del paquete que pintaba una flecha): el triángulo CSS se
+  sustituye por el `chevron-down` de lucide pintado con `mask-image`
+  (`background-color: $text-3`, así seguía el tema claro/oscuro y
+  cualquier tema de juego sin grabar un color en el SVG).
+
 ## [0.4.27] — 2026-07-21
 
 ### Cambiado

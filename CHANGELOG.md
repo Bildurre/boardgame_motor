@@ -12,6 +12,36 @@ El formato sigue [Keep a Changelog](https://keepachangelog.com/es/) y el
 versionado, [SemVer](https://semver.org/lang/es/) (mientras estemos en `0.x`,
 los cambios de API pueden llegar en versiones menores).
 
+## [Sin publicar]
+
+- **Paneles derechos: los flags dejan de ser "acciones"** (`@edc-motor/
+  admin-kit` + cascarón): en páginas (listado y single), en el panel de
+  bloque de `PageBlocks` y en usuarios, los interruptores de estado
+  (Publicada/Imprimible, PDF/Índice, Verificado) bajan a una sección
+  propia "Estado" debajo del bloque de acciones de verdad (editar,
+  borrar, abrir, regenerar…), con su propia divisoria y titulito — mismo
+  estilo `.is-on`/`.is-off` de siempre. De paso, fuera la acción "Sacar a
+  la raíz" del panel de páginas: sacar una hija a la raíz ya se hacía
+  arrastrándola al hueco entre cards raíz, y tener las dos vías era
+  redundante. **Migración del cascarón**: copiar
+  `plantilla/admin/src/views/pages/PagesListView.vue`,
+  `views/pages/PageSingleView.vue`, `views/users/UsersView.vue` y las
+  claves `common.stateKicker` y `pages.moveToRoot` (esta última se
+  quita) de `plantilla/admin/src/i18n/locales/{es,en,eu}.json`.
+- **Editor de texto rico: tablas + modo HTML** (`@edc-motor/ui`
+  `RichTextInput` + `edc-motor/core` `HtmlSanitizer`): tablas completas
+  (insertar, filas/columnas, cabecera, borrar), encabezados h2-h5,
+  subrayado, listas anidadas (sangrar/des-sangrar), cita y enlaces en la
+  toolbar; el saneador del servidor amplía su lista blanca a juego
+  (`table`/`thead`/`tbody`/`tr`/`th`/`td`, `h5`, `width`/`height` en
+  `img`) conservando la estructura anidada de la tabla. El modo HTML
+  (pegar HTML directo, p. ej. una tabla copiada de fuera) ya existía en
+  el editor. Detalle completo en los CHANGELOG de `@edc-motor/ui` y
+  `edc-motor/core`. **Migración del cascarón**: copiar las claves nuevas
+  de `editor.*` en `plantilla/admin/src/i18n/locales/{es,en,eu}.json` y
+  `plantilla/admin/src/lib/editorLabels.ts` (RUPTURA suave: `editor.heading`
+  se reparte en `heading2`/`heading3`/`heading4`/`heading5`).
+
 ## [0.4.27] — 2026-07-21
 
 - **Bloques: escala tipográfica final y layouts de imagen afinados**

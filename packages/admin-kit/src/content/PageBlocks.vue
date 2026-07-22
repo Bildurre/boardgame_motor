@@ -52,6 +52,9 @@ export interface PageBlocksLabels {
   panelContent: string
   parent: string
   parentNone: string
+  /** Título de la sección de interruptores (PDF/Índice) del panel, debajo
+   *  de las acciones de verdad (editar, borrar…). */
+  stateKicker: string
 }
 
 const defaultLabels: PageBlocksLabels = {
@@ -75,6 +78,7 @@ const defaultLabels: PageBlocksLabels = {
   panelContent: 'Contenido',
   parent: 'Bloque padre (índices indentados)',
   parentNone: '— Ninguno —',
+  stateKicker: 'Estado',
 }
 
 const props = withDefaults(
@@ -729,8 +733,23 @@ defineExpose({ reload: load })
         <template v-else>
           <p class="manager-panel__kicker">{{ L.panelTitle }}</p>
 
-          <!-- Acciones PRIMERO (los interruptores arriba); después,
-               secciones separadas (patrón panel) -->
+          <!-- Acciones de verdad (patrón panel): los interruptores
+               PDF/Índice van en su propia sección, debajo -->
+          <div class="manager-detail__actions">
+            <BaseButton variant="info" :disabled="busy" @click="openEdit(selected)">
+              <template #icon><SquarePen :size="14" /></template>
+              {{ L.edit }}
+            </BaseButton>
+            <BaseButton variant="danger" :disabled="busy" @click="remove(selected)">
+              <template #icon><Trash2 :size="14" /></template>
+              {{ L.delete }}
+            </BaseButton>
+          </div>
+
+          <!-- Estado: los interruptores (flags), separados de las
+               acciones de verdad -->
+          <hr class="manager-panel__divider" />
+          <p class="manager-panel__kicker">{{ L.stateKicker }}</p>
           <div class="manager-detail__actions">
             <BaseButton
               variant="success"
@@ -750,14 +769,6 @@ defineExpose({ reload: load })
             >
               <template #icon><List :size="14" /></template>
               {{ L.indexableShort }}
-            </BaseButton>
-            <BaseButton variant="info" :disabled="busy" @click="openEdit(selected)">
-              <template #icon><SquarePen :size="14" /></template>
-              {{ L.edit }}
-            </BaseButton>
-            <BaseButton variant="danger" :disabled="busy" @click="remove(selected)">
-              <template #icon><Trash2 :size="14" /></template>
-              {{ L.delete }}
             </BaseButton>
           </div>
 

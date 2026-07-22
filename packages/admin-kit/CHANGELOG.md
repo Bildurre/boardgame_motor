@@ -3,6 +3,33 @@
 Kit de construcción del panel de administración (sobre `@edc-motor/ui`). Paquete
 **fuente** (se consume vía Vite). Versión de tren con `edc-motor/core` y `@edc-motor/ui`.
 
+## [Sin publicar]
+
+### Cambiado
+
+- **Panel de bloque: PDF/Índice a su propia sección "Estado"**
+  (`PageBlocks`): los interruptores dejan el bloque de acciones (editar,
+  borrar) y bajan a una sección propia debajo, con su divisoria y
+  titulito (patrón panel, igual que páginas y usuarios del cascarón) —
+  nueva etiqueta `stateKicker` en `PageBlocksLabels` (por defecto
+  "Estado"; RUPTURA suave: un consumidor con labels parciales puede
+  pasarla o quedarse con el fallback).
+- **Alineación junto a su campo: arriba, no al fondo, y más estrecha**
+  (`SchemaFields`, `_page-blocks.scss`): `.schema-fields__field--row` pasa
+  de `align-items: flex-end` a `flex-start` — con un textarea alto (p. ej.
+  el subtítulo) el select de alineación quedaba descolgado al fondo de la
+  fila; ahora las etiquetas de ambos campos quedan a la misma altura.
+  `.schema-fields__field-align` baja de 180 a 140px (sobraba aire para
+  "Centrado"/"Izquierda" + etiqueta en es/en/eu).
+- **`ImageUpload` se estira dentro del grupo de imagen a dos columnas del
+  form de bloque** (`_page-blocks.scss`): `.schema-fields__field--image-
+  group` pasa de `align-items: start` a `stretch` y la cadena de
+  contenedores hasta la dropzone (`@edc-motor/ui`) lleva `flex: 1`, así
+  que la columna de la imagen llena el alto de la fila (a la del select
+  de ajustes, si es más alta). SUELTO (form-modals normales,
+  `TranslatableImage`) el componente no vive en esta cadena: conserva su
+  tamaño natural de 160×160.
+
 ## [0.4.27] — 2026-07-21
 
 ### Cambiado

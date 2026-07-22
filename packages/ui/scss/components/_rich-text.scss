@@ -69,8 +69,48 @@
     outline: none;
   }
 
-  // Selector de iconos del juego.
+  // Selector de iconos del juego (y el mismo contenedor sirve de anclaje
+  // para el mini-popover del enlace).
   &__picker { position: relative; display: inline-flex; }
+
+  // Mini-popover del enlace: input de URL + botón de aplicar, misma
+  // posición/estética que el panel de iconos.
+  &__link-popover {
+    position: absolute;
+    top: calc(100% + 4px);
+    left: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    // `width: max-content` (no simplemente `auto`): dentro de un ancla tan
+    // angosta como el propio botón (`.rich-text__picker`), el algoritmo de
+    // shrink-to-fit de un absoluto con solo `left` fijado lo recorta al
+    // ancho del ancla — el input de 220px quedaba aplastado a ~35px.
+    width: max-content;
+    padding: $space-1;
+    background: $surface;
+    border: 1px solid $border;
+    border-radius: $radius-md;
+    box-shadow: $shadow-md;
+  }
+
+  &__link-input {
+    width: 220px;
+    height: 30px;
+    padding: 0 $space-2;
+    border: 1px solid $input-border;
+    border-radius: $radius-sm;
+    background: $input-bg;
+    color: $input-text;
+    font-size: $fs-13;
+
+    &:focus {
+      outline: none;
+      border-color: $input-border-focus;
+      box-shadow: $input-focus-ring;
+    }
+  }
 
   &__icons {
     position: absolute;
@@ -118,10 +158,44 @@
 
       > * + * { margin-top: 0.6em; }
       h2 { font-size: $fs-18; font-weight: $k-fw-semibold; }
+      h3 { font-size: $fs-16; font-weight: $k-fw-semibold; }
+      h4, h5 { font-size: $fs-14; font-weight: $k-fw-semibold; }
       ul, ol { padding-left: 1.4em; }
       ul { list-style: disc; }
       ol { list-style: decimal; }
       a { color: $accent-500; text-decoration: underline; }
+      blockquote {
+        padding-left: $space-3;
+        border-left: 3px solid $border-strong;
+        color: $text-2;
+        font-style: italic;
+      }
+
+      // Tabla: visible y editable (bordes finos, cabecera destacada). Sin
+      // resize de columnas (Table.configure resizable:false), así que no
+      // hace falta CSS para la asa.
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        table-layout: fixed;
+
+        td, th {
+          min-width: 1em;
+          padding: $space-1 $space-2;
+          border: 1px solid $border-strong;
+          vertical-align: top;
+        }
+
+        th {
+          background: $surface-2;
+          font-weight: $k-fw-semibold;
+          text-align: left;
+        }
+
+        .selectedCell {
+          background: color-mix(in srgb, $accent-500 12%, transparent);
+        }
+      }
 
       // Iconos insertados: en línea con el texto.
       img.rt-icon {

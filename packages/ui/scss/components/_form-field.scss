@@ -1,5 +1,10 @@
 @use "tokens" as *;
 
+// Chevron de lucide (`chevron-down`) como máscara: el color lo pone
+// `background-color` (mask solo usa el canal alfa del SVG), así que
+// funciona igual en claro/oscuro y en cualquier tema de juego.
+$icon-chevron-down: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+
 // Estilo compartido de los elementos de formulario (portado de kontuan):
 // BaseInput, BaseTextarea, BaseSelect y TranslatableInput.
 .form-field {
@@ -49,6 +54,9 @@
     resize: vertical;
   }
 
+  // Indicador del select: chevron (lucide `chevron-down`) pintado por
+  // máscara — así toma el color de $text-3 (claro/oscuro y temas de
+  // juego) sin depender de un SVG con el color grabado.
   &__select-wrapper {
     position: relative;
     &::after {
@@ -56,12 +64,18 @@
       position: absolute;
       right: $input-padding-x;
       top: 50%;
+      width: 16px;
+      height: 16px;
       transform: translateY(-50%);
-      width: 0;
-      height: 0;
-      border-left: 5px solid transparent;
-      border-right: 5px solid transparent;
-      border-top: 5px solid $text-3;
+      background-color: $text-3;
+      -webkit-mask-image: $icon-chevron-down;
+      mask-image: $icon-chevron-down;
+      -webkit-mask-repeat: no-repeat;
+      mask-repeat: no-repeat;
+      -webkit-mask-position: center;
+      mask-position: center;
+      -webkit-mask-size: contain;
+      mask-size: contain;
       pointer-events: none;
     }
   }
