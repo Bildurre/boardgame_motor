@@ -4,6 +4,20 @@ Componentes Vue 3 + SCSS para las webs públicas (y piezas compartidas con el
 admin). Paquete **fuente** (se consume vía Vite). Versión de tren con
 `edc-motor/core` y `@edc-motor/admin-kit`.
 
+## [Sin publicar]
+
+### Cambiado
+
+- **Títulos y subtítulos de TODOS los bloques al estilo de la cabecera
+  clásica de índices y fichas** (`_blocks.scss`): título $fs-32 → $fs-28
+  con `line-height: 1.1` (el h1 compacto de base) y subtítulo $fs-24 →
+  $fs-16 — el mismo tamaño que el cuerpo, la jerarquía la da el color
+  atenuado ($text-2), como en la banda de las fichas de entidad. La
+  cabecera (bloque header) pierde sus tamaños especiales (40/28): todos
+  los bloques comparten la misma escala. Ojo para los juegos: los
+  encabezados del wysiwyg (`.rich-content h2` = $fs-32) quedan ahora por
+  ENCIMA del título de bloque — si chirría, se revisará esa escala.
+
 ## [0.4.30] — 2026-07-25
 
 ### Cambiado

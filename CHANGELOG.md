@@ -12,6 +12,14 @@ El formato sigue [Keep a Changelog](https://keepachangelog.com/es/) y el
 versionado, [SemVer](https://semver.org/lang/es/) (mientras estemos en `0.x`,
 los cambios de API pueden llegar en versiones menores).
 
+## [Sin publicar]
+
+- **Bloques con la tipografía de la cabecera clásica** (`@edc-motor/ui`):
+  el título de TODOS los bloques baja a $fs-28 compacto (line-height 1.1,
+  el h1 de base) y el subtítulo al tamaño del cuerpo ($fs-16) en color
+  atenuado — el estilo de la cabecera de índices y fichas de CDL. El
+  bloque header pierde sus tamaños especiales (40/28).
+
 ## [0.4.30] — 2026-07-25
 
 - **Wysiwyg: los paneles de iconos y enlace, en flujo bajo la toolbar**

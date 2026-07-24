@@ -39,14 +39,17 @@
   &--quote.block--w-narrow .block__inner { max-width: min(780px, 90%); }
 
   // Tipografía de bloque: texto BASE $fs-16 (el mismo cuerpo que el wysiwyg
-  // por defecto — sin override aquí), subtítulo $fs-24 (entre el título y
-  // la base), título $fs-32 (la cabecera sube a 40/28). Los títulos nunca
-  // se justifican.
+  // por defecto — sin override aquí); título y subtítulo calcan la cabecera
+  // clásica de índices y fichas de CDL: título $fs-28 compacto (line-height
+  // 1.1, el h1 de base) y subtítulo atenuado AL TAMAÑO del cuerpo — la
+  // jerarquía la da el color, no otro escalón de tamaño. Vale para TODOS
+  // los bloques (la cabecera ya no sube a 40/28). Los títulos nunca se
+  // justifican.
   // width 100%: en grids con justify-items start (el cuerpo del CTA) el
   // elemento encoge a su contenido y el text-align no se vería.
-  &__title { margin: 0; font-size: $fs-32; width: 100%; }
+  &__title { margin: 0; font-size: $fs-28; line-height: 1.1; width: 100%; }
   // pre-line: el subtítulo es un textarea — sus saltos de línea cuentan.
-  &__subtitle { margin: 0; color: $text-2; font-size: $fs-24; white-space: pre-line; width: 100%; }
+  &__subtitle { margin: 0; color: $text-2; font-size: $fs-16; white-space: pre-line; width: 100%; }
   &__text { color: $text-1; font-size: $fs-16; }
 
   // Alineación del bloque (campo común `align`): por CLASE (BlockShell ya
@@ -117,9 +120,6 @@
 
     .edc-button { justify-self: start; text-decoration: none; }
   }
-
-  &--header .block__title { font-size: $fs-40; }
-  &--header .block__subtitle { font-size: $fs-28; }
 
   &__media-layout { display: grid; gap: $space-4; }
   &__image {
