@@ -14,9 +14,11 @@ admin). Paquete **fuente** (se consume vía Vite). Versión de tren con
   $fs-16 — el mismo tamaño que el cuerpo, la jerarquía la da el color
   atenuado ($text-2), como en la banda de las fichas de entidad. La
   cabecera (bloque header) pierde sus tamaños especiales (40/28): todos
-  los bloques comparten la misma escala. Ojo para los juegos: los
-  encabezados del wysiwyg (`.rich-content h2` = $fs-32) quedan ahora por
-  ENCIMA del título de bloque — si chirría, se revisará esa escala.
+  los bloques comparten la misma escala.
+- **Escala del wysiwyg (`.rich-content`) por debajo del título de bloque**
+  (acompaña al cambio anterior — con el título en $fs-28, la escala vieja
+  h2 $fs-32 quedaba por encima): h2 $fs-24 · h3 $fs-20 · h4 $fs-18 ·
+  h5 $fs-16 (como el cuerpo; lo distingue el peso) · h6 $fs-14.
 
 ## [0.4.30] — 2026-07-25
 

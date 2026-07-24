@@ -18,7 +18,9 @@ los cambios de API pueden llegar en versiones menores).
   el título de TODOS los bloques baja a $fs-28 compacto (line-height 1.1,
   el h1 de base) y el subtítulo al tamaño del cuerpo ($fs-16) en color
   atenuado — el estilo de la cabecera de índices y fichas de CDL. El
-  bloque header pierde sus tamaños especiales (40/28).
+  bloque header pierde sus tamaños especiales (40/28), y la escala del
+  wysiwyg (`.rich-content`) baja en consecuencia para quedar por debajo
+  del título: h2 24 · h3 20 · h4 18 · h5 16 · h6 14.
 
 ## [0.4.30] — 2026-07-25
 

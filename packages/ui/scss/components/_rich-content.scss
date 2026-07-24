@@ -34,13 +34,14 @@
   > :first-child { margin-block-start: 0; }
   > :last-child { margin-block-end: 0; }
 
-  // Escala del wysiwyg: h2 32 (el mismo tamaño que un título de bloque) ·
-  // h3 24 · h4 22 (no hay token entre 20 y 24) · h5 20 · h6 18.
-  h2 { font-size: $fs-32; }
-  h3 { font-size: $fs-24; }
-  h4 { font-size: 22px; }
-  h5 { font-size: $fs-20; }
-  h6 { font-size: $fs-18; }
+  // Escala del wysiwyg, POR DEBAJO del título de bloque ($fs-28 desde que
+  // los bloques calcan la cabecera clásica): h2 24 · h3 20 · h4 18 · h5 16
+  // (como el cuerpo, se distingue por el peso) · h6 14.
+  h2 { font-size: $fs-24; }
+  h3 { font-size: $fs-20; }
+  h4 { font-size: $fs-18; }
+  h5 { font-size: $fs-16; }
+  h6 { font-size: $fs-14; }
 
   ul,
   ol {
