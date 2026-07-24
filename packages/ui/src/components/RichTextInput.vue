@@ -3,7 +3,6 @@ import { computed, ref, watch, onBeforeUnmount, onMounted, nextTick } from 'vue'
 import { useEditor, EditorContent } from '@tiptap/vue-3'
 import StarterKit from '@tiptap/starter-kit'
 import Image from '@tiptap/extension-image'
-import { useDropdownPanel } from '../composables/useDropdownPanel'
 import UnderlineExtension from '@tiptap/extension-underline'
 import LinkExtension from '@tiptap/extension-link'
 import TableExtension from '@tiptap/extension-table'
@@ -331,25 +330,23 @@ function insertTable() {
 }
 
 // --- Selector de iconos ---
+// Los paneles del editor (iconos y enlace) NO flotan: son franjas EN FLUJO
+// entre la toolbar y el contenido — dentro de un modal quedan siempre a la
+// vista (nada que recortar ni que anclar por coordenadas).
 const pickerOpen = ref(false)
 const pickerRef = ref<HTMLElement | null>(null)
 const iconsPanelRef = ref<HTMLElement | null>(null)
-// Top layer (popover): dentro de un modal, el overflow del cuerpo recortaba
-// el panel y no se podían elegir todos los iconos. Ancho propio, sin igualar
-// al trigger.
-useDropdownPanel(pickerRef, iconsPanelRef, pickerOpen, { matchWidth: false })
 
 function insertIcon(icon: RichIcon) {
   editor.value?.chain().focus().setImage({ src: icon.url, alt: icon.name, title: icon.name }).run()
   pickerOpen.value = false
 }
 
-// --- Enlaces: mini-popover con la URL (mismo patrón que el selector de
-// iconos: botón + panel flotante, cierra con Escape o click fuera) ---
+// --- Enlaces: franja con la URL (mismo patrón que el selector de iconos:
+// botón + franja bajo la toolbar, cierra con Escape o click fuera) ---
 const linkPopoverOpen = ref(false)
 const linkPickerRef = ref<HTMLElement | null>(null)
 const linkPanelRef = ref<HTMLElement | null>(null)
-useDropdownPanel(linkPickerRef, linkPanelRef, linkPopoverOpen, { matchWidth: false })
 const linkInputRef = ref<HTMLInputElement>()
 const linkUrlInput = ref('')
 
@@ -377,8 +374,12 @@ function removeLink() {
 
 function onClickOutside(e: MouseEvent) {
   const target = e.target as Node
-  if (pickerRef.value && !pickerRef.value.contains(target)) pickerOpen.value = false
-  if (linkPickerRef.value && !linkPickerRef.value.contains(target)) linkPopoverOpen.value = false
+  // Botón y franja son elementos hermanos: un click en cualquiera de los dos
+  // mantiene el panel abierto (insertar icono / escribir la URL).
+  if (!pickerRef.value?.contains(target) && !iconsPanelRef.value?.contains(target))
+    pickerOpen.value = false
+  if (!linkPickerRef.value?.contains(target) && !linkPanelRef.value?.contains(target))
+    linkPopoverOpen.value = false
 }
 onMounted(() => document.addEventListener('click', onClickOutside))
 onBeforeUnmount(() => {
@@ -447,38 +448,18 @@ function onSourceInput(value: string) {
 
         <span class="rich-text__sep" />
 
-        <!-- Enlace: botón + mini-popover con la URL -->
-        <div ref="linkPickerRef" class="rich-text__picker">
-          <button
-            type="button"
-            class="rich-text__tool"
-            :class="{ 'rich-text__tool--active': editor?.isActive('link') || linkPopoverOpen }"
-            :title="t.link"
-            :disabled="disabled"
-            @click="toggleLinkPopover"
-          >
-            <LinkIcon :size="16" />
-          </button>
-          <div
-            v-if="linkPopoverOpen"
-            ref="linkPanelRef"
-            class="rich-text__link-popover"
-            popover="manual"
-          >
-            <input
-              ref="linkInputRef"
-              v-model="linkUrlInput"
-              type="text"
-              class="rich-text__link-input"
-              :placeholder="t.linkUrl"
-              @keydown.enter.prevent="applyLink"
-              @keydown.escape.prevent="linkPopoverOpen = false"
-            />
-            <button type="button" class="rich-text__tool" :title="t.linkApply" @click="applyLink">
-              <LinkIcon :size="14" />
-            </button>
-          </div>
-        </div>
+        <!-- Enlace: botón que abre la franja de la URL bajo la toolbar -->
+        <button
+          ref="linkPickerRef"
+          type="button"
+          class="rich-text__tool"
+          :class="{ 'rich-text__tool--active': editor?.isActive('link') || linkPopoverOpen }"
+          :title="t.link"
+          :disabled="disabled"
+          @click="toggleLinkPopover"
+        >
+          <LinkIcon :size="16" />
+        </button>
         <button
           v-if="editor?.isActive('link')"
           type="button"
@@ -537,33 +518,20 @@ function onSourceInput(value: string) {
           <Redo2 :size="16" />
         </button>
 
-        <!-- Selector de iconos del juego -->
+        <!-- Selector de iconos del juego: abre la franja bajo la toolbar -->
         <template v-if="icons.length">
           <span class="rich-text__sep" />
-          <div ref="pickerRef" class="rich-text__picker">
-            <button
-              type="button"
-              class="rich-text__tool"
-              :class="{ 'rich-text__tool--active': pickerOpen }"
-              :title="t.insertIcon"
-              :disabled="disabled"
-              @click="pickerOpen = !pickerOpen"
-            >
-              <Smile :size="16" />
-            </button>
-            <div v-if="pickerOpen" ref="iconsPanelRef" class="rich-text__icons" popover="manual">
-              <button
-                v-for="icon in icons"
-                :key="icon.url"
-                type="button"
-                class="rich-text__icon"
-                :title="icon.name"
-                @click="insertIcon(icon)"
-              >
-                <img :src="icon.url" :alt="icon.name" />
-              </button>
-            </div>
-          </div>
+          <button
+            ref="pickerRef"
+            type="button"
+            class="rich-text__tool"
+            :class="{ 'rich-text__tool--active': pickerOpen }"
+            :title="t.insertIcon"
+            :disabled="disabled"
+            @click="pickerOpen = !pickerOpen"
+          >
+            <Smile :size="16" />
+          </button>
         </template>
       </template>
 
@@ -577,6 +545,38 @@ function onSourceInput(value: string) {
         @click="toggleSource"
       >
         <Code :size="16" />
+      </button>
+    </div>
+
+    <!-- Franja del enlace: EN FLUJO bajo la toolbar (dentro de un modal queda
+         siempre a la vista; los popovers flotantes se recortaban o quedaban
+         descolgados del editor) -->
+    <div v-if="linkPopoverOpen && !source" ref="linkPanelRef" class="rich-text__link-bar">
+      <input
+        ref="linkInputRef"
+        v-model="linkUrlInput"
+        type="text"
+        class="rich-text__link-input"
+        :placeholder="t.linkUrl"
+        @keydown.enter.prevent="applyLink"
+        @keydown.escape.prevent="linkPopoverOpen = false"
+      />
+      <button type="button" class="rich-text__tool" :title="t.linkApply" @click="applyLink">
+        <LinkIcon :size="14" />
+      </button>
+    </div>
+
+    <!-- Franja de iconos: misma idea, a todo el ancho del editor -->
+    <div v-if="pickerOpen && !source" ref="iconsPanelRef" class="rich-text__icons">
+      <button
+        v-for="icon in icons"
+        :key="icon.url"
+        type="button"
+        class="rich-text__icon"
+        :title="icon.name"
+        @click="insertIcon(icon)"
+      >
+        <img :src="icon.url" :alt="icon.name" />
       </button>
     </div>
 

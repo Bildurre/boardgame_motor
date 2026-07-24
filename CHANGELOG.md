@@ -12,6 +12,16 @@ El formato sigue [Keep a Changelog](https://keepachangelog.com/es/) y el
 versionado, [SemVer](https://semver.org/lang/es/) (mientras estemos en `0.x`,
 los cambios de API pueden llegar en versiones menores).
 
+## [Sin publicar]
+
+- **Wysiwyg: los paneles de iconos y enlace, en flujo bajo la toolbar**
+  (`@edc-motor/ui`): sustituye la solución de top layer de 0.4.29 — en
+  vez de flotar, el selector de iconos y la caja de la URL se insertan
+  entre la toolbar y el contenido como una franja a todo el ancho del
+  editor, siempre a la vista dentro del modal (los iconos ganan columnas
+  y scroll propio). La opción `matchWidth` de `useDropdownPanel` (0.4.29)
+  desaparece; los select no cambian.
+
 ## [0.4.29] — 2026-07-24
 
 - **Wysiwyg: los popovers del editor ya no se recortan en el modal de

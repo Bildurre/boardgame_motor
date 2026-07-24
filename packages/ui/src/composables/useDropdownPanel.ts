@@ -20,14 +20,7 @@ export function useDropdownPanel(
   anchor: Ref<HTMLElement | null>,
   panel: Ref<HTMLElement | null>,
   open: Ref<boolean>,
-  options: {
-    /** Igualar el ancho del panel al del trigger (los select). Los popovers
-     *  con ancho propio (selector de iconos, popover del enlace) lo apagan:
-     *  conservan su ancho y solo se CLAMPEA su left para no salirse. */
-    matchWidth?: boolean
-  } = {},
 ) {
-  const { matchWidth = true } = options
   const GAP = 4 // $space-1: aire entre trigger y panel, como el CSS absolute
 
   /** Ancla el panel bajo el trigger (o encima, si abajo no cabe y arriba sí). */
@@ -36,11 +29,8 @@ export function useDropdownPanel(
     const p = panel.value
     if (!a || !p) return
     const r = a.getBoundingClientRect()
-    if (matchWidth) p.style.width = `${r.width}px`
-    const left = matchWidth
-      ? r.left
-      : Math.max(GAP, Math.min(r.left, window.innerWidth - p.offsetWidth - GAP))
-    p.style.left = `${left}px`
+    p.style.width = `${r.width}px`
+    p.style.left = `${r.left}px`
     const height = p.offsetHeight
     const below = window.innerHeight - r.bottom - GAP
     const openUp = height > below && r.top > window.innerHeight - r.bottom

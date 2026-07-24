@@ -4,6 +4,24 @@ Componentes Vue 3 + SCSS para las webs públicas (y piezas compartidas con el
 admin). Paquete **fuente** (se consume vía Vite). Versión de tren con
 `edc-motor/core` y `@edc-motor/admin-kit`.
 
+## [Sin publicar]
+
+### Cambiado
+
+- **`RichTextInput`: los paneles del editor pasan de popover flotante a
+  FRANJA EN FLUJO bajo la toolbar** (sustituye a la solución de top layer
+  de 0.4.29, que dejaba las cajas "descolgadas" del editor): el selector
+  de iconos y la caja de la URL del enlace se insertan entre la toolbar y
+  el contenido como una extensión de la barra (mismo fondo, divisoria
+  abajo), a todo el ancho del editor — dentro de un modal quedan siempre
+  a la vista enteros, sin recortes ni coordenadas. La franja de iconos
+  gana columnas (`auto-fill` de 36px en vez de 5 fijas, scroll propio si
+  no caben) y el input de la URL ocupa todo el ancho. Interacción igual:
+  toggle desde el botón, Enter aplica, Escape y click fuera cierran.
+  `useDropdownPanel` vuelve a su firma sin opciones — la opción
+  `matchWidth` añadida en 0.4.29 desaparece (solo la usaban estos dos
+  paneles; los select siguen igual).
+
 ## [0.4.29] — 2026-07-24
 
 ### Corregido
