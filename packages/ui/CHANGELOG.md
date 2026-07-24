@@ -21,6 +21,14 @@ admin). Paquete **fuente** (se consume vía Vite). Versión de tren con
   `useDropdownPanel` vuelve a su firma sin opciones — la opción
   `matchWidth` añadida en 0.4.29 desaparece (solo la usaban estos dos
   paneles; los select siguen igual).
+- **`ImageUpload`: el cuadro de arrastre se CENTRA en el campo, en
+  horizontal y en vertical** (`_image-upload.scss`): la zona pasa de
+  `align-self: flex-start` a `center` + `margin-block: auto` (los
+  márgenes auto solo absorben espacio si el contenedor le da alto extra,
+  p. ej. el grupo a dos columnas del form de bloque; en un form normal no
+  cambian nada en vertical) y `flex-shrink: 0` para que nunca encoja de
+  su 160×160. El nombre del fichero bajo la miniatura se centra con ella.
+  Aplica a TODOS los inputs de imagen (también `TranslatableImage`).
 
 ## [0.4.29] — 2026-07-24
 

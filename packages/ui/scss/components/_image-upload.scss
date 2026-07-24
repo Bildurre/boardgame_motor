@@ -17,7 +17,12 @@
   &__zone {
     position: relative;
     display: flex;
-    align-self: flex-start;
+    // Centrado EN EL CAMPO: horizontal siempre, y vertical cuando el
+    // contenedor le da alto extra (p. ej. el grupo a dos columnas del form
+    // de bloque) — los márgenes auto solo absorben espacio si lo hay.
+    align-self: center;
+    margin-block: auto;
+    flex-shrink: 0;
     align-items: center;
     justify-content: center;
     width: 160px;
@@ -81,8 +86,10 @@
   &__icon { width: 32px; height: 32px; color: $text-3; }
   &__text { font-size: $fs-12; color: $text-2; }
 
-  // Nombre del fichero (pendiente o guardado) bajo la miniatura.
+  // Nombre del fichero (pendiente o guardado) bajo la miniatura, centrado
+  // con ella.
   &__name {
+    align-self: center;
     max-width: 160px;
     overflow: hidden;
     font-size: $fs-12;

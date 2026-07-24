@@ -3,6 +3,19 @@
 Kit de construcción del panel de administración (sobre `@edc-motor/ui`). Paquete
 **fuente** (se consume vía Vite). Versión de tren con `edc-motor/core` y `@edc-motor/ui`.
 
+## [Sin publicar]
+
+### Cambiado
+
+- **Form de bloque: el cuadro de arrastre de la imagen YA NO se estira**
+  (revierte el estiramiento de 0.4.28 en `_page-blocks.scss`): fuera la
+  regla que le daba `flex: 1; width: 100%` a `.image-upload__zone` — el
+  cuadro conserva su tamaño natural (160×160). La columna de la imagen
+  sigue llenando el alto de la fila (`stretch` + `flex: 1` hasta
+  `.image-upload`), y en ese espacio el cuadro se centra en vertical y
+  horizontal — el centrado vive en el componente de `@edc-motor/ui` y
+  aplica a todos los inputs de imagen.
+
 ## [0.4.29] — 2026-07-24
 
 - Sin cambios propios: versión de tren.

@@ -209,10 +209,11 @@
   &__field-align { flex: 0 0 140px; }
 
   // Imagen a dos columnas: el input a la izquierda, sus ajustes (posición,
-  // escalado, reparto de columnas) apilados a la derecha. `stretch` (no
-  // `start`) para que la columna de la imagen pueda llenar el alto de la
-  // fila — la cadena de contenedores hasta el cuadro de arrastre lleva
-  // `flex: 1` para que la dropzone crezca con ella.
+  // escalado, reparto de columnas) apilados a la derecha. `stretch` para que
+  // la columna de la imagen llene el alto de la fila; el cuadro de arrastre
+  // YA NO se estira con ella (0.4.28): conserva su tamaño natural (160×160)
+  // y se centra en el espacio — el centrado vive en el componente
+  // (_image-upload.scss de @edc-motor/ui), común a todos los inputs.
   &__field--image-group {
     display: grid;
     grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
@@ -225,10 +226,6 @@
       min-width: 0;
     }
 
-    // El campo imagen (label + ImageUpload) y el propio ImageUpload
-    // (`@edc-motor/ui`) se apuntan al `flex: 1` de la columna; SUELTO
-    // (form-modals normales, TranslatableImage) el componente no vive en
-    // esta cadena y conserva su tamaño natural (160×160).
     .schema-fields__image {
       display: flex;
       flex-direction: column;
@@ -240,11 +237,6 @@
     .image-upload {
       flex: 1;
       min-height: 0;
-    }
-
-    .image-upload__zone {
-      flex: 1;
-      width: 100%;
     }
   }
 
