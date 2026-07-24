@@ -12,7 +12,7 @@ El formato sigue [Keep a Changelog](https://keepachangelog.com/es/) y el
 versionado, [SemVer](https://semver.org/lang/es/) (mientras estemos en `0.x`,
 los cambios de API pueden llegar en versiones menores).
 
-## [Sin publicar]
+## [0.4.31] — 2026-07-25
 
 - **Bloques con la tipografía de la cabecera clásica** (`@edc-motor/ui`):
   el título de TODOS los bloques baja a $fs-28 compacto (line-height 1.1,
