@@ -12,7 +12,7 @@ El formato sigue [Keep a Changelog](https://keepachangelog.com/es/) y el
 versionado, [SemVer](https://semver.org/lang/es/) (mientras estemos en `0.x`,
 los cambios de API pueden llegar en versiones menores).
 
-## [4.0.29] — 2026-07-24
+## [Sin publicar]
 
 - **Wysiwyg: los popovers del editor ya no se recortan en el modal de
   bloque** (`@edc-motor/ui`): el selector de iconos y el mini-popover de
