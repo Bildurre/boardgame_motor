@@ -12,7 +12,7 @@ El formato sigue [Keep a Changelog](https://keepachangelog.com/es/) y el
 versionado, [SemVer](https://semver.org/lang/es/) (mientras estemos en `0.x`,
 los cambios de API pueden llegar en versiones menores).
 
-## [Sin publicar]
+## [0.4.30] — 2026-07-25
 
 - **Wysiwyg: los paneles de iconos y enlace, en flujo bajo la toolbar**
   (`@edc-motor/ui`): sustituye la solución de top layer de 0.4.29 — en
