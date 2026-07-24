@@ -3,6 +3,7 @@ import { computed, ref, watch, onBeforeUnmount, onMounted, nextTick } from 'vue'
 import { useEditor, EditorContent } from '@tiptap/vue-3'
 import StarterKit from '@tiptap/starter-kit'
 import Image from '@tiptap/extension-image'
+import { useDropdownPanel } from '../composables/useDropdownPanel'
 import UnderlineExtension from '@tiptap/extension-underline'
 import LinkExtension from '@tiptap/extension-link'
 import TableExtension from '@tiptap/extension-table'
@@ -331,7 +332,12 @@ function insertTable() {
 
 // --- Selector de iconos ---
 const pickerOpen = ref(false)
-const pickerRef = ref<HTMLElement>()
+const pickerRef = ref<HTMLElement | null>(null)
+const iconsPanelRef = ref<HTMLElement | null>(null)
+// Top layer (popover): dentro de un modal, el overflow del cuerpo recortaba
+// el panel y no se podían elegir todos los iconos. Ancho propio, sin igualar
+// al trigger.
+useDropdownPanel(pickerRef, iconsPanelRef, pickerOpen, { matchWidth: false })
 
 function insertIcon(icon: RichIcon) {
   editor.value?.chain().focus().setImage({ src: icon.url, alt: icon.name, title: icon.name }).run()
@@ -341,7 +347,9 @@ function insertIcon(icon: RichIcon) {
 // --- Enlaces: mini-popover con la URL (mismo patrón que el selector de
 // iconos: botón + panel flotante, cierra con Escape o click fuera) ---
 const linkPopoverOpen = ref(false)
-const linkPickerRef = ref<HTMLElement>()
+const linkPickerRef = ref<HTMLElement | null>(null)
+const linkPanelRef = ref<HTMLElement | null>(null)
+useDropdownPanel(linkPickerRef, linkPanelRef, linkPopoverOpen, { matchWidth: false })
 const linkInputRef = ref<HTMLInputElement>()
 const linkUrlInput = ref('')
 
@@ -451,7 +459,12 @@ function onSourceInput(value: string) {
           >
             <LinkIcon :size="16" />
           </button>
-          <div v-if="linkPopoverOpen" class="rich-text__link-popover">
+          <div
+            v-if="linkPopoverOpen"
+            ref="linkPanelRef"
+            class="rich-text__link-popover"
+            popover="manual"
+          >
             <input
               ref="linkInputRef"
               v-model="linkUrlInput"
@@ -538,7 +551,7 @@ function onSourceInput(value: string) {
             >
               <Smile :size="16" />
             </button>
-            <div v-if="pickerOpen" class="rich-text__icons">
+            <div v-if="pickerOpen" ref="iconsPanelRef" class="rich-text__icons" popover="manual">
               <button
                 v-for="icon in icons"
                 :key="icon.url"

@@ -4,6 +4,20 @@ Componentes Vue 3 + SCSS para las webs públicas (y piezas compartidas con el
 admin). Paquete **fuente** (se consume vía Vite). Versión de tren con
 `edc-motor/core` y `@edc-motor/admin-kit`.
 
+## [Sin publicar]
+
+### Corregido
+
+- **`RichTextInput`: el selector de iconos y el popover de enlace ya no se
+  recortan dentro del modal de bloque**. Ambos paneles se abrían con
+  `position: absolute` y el `overflow` del cuerpo del modal los cortaba
+  (no se podían elegir todos los iconos). Ahora se promocionan a la top
+  layer del navegador con `useDropdownPanel` — el mismo mecanismo que ya
+  usaban `BaseSelect`/`SearchSelect` — con una opción nueva del composable,
+  `matchWidth: false`: el panel conserva su ancho propio (no lo iguala al
+  del trigger) y solo se clampea su `left` para no salirse del viewport.
+  Sin soporte de `popover` sigue actuando el CSS absoluto de siempre.
+
 ## [0.4.28] — 2026-07-22
 
 ### Añadido

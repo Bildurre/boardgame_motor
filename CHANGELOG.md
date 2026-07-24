@@ -12,6 +12,17 @@ El formato sigue [Keep a Changelog](https://keepachangelog.com/es/) y el
 versionado, [SemVer](https://semver.org/lang/es/) (mientras estemos en `0.x`,
 los cambios de API pueden llegar en versiones menores).
 
+## [Sin publicar]
+
+- **Wysiwyg: los popovers del editor ya no se recortan en el modal de
+  bloque** (`@edc-motor/ui`): el selector de iconos y el mini-popover de
+  enlace de `RichTextInput` se promocionan a la top layer del navegador
+  con `useDropdownPanel` (nueva opción `matchWidth: false` del composable:
+  el panel conserva su ancho propio y solo se clampea su `left` al
+  viewport), igual que ya hacían los desplegables de `BaseSelect`/
+  `SearchSelect`. Antes, el `overflow` del cuerpo del modal los cortaba y
+  no se podían elegir todos los iconos.
+
 ## [0.4.28] — 2026-07-22
 
 - **Paneles derechos: los flags dejan de ser "acciones"** (`@edc-motor/
