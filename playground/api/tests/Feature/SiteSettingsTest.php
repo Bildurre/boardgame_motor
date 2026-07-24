@@ -105,6 +105,25 @@ it('normaliza el logo del formato antiguo (string) al locale por defecto', funct
     expect($public->json('data.logo'))->toBe([config('motor.default_locale') => 'https://cdn.example/logo.png']);
 });
 
+it('guarda los fondos de las vistas índice y el público los refleja', function () {
+    $admin = motorUser('admin');
+
+    // Mapa {clave del juego: URL}; las claves las decide el juego.
+    $this->actingAs($admin)->putJson('/api/admin/settings/site', [
+        'index_backgrounds' => [
+            'cards' => 'https://cdn.example/fondos/cartas.jpg',
+            'downloads' => null,
+        ],
+    ])->assertOk()->assertJsonPath('data.index_backgrounds.cards', 'https://cdn.example/fondos/cartas.jpg');
+
+    $public = $this->getJson('/api/site')->assertOk();
+    expect($public->json('data.index_backgrounds.cards'))->toBe('https://cdn.example/fondos/cartas.jpg');
+
+    // Sin configurar: mapa vacío por defecto (la SPA no pinta nada).
+    app(SiteSettings::class)->update(['index_backgrounds' => []]);
+    expect($this->getJson('/api/site')->json('data.index_backgrounds'))->toBe([]);
+});
+
 it('valida colores, modo y fuentes', function () {
     $admin = motorUser('admin');
 

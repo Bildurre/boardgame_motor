@@ -21,6 +21,17 @@ los cambios de API pueden llegar en versiones menores).
   editor, siempre a la vista dentro del modal (los iconos ganan columnas
   y scroll propio). La opción `matchWidth` de `useDropdownPanel` (0.4.29)
   desaparece; los select no cambian.
+- **Fondos configurables para las vistas índice del app pública**
+  (`edc-motor/core`): nuevo ajuste `index_backgrounds` en los site
+  settings — mapa `{clave: URL}` con claves definidas por el juego (p. ej.
+  `cards`, `downloads`…). El admin del juego lo edita con el patrón de
+  subida diferida del favicon y la SPA lo pinta con el `PageBackground`
+  de `@edc-motor/ui` (el mismo del fondo de página del CRM).
+- **Inputs de imagen: el cuadro de arrastre, centrado en el campo**
+  (`@edc-motor/ui` + `@edc-motor/admin-kit`): se revierte el estiramiento
+  del form de bloque de 0.4.28 — el cuadro conserva su 160×160 y se
+  centra en vertical y horizontal en el espacio disponible, en TODOS los
+  inputs de imagen.
 
 ## [0.4.29] — 2026-07-24
 
