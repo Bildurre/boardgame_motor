@@ -13,7 +13,10 @@ admin). Paquete **fuente** (se consume vía Vite). Versión de tren con
   centrado sin flechas nativas, botones que respetan `min`/`max` (se
   deshabilitan en el tope), clamp al teclear, `step`, `disabled`,
   `invalid` (borde danger) y aria-labels (`label`, `decreaseLabel`,
-  `increaseLabel`). SCSS propio `_number-input.scss`.
+  `increaseLabel`). SCSS propio `_number-input.scss`; la regla genérica de
+  `_forms.scss` (`input[type="number"]` a 100%/36px) EXCLUYE su campo con
+  `:not(.number-input__field)` — le ganaba por especificidad y lo
+  deformaba a campo de línea.
 - **`createApi`: opción `locale`** (getter evaluado en CADA petición): el
   locale activo de la interfaz viaja como `?locale=` para que el
   `SetLocale` del servidor busque y ordene por el idioma que el usuario
