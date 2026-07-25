@@ -14,6 +14,18 @@ los cambios de API pueden llegar en versiones menores).
 
 ## [0.4.31] — 2026-07-25
 
+- **Listas alfabéticas por defecto y búsqueda en el locale activo**
+  (`@edc-motor/ui` + cascarón): `createApi` gana la opción `locale` — el
+  admin manda su idioma activo en cada petición y el servidor busca
+  (`HasFilters`, que ya buscaba en el json del locale) y ordena por ese
+  idioma de verdad; el default de `SortToggles`/`ListToolbar` pasa de
+  "más recientes" a "alfabético A-Z". **Migración del cascarón**:
+  `admin/src/lib/api.ts` + `admin/src/components/ListToolbar.vue`, y el
+  `sort` por defecto de los index del juego debe pasar a
+  `orderBy("name->{locale}")`.
+- **`NumberInput` genérico** (`@edc-motor/ui`): el input numérico con
+  steppers −/+ del contador de copias de mazos de CDL, como componente
+  reutilizable (min/max/step, invalid, aria-labels).
 - **Bloques con la tipografía de la cabecera clásica** (`@edc-motor/ui`):
   el título de TODOS los bloques baja a $fs-28 compacto (line-height 1.1,
   el h1 de base) y el subtítulo al tamaño del cuerpo ($fs-16) en color

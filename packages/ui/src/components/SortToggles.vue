@@ -22,7 +22,7 @@ const props = withDefaults(
     nameDescLabel?: string
   }>(),
   {
-    modelValue: 'latest',
+    modelValue: 'name',
     latestLabel: 'Más recientes primero',
     oldestLabel: 'Más antiguos primero',
     nameLabel: 'Alfabético (A-Z)',

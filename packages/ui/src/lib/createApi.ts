@@ -7,6 +7,13 @@ export interface CreateApiOptions {
   tokenKey: string
   /** Se invoca cuando la API responde 401 (token inválido/expirado). */
   onUnauthorized?: () => void
+  /**
+   * Locale ACTIVO de la interfaz (getter, se evalúa en cada petición): viaja
+   * como `?locale=` para que el SetLocale del servidor busque y ordene por el
+   * idioma que el usuario está viendo, no por el Accept-Language del
+   * navegador. Una petición con `locale` propio en params no se pisa.
+   */
+  locale?: () => string | null | undefined
 }
 
 /**
@@ -23,6 +30,10 @@ export function createApi(options: CreateApiOptions): AxiosInstance {
     const token = localStorage.getItem(options.tokenKey)
     if (token) {
       config.headers.Authorization = `Bearer ${token}`
+    }
+    const locale = options.locale?.()
+    if (locale && !(config.params && 'locale' in config.params)) {
+      config.params = { ...config.params, locale }
     }
     return config
   })

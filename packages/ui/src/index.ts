@@ -31,6 +31,7 @@ export {
 export const RichTextInput = defineAsyncComponent(() => import('./components/RichTextInput.vue'))
 export type { RichIcon, RichTextLabels } from './components/RichTextInput.vue'
 export { default as ImageUpload } from './components/ImageUpload.vue'
+export { default as NumberInput } from './components/NumberInput.vue'
 export { default as FontUpload } from './components/FontUpload.vue'
 export { default as BaseModal } from './components/BaseModal.vue'
 export { default as EditModal } from './components/EditModal.vue'
