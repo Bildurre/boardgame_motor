@@ -6,7 +6,30 @@ admin). Paquete **fuente** (se consume vía Vite). Versión de tren con
 
 ## [Sin publicar]
 
+### Añadido
+
+- **`NumberInput`: input numérico genérico con steppers −/+** (nacido como
+  el contador de copias del editor de mazos de CDL, generalizado): input
+  centrado sin flechas nativas, botones que respetan `min`/`max` (se
+  deshabilitan en el tope), clamp al teclear, `step`, `disabled`,
+  `invalid` (borde danger) y aria-labels (`label`, `decreaseLabel`,
+  `increaseLabel`). SCSS propio `_number-input.scss`.
+- **`createApi`: opción `locale`** (getter evaluado en CADA petición): el
+  locale activo de la interfaz viaja como `?locale=` para que el
+  `SetLocale` del servidor busque y ordene por el idioma que el usuario
+  está viendo, no por el `Accept-Language` del navegador. Una petición
+  que ya lleve `locale` propio no se pisa. El cascarón del admin lo
+  conecta a su selector de idioma (`localStorage[LOCALE_KEY]`).
+  **Migración del cascarón**: copiar `admin/src/lib/api.ts` y
+  `admin/src/components/ListToolbar.vue`.
+
 ### Cambiado
+
+- **Orden por defecto de las listas: ALFABÉTICO (A-Z) del locale actual**:
+  el `modelValue` por defecto de `SortToggles` pasa de `latest` a `name`
+  (y el `ListToolbar` del cascarón igual). El contrato de `sort` de los
+  index de cada juego debe responder a su vez con el alfabético del
+  locale activo como default (`orderBy("name->{locale}")`).
 
 - **Títulos y subtítulos de TODOS los bloques al estilo de la cabecera
   clásica de índices y fichas** (`_blocks.scss`): título $fs-32 → $fs-28

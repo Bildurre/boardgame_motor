@@ -1,0 +1,48 @@
+@use "tokens" as *;
+
+// Input numérico compacto con steppers −/+ (NumberInput.vue): la estética
+// del contador de copias del editor de mazos de CDL, generalizada.
+.number-input {
+  display: inline-flex;
+  align-items: center;
+  gap: $space-1;
+
+  &__step {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.6rem;
+    height: 1.6rem;
+    padding: 0;
+    border: 1px solid $border;
+    border-radius: $radius-sm;
+    background: $surface-2;
+    color: $text-2;
+    cursor: pointer;
+
+    &:hover:not(:disabled) { color: $text-1; border-color: $text-3; }
+    &:disabled { opacity: $disabled-opacity; cursor: not-allowed; }
+  }
+
+  &__field {
+    width: 2.6rem;
+    padding: 0.1rem 0.2rem;
+    text-align: center;
+    font-weight: $k-fw-bold;
+    font-size: $fs-13;
+    color: $text-1;
+    border: 1px solid $border;
+    border-radius: $radius-sm;
+    background: $surface;
+    appearance: textfield;
+    -moz-appearance: textfield;
+
+    &::-webkit-outer-spin-button,
+    &::-webkit-inner-spin-button {
+      appearance: none;
+      margin: 0;
+    }
+  }
+
+  &--invalid &__field { color: $danger; border-color: $danger; }
+}
