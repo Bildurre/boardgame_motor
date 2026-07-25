@@ -12,6 +12,10 @@ El formato sigue [Keep a Changelog](https://keepachangelog.com/es/) y el
 versionado, [SemVer](https://semver.org/lang/es/) (mientras estemos en `0.x`,
 los cambios de API pueden llegar en versiones menores).
 
+## [0.4.32] — 2026-07-26
+
+- Sin cambios propios: versión de tren.
+
 ## [0.4.31] — 2026-07-25
 
 - **Listas alfabéticas por defecto y búsqueda en el locale activo**
