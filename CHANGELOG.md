@@ -14,7 +14,8 @@ los cambios de API pueden llegar en versiones menores).
 
 ## [0.4.36] — 2026-07-26
 
-- Sin cambios propios: versión de tren.
+- **`BaseButton` centra mejor su texto** (`@edc-motor/ui`):
+  `line-height: 1` en `.edc-button__text` (antes 1.2).
 
 ## [0.4.35] — 2026-07-26
 
