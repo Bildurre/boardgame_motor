@@ -12,7 +12,7 @@ El formato sigue [Keep a Changelog](https://keepachangelog.com/es/) y el
 versionado, [SemVer](https://semver.org/lang/es/) (mientras estemos en `0.x`,
 los cambios de API pueden llegar en versiones menores).
 
-## [Sin publicar]
+## [0.4.35] — 2026-07-26
 
 - **`MultiSelect` se cierra al elegir** (`@edc-motor/ui`): como el select
   simple — un valor por apertura, las marcas persisten al reabrir.
