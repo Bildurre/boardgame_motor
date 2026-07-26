@@ -4,6 +4,15 @@ Componentes Vue 3 + SCSS para las webs públicas (y piezas compartidas con el
 admin). Paquete **fuente** (se consume vía Vite). Versión de tren con
 `edc-motor/core` y `@edc-motor/admin-kit`.
 
+## [Sin publicar]
+
+### Cambiado
+
+- **`MultiSelect` se cierra al elegir una opción** (como el select
+  simple): un valor por apertura — para añadir otro se reabre y las
+  marcas siguen ahí. Antes el panel quedaba abierto para marcar varias
+  seguidas y resultaba raro de cerrar.
+
 ## [0.4.34] — 2026-07-26
 
 ### Añadido

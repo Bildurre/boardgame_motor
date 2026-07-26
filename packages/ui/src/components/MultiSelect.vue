@@ -6,12 +6,13 @@ import type { SelectOption } from './BaseSelect.vue'
 
 // Select MÚLTIPLE de formulario: el hermano de BaseSelect para filtros y
 // campos de varios valores. Mismo trigger (.form-field__select) y mismo
-// panel en la top layer (useDropdownPanel), pero cada opción es un toggle
-// con marca de check y el panel NO se cierra al marcar (se cierra con
-// Escape, Tab o click fuera). El valor viaja como array de strings (mismo
-// criterio String() que BaseSelect). El trigger pinta las etiquetas
-// elegidas unidas por comas (el CSS las trunca con elipsis) — así no hace
-// falta ningún texto "N seleccionadas" que traducir.
+// panel en la top layer (useDropdownPanel); cada opción es un toggle con
+// marca de check y el panel SE CIERRA al elegir (como el simple: un valor
+// por apertura — para añadir otro se reabre y las marcas siguen ahí). El
+// valor viaja como array de strings (mismo criterio String() que
+// BaseSelect). El trigger pinta las etiquetas elegidas unidas por comas
+// (el CSS las trunca con elipsis) — así no hace falta ningún texto
+// "N seleccionadas" que traducir.
 const props = withDefaults(
   defineProps<{
     modelValue?: (string | number)[]
@@ -71,7 +72,7 @@ function toggle() {
   else void openPanel()
 }
 
-/** Marca/desmarca la opción SIN cerrar el panel (a diferencia del simple). */
+/** Marca/desmarca la opción y CIERRA el panel (como el select simple). */
 function toggleOption(option: SelectOption) {
   const value = String(option.value)
   const next = props.modelValue.map((v) => String(v))
@@ -79,6 +80,7 @@ function toggleOption(option: SelectOption) {
   if (at === -1) next.push(value)
   else next.splice(at, 1)
   emit('update:modelValue', next)
+  close()
 }
 
 function highlight(index: number) {

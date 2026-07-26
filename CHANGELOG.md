@@ -12,6 +12,11 @@ El formato sigue [Keep a Changelog](https://keepachangelog.com/es/) y el
 versionado, [SemVer](https://semver.org/lang/es/) (mientras estemos en `0.x`,
 los cambios de API pueden llegar en versiones menores).
 
+## [Sin publicar]
+
+- **`MultiSelect` se cierra al elegir** (`@edc-motor/ui`): como el select
+  simple — un valor por apertura, las marcas persisten al reabrir.
+
 ## [0.4.34] — 2026-07-26
 
 - **`MultiSelect`** (`@edc-motor/ui`): select múltiple de formulario con
