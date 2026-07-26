@@ -4,6 +4,17 @@ Componentes Vue 3 + SCSS para las webs públicas (y piezas compartidas con el
 admin). Paquete **fuente** (se consume vía Vite). Versión de tren con
 `edc-motor/core` y `@edc-motor/admin-kit`.
 
+## [Sin publicar]
+
+### Eliminado
+
+- **Fuera `NumberInput`: duplicaba a `NumericInput`** (nació en 0.4.32
+  como contador de copias del editor de mazos y no aportaba nada que el
+  veterano no hiciera). El campo numérico del motor es `NumericInput`
+  (botones −/+, clamp a min/max, entero por defecto). Se va también su
+  scss (`_number-input.scss`) y la regla genérica de `_forms.scss`
+  recupera su forma sin la excepción `:not(.number-input__field)`.
+
 ## [0.4.36] — 2026-07-26
 
 ### Cambiado

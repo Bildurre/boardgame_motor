@@ -9,13 +9,11 @@
 .field { display: flex; flex-direction: column; gap: $space-1; }
 .field__label, .field label { font-size: $fs-13; color: $text-2; }
 
-// El numérico compacto del NumberInput queda FUERA: esta regla genérica le
-// ganaba por especificidad y le imponía el 100%/36px de un campo de línea.
 input[type="text"],
 input[type="email"],
 input[type="password"],
 input[type="search"],
-input[type="number"]:not(.number-input__field),
+input[type="number"],
 select,
 textarea {
   font: inherit;
