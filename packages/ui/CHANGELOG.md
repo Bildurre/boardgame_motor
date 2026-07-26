@@ -12,6 +12,8 @@ admin). Paquete **fuente** (se consume vía Vite). Versión de tren con
   simple): un valor por apertura — para añadir otro se reabre y las
   marcas siguen ahí. Antes el panel quedaba abierto para marcar varias
   seguidas y resultaba raro de cerrar.
+- **`BaseButton`: `line-height: 1` en el texto** (`.edc-button__text`,
+  antes 1.2): el texto centra mejor en la altura fija del botón.
 
 ## [0.4.34] — 2026-07-26
 
