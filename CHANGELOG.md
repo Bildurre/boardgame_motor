@@ -12,16 +12,19 @@ El formato sigue [Keep a Changelog](https://keepachangelog.com/es/) y el
 versionado, [SemVer](https://semver.org/lang/es/) (mientras estemos en `0.x`,
 los cambios de API pueden llegar en versiones menores).
 
-## [0.4.32] — 2026-07-26
-
-- Sin cambios propios: versión de tren.
-
-## [0.4.31] — 2026-07-25
+## [Sin publicar]
 
 - **Búsqueda sin mayúsculas ni acentos** (`edc-motor/core`): "CaMiON"
   encuentra "Camión" — plegado `SqlFold` en el SQL de `HasFilters` (y del
   listado de usuarios), aplicado a columna y término; expuesto para que
   los juegos plieguen también sus ORDER BY alfabéticos.
+- **Chip de identidad teñido** (`@edc-motor/ui`): `.chip.is-tinted` — el
+  color del dato (p. ej. la facción) pasa a ser el fondo del chip y el
+  texto elige blanco o negro por luminosidad real (lch), legible con
+  cualquier color y en ambos temas.
+
+## [0.4.32] — 2026-07-26
+
 - **Listas alfabéticas por defecto y búsqueda en el locale activo**
   (`@edc-motor/ui` + cascarón): `createApi` gana la opción `locale` — el
   admin manda su idioma activo en cada petición y el servidor busca
@@ -34,6 +37,9 @@ los cambios de API pueden llegar en versiones menores).
 - **`NumberInput` genérico** (`@edc-motor/ui`): el input numérico con
   steppers −/+ del contador de copias de mazos de CDL, como componente
   reutilizable (min/max/step, invalid, aria-labels).
+
+## [0.4.31] — 2026-07-25
+
 - **Bloques con la tipografía de la cabecera clásica** (`@edc-motor/ui`):
   el título de TODOS los bloques baja a $fs-28 compacto (line-height 1.1,
   el h1 de base) y el subtítulo al tamaño del cuerpo ($fs-16) en color

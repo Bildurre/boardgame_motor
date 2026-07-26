@@ -4,11 +4,19 @@ Componentes Vue 3 + SCSS para las webs públicas (y piezas compartidas con el
 admin). Paquete **fuente** (se consume vía Vite). Versión de tren con
 `edc-motor/core` y `@edc-motor/admin-kit`.
 
+## [Sin publicar]
+
+### Añadido
+
+- **`.chip.is-tinted`: chip de identidad teñido por dato** (p. ej. la
+  facción de un juego): el color llega por la variable `--chip-tint`
+  (style en línea) y pasa a ser el FONDO del chip; el texto elige blanco
+  o negro por luminosidad real (truco lch del `contrast-text`, como los
+  botones de bloque) — legible con cualquier color y en ambos temas. El
+  patrón viejo (teñir el TEXTO del chip de contorno) no se leía con
+  colores claros en tema claro y viceversa.
+
 ## [0.4.32] — 2026-07-26
-
-- Sin cambios propios: versión de tren.
-
-## [0.4.31] — 2026-07-25
 
 ### Añadido
 
@@ -30,16 +38,6 @@ admin). Paquete **fuente** (se consume vía Vite). Versión de tren con
   **Migración del cascarón**: copiar `admin/src/lib/api.ts` y
   `admin/src/components/ListToolbar.vue`.
 
-### Añadido (chip)
-
-- **`.chip.is-tinted`: chip de identidad teñido por dato** (p. ej. la
-  facción de un juego): el color llega por la variable `--chip-tint`
-  (style en línea) y pasa a ser el FONDO del chip; el texto elige blanco
-  o negro por luminosidad real (truco lch del `contrast-text`, como los
-  botones de bloque) — legible con cualquier color y en ambos temas. El
-  patrón viejo (teñir el TEXTO del chip de contorno) no se leía con
-  colores claros en tema claro y viceversa.
-
 ### Cambiado
 
 - **Orden por defecto de las listas: ALFABÉTICO (A-Z) del locale actual**:
@@ -47,6 +45,10 @@ admin). Paquete **fuente** (se consume vía Vite). Versión de tren con
   (y el `ListToolbar` del cascarón igual). El contrato de `sort` de los
   index de cada juego debe responder a su vez con el alfabético del
   locale activo como default (`orderBy("name->{locale}")`).
+
+## [0.4.31] — 2026-07-25
+
+### Cambiado
 
 - **Títulos y subtítulos de TODOS los bloques al estilo de la cabecera
   clásica de índices y fichas** (`_blocks.scss`): título $fs-32 → $fs-28
