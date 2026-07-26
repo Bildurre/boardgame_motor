@@ -30,6 +30,16 @@ admin). Paquete **fuente** (se consume vía Vite). Versión de tren con
   **Migración del cascarón**: copiar `admin/src/lib/api.ts` y
   `admin/src/components/ListToolbar.vue`.
 
+### Añadido (chip)
+
+- **`.chip.is-tinted`: chip de identidad teñido por dato** (p. ej. la
+  facción de un juego): el color llega por la variable `--chip-tint`
+  (style en línea) y pasa a ser el FONDO del chip; el texto elige blanco
+  o negro por luminosidad real (truco lch del `contrast-text`, como los
+  botones de bloque) — legible con cualquier color y en ambos temas. El
+  patrón viejo (teñir el TEXTO del chip de contorno) no se leía con
+  colores claros en tema claro y viceversa.
+
 ### Cambiado
 
 - **Orden por defecto de las listas: ALFABÉTICO (A-Z) del locale actual**:

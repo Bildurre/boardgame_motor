@@ -20,4 +20,15 @@
   &.is-info { color: $info; border-color: color-mix(in srgb, $info 45%, transparent); }
   &.is-missing { color: $warning; border-color: color-mix(in srgb, $warning 45%, transparent); }
   &.is-failed { color: $danger; border-color: color-mix(in srgb, $danger 45%, transparent); }
+
+  // Chip de IDENTIDAD teñido por dato (p. ej. la facción de un juego): el
+  // color llega por --chip-tint (style en línea) y pasa a ser el FONDO; el
+  // texto elige blanco o negro por luminosidad real (truco lch, como los
+  // botones de bloque) — legible con cualquier color y en ambos temas, que
+  // era el problema del texto teñido sobre el fondo del chip de contorno.
+  &.is-tinted {
+    background: var(--chip-tint);
+    border-color: transparent;
+    @include contrast-text(var(--chip-tint));
+  }
 }
