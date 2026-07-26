@@ -18,6 +18,10 @@ los cambios de API pueden llegar en versiones menores).
 
 ## [0.4.31] — 2026-07-25
 
+- **Búsqueda sin mayúsculas ni acentos** (`edc-motor/core`): "CaMiON"
+  encuentra "Camión" — plegado `SqlFold` en el SQL de `HasFilters` (y del
+  listado de usuarios), aplicado a columna y término; expuesto para que
+  los juegos plieguen también sus ORDER BY alfabéticos.
 - **Listas alfabéticas por defecto y búsqueda en el locale activo**
   (`@edc-motor/ui` + cascarón): `createApi` gana la opción `locale` — el
   admin manda su idioma activo en cada petición y el servidor busca

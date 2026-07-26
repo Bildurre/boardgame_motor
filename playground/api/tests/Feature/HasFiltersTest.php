@@ -62,3 +62,31 @@ it('la búsqueda va agrupada y no rompe el filtro de estado', function () {
         ->assertJsonCount(1, 'data')
         ->assertJsonPath('data.0.name.es', 'Espada rota');
 });
+
+it('busca sin distinguir mayúsculas ni acentos (plegado SqlFold)', function () {
+    filterCharacter(['es' => 'Camión de Asalto']);
+    filterCharacter(['es' => 'Ñu Embravecido']);
+    filterCharacter(['es' => 'Arquera']);
+
+    $admin = motorUser('admin');
+
+    // "CaMiON" (sin acento, mayúsculas de por medio) encuentra "Camión…".
+    $this->actingAs($admin)
+        ->getJson('/api/admin/characters?search=CaMiON&locale=es')
+        ->assertOk()
+        ->assertJsonCount(1, 'data')
+        ->assertJsonPath('data.0.name.es', 'Camión de Asalto');
+
+    // Al revés también: buscar CON acento encuentra aunque se guarde igual.
+    $this->actingAs($admin)
+        ->getJson('/api/admin/characters?search=camión&locale=es')
+        ->assertOk()
+        ->assertJsonCount(1, 'data');
+
+    // La eñe pliega a ene: "nu" encuentra "Ñu".
+    $this->actingAs($admin)
+        ->getJson('/api/admin/characters?search=nu+embra&locale=es')
+        ->assertOk()
+        ->assertJsonCount(1, 'data')
+        ->assertJsonPath('data.0.name.es', 'Ñu Embravecido');
+});
