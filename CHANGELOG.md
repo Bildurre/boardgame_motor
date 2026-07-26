@@ -12,7 +12,7 @@ El formato sigue [Keep a Changelog](https://keepachangelog.com/es/) y el
 versionado, [SemVer](https://semver.org/lang/es/) (mientras estemos en `0.x`,
 los cambios de API pueden llegar en versiones menores).
 
-## [Sin publicar]
+## [0.4.33] — 2026-07-26
 
 - **Búsqueda sin mayúsculas ni acentos** (`edc-motor/core`): "CaMiON"
   encuentra "Camión" — plegado `SqlFold` en el SQL de `HasFilters` (y del
