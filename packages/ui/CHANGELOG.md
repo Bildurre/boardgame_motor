@@ -4,6 +4,21 @@ Componentes Vue 3 + SCSS para las webs públicas (y piezas compartidas con el
 admin). Paquete **fuente** (se consume vía Vite). Versión de tren con
 `edc-motor/core` y `@edc-motor/admin-kit`.
 
+## [Sin publicar]
+
+### Añadido
+
+- **`MultiSelect`: select MÚLTIPLE de formulario**, el hermano de
+  `BaseSelect` para filtros y campos de varios valores: mismo trigger
+  (`.form-field__select`) y mismo panel en la top layer
+  (`useDropdownPanel`), pero cada opción es un toggle con casilla de
+  check y el panel NO se cierra al marcar (Escape, Tab o click fuera).
+  `v-model` = array de strings; el trigger pinta las etiquetas elegidas
+  unidas por comas (elipsis por CSS) y el `placeholder` hace de "Todas"
+  — sin textos que traducir. Teclado completo como el simple.
+  Pensado para los filtros de los index (varios valores a la vez) junto
+  a un botón "Limpiar" del consumidor.
+
 ## [0.4.33] — 2026-07-26
 
 ### Añadido

@@ -12,6 +12,13 @@ El formato sigue [Keep a Changelog](https://keepachangelog.com/es/) y el
 versionado, [SemVer](https://semver.org/lang/es/) (mientras estemos en `0.x`,
 los cambios de API pueden llegar en versiones menores).
 
+## [Sin publicar]
+
+- **`MultiSelect`** (`@edc-motor/ui`): select múltiple de formulario con
+  la estética de `BaseSelect` (panel top layer, opciones con casilla de
+  check que no cierran al marcar, array de strings) — para que los
+  filtros de los index acepten varios valores a la vez.
+
 ## [0.4.33] — 2026-07-26
 
 - **Búsqueda sin mayúsculas ni acentos** (`edc-motor/core`): "CaMiON"
