@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, nextTick, onBeforeUnmount, ref } from 'vue'
-import { Check } from '@lucide/vue'
+import { Check, X } from '@lucide/vue'
 import { useDropdownPanel } from '../composables/useDropdownPanel'
 import type { SelectOption } from './BaseSelect.vue'
 
@@ -10,9 +10,9 @@ import type { SelectOption } from './BaseSelect.vue'
 // marca de check y el panel SE CIERRA al elegir (como el simple: un valor
 // por apertura — para añadir otro se reabre y las marcas siguen ahí). El
 // valor viaja como array de strings (mismo criterio String() que
-// BaseSelect). El trigger pinta las etiquetas elegidas unidas por comas
-// (el CSS las trunca con elipsis) — así no hace falta ningún texto
-// "N seleccionadas" que traducir.
+// BaseSelect). El trigger pinta las elegidas como etiquetas con aspa: se
+// quitan desde ahí sin abrir el panel (también con Backspace); así no
+// hace falta ningún texto "N seleccionadas" que traducir.
 const props = withDefaults(
   defineProps<{
     modelValue?: (string | number)[]
@@ -42,12 +42,17 @@ useDropdownPanel(root, panel, open)
 
 const selectedValues = computed(() => new Set(props.modelValue.map((v) => String(v))))
 const isSelected = (option: SelectOption) => selectedValues.value.has(String(option.value))
-const triggerLabel = computed(() =>
-  props.options
-    .filter((o) => isSelected(o))
-    .map((o) => o.label)
-    .join(', '),
-)
+const selectedOptions = computed(() => props.options.filter((o) => isSelected(o)))
+
+/** Quita una elegida desde su etiqueta del trigger, sin tocar el panel. */
+function removeOption(option: SelectOption) {
+  if (props.disabled) return
+  const value = String(option.value)
+  emit(
+    'update:modelValue',
+    props.modelValue.map((v) => String(v)).filter((v) => v !== value),
+  )
+}
 
 function optionId(index: number) {
   return `${selectId}-opt-${index}`
@@ -101,6 +106,10 @@ function onKeydown(e: KeyboardEvent) {
     if (['ArrowDown', 'ArrowUp', 'Enter', ' '].includes(e.key)) {
       e.preventDefault()
       void openPanel()
+    } else if (e.key === 'Backspace' && selectedOptions.value.length) {
+      // Quitar la última elegida sin abrir el panel (espejo del aspa).
+      e.preventDefault()
+      removeOption(selectedOptions.value[selectedOptions.value.length - 1])
     }
     return
   }
@@ -171,9 +180,22 @@ onBeforeUnmount(() => document.removeEventListener('mousedown', onOutside))
         @click="toggle"
         @keydown="onKeydown"
       >
-        <span class="base-select__value" :class="{ 'is-placeholder': !triggerLabel }">
-          {{ triggerLabel || placeholder }}
+        <!-- Elegidas como etiquetas con aspa (el aspa NO abre el panel);
+             span con role=button porque un button no puede anidar otro -->
+        <span v-if="selectedOptions.length" class="multi-select__tags">
+          <span v-for="option in selectedOptions" :key="option.value" class="multi-select__tag">
+            {{ option.label }}
+            <span
+              class="multi-select__tag-remove"
+              role="button"
+              :aria-label="String(option.label)"
+              @click.stop="removeOption(option)"
+            >
+              <X :size="12" />
+            </span>
+          </span>
         </span>
+        <span v-else class="base-select__value is-placeholder">{{ placeholder }}</span>
       </button>
 
       <ul

@@ -6,6 +6,13 @@ admin). Paquete **fuente** (se consume vía Vite). Versión de tren con
 
 ## [Sin publicar]
 
+### Cambiado
+
+- **`MultiSelect`: las elegidas se quitan desde el trigger** — cada una
+  se pinta como etiqueta con aspa (y Backspace quita la última), sin
+  tener que reabrir el panel para desmarcar. El trigger crece con las
+  etiquetas (min-height en vez del alto fijo).
+
 ### Eliminado
 
 - **Fuera `NumberInput`: duplicaba a `NumericInput`** (nació en 0.4.32

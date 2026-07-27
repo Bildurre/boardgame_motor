@@ -1,12 +1,54 @@
 @use "tokens" as *;
 
 // Select múltiple (MultiSelect.vue): hereda toda la estética de .base-select;
-// aquí solo la casilla de check de cada opción y el truncado del trigger.
+// aquí la casilla de check de cada opción y las etiquetas del trigger (las
+// elegidas se quitan desde su aspa sin abrir el panel).
 .multi-select {
   .base-select__value {
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+  }
+
+  // El trigger crece con las etiquetas (min-height en vez del alto fijo).
+  .base-select__trigger {
+    height: auto;
+    min-height: $input-height;
+    padding-block: 4px;
+  }
+
+  &__tags {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 4px;
+    min-width: 0;
+  }
+
+  &__tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    max-width: 100%;
+    padding: 1px $space-1 1px $space-2;
+    border: 1px solid $border;
+    border-radius: $radius-sm;
+    background: $surface-2;
+    font-size: $fs-13;
+    line-height: 1.4;
+  }
+
+  &__tag-remove {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: none;
+    color: $text-3;
+    cursor: pointer;
+
+    &:hover {
+      color: $danger;
+    }
   }
 
   &__option {

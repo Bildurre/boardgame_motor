@@ -14,6 +14,9 @@ los cambios de API pueden llegar en versiones menores).
 
 ## [Sin publicar]
 
+- **`MultiSelect` con etiquetas eliminables en el trigger**
+  (`@edc-motor/ui`): las elegidas se quitan desde su aspa (o con
+  Backspace) sin reabrir el panel.
 - **Fuera `NumberInput`** (`@edc-motor/ui`): duplicaba a `NumericInput`,
   que queda como único campo numérico del motor.
 
