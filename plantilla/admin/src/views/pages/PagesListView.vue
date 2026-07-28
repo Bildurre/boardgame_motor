@@ -14,7 +14,7 @@ import {
   Trash2,
 } from '@lucide/vue'
 import { BaseButton, BaseSelect, useConfirm, useToast } from '@edc-motor/ui'
-import { useCardDeselect, useRightSidebar } from '@edc-motor/admin-kit'
+import { blockPreview, useCardDeselect, useRightSidebar } from '@edc-motor/admin-kit'
 import { api } from '@/lib/api'
 import ListToolbar from '@/components/ListToolbar.vue'
 import PageFormModal, { type PageRow } from '@/components/pages/PageFormModal.vue'
@@ -91,18 +91,12 @@ function blockTypeName(key: string): string {
   return te(`blockTypes.${key}`) ? t(`blockTypes.${key}`) : fallback
 }
 
-/** Primer texto traducible con valor, sin HTML (una línea en el panel). */
+/** Preview del bloque (helper transversal del admin-kit): primera frase del
+ *  primer campo con contenido (título > subtítulo > contenido), sin HTML —
+ *  aquí truncada por CSS a una línea. */
 function blockSummary(block: { type: string; settings: Record<string, unknown> }): string {
   const type = blockTypes.value.find((t) => t.key === block.type)
-  for (const field of type?.fields ?? []) {
-    if (!['text', 'textarea', 'richtext'].includes(field.type)) continue
-    const value = block.settings?.[field.key]
-    if (field.translatable && value && typeof value === 'object') {
-      const text = displayText(value as Record<string, string>)
-      if (text) return text.replace(/<[^>]*>/g, '').slice(0, 90)
-    }
-  }
-  return ''
+  return blockPreview(block.settings, type?.fields ?? [], displayText)
 }
 
 watch(selectedId, async (id) => {

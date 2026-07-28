@@ -1,17 +1,7 @@
 <script setup lang="ts">
 import { computed, onMounted, reactive, ref } from 'vue'
 import type { AxiosInstance } from 'axios'
-import {
-  ArrowDown,
-  ArrowUp,
-  Compass,
-  Eye,
-  EyeOff,
-  File,
-  GripVertical,
-  RotateCcw,
-  Save,
-} from '@lucide/vue'
+import { ArrowDown, ArrowUp, Eye, EyeOff, GripVertical, RotateCcw, Save } from '@lucide/vue'
 import { BaseButton, useToast } from '@edc-motor/ui'
 
 // Configurador del menú de la web pública (doc 10 ampliado, rediseño sin
@@ -27,7 +17,6 @@ import { BaseButton, useToast } from '@edc-motor/ui'
 
 export interface MenuManagerLabels {
   empty: string
-  hidden: string
   draft: string
   moveUp: string
   moveDown: string
@@ -41,7 +30,6 @@ export interface MenuManagerLabels {
 
 const defaultLabels: MenuManagerLabels = {
   empty: 'El menú aún no tiene elementos.',
-  hidden: 'Oculto',
   draft: 'Borrador',
   moveUp: 'Subir',
   moveDown: 'Bajar',
@@ -367,15 +355,11 @@ defineExpose({ isDirty })
       >
         <span class="menu-manager__grip"><GripVertical :size="15" /></span>
 
-        <span class="menu-manager__icon">
-          <File v-if="row.node.type === 'page'" :size="16" />
-          <Compass v-else :size="16" />
-        </span>
-
         <span class="menu-manager__label">{{ labelOf(row.node) }}</span>
 
+        <!-- Sin chip «Oculto»: el estado lo cuenta el color del botón de
+             visibilidad (ámbar = oculta) -->
         <span class="menu-manager__badges">
-          <span v-if="!row.node.is_visible" class="chip is-missing">{{ L.hidden }}</span>
           <span
             v-if="row.node.type === 'page' && row.node.page && !row.node.page.is_published"
             class="chip is-missing"

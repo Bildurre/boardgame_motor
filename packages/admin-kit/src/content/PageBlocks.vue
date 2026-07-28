@@ -13,6 +13,7 @@ import {
   type RichTextLabels,
 } from '@edc-motor/ui'
 import SchemaFields, { type FieldSchema } from './SchemaFields.vue'
+import { blockPreview } from './blockPreview'
 import { collectImageUrls, deleteContentImage, uploadPendingImages } from './deferredImages'
 import { useRightSidebar } from '../composables/useRightSidebar'
 import { useCardDeselect } from '../composables/useCardDeselect'
@@ -55,6 +56,8 @@ export interface PageBlocksLabels {
   /** Título de la sección de interruptores (PDF/Índice) del panel, debajo
    *  de las acciones de verdad (editar, borrar…). */
   stateKicker: string
+  /** Título de la sección de detalles del panel (el tipo del bloque). */
+  details: string
 }
 
 const defaultLabels: PageBlocksLabels = {
@@ -79,6 +82,7 @@ const defaultLabels: PageBlocksLabels = {
   parent: 'Bloque padre (índices indentados)',
   parentNone: '— Ninguno —',
   stateKicker: 'Estado',
+  details: 'Detalles',
 }
 
 const props = withDefaults(
@@ -244,18 +248,12 @@ function displayText(map: Record<string, string> | null | undefined): string {
   return map[props.displayLocale] || Object.values(map).find(Boolean) || ''
 }
 
-/** Resumen del bloque en la lista: el primer texto traducible con valor. */
+/** Resumen del bloque en la lista: preview depurado (`blockPreview`) — la
+ *  primera frase del primer campo con contenido (título > subtítulo >
+ *  contenido), completa en el index; card y paneles la truncan por CSS. */
 function summary(block: BlockRow): string {
   const type = types.value.find((t) => t.key === block.type)
-  for (const field of type?.fields ?? []) {
-    if (!['text', 'textarea', 'richtext'].includes(field.type)) continue
-    const value = block.settings?.[field.key]
-    if (field.translatable && value && typeof value === 'object') {
-      const text = displayText(value as Record<string, string>)
-      if (text) return text.replace(/<[^>]*>/g, '').slice(0, 80)
-    }
-  }
-  return ''
+  return blockPreview(block.settings, type?.fields ?? [], displayText)
 }
 
 /** URL de un campo imagen (traducible o no): la del locale actual. */
@@ -772,23 +770,18 @@ defineExpose({ reload: load })
             </BaseButton>
           </div>
 
-          <hr class="manager-panel__divider" />
-
-          <!-- El título del panel es el TIPO del bloque (el contenido va en
-               su sección, abajo) -->
-          <h3 class="manager-detail__title">{{ typeName(selected.type) }}</h3>
-
-          <!-- Estado de los interruptores, en texto -->
-          <p class="manager-detail__meta">
-            <strong>{{ L.printable }}</strong> {{ selected.is_printable ? L.yes : L.no }}
-          </p>
-          <p class="manager-detail__meta">
-            <strong>{{ L.indexable }}</strong> {{ selected.is_indexable ? L.yes : L.no }}
-          </p>
+          <!-- Detalles con el lenguaje de secciones del panel (divisoria +
+               kicker): el título es el TIPO del bloque. El estado de los
+               interruptores ya lo cuentan los botones de arriba. -->
+          <section class="manager-panel__section">
+            <hr class="manager-panel__divider" />
+            <p class="manager-panel__kicker">{{ L.details }}</p>
+            <h3 class="manager-detail__title">{{ typeName(selected.type) }}</h3>
+          </section>
 
           <!-- Contenido: cada campo del bloque con su valor (truncado) -->
-          <hr v-if="selectedFields.length" class="manager-panel__divider" />
-          <div v-if="selectedFields.length" class="manager-detail">
+          <section v-if="selectedFields.length" class="manager-panel__section">
+            <hr class="manager-panel__divider" />
             <p class="manager-panel__kicker">{{ L.panelContent }}</p>
             <dl class="manager-detail__fields">
               <div
@@ -807,7 +800,7 @@ defineExpose({ reload: load })
                 <dd v-else>{{ entry.value }}</dd>
               </div>
             </dl>
-          </div>
+          </section>
         </template>
       </div>
     </Teleport>

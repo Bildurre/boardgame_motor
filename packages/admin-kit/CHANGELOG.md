@@ -3,6 +3,39 @@
 Kit de construcción del panel de administración (sobre `@edc-motor/ui`). Paquete
 **fuente** (se consume vía Vite). Versión de tren con `edc-motor/core` y `@edc-motor/ui`.
 
+## [Sin publicar]
+
+### Añadido
+
+- **`blockPreview` / `firstSentence`** (`content/blockPreview.ts`,
+  exportados): preview depurado de un bloque — la PRIMERA FRASE (corta en
+  el primer `. ! ? … : ;` o salto de línea, sin HTML) del primer campo con
+  contenido en el orden título > subtítulo > contenido (el primer campo de
+  texto restante del esquema). Lo usa `PageBlocks` y queda disponible para
+  los paneles de los cascarones (que lo truncan por CSS a una línea).
+- **`.manager-panel__section`** (`_manager-card.scss`): sección del panel
+  derecho (divisoria + kicker + contenido) con el aire justo (`gap:
+  $space-2`), reutilizable por cualquier panel.
+
+### Cambiado
+
+- **`PageBlocks`: resumen depurado y panel de bloque en secciones** — el
+  resumen de la lista pasa de "primeros 80 caracteres" a `blockPreview`
+  (la primera frase completa; card y paneles la truncan por CSS); el panel
+  del bloque seleccionado se agrupa en secciones con divisoria + kicker
+  (nueva etiqueta `details`, por defecto «Detalles», para la sección del
+  tipo) y PIERDE las dos líneas de texto «Entra en el PDF de la página
+  Sí» / «Aparece en el índice Sí» (los interruptores de Estado ya cuentan
+  eso; las etiquetas `yes`/`no` quedan sin uso pero se conservan en la
+  interfaz).
+- **`MenuManager`: filas sin icono, sin chip «Oculto» y en UNA línea** —
+  fuera el icono de tipo (página/ruta) y el chip «Oculto» (la etiqueta
+  `hidden` desaparece de `MenuManagerLabels`: los cascarones deben dejar
+  de pasarla); la fila ya no hace wrap en estrecho (la etiqueta encoge con
+  elipsis y en muy estrecho baja de cuerpo); el botón de visibilidad se
+  pinta en ámbar (`$warning`, relleno) cuando la entrada está oculta — el
+  estado se ve por el color del botón.
+
 ## [0.4.37] — 2026-07-27
 
 - Sin cambios propios: versión de tren.

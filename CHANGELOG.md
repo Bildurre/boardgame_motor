@@ -12,6 +12,21 @@ El formato sigue [Keep a Changelog](https://keepachangelog.com/es/) y el
 versionado, [SemVer](https://semver.org/lang/es/) (mientras estemos en `0.x`,
 los cambios de API pueden llegar en versiones menores).
 
+## [Sin publicar]
+
+- **Preview de bloque depurado** (`@edc-motor/admin-kit`): helper
+  `blockPreview`/`firstSentence` (primera frase del primer campo con
+  contenido, título > subtítulo > contenido, sin HTML) — lo usa
+  `PageBlocks` y lo exporta el paquete para los paneles de los cascarones.
+- **Panel de bloque en secciones** (`@edc-motor/admin-kit`): `PageBlocks`
+  agrupa el panel del bloque con divisoria + kicker (nueva etiqueta
+  `details` y clase `.manager-panel__section`) y pierde las líneas de
+  texto «Entra en el PDF…» / «Aparece en el índice…».
+- **`MenuManager` sin icono ni chip «Oculto»** (`@edc-motor/admin-kit`):
+  filas en UNA línea (elipsis y cuerpo menor en muy estrecho) y botón de
+  visibilidad en ámbar (`$warning`) cuando la entrada está oculta; la
+  etiqueta `hidden` desaparece de `MenuManagerLabels`.
+
 ## [0.4.37] — 2026-07-27
 
 - **`MultiSelect` con etiquetas eliminables en el trigger**

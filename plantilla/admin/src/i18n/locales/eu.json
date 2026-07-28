@@ -241,6 +241,7 @@
       "panelTitle": "Blokea",
       "panelEmpty": "Aukeratu bloke bat bere ekintzak ikusteko.",
       "panelContent": "Edukia",
+      "details": "Xehetasunak",
       "parent": "Bloke gurasoa (aurkibide koskatuak)",
       "parentNone": "— Bat ere ez —",
       "printableShort": "PDF",

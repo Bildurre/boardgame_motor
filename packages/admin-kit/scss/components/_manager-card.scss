@@ -187,6 +187,14 @@
     width: 100%;
   }
 
+  // Sección del panel (divisoria + kicker + contenido) con el aire justo
+  // entre el kicker y lo suyo: reutilizable por cualquier panel derecho
+  // (la usa el panel de bloque de PageBlocks).
+  &__section {
+    display: grid;
+    gap: $space-2;
+  }
+
   // Botón-volver del panel (texto con flecha): del detalle de la card
   // seleccionada al estado sin selección (los filtros del listado).
   &__back {

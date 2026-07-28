@@ -241,6 +241,7 @@
       "panelTitle": "Bloque",
       "panelEmpty": "Selecciona un bloque para ver sus acciones.",
       "panelContent": "Contenido",
+      "details": "Detalles",
       "parent": "Bloque padre (índices indentados)",
       "parentNone": "— Ninguno —",
       "printableShort": "PDF",
