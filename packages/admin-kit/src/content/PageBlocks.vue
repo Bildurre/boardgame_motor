@@ -56,8 +56,6 @@ export interface PageBlocksLabels {
   /** Título de la sección de interruptores (PDF/Índice) del panel, debajo
    *  de las acciones de verdad (editar, borrar…). */
   stateKicker: string
-  /** Título de la sección de detalles del panel (el tipo del bloque). */
-  details: string
 }
 
 const defaultLabels: PageBlocksLabels = {
@@ -82,7 +80,6 @@ const defaultLabels: PageBlocksLabels = {
   parent: 'Bloque padre (índices indentados)',
   parentNone: '— Ninguno —',
   stateKicker: 'Estado',
-  details: 'Detalles',
 }
 
 const props = withDefaults(
@@ -770,14 +767,9 @@ defineExpose({ reload: load })
             </BaseButton>
           </div>
 
-          <!-- Detalles con el lenguaje de secciones del panel (divisoria +
-               kicker): el título es el TIPO del bloque. El estado de los
-               interruptores ya lo cuentan los botones de arriba. -->
-          <section class="manager-panel__section">
-            <hr class="manager-panel__divider" />
-            <p class="manager-panel__kicker">{{ L.details }}</p>
-            <h3 class="manager-detail__title">{{ typeName(selected.type) }}</h3>
-          </section>
+          <!-- El TIPO del bloque como título del panel (patrón de los
+               paneles de entidad), debajo del estado y fuera de secciones -->
+          <h3 class="manager-detail__title">{{ typeName(selected.type) }}</h3>
 
           <!-- Contenido: cada campo del bloque con su valor (truncado) -->
           <section v-if="selectedFields.length" class="manager-panel__section">
@@ -788,6 +780,7 @@ defineExpose({ reload: load })
                 v-for="entry in selectedFields"
                 :key="entry.field.key"
                 class="manager-detail__field"
+                :class="{ 'is-stacked': entry.field.type === 'image' }"
               >
                 <dt>{{ fieldLabel(entry.field) }}</dt>
                 <dd v-if="entry.field.type === 'image'">

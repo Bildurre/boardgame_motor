@@ -19,15 +19,16 @@ Kit de construcción del panel de administración (sobre `@edc-motor/ui`). Paque
 
 ### Cambiado
 
-- **`PageBlocks`: resumen depurado y panel de bloque en secciones** — el
-  resumen de la lista pasa de "primeros 80 caracteres" a `blockPreview`
-  (la primera frase completa; card y paneles la truncan por CSS); el panel
-  del bloque seleccionado se agrupa en secciones con divisoria + kicker
-  (nueva etiqueta `details`, por defecto «Detalles», para la sección del
-  tipo) y PIERDE las dos líneas de texto «Entra en el PDF de la página
-  Sí» / «Aparece en el índice Sí» (los interruptores de Estado ya cuentan
-  eso; las etiquetas `yes`/`no` quedan sin uso pero se conservan en la
-  interfaz).
+- **`PageBlocks`: resumen depurado y panel de bloque al patrón de los
+  paneles de entidad** — el resumen de la lista pasa de "primeros 80
+  caracteres" a `blockPreview` (la primera frase completa; card y paneles
+  la truncan por CSS); en el panel del bloque, el TIPO va como título
+  debajo de la sección Estado (fuera de secciones), el Contenido lista
+  cada campo como «Label: valor» EN LÍNEA (las imágenes, apiladas con la
+  miniatura debajo del label) y desaparecen las dos líneas de texto
+  «Entra en el PDF de la página Sí» / «Aparece en el índice Sí» (los
+  interruptores de Estado ya cuentan eso; las etiquetas `yes`/`no` quedan
+  sin uso pero se conservan en la interfaz).
 - **`MenuManager`: filas sin icono, sin chip «Oculto» y en UNA línea** —
   fuera el icono de tipo (página/ruta) y el chip «Oculto» (la etiqueta
   `hidden` desaparece de `MenuManagerLabels`: los cascarones deben dejar

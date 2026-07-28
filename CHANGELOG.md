@@ -18,10 +18,11 @@ los cambios de API pueden llegar en versiones menores).
   `blockPreview`/`firstSentence` (primera frase del primer campo con
   contenido, título > subtítulo > contenido, sin HTML) — lo usa
   `PageBlocks` y lo exporta el paquete para los paneles de los cascarones.
-- **Panel de bloque en secciones** (`@edc-motor/admin-kit`): `PageBlocks`
-  agrupa el panel del bloque con divisoria + kicker (nueva etiqueta
-  `details` y clase `.manager-panel__section`) y pierde las líneas de
-  texto «Entra en el PDF…» / «Aparece en el índice…».
+- **Panel de bloque al patrón de entidad** (`@edc-motor/admin-kit`): en
+  `PageBlocks` el tipo va como título bajo Estado, el contenido lista
+  «Label: valor» en línea (imágenes apiladas) con la nueva clase
+  `.manager-panel__section`, y fuera las líneas de texto «Entra en el
+  PDF…» / «Aparece en el índice…».
 - **`MenuManager` sin icono ni chip «Oculto»** (`@edc-motor/admin-kit`):
   filas en UNA línea (elipsis y cuerpo menor en muy estrecho) y botón de
   visibilidad en ámbar (`$warning`) cuando la entrada está oculta; la

@@ -63,7 +63,6 @@ const blockLabels = computed<Partial<PageBlocksLabels>>(() => ({
   parent: t('pages.blocks.parent'),
   parentNone: t('pages.blocks.parentNone'),
   stateKicker: t('common.stateKicker'),
-  details: t('pages.blocks.details'),
 }))
 
 /** Acción rápida del panel: alterna un flag de la página sin abrir el modal. */
