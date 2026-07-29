@@ -368,21 +368,28 @@
 
   // Campos del bloque seleccionado: etiqueta + valor; los valores largos se
   // recortan a unas pocas líneas.
+  // Campo del panel de bloque: «Label: valor» EN LÍNEA; las imágenes van
+  // apiladas (is-stacked), con la miniatura debajo del label.
   &__field {
-    display: grid;
-    gap: 2px;
+    display: flex;
+    align-items: baseline;
+    gap: $space-1;
     min-width: 0;
     font-size: $fs-13;
 
     dt {
+      flex: none;
       color: $text-3;
       font-size: $fs-12;
       text-transform: uppercase;
       letter-spacing: 0.04em;
+
+      &::after { content: ':'; }
     }
 
     dd {
       margin: 0;
+      min-width: 0;
       color: $text-2;
       overflow-wrap: anywhere;
       display: -webkit-box;
@@ -390,6 +397,13 @@
       -webkit-line-clamp: 4;
       line-clamp: 4;
       overflow: hidden;
+    }
+
+    &.is-stacked {
+      display: grid;
+      gap: 2px;
+
+      dt::after { content: none; }
     }
   }
 

@@ -241,7 +241,6 @@
       "panelTitle": "Block",
       "panelEmpty": "Pick a block to see its actions.",
       "panelContent": "Content",
-      "details": "Details",
       "parent": "Parent block (indented indexes)",
       "parentNone": "— None —",
       "printableShort": "PDF",
