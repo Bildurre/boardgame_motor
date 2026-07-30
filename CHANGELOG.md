@@ -14,6 +14,9 @@ los cambios de API pueden llegar en versiones menores).
 
 ## [Sin publicar]
 
+- **Arranca el ciclo 0.5.x**: repaso vista a vista de la app pública
+  (como el 0.4.x lo fue del admin). Los cambios de componentes públicos
+  del motor que salgan de ese repaso viajan en esta serie.
 - **`ThemeSelector` sin padding y con borde** (`@edc-motor/ui`): los
   botones llenan la caja y el control se delimita por el borde.
 
