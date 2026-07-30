@@ -12,6 +12,11 @@ El formato sigue [Keep a Changelog](https://keepachangelog.com/es/) y el
 versionado, [SemVer](https://semver.org/lang/es/) (mientras estemos en `0.x`,
 los cambios de API pueden llegar en versiones menores).
 
+## [Sin publicar]
+
+- **`ThemeSelector` sin padding y con borde** (`@edc-motor/ui`): los
+  botones llenan la caja y el control se delimita por el borde.
+
 ## [0.4.39] — 2026-07-29
 
 - **Panel de bloque rematado** (`@edc-motor/admin-kit`): el tipo del

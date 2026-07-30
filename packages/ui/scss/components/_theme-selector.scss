@@ -3,8 +3,8 @@
 .theme-selector {
   display: flex;
   background: $surface-2;
+  border: 1px solid $border;
   border-radius: $radius-sm;
-  padding: 2px;
   gap: 2px;
 }
 

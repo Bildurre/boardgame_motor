@@ -4,6 +4,15 @@ Componentes Vue 3 + SCSS para las webs públicas (y piezas compartidas con el
 admin). Paquete **fuente** (se consume vía Vite). Versión de tren con
 `edc-motor/core` y `@edc-motor/admin-kit`.
 
+## [Sin publicar]
+
+### Cambiado
+
+- **`ThemeSelector` sin padding y con borde** (`_theme-selector.scss`):
+  fuera el `padding: 2px` del contenedor y entra `border: 1px solid
+  $border` — los botones llenan la caja y el control se delimita por el
+  borde, no por el aire.
+
 ## [0.4.39] — 2026-07-29
 
 - Sin cambios propios: versión de tren.
