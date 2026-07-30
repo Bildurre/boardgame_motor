@@ -4,6 +4,18 @@ Componentes Vue 3 + SCSS para las webs públicas (y piezas compartidas con el
 admin). Paquete **fuente** (se consume vía Vite). Versión de tren con
 `edc-motor/core` y `@edc-motor/admin-kit`.
 
+## [Sin publicar]
+
+### Cambiado
+
+- **`PreviewGrid`: hover con glow de acento** (`_preview-grid.scss`): la
+  tarjeta enlazada, al pasar, cambia la sombra neutra (`$shadow-sm`) por un
+  glow suave del color de acento por los CUATRO lados
+  (`0 0 12px 2px color-mix($accent-500 40%)`), siempre sin desplazarse.
+  El foco por teclado conserva su halo. Es el mismo hover que los juegos
+  deben dar a sus tarjetas CSS propias (facciones/mazos en CdL) para que
+  los cuatro tipos de card de índice respondan igual.
+
 ## [0.5.2] — 2026-07-30
 
 - Sin cambios propios: versión de tren.

@@ -37,8 +37,9 @@
     min-width: 0;
   }
 
-  // Tarjeta (enlace o div): al pasar, SOLO una sombra muy sutil (sin
-  // desplazarse). El foco por teclado conserva su halo de acento.
+  // Tarjeta (enlace o div): al pasar, SOLO un glow sutil del color de
+  // acento por los cuatro lados (sin desplazarse). El foco por teclado
+  // conserva su halo de acento.
   &__item {
     display: block;
     width: 100%;
@@ -50,7 +51,7 @@
   }
 
   a.preview-grid__item:hover {
-    box-shadow: $shadow-sm;
+    box-shadow: 0 0 12px 2px color-mix(in srgb, $accent-500 40%, transparent);
   }
 
   a.preview-grid__item:focus-visible {

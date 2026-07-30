@@ -12,11 +12,15 @@ El formato sigue [Keep a Changelog](https://keepachangelog.com/es/) y el
 versionado, [SemVer](https://semver.org/lang/es/) (mientras estemos en `0.x`,
 los cambios de API pueden llegar en versiones menores).
 
+## [Sin publicar]
+
+- **`PreviewGrid`: hover con glow de acento** (`@edc-motor/ui`): al pasar
+  por una tarjeta enlazada, la sombra neutra deja paso a un glow suave del
+  color de acento por los cuatro lados (sin desplazamiento). Patrón de
+  hover unificado para TODOS los cards de índice: los juegos aplican la
+  misma sombra a sus tarjetas CSS propias.
+
 ## [0.5.2] — 2026-07-30
-
-- Sin cambios propios: versión de tren.
-
-## [0.5.1] — 2026-07-30
 
 - **core: previews PNG sobre el host de la petición** — `HasPreviewImage::
   previewUrl()` (y `previewUrls()`/ítems de catálogo) reconstruye la URL del
@@ -25,6 +29,8 @@ los cambios de API pueden llegar en versiones menores).
   de los catálogos públicos salían inaccesibles. Nuevo helper genérico
   `Edc\Core\Support\PublicUrl::onRequestHost()` compartido por ambos traits
   (reutilizable por los juegos para campos de imagen propios).
+
+## [0.5.1] — 2026-07-30
 
 - **Patrón documentado: páginas índice montadas A MANO desde el CRM**
   (sin cambios de código en los paquetes; el mecanismo existente basta).
