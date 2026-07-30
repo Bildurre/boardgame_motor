@@ -14,6 +14,24 @@ los cambios de API pueden llegar en versiones menores).
 
 ## [Sin publicar]
 
+- **Patrón documentado: páginas índice montadas A MANO desde el CRM**
+  (sin cambios de código en los paquetes; el mecanismo existente basta).
+  CdL añade dos tipos de bloque con-datos DEL JUEGO siguiendo el patrón
+  de siempre (doc 03 / guía §3): `entity-index` («Índice de entidad», un
+  `Field::select('section', …)` con las claves de su `entitySections`) y
+  `downloads` («Descargas», sin campos propios). Otro juego lo replica
+  igual: (1) `BlockType` en `api/app/Blocks/` + `Blocks::register(...)`
+  en su `AppServiceProvider`; (2) extraer el interior de sus vistas
+  índice (búsqueda + rejilla paginada + filtros de la barra derecha) a
+  componentes reutilizables que reciben la sección por prop (la vista
+  queda como cáscara: canónica + SEO + cabecera); (3) componente Vue del
+  bloque que monta el catálogo extraído dentro de `BlockShell`, añadido
+  a su `blockRegistry`. El estado (búsqueda/página/filtros) sigue
+  viajando por la query string también dentro de una página del CRM. En
+  el admin no hay que tocar nada: la paleta y el formulario salen del
+  esquema (`GET /admin/block-types`), con las claves i18n opcionales
+  `blockTypes.*`, `blockFields.*` y `blockOptions.*`.
+
 - **Cabecera pública: burger a icono pleno y desplegable recto arriba**
   (cascarón): el botón hamburguesa pierde el borde y sus iconos llenan
   el botón; la X pasa a dibujarse a mano en caja cuadrada (los palos
