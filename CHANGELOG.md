@@ -12,7 +12,7 @@ El formato sigue [Keep a Changelog](https://keepachangelog.com/es/) y el
 versionado, [SemVer](https://semver.org/lang/es/) (mientras estemos en `0.x`,
 los cambios de API pueden llegar en versiones menores).
 
-## [Sin publicar]
+## [0.5.0] — 2026-07-30
 
 - **Arranca el ciclo 0.5.x**: repaso vista a vista de la app pública
   (como el 0.4.x lo fue del admin). Los cambios de componentes públicos
