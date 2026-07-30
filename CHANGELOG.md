@@ -12,6 +12,34 @@ El formato sigue [Keep a Changelog](https://keepachangelog.com/es/) y el
 versionado, [SemVer](https://semver.org/lang/es/) (mientras estemos en `0.x`,
 los cambios de API pueden llegar en versiones menores).
 
+## [Sin publicar]
+
+- **`MultiSelect` con trigger compacto opcional** (`@edc-motor/ui`): nueva
+  prop opt-in `compactTrigger` — alto FIJO y resumen en una línea (labels
+  con comas y elipsis) en vez de etiquetas con aspa dentro del trigger,
+  para que el consumidor pinte las elegidas fuera (chips). Sin la prop,
+  comportamiento idéntico al de siempre (el admin no cambia).
+- **`BasePagination`: números en caja como prev/next** (`@edc-motor/ui`):
+  los números que NO son el actual llevan fondo semiopaco + borde visibles
+  en reposo y, al hover, acento sutil (tinte al 12% de fondo y número en
+  color de acento); todos suben a semibold sin cambiar el tamaño de la
+  caja. El actual se queda como estaba (relleno de acento).
+- **Filas declaradas en los formularios de bloque** (`edc-motor/core` +
+  `@edc-motor/admin-kit`): nuevo `Field::row('nombre')` en el DSL — los
+  campos con el mismo nombre de fila comparten fila en el admin mientras
+  quepan (apilan en angosto); gana a las convenciones implícitas. Lo
+  estrenan `related` (Entidad+Modo; Botón+Texto) y `cta` (Texto+Enlace;
+  Grande+Alineación+Estilo).
+- **`AppRightSidebar`: arreglo del drawer con scrollbar** (`@edc-motor/ui`):
+  en el tamaño más estrecho el ancho usaba `100vw` (que incluye la barra de
+  scroll) y el asa/cierre podía quedar fuera de pantalla; ahora `100% - 36px`
+  sobre el viewport real del fixed.
+- **`PageBlocks`: «Label: valor» en párrafo corrido**
+  (`@edc-motor/admin-kit`): en el panel del bloque seleccionado el valor
+  sigue al label en la misma línea y envuelve a ancho completo bajo él
+  (antes label y valor eran dos columnas); el clamp de líneas pasa al
+  párrafo entero. `is-stacked` (imágenes) sigue igual.
+
 ## [0.5.3] — 2026-07-30
 
 - **`PreviewGrid`: hover con glow de acento** (`@edc-motor/ui`): al pasar

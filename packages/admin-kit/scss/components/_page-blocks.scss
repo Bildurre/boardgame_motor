@@ -208,6 +208,20 @@
   // cortarse (180px sobraba de aire).
   &__field-align { flex: 0 0 140px; }
 
+  // Fila declarada en el esquema (Field::row): el grupo baja por recursión
+  // como un .schema-fields anidado — aquí solo se reparte en columnas
+  // iguales MIENTRAS QUEPAN (auto-fit: con poco ancho van cayendo solas);
+  // el checkbox se centra en vertical junto a sus compañeros de fila.
+  &__field--pair > .schema-fields {
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: $space-3;
+    align-items: start;
+
+    > .schema-fields__field:has(> .schema-fields__field-main > .checkbox) {
+      align-self: center;
+    }
+  }
+
   // Imagen a dos columnas: el input a la izquierda, sus ajustes (posición,
   // escalado, reparto de columnas) apilados a la derecha. `stretch` para que
   // la columna de la imagen llene el alto de la fila; el cuadro de arrastre
@@ -253,6 +267,9 @@
     &__field-align { flex-basis: auto; }
 
     &__field--image-group { grid-template-columns: 1fr; }
+
+    // Las filas declaradas (Field::row) apilan en el modal angosto.
+    &__field--pair > .schema-fields { grid-template-columns: 1fr; }
   }
 
   &__color,

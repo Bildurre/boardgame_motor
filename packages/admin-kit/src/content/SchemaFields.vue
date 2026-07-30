@@ -43,6 +43,8 @@ export interface FieldSchema {
   fields?: FieldSchema[] | null
   /** Para entity: endpoint de opciones del admin. */
   options_url?: string | null
+  /** Fila declarada en el esquema (Field::row): mismo nombre = misma fila. */
+  row?: string | null
 }
 
 const props = withDefaults(
@@ -76,6 +78,13 @@ const emit = defineEmits<{ 'update:modelValue': [value: Record<string, unknown>]
 //    (`image_position`, `image_fit`, `image_columns`) en la misma lista se
 //    agrupa con ellos — columna 1 la imagen, columna 2 los ajustes
 //    apilados.
+// 3) Filas DECLARADAS en el esquema (Field::row('nombre')): los campos que
+//    comparten `row` van juntos en una fila de columnas iguales mientras
+//    quepan (auto-fit; en un modal angosto apilan). Se pintan por RECURSIÓN
+//    sobre este mismo componente (los compañeros pierden su `row` al bajar,
+//    para no re-agrupar en bucle). La fila declarada es intención EXPLÍCITA
+//    del esquema: gana a las convenciones 1 y 2 — un campo con `row` queda
+//    fuera del emparejado implícito (tanto de origen como de destino).
 const IMAGE_SETTING_KEYS = ['image_position', 'image_fit', 'image_columns']
 
 interface LayoutItem {
@@ -84,6 +93,8 @@ interface LayoutItem {
   align?: FieldSchema
   /** Ajustes de imagen (image_position/fit/columns) que viajan con `field`. */
   imageSettings?: FieldSchema[]
+  /** Campos de una fila declarada (Field::row), este incluido y sin `row`. */
+  rowFields?: FieldSchema[]
 }
 
 const layout = computed<LayoutItem[]>(() => {
@@ -92,24 +103,43 @@ const layout = computed<LayoutItem[]>(() => {
   const consumed = new Set<string>() // claves ya emparejadas con otro campo
 
   for (const field of props.fields) {
-    if (field.type !== 'select' || !field.key.endsWith('_align')) continue
+    if (field.type !== 'select' || !field.key.endsWith('_align') || field.row) continue
     const base = field.key.slice(0, -'_align'.length)
     if (!base) continue // el "align" general no tiene prefijo
     const baseKey = byKey.has(base) ? base : byKey.has(`${base}_text`) ? `${base}_text` : null
-    if (!baseKey) continue
+    if (!baseKey || byKey.get(baseKey)?.row) continue // el base va en fila declarada
     alignOf.set(baseKey, field)
     consumed.add(field.key)
   }
 
   const imageSettingsOf = new Map<string, FieldSchema[]>()
   for (const field of props.fields) {
-    if (field.key !== 'image' || field.type !== 'image') continue
+    if (field.key !== 'image' || field.type !== 'image' || field.row) continue
     const settings = IMAGE_SETTING_KEYS.map((key) => byKey.get(key)).filter(
-      (f): f is FieldSchema => !!f,
+      (f): f is FieldSchema => !!f && !f.row,
     )
     if (!settings.length) continue
     imageSettingsOf.set(field.key, settings)
     settings.forEach((f) => consumed.add(f.key))
+  }
+
+  // Filas declaradas: agrupa por nombre de fila los campos aún libres (sin
+  // pareja de align/imagen). El grupo se pinta donde va su PRIMER campo.
+  const rowGroups = new Map<string, FieldSchema[]>()
+  for (const field of props.fields) {
+    if (!field.row) continue
+    const group = rowGroups.get(field.row) ?? []
+    group.push(field)
+    rowGroups.set(field.row, group)
+  }
+  const rowFieldsOf = new Map<string, FieldSchema[]>()
+  for (const group of rowGroups.values()) {
+    if (group.length < 2) continue // solo, se pinta como siempre
+    rowFieldsOf.set(
+      group[0].key,
+      group.map((f) => ({ ...f, row: null })),
+    )
+    group.slice(1).forEach((f) => consumed.add(f.key))
   }
 
   return props.fields
@@ -118,6 +148,7 @@ const layout = computed<LayoutItem[]>(() => {
       field: f,
       align: alignOf.get(f.key),
       imageSettings: imageSettingsOf.get(f.key),
+      rowFields: rowFieldsOf.get(f.key),
     }))
 })
 
@@ -211,8 +242,23 @@ function addLabel(): string {
 
 <template>
   <div class="schema-fields">
-    <template v-for="{ field, align, imageSettings } in layout" :key="field.key">
+    <template v-for="{ field, align, imageSettings, rowFields } in layout" :key="field.key">
+      <!-- Fila declarada (Field::row): los campos del grupo por recursión,
+           en columnas iguales (los compañeros bajan sin `row`) -->
+      <div v-if="rowFields" class="schema-fields__field schema-fields__field--pair">
+        <SchemaFields
+          :fields="rowFields"
+          :model-value="modelValue"
+          :locales="locales"
+          :api="api"
+          :icons="icons"
+          :rich-labels="richLabels"
+          :translate="translate"
+          @update:model-value="(v) => emit('update:modelValue', v)"
+        />
+      </div>
       <div
+        v-else
         class="schema-fields__field"
         :class="{
           'schema-fields__field--row': !!align,

@@ -4,6 +4,39 @@ Componentes Vue 3 + SCSS para las webs públicas (y piezas compartidas con el
 admin). Paquete **fuente** (se consume vía Vite). Versión de tren con
 `edc-motor/core` y `@edc-motor/admin-kit`.
 
+## [Sin publicar]
+
+### Añadido
+
+- **`MultiSelect`: prop `compactTrigger` (opt-in)** — trigger de alto FIJO
+  (el del select simple): sin nada marcado pinta el placeholder y, con
+  selección, un resumen en UNA línea (labels separadas por comas, con
+  elipsis) en vez de las etiquetas con aspa de siempre. Pensado para que
+  el consumidor pinte las elegidas FUERA (p. ej. chips sobre la búsqueda
+  de un catálogo). Sin la prop no cambia nada: el trigger sigue creciendo
+  con sus etiquetas (el admin queda como estaba).
+
+### Arreglado
+
+- **`AppRightSidebar`: el asa/cierre del drawer ya no se sale de pantalla
+  con scrollbar visible** (`_app-right-sidebar.scss`): el ancho del drawer
+  en viewports mínimos se calculaba con `100vw`, que INCLUYE la barra de
+  scroll del navegador — cuando aparecía, robaba su ancho y el botón de
+  cerrar (el asa anclada al costado) quedaba cortado fuera del viewport.
+  Ahora usa `100%` (el ancho porcentual de un `position: fixed` resuelve
+  contra el viewport real, sin scrollbar): `min(var(--app-right-sidebar-
+  width), 100% - 36px)`.
+
+### Cambiado
+
+- **`BasePagination`: los números que no son el actual, en caja como
+  prev/next** (`_base-pagination.scss`): fondo semiopaco + borde visibles
+  ya en reposo (antes iban «sueltos», con el borde solo al hover); al
+  hover, acento SUTIL — tinte de acento al 12% de fondo y el número en
+  color de acento. Los números suben a `$k-fw-semibold` (600) sin tocar el
+  tamaño de la caja (32px). La página actual (`aria-current="page"`) queda
+  como estaba: relleno de acento con texto de contraste.
+
 ## [0.5.3] — 2026-07-30
 
 ### Cambiado

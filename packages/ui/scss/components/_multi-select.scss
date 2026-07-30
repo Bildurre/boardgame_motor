@@ -17,6 +17,15 @@
     padding-block: 4px;
   }
 
+  // Variante compacta (prop compactTrigger): alto FIJO del select simple y
+  // resumen en una línea (el .base-select__value de arriba ya elipsa); las
+  // elegidas se pintan fuera (chips del consumidor), no dentro del trigger.
+  &--compact .base-select__trigger {
+    height: $input-height;
+    min-height: 0;
+    padding-block: 0;
+  }
+
   &__tags {
     display: flex;
     flex-wrap: wrap;

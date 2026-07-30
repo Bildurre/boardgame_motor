@@ -26,7 +26,11 @@
   bottom: 0;
   z-index: 40; // por debajo de la cabecera fija del cascarón (50)
   // En viewports mínimos deja sitio al asa (el telón cubre el resto).
-  width: min(var(--app-right-sidebar-width), 100vw - 36px);
+  // OJO: 100% y no 100vw — el ancho porcentual de un fixed resuelve contra
+  // el viewport REAL (sin la barra de scroll del navegador); con 100vw la
+  // scrollbar, cuando aparece, robaba su ancho y el asa/cierre quedaba
+  // fuera de pantalla en el tamaño más estrecho.
+  width: min(var(--app-right-sidebar-width), 100% - 36px);
   transform: translateX(100%);
   transition: transform 0.25s ease;
 

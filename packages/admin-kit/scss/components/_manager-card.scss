@@ -368,40 +368,50 @@
 
   // Campos del bloque seleccionado: etiqueta + valor; los valores largos se
   // recortan a unas pocas líneas.
-  // Campo del panel de bloque: «Label: valor» EN LÍNEA; las imágenes van
-  // apiladas (is-stacked), con la miniatura debajo del label.
+  // Campo del panel de bloque: «Label: valor» como UN ÚNICO PÁRRAFO corrido
+  // — dt y dd van en línea, el valor arranca tras los dos puntos y, al
+  // envolver, ocupa el ancho completo bajo el label (nada de dos columnas).
+  // El clamp de líneas vive ahora en el PÁRRAFO entero (el -webkit-box no
+  // convive con hijos inline sueltos, así que recorta label+valor juntos:
+  // con labels de una palabra, en la práctica es el mismo recorte de antes).
+  // Las imágenes van apiladas (is-stacked), con la miniatura bajo el label.
   &__field {
-    display: flex;
-    align-items: baseline;
-    gap: $space-1;
     min-width: 0;
     font-size: $fs-13;
+    overflow-wrap: anywhere;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 4;
+    line-clamp: 4;
+    overflow: hidden;
 
     dt {
-      flex: none;
+      display: inline;
       color: $text-3;
       font-size: $fs-12;
       text-transform: uppercase;
       letter-spacing: 0.04em;
 
-      &::after { content: ':'; }
+      // El hueco tras los dos puntos va en margen: Vue condensa el
+      // whitespace entre <dt> y <dd> y en línea quedarían pegados.
+      &::after {
+        content: ':';
+        margin-inline-end: 0.4em;
+      }
     }
 
     dd {
+      display: inline;
       margin: 0;
-      min-width: 0;
       color: $text-2;
-      overflow-wrap: anywhere;
-      display: -webkit-box;
-      -webkit-box-orient: vertical;
-      -webkit-line-clamp: 4;
-      line-clamp: 4;
-      overflow: hidden;
     }
 
     &.is-stacked {
       display: grid;
       gap: 2px;
+      -webkit-line-clamp: none;
+      line-clamp: none;
+      overflow: visible;
 
       dt::after { content: none; }
     }

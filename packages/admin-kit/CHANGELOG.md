@@ -3,6 +3,33 @@
 Kit de construcción del panel de administración (sobre `@edc-motor/ui`). Paquete
 **fuente** (se consume vía Vite). Versión de tren con `edc-motor/core` y `@edc-motor/ui`.
 
+## [Sin publicar]
+
+### Añadido
+
+- **`SchemaFields`: filas declaradas en el esquema (`Field::row`)** — los
+  campos de un bloque que compartan nombre de fila (`->row('nombre')` en el
+  DSL de core) se pintan JUNTOS en una fila de columnas iguales mientras
+  quepan (`auto-fit`), y apilan en el modal angosto (container query
+  `modal-body`, como las parejas de alineación). Se resuelve por recursión
+  del propio `SchemaFields` (los compañeros bajan sin `row`). La fila
+  declarada es intención explícita del esquema: GANA a las convenciones
+  implícitas (`_align` junto a su campo, grupo de imagen). Lo estrenan los
+  bloques del motor: `related` (Entidad+Modo y Botón+Texto del botón) y
+  `cta` (Texto+Enlace del botón; y Grande+Alineación+Estilo).
+
+### Cambiado
+
+- **`PageBlocks`: los campos «Label: valor» del panel de bloque como UN
+  párrafo corrido** (`_manager-card.scss`, `.manager-detail__field`): `dt`
+  y `dd` van ahora en línea — el valor arranca en la misma línea que el
+  label (tras sus dos puntos) y, al envolver, ocupa el ancho completo por
+  debajo, como texto normal (antes el label era columna fija y el valor
+  envolvía en su propia columna). El clamp de líneas se conserva pero vive
+  en el PÁRRAFO entero (el `-webkit-box` no convive con hijos inline
+  sueltos): con labels de una palabra es, en la práctica, el mismo recorte
+  de 4 líneas de antes. `is-stacked` (imágenes) sigue apilado como estaba.
+
 ## [0.5.3] — 2026-07-30
 
 - Sin cambios propios: versión de tren.

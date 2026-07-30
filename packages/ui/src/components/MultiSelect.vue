@@ -13,6 +13,11 @@ import type { SelectOption } from './BaseSelect.vue'
 // BaseSelect). El trigger pinta las elegidas como etiquetas con aspa: se
 // quitan desde ahí sin abrir el panel (también con Backspace); así no
 // hace falta ningún texto "N seleccionadas" que traducir.
+// Con `compactTrigger` (opt-in) el trigger NO crece: mantiene el alto fijo
+// del select simple y, en vez de etiquetas, pinta un resumen en una línea
+// (las elegidas separadas por comas, con elipsis); quitar una elegida
+// queda para fuera (el consumidor pinta sus propios chips) o para el
+// propio panel/Backspace. Sin la prop, todo sigue como siempre.
 const props = withDefaults(
   defineProps<{
     modelValue?: (string | number)[]
@@ -20,12 +25,17 @@ const props = withDefaults(
     options: SelectOption[]
     /** Texto en reposo (sin nada marcado), p. ej. "Todas". */
     placeholder?: string
+    /**
+     * Trigger compacto de alto fijo: resumen en una línea (labels con
+     * comas y elipsis) en lugar de etiquetas con aspa dentro del trigger.
+     */
+    compactTrigger?: boolean
     error?: string
     hint?: string
     disabled?: boolean
     id?: string
   }>(),
-  { modelValue: () => [], disabled: false },
+  { modelValue: () => [], disabled: false, compactTrigger: false },
 )
 
 const emit = defineEmits<{ 'update:modelValue': [value: string[]] }>()
@@ -43,6 +53,9 @@ useDropdownPanel(root, panel, open)
 const selectedValues = computed(() => new Set(props.modelValue.map((v) => String(v))))
 const isSelected = (option: SelectOption) => selectedValues.value.has(String(option.value))
 const selectedOptions = computed(() => props.options.filter((o) => isSelected(o)))
+
+/** Resumen de una línea del trigger compacto: labels separadas por comas. */
+const summary = computed(() => selectedOptions.value.map((o) => o.label).join(', '))
 
 /** Quita una elegida desde su etiqueta del trigger, sin tocar el panel. */
 function removeOption(option: SelectOption) {
@@ -166,7 +179,7 @@ onBeforeUnmount(() => document.removeEventListener('mousedown', onOutside))
     <div
       ref="root"
       class="form-field__select-wrapper base-select multi-select"
-      :class="{ 'is-open': open }"
+      :class="{ 'is-open': open, 'multi-select--compact': compactTrigger }"
     >
       <button
         :id="selectId"
@@ -180,9 +193,13 @@ onBeforeUnmount(() => document.removeEventListener('mousedown', onOutside))
         @click="toggle"
         @keydown="onKeydown"
       >
+        <!-- Trigger compacto (opt-in): resumen en una línea, sin etiquetas -->
+        <span v-if="compactTrigger && selectedOptions.length" class="base-select__value">
+          {{ summary }}
+        </span>
         <!-- Elegidas como etiquetas con aspa (el aspa NO abre el panel);
              span con role=button porque un button no puede anidar otro -->
-        <span v-if="selectedOptions.length" class="multi-select__tags">
+        <span v-else-if="selectedOptions.length" class="multi-select__tags">
           <span v-for="option in selectedOptions" :key="option.value" class="multi-select__tag">
             {{ option.label }}
             <span

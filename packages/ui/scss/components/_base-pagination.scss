@@ -37,6 +37,10 @@
   }
 
   // Números de página clicables; el actual, marcado con aria-current.
+  // Los que NO son el actual van en caja como prev/next (fondo semiopaco +
+  // borde visibles ya en reposo); al hover, acento sutil: tinte de acento
+  // al 12% de fondo y el número en color de acento. El actual, como
+  // siempre: relleno de acento con texto de contraste.
   &__number {
     display: inline-flex;
     align-items: center;
@@ -44,17 +48,19 @@
     min-width: 32px;
     height: 32px;
     padding: 0 $space-1;
-    background: none;
-    border: 1px solid transparent;
+    background: color-mix(in srgb, $surface 65%, transparent);
+    border: 1px solid $border;
     border-radius: $radius-sm;
     color: $text-2;
     font-size: $fs-13;
+    // Más peso sin tocar el tamaño de la caja (32px se quedan como están).
+    font-weight: $k-fw-semibold;
     font-variant-numeric: tabular-nums;
-    transition: color 0.15s ease, border-color 0.15s ease;
+    transition: color 0.15s ease, background-color 0.15s ease, border-color 0.15s ease;
 
     &:hover {
-      color: $text-1;
-      border-color: $border;
+      color: $accent-500;
+      background: color-mix(in srgb, $accent-500 12%, transparent);
     }
 
     &[aria-current="page"] {
