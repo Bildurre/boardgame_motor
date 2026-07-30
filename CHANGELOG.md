@@ -12,6 +12,18 @@ El formato sigue [Keep a Changelog](https://keepachangelog.com/es/) y el
 versionado, [SemVer](https://semver.org/lang/es/) (mientras estemos en `0.x`,
 los cambios de API pueden llegar en versiones menores).
 
+## [Sin publicar]
+
+- **Cabecera pública: burger a icono pleno y desplegable recto arriba**
+  (cascarón): el botón hamburguesa pierde el borde y sus iconos llenan
+  el botón; la X pasa a dibujarse a mano en caja cuadrada (los palos
+  cruzan a 90º con el mismo ancho que las rayas de la hamburguesa); el
+  desplegable de páginas hijas redondea solo las esquinas inferiores.
+  **Migración del cascarón**: copiar
+  `plantilla/app/src/components/AppHeader.vue` y
+  `plantilla/app/src/assets/scss/components/_app-header.scss` (CdL ya lo
+  lleva de origen).
+
 ## [0.5.0] — 2026-07-30
 
 - **Arranca el ciclo 0.5.x**: repaso vista a vista de la app pública

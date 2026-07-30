@@ -3,7 +3,7 @@ import { computed, onMounted, ref, watch } from 'vue'
 import type { RouteLocationRaw } from 'vue-router'
 import { useRoute, useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
-import { ChevronDown, FileDown, LayoutDashboard, LogIn, LogOut, Menu, X } from '@lucide/vue'
+import { ChevronDown, FileDown, LayoutDashboard, LogIn, LogOut, Menu } from '@lucide/vue'
 import { LocaleSelector, MotorBadge, ThemeSelector } from '@edc-motor/ui'
 import { api } from '@/lib/api'
 import { entitySections } from '@/entities/registry'
@@ -211,8 +211,21 @@ onMounted(async () => {
           :title="t('nav.menu')"
           @click="navOpen = !navOpen"
         >
-          <X v-if="navOpen" :size="22" />
-          <Menu v-else :size="22" />
+          <svg
+            v-if="navOpen"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            aria-hidden="true"
+          >
+            <!-- Caja CUADRADA (16×16): los palos se cruzan a 90º, con el
+                 mismo ancho que las rayas de la hamburguesa (x 4-20) -->
+            <line x1="4" y1="4" x2="20" y2="20" />
+            <line x1="20" y1="4" x2="4" y2="20" />
+          </svg>
+          <Menu v-else />
         </button>
 
         <RouterLink
