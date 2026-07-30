@@ -4,6 +4,29 @@ Componentes Vue 3 + SCSS para las webs públicas (y piezas compartidas con el
 admin). Paquete **fuente** (se consume vía Vite). Versión de tren con
 `edc-motor/core` y `@edc-motor/admin-kit`.
 
+## [Sin publicar]
+
+### Cambiado
+
+- **`BasePagination` con números de página clicables**
+  (`_base-pagination.scss`): entre anterior/siguiente van los números
+  (el actual marcado con `aria-current="page"` sobre fondo de acento) y,
+  con muchas páginas, elisión clásica con «…» — primera + vecinas de la
+  actual + última (1 … 4 5 6 … 20; hasta 7 páginas caben todas). Los
+  botones anterior/siguiente ganan fondo semiopaco
+  (`color-mix($surface 65%)`) además del borde, y el chevron pasa a
+  colorearse SIEMPRE con el texto del botón (también al hover), nunca
+  con el acento. Misma API (`v-model:page`, `pages`, labels): los
+  números no necesitan textos nuevos.
+- **`PreviewGrid`: hover sin desplazamiento** (`_preview-grid.scss`): la
+  tarjeta ya no se traslada al pasar (fuera el `translateY(-2px)` y su
+  halo de acento) — solo una sombra muy sutil (`$shadow-sm`). El foco
+  por teclado conserva el halo.
+- **`PreviewGrid`: rejilla de 1 a 4 columnas** (`_preview-grid.scss`):
+  en estrecho UNA columna y, según crece el ancho, 2 (`$bp-sm`), 3
+  (`$bp-md`) y 4 (`$bp-lg`) — antes arrancaba en 2. La variante compacta
+  (bloque related) no cambia.
+
 ## [0.5.0] — 2026-07-30
 
 ### Cambiado

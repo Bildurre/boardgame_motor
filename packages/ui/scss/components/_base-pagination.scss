@@ -1,12 +1,16 @@
 @use "../tokens" as *;
 
-// Paginación compacta de listados (BasePagination.vue).
+// Paginación compacta de listados (BasePagination.vue): anterior /
+// números de página (con elisión «…») / siguiente.
 .base-pagination {
   display: flex;
   align-items: center;
   justify-content: center;
   gap: $space-2;
 
+  // Anterior/siguiente: fondo SEMIOPACO + borde; el chevron (lucide,
+  // stroke: currentColor) hereda el color del TEXTO del botón — nunca el
+  // acento.
   &__button {
     display: inline-flex;
     align-items: center;
@@ -15,15 +19,15 @@
     // de los controles de formulario.
     width: 32px;
     height: 32px;
-    background: none;
+    background: color-mix(in srgb, $surface 65%, transparent);
     border: 1px solid $border;
     border-radius: $radius-sm;
     color: $text-2;
     transition: color 0.15s ease, border-color 0.15s ease;
 
     &:not(:disabled):hover {
-      color: $accent-500;
-      border-color: $accent-500;
+      color: $text-1;
+      border-color: $border-strong;
     }
 
     &:disabled {
@@ -32,10 +36,40 @@
     }
   }
 
-  &__status {
-    font-size: $fs-13;
+  // Números de página clicables; el actual, marcado con aria-current.
+  &__number {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 32px;
+    height: 32px;
+    padding: 0 $space-1;
+    background: none;
+    border: 1px solid transparent;
+    border-radius: $radius-sm;
     color: $text-2;
-    min-width: 56px;
+    font-size: $fs-13;
+    font-variant-numeric: tabular-nums;
+    transition: color 0.15s ease, border-color 0.15s ease;
+
+    &:hover {
+      color: $text-1;
+      border-color: $border;
+    }
+
+    &[aria-current="page"] {
+      background: $accent-500;
+      border-color: $accent-500;
+      @include contrast-text($accent-500);
+      cursor: default;
+    }
+  }
+
+  &__ellipsis {
+    min-width: 20px;
     text-align: center;
+    color: $text-3;
+    font-size: $fs-13;
+    user-select: none;
   }
 }

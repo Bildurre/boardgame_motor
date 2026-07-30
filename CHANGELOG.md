@@ -23,6 +23,16 @@ los cambios de API pueden llegar en versiones menores).
   `plantilla/app/src/components/AppHeader.vue` y
   `plantilla/app/src/assets/scss/components/_app-header.scss` (CdL ya lo
   lleva de origen).
+- **`BasePagination` con números de página clicables** (`@edc-motor/ui`):
+  números entre anterior/siguiente (el actual con `aria-current="page"`)
+  y elisión con «…» cuando hay muchas páginas; los botones
+  anterior/siguiente ganan fondo semiopaco y el chevron se colorea con el
+  texto, no con el acento. Misma API: nada que migrar en los consumidores.
+- **`PreviewGrid`: hover solo con sombra sutil y rejilla de 1 a 4
+  columnas** (`@edc-motor/ui`): la tarjeta ya no se traslada al pasar
+  (sombra `$shadow-sm`, sin halo; el foco por teclado conserva el suyo) y
+  la rejilla arranca en UNA columna en estrecho (2/3/4 en
+  `$bp-sm`/`$bp-md`/`$bp-lg`).
 
 ## [0.5.0] — 2026-07-30
 

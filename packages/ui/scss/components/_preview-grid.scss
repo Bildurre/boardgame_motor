@@ -1,7 +1,7 @@
 @use "tokens" as *;
 
 // Rejilla de previews del catálogo público (PreviewGrid.vue). Mobile-first:
-// 2 columnas → 3 → 4 (patrón CDL). Media queries y no container queries:
+// 1 columna → 2 → 3 → 4 (patrón CDL). Media queries y no container queries:
 // también se monta fuera de las páginas del CRM (índices, singles).
 .preview-grid {
   display: grid;
@@ -9,8 +9,12 @@
 
   &__grid {
     display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-columns: minmax(0, 1fr);
     gap: $space-4;
+
+    @media (min-width: $bp-sm) {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
 
     @media (min-width: $bp-md) {
       grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -33,7 +37,8 @@
     min-width: 0;
   }
 
-  // Tarjeta (enlace o div): hover suave con elevación y halo de acento.
+  // Tarjeta (enlace o div): al pasar, SOLO una sombra muy sutil (sin
+  // desplazarse). El foco por teclado conserva su halo de acento.
   &__item {
     display: block;
     width: 100%;
@@ -41,12 +46,14 @@
     text-decoration: none;
     border-radius: $radius-md;
     overflow: hidden;
-    transition: box-shadow 0.2s ease, transform 0.2s ease;
+    transition: box-shadow 0.2s ease;
   }
 
-  a.preview-grid__item:hover,
+  a.preview-grid__item:hover {
+    box-shadow: $shadow-sm;
+  }
+
   a.preview-grid__item:focus-visible {
-    transform: translateY(-2px);
     box-shadow: 0 0 0 2px color-mix(in srgb, $accent-500 55%, transparent), $shadow-md;
     outline: none;
   }
