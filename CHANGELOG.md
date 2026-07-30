@@ -14,6 +14,14 @@ los cambios de API pueden llegar en versiones menores).
 
 ## [0.5.1] — 2026-07-30
 
+- **core: previews PNG sobre el host de la petición** — `HasPreviewImage::
+  previewUrl()` (y `previewUrls()`/ítems de catálogo) reconstruye la URL del
+  disco de previews sobre el host real de la petición, como ya hacía
+  `HasImage::imageUrl()`: con APP_URL apuntando a otro host/puerto los PNG
+  de los catálogos públicos salían inaccesibles. Nuevo helper genérico
+  `Edc\Core\Support\PublicUrl::onRequestHost()` compartido por ambos traits
+  (reutilizable por los juegos para campos de imagen propios).
+
 - **Patrón documentado: páginas índice montadas A MANO desde el CRM**
   (sin cambios de código en los paquetes; el mecanismo existente basta).
   CdL añade dos tipos de bloque con-datos DEL JUEGO siguiendo el patrón
