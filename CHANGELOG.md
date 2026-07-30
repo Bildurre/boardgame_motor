@@ -12,7 +12,7 @@ El formato sigue [Keep a Changelog](https://keepachangelog.com/es/) y el
 versionado, [SemVer](https://semver.org/lang/es/) (mientras estemos en `0.x`,
 los cambios de API pueden llegar en versiones menores).
 
-## [Sin publicar]
+## [0.5.1] — 2026-07-30
 
 - **Patrón documentado: páginas índice montadas A MANO desde el CRM**
   (sin cambios de código en los paquetes; el mecanismo existente basta).
