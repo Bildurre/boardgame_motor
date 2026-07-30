@@ -5,7 +5,16 @@ Kit de construcción del panel de administración (sobre `@edc-motor/ui`). Paque
 
 ## [0.4.39] — 2026-07-29
 
-- Sin cambios propios: versión de tren.
+### Cambiado
+
+- **`PageBlocks`: el tipo como título del panel y contenido «Label:
+  valor»** — el TIPO del bloque deja la sección «Detalles» (que
+  desaparece: la etiqueta `details` estrenada en 0.4.38 sale de
+  `PageBlocksLabels`; basta dejar de pasarla) y pasa a ser el título del
+  panel debajo de Estado, como en los paneles de entidad; y los campos
+  del Contenido pasan de label-encima-del-valor a «Label: valor» EN
+  LÍNEA (los dos puntos los pone el CSS), salvo las imágenes, que van
+  apiladas con la miniatura debajo del label y sin dos puntos.
 
 ## [0.4.38] — 2026-07-28
 
@@ -23,16 +32,15 @@ Kit de construcción del panel de administración (sobre `@edc-motor/ui`). Paque
 
 ### Cambiado
 
-- **`PageBlocks`: resumen depurado y panel de bloque al patrón de los
-  paneles de entidad** — el resumen de la lista pasa de "primeros 80
-  caracteres" a `blockPreview` (la primera frase completa; card y paneles
-  la truncan por CSS); en el panel del bloque, el TIPO va como título
-  debajo de la sección Estado (fuera de secciones), el Contenido lista
-  cada campo como «Label: valor» EN LÍNEA (las imágenes, apiladas con la
-  miniatura debajo del label) y desaparecen las dos líneas de texto
-  «Entra en el PDF de la página Sí» / «Aparece en el índice Sí» (los
-  interruptores de Estado ya cuentan eso; las etiquetas `yes`/`no` quedan
-  sin uso pero se conservan en la interfaz).
+- **`PageBlocks`: resumen depurado y panel de bloque en secciones** — el
+  resumen de la lista pasa de "primeros 80 caracteres" a `blockPreview`
+  (la primera frase completa; card y paneles la truncan por CSS); el panel
+  del bloque seleccionado se agrupa en secciones con divisoria + kicker
+  (nueva etiqueta `details`, por defecto «Detalles», para la sección del
+  tipo) y PIERDE las dos líneas de texto «Entra en el PDF de la página
+  Sí» / «Aparece en el índice Sí» (los interruptores de Estado ya cuentan
+  eso; las etiquetas `yes`/`no` quedan sin uso pero se conservan en la
+  interfaz).
 - **`MenuManager`: filas sin icono, sin chip «Oculto» y en UNA línea** —
   fuera el icono de tipo (página/ruta) y el chip «Oculto» (la etiqueta
   `hidden` desaparece de `MenuManagerLabels`: los cascarones deben dejar
