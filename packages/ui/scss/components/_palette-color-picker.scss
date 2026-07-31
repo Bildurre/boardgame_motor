@@ -32,9 +32,23 @@
     background: var(--swatch-color);
     color: #fff;
     cursor: pointer;
-    transition: transform 0.15s, box-shadow 0.15s, border-color 0.15s;
+    transition: box-shadow 0.15s, border-color 0.15s;
 
-    &:hover { transform: scale(1.06); }
+    // Realce al hover: SOLO halo (sombra), nunca transform — el
+    // scale(1.06) de antes rasterizaba el swatch (y sus 2px de borde) en
+    // fracciones de píxel durante la transición: al pasear el ratón por
+    // el formulario del modal de bloque la fila entera «bailaba» y los
+    // bordes finos vecinos parpadeaban (peor aún con zoom/DPI
+    // fraccionario). El halo se pinta fuera de la caja y no toca ni
+    // layout ni raster de los vecinos.
+    // (el seleccionado conserva su anillo: el halo solo aplica sin marcar)
+    &:hover:not(#{&}--selected) {
+      box-shadow: 0 0 0 3px color-mix(in srgb, var(--swatch-color) 40%, transparent);
+    }
+
+    &--custom-idle:hover:not(#{&}--selected) {
+      box-shadow: 0 0 0 3px color-mix(in srgb, #3b82f6 40%, transparent);
+    }
 
     &--selected { box-shadow: 0 0 0 2px $surface, 0 0 0 4px var(--swatch-color); }
 

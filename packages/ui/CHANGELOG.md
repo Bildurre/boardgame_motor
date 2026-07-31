@@ -4,6 +4,18 @@ Componentes Vue 3 + SCSS para las webs públicas (y piezas compartidas con el
 admin). Paquete **fuente** (se consume vía Vite). Versión de tren con
 `edc-motor/core` y `@edc-motor/admin-kit`.
 
+## [Sin publicar]
+
+### Añadido
+
+- **`AppRightSidebar`: prop `overlayAlways` (opt-in)** — la barra derecha
+  contextual funciona como drawer SUPERPUESTO en TODAS las anchuras: nunca
+  «atraca» (docked) ni el cascarón le hace hueco al contenido — siempre
+  telón + superposición y cierre por asa, click fuera o Escape, igual que
+  el drawer estrecho de siempre. Para juegos que prefieren que los filtros
+  no roben ancho al main ni en escritorio. Sin la prop no cambia nada: el
+  corte de 900px sigue decidiendo drawer/columna.
+
 ## [0.5.4] — 2026-07-31
 
 ### Añadido
@@ -15,6 +27,21 @@ admin). Paquete **fuente** (se consume vía Vite). Versión de tren con
   el consumidor pinte las elegidas FUERA (p. ej. chips sobre la búsqueda
   de un catálogo). Sin la prop no cambia nada: el trigger sigue creciendo
   con sus etiquetas (el admin queda como estaba).
+
+### Arreglado
+
+- **`PaletteColorPicker`: el hover de los swatches ya no hace «bailar» el
+  formulario** (`_palette-color-picker.scss`): el realce era
+  `transform: scale(1.06)` — al cruzar con el ratón la fila de swatches
+  (campo «Color de fondo», común a todos los formularios de bloque del
+  admin) cada caja de 32px se rasterizaba a 33.92px con centro en
+  fracciones de píxel mientras corría la transición: la fila entera
+  temblaba y los bordes de 1px vecinos parpadeaban (peor con zoom o DPI
+  fraccionario). Diagnóstico en navegador: era el ÚNICO cambio de
+  geometría al hover en todo el modal de bloque (cero `layout-shift`;
+  bordes e inputs estables). Ahora el realce es un halo por `box-shadow`
+  del color del propio swatch (como el resto de hovers del kit: nunca
+  cambia el tamaño); el swatch seleccionado conserva su anillo.
 
 ### Arreglado
 

@@ -12,6 +12,18 @@ El formato sigue [Keep a Changelog](https://keepachangelog.com/es/) y el
 versionado, [SemVer](https://semver.org/lang/es/) (mientras estemos en `0.x`,
 los cambios de API pueden llegar en versiones menores).
 
+## [Sin publicar]
+
+- **`AppRightSidebar` con modo drawer permanente** (`@edc-motor/ui`): nueva
+  prop opt-in `overlayAlways` — la barra derecha se superpone al contenido
+  (telón + asa) en TODAS las anchuras, sin hacer hueco nunca; sin la prop,
+  el corte de 900px sigue mandando.
+- **Los swatches del `PaletteColorPicker` ya no «bailan» al hover**
+  (`@edc-motor/ui`): el realce `transform: scale(1.06)` rasterizaba las
+  cajas en fracciones de píxel y hacía temblar el formulario del modal de
+  bloque (y parpadear bordes vecinos) al pasear el ratón; ahora es un halo
+  por `box-shadow` sin tocar la geometría.
+
 ## [0.5.4] — 2026-07-31
 
 - **`MultiSelect` con trigger compacto opcional** (`@edc-motor/ui`): nueva

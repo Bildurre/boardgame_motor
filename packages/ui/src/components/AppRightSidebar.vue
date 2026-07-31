@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, onBeforeUnmount, onMounted } from 'vue'
+import { computed, onBeforeUnmount, onMounted, watch } from 'vue'
 import { Funnel, X } from '@lucide/vue'
 import { useAppRightSidebar } from '../composables/useAppRightSidebar'
 
@@ -17,7 +17,11 @@ import { useAppRightSidebar } from '../composables/useAppRightSidebar'
 // .app-footer sobre la clase `--docked`; la cabecera no lo necesita: la
 // barra no la tapa); por debajo de OVERLAY_BREAKPOINT es un drawer
 // superpuesto con telón (también bajo la cabecera, que sigue usable), click
-// fuera y Escape. Se abre y se cierra con el ASA anclada a la propia barra
+// fuera y Escape. Con `overlayAlways` el modo drawer vale para TODAS las
+// anchuras: la barra se superpone siempre al contenido (nunca le roba ancho
+// al main) y se abre/cierra igual que el drawer estrecho — para juegos que
+// prefieren no hacer hueco ni en escritorio. Se abre y se cierra con el ASA
+// anclada a la propia barra
 // (Funnel cerrada / X abierta), visible solo si la vista registró
 // contenido; el cascarón puede ajustar su altura con
 // --app-right-sidebar-handle-top (relativa al techo de la barra).
@@ -32,8 +36,19 @@ const props = withDefaults(
     closeLabel?: string
     /** Título por defecto si la vista registra sin título. */
     fallbackTitle?: string
+    /**
+     * Drawer superpuesto en TODAS las anchuras: nunca "atraca" (docked) ni
+     * le hace hueco el cascarón — siempre telón + superposición, como en
+     * estrecho. Por defecto, solo por debajo del corte de 900px.
+     */
+    overlayAlways?: boolean
   }>(),
-  { openLabel: 'Abrir el panel', closeLabel: 'Cerrar el panel', fallbackTitle: 'Filtros' },
+  {
+    openLabel: 'Abrir el panel',
+    closeLabel: 'Cerrar el panel',
+    fallbackTitle: 'Filtros',
+    overlayAlways: false,
+  },
 )
 
 const { hasContent, collapsed, mobileOpen, overlay, title, isOpen, toggle, closeMobile } =
@@ -44,9 +59,12 @@ const { hasContent, collapsed, mobileOpen, overlay, title, isOpen, toggle, close
 const OVERLAY_BREAKPOINT = 900
 
 function checkOverlay() {
-  overlay.value = window.innerWidth < OVERLAY_BREAKPOINT
+  overlay.value = props.overlayAlways || window.innerWidth < OVERLAY_BREAKPOINT
   if (!overlay.value) mobileOpen.value = false
 }
+
+// Si el consumidor cambia el modo en caliente, el estado se recalcula.
+watch(() => props.overlayAlways, checkOverlay)
 
 // En el drawer, Escape cierra (el click fuera lo cubre el telón).
 function onKeydown(e: KeyboardEvent) {
