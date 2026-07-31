@@ -1,0 +1,125 @@
+@use "tokens" as *;
+
+// =========================================================
+// Sistema COMPARTIDO de filas y grupos de formulario
+// =========================================================
+// Un único lenguaje para TODOS los formularios modales del admin:
+// sustituye a los layouts ad hoc que había repartidos (el `__common-row` de
+// PageBlocks y las filas `--pair`/`--row`/`--image-group` de SchemaFields).
+//
+// PROHIBIDO auto-fit/auto-fill en todo el sistema: columnas FIJAS + cortes
+// EXPLÍCITOS de container query. Con auto-fit las pistas se re-resolvían
+// contra el ancho de `modal-body` (que depende de si hay scrollbar),
+// quedaban pistas fantasma a 0px y los `1fr` resultaban fraccionales
+// desiguales: al repintar con hover a DPI 125 %/150 % los campos vecinos
+// temblaban («baile» en modales largos). Con pistas fijas el layout es
+// idéntico en cada repintado.
+//
+// El contenedor `modal-body` lo define _modal.scss sobre el cuerpo del
+// modal: el patrón funciona en CUALQUIER modal y los cortes miden el ancho
+// REAL del formulario, no el del viewport.
+.form-row {
+  display: grid;
+  // Base: dos columnas fijas iguales.
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: $space-3;
+  align-items: start;
+
+  > * { min-width: 0; }
+
+  // Un checkbox como celda: flex para que se comporte como bloque de su
+  // celda junto a sus compañeros de fila.
+  > .checkbox { display: flex; }
+
+  // Tres columnas fijas iguales, para filas de 3 campos pequeños.
+  &--3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+
+  // Columna izquierda MUCHO más ancha que la derecha (2:1): un textarea o
+  // wysiwyg a la izquierda con su campo pequeño natural al lado (p. ej. el
+  // select de alineación). 2fr y no 2.5fr: en el modal `md` (~520px útiles)
+  // 2:1 deja ~170px a la derecha — lo justo para un select con su etiqueta
+  // («Alineación del subtítulo»…) sin cortarse; con 2.5fr quedaría corto.
+  &--wide-left { grid-template-columns: minmax(0, 2fr) minmax(0, 1fr); }
+
+  // Fila de imagen (especial): la celda izquierda (el input de imagen, con
+  // su etiqueta) es UNA sola celda que llena TODO el alto de la fila; la
+  // derecha es una pila de filas (.form-row__stack) con los ajustes
+  // (posición, escalado, reparto de columnas…). El cuadro de arrastre NO se
+  // estira con la celda: conserva su tamaño natural y se centra en el
+  // espacio (margin-block auto en _image-upload.scss).
+  &--media {
+    align-items: stretch;
+
+    > :first-child {
+      display: flex;
+      flex-direction: column;
+      gap: $space-1;
+      min-width: 0;
+      min-height: 0;
+
+      // El input crece para llenar la celda (envoltorios de etiqueta
+      // incluidos: .form-field de TranslatableImage, etc.).
+      .image-upload {
+        flex: 1;
+        min-height: 0;
+      }
+    }
+  }
+
+  // Pila de filas apiladas dentro de una celda (la columna derecha de
+  // --media): mismo ritmo que la propia fila.
+  &__stack {
+    display: grid;
+    gap: $space-3;
+    align-content: start;
+  }
+
+  // Cortes explícitos (en vez del auto-fit):
+  // — la fila de 3 apila ANTES que el resto: por debajo de ~564px de
+  //   modal-body (3 campos de 180px mínimos cómodos + 2 gaps) ya no caben
+  //   tres columnas. Pasa DIRECTA a una columna, sin estadio intermedio
+  //   2+1 que dejaría una celda huérfana descolgada.
+  @container modal-body (max-width: 563px) {
+    &--3 { grid-template-columns: minmax(0, 1fr); }
+  }
+
+  // — TODAS las variantes apilan a una columna en el modal angosto.
+  @container modal-body (max-width: #{$bp-sm - 1px}) {
+    &,
+    &--3,
+    &--wide-left,
+    &--media {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+}
+
+// Separador de grupos de campos relacionados dentro de un formulario:
+//   <fieldset class="form-fieldset"><legend>…</legend>…</fieldset>
+// Raya superior dashed (el mismo lenguaje que tenía la divisoria de la
+// sección General del form de bloque); el navegador corta la raya donde
+// asienta el legend (comportamiento nativo de fieldset+legend).
+.form-fieldset {
+  margin: 0;
+  padding: $space-3 0 0; // aire entre la raya y el primer campo
+  border: 0;
+  border-top: 1px dashed $border;
+  min-width: 0; // los fieldset traen min-width min-content; aquí estorba
+  display: grid;
+  gap: $space-4; // el mismo ritmo que .edit-modal__body
+
+  // Legend discreto asentado sobre la raya: pegado al borde izquierdo y
+  // con un poco de aire antes de que sigan los guiones.
+  > legend {
+    padding-inline: 0 $space-2;
+    font-size: $fs-13;
+    color: $text-2;
+  }
+
+  // El PRIMER grupo del formulario no lleva raya superior (el formulario
+  // empieza directamente con él; su legend hace de título).
+  &:first-child {
+    border-top: 0;
+    padding-top: 0;
+  }
+}

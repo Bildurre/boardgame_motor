@@ -143,36 +143,10 @@
 
   &__flags { grid-area: flags; display: flex; gap: $space-1; }
 
-  // Sección "General": ARRIBA del formulario (antes al fondo, como "Ajustes
-  // comunes", y pasaba desapercibida), con su titulito discreto — fila 1:
-  // anchura + bloque padre; fila 2: los interruptores; fila 3: color de
-  // fondo + alineación general del bloque. Los campos del TIPO van después.
-  &__common {
-    border-bottom: 1px dashed $border;
-    padding-bottom: $space-4;
-    display: grid;
-    gap: $space-3;
-
-    &-title {
-      color: $text-2;
-      font-size: $fs-13;
-    }
-  }
-
-  // Cada fila de General: dos columnas iguales, apiladas en un modal
-  // angosto (container query sobre el cuerpo del modal, no el viewport).
-  &__common-row {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-    gap: $space-3;
-    align-items: start;
-
-    > .checkbox { display: flex; }
-
-    @container modal-body (max-width: #{$bp-sm - 1px}) {
-      grid-template-columns: 1fr;
-    }
-  }
+  // La sección "General" del modal de bloque y los campos del tipo van
+  // ahora en fieldsets del sistema compartido del ui (.form-fieldset con
+  // legend + filas .form-row): mismo lenguaje que el resto de formularios
+  // del admin. Aquí ya no queda CSS propio para ello.
 
   // Bloques anidados (parent_id, sin límite de niveles): sangría por
   // profundidad REAL — `--depth` lo pone el componente en línea.
@@ -189,88 +163,6 @@
   &__field { min-width: 0; }
 
   &__field-main { min-width: 0; }
-
-  // Alineación junto a su campo: input flexible + select de ancho
-  // contenido (~180px). En un modal angosto (container query sobre el
-  // cuerpo del modal, no el viewport) se apilan, el select debajo.
-  &__field--row {
-    display: flex;
-    // ARRIBA (no al fondo): con un textarea alto (p. ej. el subtítulo) el
-    // select de alineación debe quedar a la altura de las etiquetas, no
-    // descolgado al fondo de la fila.
-    align-items: flex-start;
-    gap: $space-3;
-
-    .schema-fields__field-main { flex: 1 1 0; }
-  }
-
-  // Ancho justo para "Centrado"/"Izquierda" + etiqueta en es/en/eu sin
-  // cortarse (180px sobraba de aire).
-  &__field-align { flex: 0 0 140px; }
-
-  // Fila declarada en el esquema (Field::row): el grupo baja por recursión
-  // como un .schema-fields anidado — aquí solo se reparte en columnas
-  // iguales MIENTRAS QUEPAN (auto-fit: con poco ancho van cayendo solas);
-  // el checkbox se centra en vertical junto a sus compañeros de fila.
-  &__field--pair > .schema-fields {
-    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-    gap: $space-3;
-    align-items: start;
-
-    > .schema-fields__field:has(> .schema-fields__field-main > .checkbox) {
-      align-self: center;
-    }
-  }
-
-  // Imagen a dos columnas: el input a la izquierda, sus ajustes (posición,
-  // escalado, reparto de columnas) apilados a la derecha. `stretch` para que
-  // la columna de la imagen llene el alto de la fila; el cuadro de arrastre
-  // YA NO se estira con ella (0.4.28): conserva su tamaño natural (160×160)
-  // y se centra en el espacio — el centrado vive en el componente
-  // (_image-upload.scss de @edc-motor/ui), común a todos los inputs.
-  &__field--image-group {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-    gap: $space-3;
-    align-items: stretch;
-
-    .schema-fields__field-main {
-      display: flex;
-      flex-direction: column;
-      min-width: 0;
-    }
-
-    .schema-fields__image {
-      display: flex;
-      flex-direction: column;
-      gap: $space-1;
-      flex: 1;
-      min-height: 0;
-    }
-
-    .image-upload {
-      flex: 1;
-      min-height: 0;
-    }
-  }
-
-  &__field-image-settings {
-    display: grid;
-    gap: $space-3;
-  }
-
-  @container modal-body (max-width: #{$bp-sm - 1px}) {
-    &__field--row {
-      flex-direction: column;
-      align-items: stretch;
-    }
-    &__field-align { flex-basis: auto; }
-
-    &__field--image-group { grid-template-columns: 1fr; }
-
-    // Las filas declaradas (Field::row) apilan en el modal angosto.
-    &__field--pair > .schema-fields { grid-template-columns: 1fr; }
-  }
 
   &__color,
   &__image {
@@ -318,4 +210,18 @@
     font-size: $fs-12;
     font-weight: 600;
   }
+}
+
+// Encaje de SchemaFields con las filas del sistema compartido (.form-row,
+// @edc-motor/ui). Un .schema-fields que llega como HIJO directo de una fila
+// (la recursión de las filas declaradas Field::row, o los mini-SchemaFields
+// de la sección General de PageBlocks) se DISUELVE (display: contents): sus
+// campos pasan a ser celdas directas de la fila — sin envoltorios que
+// rompan el grid ni re-aniden gaps.
+.form-row > .schema-fields { display: contents; }
+
+// El checkbox de un campo del esquema se centra en vertical junto a sus
+// compañeros de fila (que llevan etiqueta encima y quedarían descolgados).
+.form-row .schema-fields__field:has(> .schema-fields__field-main > .checkbox) {
+  align-self: center;
 }

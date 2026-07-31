@@ -117,6 +117,10 @@
     "motor": "{name} v{version} · locales {locales}"
   },
   "houses": {
+    "form": {
+      "sheet": "Ficha",
+      "media": "Presentación"
+    },
     "title": "Casas",
     "new": "Nueva casa",
     "edit": "Editar casa",
@@ -160,6 +164,10 @@
     }
   },
   "schemes": {
+    "form": {
+      "sheet": "Ficha",
+      "media": "Imagen y publicación"
+    },
     "title": "Argucias",
     "new": "Nueva argucia",
     "edit": "Editar argucia",
@@ -204,6 +212,11 @@
     }
   },
   "characters": {
+    "form": {
+      "sheet": "Ficha",
+      "stats": "Estadísticas",
+      "media": "Imagen y publicación"
+    },
     "title": "Personajes",
     "new": "Nuevo personaje",
     "edit": "Editar personaje",
@@ -374,6 +387,11 @@
       "metaDescription": "Meta descripción (SEO)",
       "published": "Publicada",
       "printable": "Imprimible (PDF)"
+    },
+    "form": {
+      "content": "Contenido",
+      "settings": "Ajustes",
+      "seo": "SEO"
     },
     "templates": {
       "default": "Por defecto",

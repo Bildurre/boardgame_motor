@@ -26,12 +26,15 @@ class CharactersGridBlock extends BlockType
     {
         return [
             Field::text('title')->label('Título')->translatable(),
-            Field::number('limit')->label('Máximo de cartas')->default(8)->min(1)->max(24),
+            // Máximo + orden en una fila (Field::row): dos campos pequeños
+            // que caben de sobra en columnas; en un modal angosto apilan.
+            Field::number('limit')->label('Máximo de cartas')->default(8)->min(1)->max(24)
+                ->row('layout'),
             Field::select('order', [
                 'recent' => 'Más recientes',
                 'cost' => 'Por coste',
                 'name' => 'Por nombre',
-            ])->label('Orden'),
+            ])->label('Orden')->row('layout'),
         ];
     }
 

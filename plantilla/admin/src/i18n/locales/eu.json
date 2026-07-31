@@ -220,6 +220,11 @@
       "published": "Argitaratuta",
       "printable": "Inprimagarria (PDF)"
     },
+    "form": {
+      "content": "Edukia",
+      "settings": "Ezarpenak",
+      "seo": "SEO"
+    },
     "templates": {
       "default": "Lehenetsia",
       "landing": "Azala (zabalera osoa)"

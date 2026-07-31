@@ -67,24 +67,30 @@ const emit = defineEmits<{ 'update:modelValue': [value: Record<string, unknown>]
 
 // Convenciones genéricas de agrupado (doc 03 ampliado):
 //
+// El layout se pinta con las filas del sistema compartido del ui
+// (.form-row y variantes: columnas FIJAS + cortes de container query sobre
+// modal-body; nada de auto-fit):
+//
 // 1) Alineaciones junto a su campo: un select `<base>_align` cuyo campo
 //    `<base>` (o `<base>_text`, caso de `button_align`/`button_text`) esté
-//    en la MISMA lista se pinta junto a él, en una fila de dos columnas
-//    (PageBlocks inyecta title_align/subtitle_align —comunes del motor—
-//    junto a title/subtitle antes de pasar la lista aquí). El `align`
-//    general del bloque no tiene campo objetivo ("align" no acaba en
-//    "_align" con un prefijo no vacío) y se queda fuera de esta pareja.
-// 2) Imagen a dos columnas: el campo `image` con alguno de sus ajustes
-//    (`image_position`, `image_fit`, `image_columns`) en la misma lista se
-//    agrupa con ellos — columna 1 la imagen, columna 2 los ajustes
-//    apilados.
+//    en la MISMA lista se pinta junto a él en una .form-row--wide-left —
+//    el campo (input/textarea/wysiwyg) ancho a la izquierda, el select
+//    estrecho a la derecha (PageBlocks inyecta title_align/subtitle_align
+//    —comunes del motor— junto a title/subtitle antes de pasar la lista
+//    aquí). El `align` general del bloque no tiene campo objetivo ("align"
+//    no acaba en "_align" con un prefijo no vacío) y queda fuera.
+// 2) Imagen a dos columnas (.form-row--media): el campo `image` con alguno
+//    de sus ajustes (`image_position`, `image_fit`, `image_columns`) en la
+//    misma lista se agrupa con ellos — la celda izquierda (el input) llena
+//    todo el alto de la fila; la derecha es la pila de ajustes.
 // 3) Filas DECLARADAS en el esquema (Field::row('nombre')): los campos que
-//    comparten `row` van juntos en una fila de columnas iguales mientras
-//    quepan (auto-fit; en un modal angosto apilan). Se pintan por RECURSIÓN
-//    sobre este mismo componente (los compañeros pierden su `row` al bajar,
-//    para no re-agrupar en bucle). La fila declarada es intención EXPLÍCITA
-//    del esquema: gana a las convenciones 1 y 2 — un campo con `row` queda
-//    fuera del emparejado implícito (tanto de origen como de destino).
+//    comparten `row` van juntos en una .form-row (--3 si son 3+; en un
+//    modal angosto apilan). Se pintan por RECURSIÓN sobre este mismo
+//    componente (los compañeros pierden su `row` al bajar, para no
+//    re-agrupar en bucle; el .schema-fields anidado se disuelve por CSS).
+//    La fila declarada es intención EXPLÍCITA del esquema: gana a las
+//    convenciones 1 y 2 — un campo con `row` queda fuera del emparejado
+//    implícito (tanto de origen como de destino).
 const IMAGE_SETTING_KEYS = ['image_position', 'image_fit', 'image_columns']
 
 interface LayoutItem {
@@ -243,9 +249,15 @@ function addLabel(): string {
 <template>
   <div class="schema-fields">
     <template v-for="{ field, align, imageSettings, rowFields } in layout" :key="field.key">
-      <!-- Fila declarada (Field::row): los campos del grupo por recursión,
-           en columnas iguales (los compañeros bajan sin `row`) -->
-      <div v-if="rowFields" class="schema-fields__field schema-fields__field--pair">
+      <!-- Fila declarada (Field::row): los campos del grupo por recursión
+           sobre una .form-row del ui (columnas fijas: 2, o 3 si la fila trae
+           3+ campos; el .schema-fields anidado se disuelve por CSS y los
+           compañeros bajan sin `row`) -->
+      <div
+        v-if="rowFields"
+        class="schema-fields__field form-row"
+        :class="{ 'form-row--3': rowFields.length >= 3 }"
+      >
         <SchemaFields
           :fields="rowFields"
           :model-value="modelValue"
@@ -257,14 +269,45 @@ function addLabel(): string {
           @update:model-value="(v) => emit('update:modelValue', v)"
         />
       </div>
-      <div
-        v-else
-        class="schema-fields__field"
-        :class="{
-          'schema-fields__field--row': !!align,
-          'schema-fields__field--image-group': !!imageSettings,
-        }"
-      >
+
+      <!-- Fila de imagen (convención 2), el caso especial del sistema: el
+           input de imagen es UNA sola celda a todo el alto (izquierda) y los
+           ajustes (posición, escalado, reparto de columnas) van apilados en
+           la columna derecha (.form-row__stack) -->
+      <div v-else-if="imageSettings" class="schema-fields__field form-row form-row--media">
+        <TranslatableImage
+          v-if="field.translatable"
+          :model-value="imageTranslations(field)"
+          :locales="locales"
+          :label="label(field)"
+          :required="field.required"
+          @update:model-value="(v) => set(field.key, v)"
+        />
+        <div v-else class="schema-fields__image">
+          <span class="form-field__label">{{ label(field) }}</span>
+          <ImageUpload
+            :model-value="imageFile(field)"
+            :current-url="imageCurrentUrl(field)"
+            @update:model-value="(f: File | null) => set(field.key, f)"
+            @remove="set(field.key, null)"
+          />
+        </div>
+        <div class="form-row__stack">
+          <BaseSelect
+            v-for="setting in imageSettings"
+            :key="setting.key"
+            :model-value="(modelValue[setting.key] as string) ?? (setting.default as string) ?? ''"
+            :label="label(setting)"
+            :options="selectOptions(setting)"
+            @update:model-value="(v) => set(setting.key, v)"
+          />
+        </div>
+      </div>
+
+      <!-- Campo suelto — o, con su select de alineación al lado (convención
+           1), fila ancha-izquierda del ui: el campo (input/textarea/wysiwyg)
+           a la izquierda y el select pequeño a la derecha -->
+      <div v-else class="schema-fields__field" :class="{ 'form-row form-row--wide-left': !!align }">
         <div class="schema-fields__field-main">
           <!-- Traducibles: text / textarea / richtext van al TranslatableInput -->
           <TranslatableInput
@@ -433,28 +476,14 @@ function addLabel(): string {
         </div>
 
         <!-- Alineación del campo (title_align/subtitle_align/author_align/…),
-         en la misma fila que su campo (columna de ancho contenido). -->
+         en la misma fila que su campo (columna derecha, estrecha). -->
         <BaseSelect
           v-if="align"
-          class="schema-fields__field-align"
           :model-value="(modelValue[align.key] as string) ?? (align.default as string) ?? ''"
           :label="label(align)"
           :options="selectOptions(align)"
           @update:model-value="(v) => set(align!.key, v)"
         />
-
-        <!-- Ajustes de la imagen (image_position/image_fit/image_columns),
-         apilados en la segunda columna junto al input de imagen. -->
-        <div v-if="imageSettings" class="schema-fields__field-image-settings">
-          <BaseSelect
-            v-for="setting in imageSettings"
-            :key="setting.key"
-            :model-value="(modelValue[setting.key] as string) ?? (setting.default as string) ?? ''"
-            :label="label(setting)"
-            :options="selectOptions(setting)"
-            @update:model-value="(v) => set(setting.key, v)"
-          />
-        </div>
       </div>
     </template>
   </div>

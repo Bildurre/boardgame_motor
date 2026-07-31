@@ -186,55 +186,69 @@ async function submit() {
     @update:model-value="(v: boolean) => emit('update:modelValue', v)"
     @submit="submit"
   >
-    <TranslatableInput
-      v-model="form.name"
-      :locales="locales.locales"
-      :label="t('characters.fields.name')"
-      required
-      :error="errors.name"
-    />
-    <TranslatableInput
-      v-model="form.description"
-      :locales="locales.locales"
-      :label="t('characters.fields.description')"
-      type="wysiwyg"
-      :icons="iconList"
-      :rich-labels="editorLabels"
-    />
-    <TranslatableInput
-      v-model="form.ability"
-      :locales="locales.locales"
-      :label="t('characters.fields.ability')"
-      type="wysiwyg"
-      :icons="iconList"
-      :rich-labels="editorLabels"
-    />
+    <!-- Grupos del sistema compartido (.form-fieldset + .form-row): la
+         ficha (los wysiwyg a doble columna), las estadísticas y la imagen
+         con la publicación al lado. -->
+    <fieldset class="form-fieldset">
+      <legend>{{ t('characters.form.sheet') }}</legend>
+      <TranslatableInput
+        v-model="form.name"
+        :locales="locales.locales"
+        :label="t('characters.fields.name')"
+        required
+        :error="errors.name"
+      />
+      <TranslatableInput
+        v-model="form.description"
+        :locales="locales.locales"
+        :label="t('characters.fields.description')"
+        type="wysiwyg"
+        :icons="iconList"
+        :rich-labels="editorLabels"
+      />
+      <TranslatableInput
+        v-model="form.ability"
+        :locales="locales.locales"
+        :label="t('characters.fields.ability')"
+        type="wysiwyg"
+        :icons="iconList"
+        :rich-labels="editorLabels"
+      />
+    </fieldset>
 
-    <div class="stats-grid">
-      <NumericInput v-model="form.power" :min="0" :label="t('characters.fields.power')" />
-      <NumericInput v-model="form.prestige" :min="0" :label="t('characters.fields.prestige')" />
-      <NumericInput v-model="form.intrigue" :min="0" :label="t('characters.fields.intrigue')" />
-      <NumericInput v-model="form.money" :min="0" :label="t('characters.fields.money')" />
-    </div>
-    <p class="stats-derived">
-      <span
-        >{{ t('characters.fields.cost') }}: <strong>{{ cost }}</strong></span
-      >
-      <span
-        >{{ t('characters.fields.defense') }}: <strong>{{ cost }}</strong></span
-      >
-    </p>
+    <fieldset class="form-fieldset">
+      <legend>{{ t('characters.form.stats') }}</legend>
+      <div class="stats-grid">
+        <NumericInput v-model="form.power" :min="0" :label="t('characters.fields.power')" />
+        <NumericInput v-model="form.prestige" :min="0" :label="t('characters.fields.prestige')" />
+        <NumericInput v-model="form.intrigue" :min="0" :label="t('characters.fields.intrigue')" />
+        <NumericInput v-model="form.money" :min="0" :label="t('characters.fields.money')" />
+      </div>
+      <p class="stats-derived">
+        <span
+          >{{ t('characters.fields.cost') }}: <strong>{{ cost }}</strong></span
+        >
+        <span
+          >{{ t('characters.fields.defense') }}: <strong>{{ cost }}</strong></span
+        >
+      </p>
+    </fieldset>
 
-    <ImageUpload
-      v-model="image"
-      :current-url="currentImage"
-      :label="t('characters.fields.image')"
-      :drag-text="t('common.imageDrag')"
-      :hint-text="t('common.imageHint')"
-      :too-large-text="t('common.fileTooLarge')"
-      :invalid-type-text="t('common.fileType')"
-      @remove="onRemoveImage"
-    />
-    <BaseCheckbox v-model="form.is_published" :label="t('characters.fields.published')" />
+    <fieldset class="form-fieldset">
+      <legend>{{ t('characters.form.media') }}</legend>
+      <div class="form-row">
+        <ImageUpload
+          v-model="image"
+          :current-url="currentImage"
+          :label="t('characters.fields.image')"
+          :drag-text="t('common.imageDrag')"
+          :hint-text="t('common.imageHint')"
+          :too-large-text="t('common.fileTooLarge')"
+          :invalid-type-text="t('common.fileType')"
+          @remove="onRemoveImage"
+        />
+        <BaseCheckbox v-model="form.is_published" :label="t('characters.fields.published')" />
+      </div>
+    </fieldset>
   </EditModal>
 </template>

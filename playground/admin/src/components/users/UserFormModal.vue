@@ -83,27 +83,35 @@ async function save() {
     @update:model-value="(v) => emit('update:modelValue', v)"
     @submit="save"
   >
-    <BaseInput v-model="name" :label="t('users.fields.name')" required :error="errors.name" />
-    <BaseInput
-      v-model="email"
-      type="email"
-      :label="t('users.fields.email')"
-      required
-      :error="errors.email"
-    />
-    <BaseInput
-      v-model="password"
-      type="password"
-      :label="user ? t('users.fields.passwordOptional') : t('users.fields.password')"
-      :required="!user"
-      :error="errors.password"
-    />
-    <BaseSelect
-      v-if="!isSelf"
-      v-model="role"
-      :label="t('users.fields.role')"
-      :options="ROLES.map((r) => ({ value: r, label: roleLabel(r) }))"
-      :error="errors.role"
-    />
+    <!-- Filas del sistema compartido (.form-row): identidad y acceso, en
+         columnas mientras quepan (en un modal angosto apilan). -->
+    <div class="form-row">
+      <BaseInput v-model="name" :label="t('users.fields.name')" required :error="errors.name" />
+      <BaseInput
+        v-model="email"
+        type="email"
+        :label="t('users.fields.email')"
+        required
+        :error="errors.email"
+      />
+    </div>
+    <!-- Editándose a uno mismo no hay select de rol: la contraseña va sola,
+         a ancho completo (sin fila con celda huérfana). -->
+    <div :class="{ 'form-row': !isSelf }">
+      <BaseInput
+        v-model="password"
+        type="password"
+        :label="user ? t('users.fields.passwordOptional') : t('users.fields.password')"
+        :required="!user"
+        :error="errors.password"
+      />
+      <BaseSelect
+        v-if="!isSelf"
+        v-model="role"
+        :label="t('users.fields.role')"
+        :options="ROLES.map((r) => ({ value: r, label: roleLabel(r) }))"
+        :error="errors.role"
+      />
+    </div>
   </EditModal>
 </template>

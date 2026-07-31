@@ -3,6 +3,32 @@
 Kit de construcción del panel de administración (sobre `@edc-motor/ui`). Paquete
 **fuente** (se consume vía Vite). Versión de tren con `edc-motor/core` y `@edc-motor/ui`.
 
+## [Sin publicar]
+
+### Cambiado
+
+- **`SchemaFields` sobre el sistema compartido `.form-row` del ui** — fuera
+  la maquinaria propia (`__field--pair` con `auto-fit`, `__field--row` con
+  el select de alineación a 140px, `__field--image-group`,
+  `__field-image-settings`): las filas declaradas (`Field::row`, la API del
+  core NO cambia) se pintan con `.form-row` (`--3` si la fila trae 3+
+  campos; la recursión anidada se disuelve con `display: contents`); la
+  pareja campo+alineación pasa a `.form-row--wide-left` (el
+  input/textarea/wysiwyg ancho a la izquierda, el select a la derecha); y
+  el grupo de imagen pasa a `.form-row--media` — el input de imagen es UNA
+  sola celda a todo el alto de la fila y los ajustes (posición, escalado,
+  reparto de columnas) van apilados en la columna derecha. Sin `auto-fit`
+  en ningún caso: columnas fijas + cortes explícitos (el porqué del
+  temblor a DPI fraccionario, en el Sin publicar de `@edc-motor/ui`). Las
+  filas del repeater (`.schema-fields__row`) no cambian.
+- **`PageBlocks`: la sección General y los campos del tipo, en
+  `.form-fieldset`** — el modal de bloque usa el mismo lenguaje que el
+  resto de formularios: General como fieldset con legend (sin raya, por
+  ser el primero) y sus filas como `.form-row` (adiós
+  `.page-blocks__common-row`); los campos del tipo en un segundo fieldset
+  con legend (`panelContent`), cuya raya dashed conserva la separación de
+  antes.
+
 ## [0.5.6] — 2026-07-31
 
 - Sin cambios propios: versión de tren.

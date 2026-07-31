@@ -173,45 +173,59 @@ async function submit() {
     @update:model-value="(v: boolean) => emit('update:modelValue', v)"
     @submit="submit"
   >
-    <BaseSelect
-      v-model="form.house_id"
-      :label="t('schemes.fields.house')"
-      :options="houseOptions"
-      :placeholder="t('schemes.fields.house')"
-      required
-      :error="errors.house_id"
-    />
-    <TranslatableInput
-      v-model="form.title"
-      :locales="locales.locales"
-      :label="t('schemes.fields.title')"
-      required
-      :error="errors.title"
-    />
-    <TranslatableInput
-      v-model="form.description"
-      :locales="locales.locales"
-      :label="t('schemes.fields.description')"
-      type="wysiwyg"
-      :icons="iconList"
-      :rich-labels="editorLabels"
-    />
-    <NumericInput
-      v-model="form.cost"
-      :min="0"
-      :label="t('schemes.fields.cost')"
-      :error="errors.cost"
-    />
-    <ImageUpload
-      v-model="image"
-      :current-url="currentImage"
-      :label="t('schemes.fields.image')"
-      :drag-text="t('common.imageDrag')"
-      :hint-text="t('common.imageHint')"
-      :too-large-text="t('common.fileTooLarge')"
-      :invalid-type-text="t('common.fileType')"
-      @remove="onRemoveImage"
-    />
-    <BaseCheckbox v-model="form.is_published" :label="t('schemes.fields.published')" />
+    <!-- Grupos del sistema compartido (.form-fieldset + .form-row): la
+         ficha (casa+coste en fila; el wysiwyg a doble columna) y la imagen
+         con la publicación al lado. -->
+    <fieldset class="form-fieldset">
+      <legend>{{ t('schemes.form.sheet') }}</legend>
+      <div class="form-row">
+        <BaseSelect
+          v-model="form.house_id"
+          :label="t('schemes.fields.house')"
+          :options="houseOptions"
+          :placeholder="t('schemes.fields.house')"
+          required
+          :error="errors.house_id"
+        />
+        <NumericInput
+          v-model="form.cost"
+          :min="0"
+          :label="t('schemes.fields.cost')"
+          :error="errors.cost"
+        />
+      </div>
+      <TranslatableInput
+        v-model="form.title"
+        :locales="locales.locales"
+        :label="t('schemes.fields.title')"
+        required
+        :error="errors.title"
+      />
+      <TranslatableInput
+        v-model="form.description"
+        :locales="locales.locales"
+        :label="t('schemes.fields.description')"
+        type="wysiwyg"
+        :icons="iconList"
+        :rich-labels="editorLabels"
+      />
+    </fieldset>
+
+    <fieldset class="form-fieldset">
+      <legend>{{ t('schemes.form.media') }}</legend>
+      <div class="form-row">
+        <ImageUpload
+          v-model="image"
+          :current-url="currentImage"
+          :label="t('schemes.fields.image')"
+          :drag-text="t('common.imageDrag')"
+          :hint-text="t('common.imageHint')"
+          :too-large-text="t('common.fileTooLarge')"
+          :invalid-type-text="t('common.fileType')"
+          @remove="onRemoveImage"
+        />
+        <BaseCheckbox v-model="form.is_published" :label="t('schemes.fields.published')" />
+      </div>
+    </fieldset>
   </EditModal>
 </template>

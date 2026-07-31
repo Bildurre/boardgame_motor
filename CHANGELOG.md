@@ -12,6 +12,33 @@ El formato sigue [Keep a Changelog](https://keepachangelog.com/es/) y el
 versionado, [SemVer](https://semver.org/lang/es/) (mientras estemos en `0.x`,
 los cambios de API pueden llegar en versiones menores).
 
+## [Sin publicar]
+
+- **Sistema compartido de filas y grupos de formulario `.form-row` /
+  `.form-fieldset`** (`@edc-motor/ui`): un único lenguaje para TODOS los
+  formularios modales del admin — filas de columnas FIJAS (2, 3, ancha-
+  izquierda 2:1 y la fila especial de imagen con pila de ajustes a la
+  derecha) con cortes explícitos de container query sobre `modal-body`, y
+  fieldsets con raya dashed + legend para separar grupos de campos
+  relacionados. Sustituye al render `--pair` con `auto-fit` de las filas
+  `Field::row` (el auto-fit re-resolvía pistas contra el ancho del modal
+  —dependiente de la scrollbar— y dejaba `1fr` fraccionales desiguales:
+  temblor al repintar con hover a DPI 125/150 %) y a los layouts ad hoc de
+  `SchemaFields`/`PageBlocks`.
+- **`SchemaFields` y `PageBlocks` sobre el patrón nuevo**
+  (`@edc-motor/admin-kit`): las filas declaradas, las parejas campo+
+  alineación (ahora ancha-izquierda) y el grupo de imagen (celda izquierda
+  a todo el alto, ajustes apilados a la derecha) usan `.form-row`; la
+  sección General del modal de bloque y los campos del tipo van en
+  `.form-fieldset` con legend.
+- **Formularios modales del cascarón rehechos con el sistema**
+  (plantilla y playground): usuarios (nombre+email y contraseña+rol en
+  filas), páginas (fieldsets Contenido/Ajustes/SEO, imagen de fondo con los
+  interruptores apilados al lado), iconos (nombre+imagen en fila) y los
+  modales del juego de ejemplo (casas, personajes, argucias) con fieldsets
+  y filas; los bloques del playground declaran filas `Field::row` nuevas
+  (máximo+orden; casa+interruptor). Legends localizadas (es/en/eu).
+
 ## [0.5.6] — 2026-07-31
 
 - **`AppRightSidebar` con `overlayAlways`: sin hueco posible, en ninguna

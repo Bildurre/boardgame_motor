@@ -220,6 +220,11 @@
       "published": "Published",
       "printable": "Printable (PDF)"
     },
+    "form": {
+      "content": "Content",
+      "settings": "Settings",
+      "seo": "SEO"
+    },
     "templates": {
       "default": "Default",
       "landing": "Landing (full width)"

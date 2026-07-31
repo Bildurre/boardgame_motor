@@ -148,58 +148,82 @@ async function save() {
     @update:model-value="(v) => emit('update:modelValue', v)"
     @submit="save"
   >
-    <TranslatableInput
-      v-model="title"
-      :locales="locales.locales"
-      :label="t('pages.fields.title')"
-      required
-    />
-    <TranslatableInput
-      v-model="description"
-      :locales="locales.locales"
-      :label="t('pages.fields.description')"
-      type="textarea"
-    />
-    <BaseSelect
-      v-model="parentId"
-      :label="t('pages.fields.parent')"
-      :options="[
-        { value: '', label: '—' },
-        ...pages
-          .filter((p) => p.id !== page?.id)
-          .map((p) => ({
-            value: String(p.id),
-            label: p.title[locales.current] ?? p.title.es ?? String(p.id),
-          })),
-      ]"
-    />
-    <BaseSelect
-      v-if="templates.length > 1"
-      v-model="template"
-      :label="t('pages.fields.template')"
-      :options="templates.map((tpl) => ({ value: tpl.key, label: templateLabel(tpl) }))"
-    />
-    <ImageUpload
-      :model-value="backgroundFile"
-      :current-url="backgroundUrl"
-      :label="t('pages.fields.backgroundImage')"
-      :drag-text="t('common.imageDrag')"
-      :hint-text="t('pages.fields.backgroundImageHint')"
-      @update:model-value="(f: File | null) => (backgroundImage = f)"
-      @remove="backgroundImage = null"
-    />
-    <TranslatableInput
-      v-model="metaTitle"
-      :locales="locales.locales"
-      :label="t('pages.fields.metaTitle')"
-    />
-    <TranslatableInput
-      v-model="metaDescription"
-      :locales="locales.locales"
-      :label="t('pages.fields.metaDescription')"
-      type="textarea"
-    />
-    <BaseCheckbox v-model="isPublished" :label="t('pages.fields.published')" />
-    <BaseCheckbox v-model="isPrintable" :label="t('pages.fields.printable')" />
+    <!-- Grupos del sistema compartido (.form-fieldset + .form-row):
+         contenido / ajustes / SEO. Los textareas van a doble columna
+         (ancho completo). -->
+    <fieldset class="form-fieldset">
+      <legend>{{ t('pages.form.content') }}</legend>
+      <TranslatableInput
+        v-model="title"
+        :locales="locales.locales"
+        :label="t('pages.fields.title')"
+        required
+      />
+      <TranslatableInput
+        v-model="description"
+        :locales="locales.locales"
+        :label="t('pages.fields.description')"
+        type="textarea"
+      />
+    </fieldset>
+
+    <fieldset class="form-fieldset">
+      <legend>{{ t('pages.form.settings') }}</legend>
+      <!-- Sin catálogo de plantillas (una sola) el select no existe: la
+           página madre va sola, a ancho completo. -->
+      <div :class="{ 'form-row': templates.length > 1 }">
+        <BaseSelect
+          v-model="parentId"
+          :label="t('pages.fields.parent')"
+          :options="[
+            { value: '', label: '—' },
+            ...pages
+              .filter((p) => p.id !== page?.id)
+              .map((p) => ({
+                value: String(p.id),
+                label: p.title[locales.current] ?? p.title.es ?? String(p.id),
+              })),
+          ]"
+        />
+        <BaseSelect
+          v-if="templates.length > 1"
+          v-model="template"
+          :label="t('pages.fields.template')"
+          :options="templates.map((tpl) => ({ value: tpl.key, label: templateLabel(tpl) }))"
+        />
+      </div>
+      <!-- Fila de imagen: el input a la izquierda a todo el alto; los
+           interruptores apilados a la derecha. -->
+      <div class="form-row form-row--media">
+        <ImageUpload
+          :model-value="backgroundFile"
+          :current-url="backgroundUrl"
+          :label="t('pages.fields.backgroundImage')"
+          :drag-text="t('common.imageDrag')"
+          :hint-text="t('pages.fields.backgroundImageHint')"
+          @update:model-value="(f: File | null) => (backgroundImage = f)"
+          @remove="backgroundImage = null"
+        />
+        <div class="form-row__stack">
+          <BaseCheckbox v-model="isPublished" :label="t('pages.fields.published')" />
+          <BaseCheckbox v-model="isPrintable" :label="t('pages.fields.printable')" />
+        </div>
+      </div>
+    </fieldset>
+
+    <fieldset class="form-fieldset">
+      <legend>{{ t('pages.form.seo') }}</legend>
+      <TranslatableInput
+        v-model="metaTitle"
+        :locales="locales.locales"
+        :label="t('pages.fields.metaTitle')"
+      />
+      <TranslatableInput
+        v-model="metaDescription"
+        :locales="locales.locales"
+        :label="t('pages.fields.metaDescription')"
+        type="textarea"
+      />
+    </fieldset>
   </EditModal>
 </template>

@@ -27,9 +27,13 @@ class FeaturedHouseBlock extends BlockType
     {
         return [
             Field::text('title')->label('Título')->translatable(),
-            Field::entity('house_id', '/admin/houses/options')->label('Casa')->required(),
+            // Casa + interruptor en una fila (Field::row); la introducción
+            // (wysiwyg) va después, a doble columna (ancho completo).
+            Field::entity('house_id', '/admin/houses/options')->label('Casa')->required()
+                ->row('house'),
+            Field::boolean('show_schemes')->label('Mostrar sus argucias')->default(true)
+                ->row('house'),
             Field::richtext('intro')->label('Introducción')->translatable(),
-            Field::boolean('show_schemes')->label('Mostrar sus argucias')->default(true),
         ];
     }
 

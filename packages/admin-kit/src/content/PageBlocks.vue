@@ -660,13 +660,14 @@ defineExpose({ reload: load })
     >
       <template v-if="modalType">
         <!-- General ARRIBA del todo (antes iba al fondo, como "Ajustes
-             comunes", y pasaba desapercibida): anchura + bloque padre;
-             los interruptores; color de fondo + alineación general del
-             bloque. Los campos del tipo van DESPUÉS. -->
-        <div class="page-blocks__common">
-          <span class="page-blocks__common-title">{{ L.common }}</span>
+             comunes", y pasaba desapercibida), como fieldset del sistema
+             compartido (mismo lenguaje que el resto de formularios; el
+             primero no lleva raya): anchura + bloque padre; los
+             interruptores; color de fondo + alineación general. -->
+        <fieldset class="form-fieldset">
+          <legend>{{ L.common }}</legend>
 
-          <div class="page-blocks__common-row">
+          <div class="form-row">
             <SchemaFields
               v-model="form"
               :fields="generalWidthFields"
@@ -682,12 +683,12 @@ defineExpose({ reload: load })
             />
           </div>
 
-          <div class="page-blocks__common-row">
+          <div class="form-row">
             <BaseCheckbox v-model="formPrintable" :label="L.printable" />
             <BaseCheckbox v-model="formIndexable" :label="L.indexable" />
           </div>
 
-          <div class="page-blocks__common-row">
+          <div class="form-row">
             <SchemaFields
               v-model="form"
               :fields="generalBackgroundFields"
@@ -703,17 +704,22 @@ defineExpose({ reload: load })
               :translate="translate"
             />
           </div>
-        </div>
+        </fieldset>
 
-        <SchemaFields
-          v-model="form"
-          :fields="typeFieldsWithAligns"
-          :locales="locales"
-          :api="api"
-          :icons="icons"
-          :rich-labels="richLabels"
-          :translate="translate"
-        />
+        <!-- Los campos del TIPO, en su propio fieldset (la raya dashed
+             separa General del contenido, como antes). -->
+        <fieldset class="form-fieldset">
+          <legend>{{ L.panelContent }}</legend>
+          <SchemaFields
+            v-model="form"
+            :fields="typeFieldsWithAligns"
+            :locales="locales"
+            :api="api"
+            :icons="icons"
+            :rich-labels="richLabels"
+            :translate="translate"
+          />
+        </fieldset>
       </template>
     </EditModal>
 

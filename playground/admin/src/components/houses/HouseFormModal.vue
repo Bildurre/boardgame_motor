@@ -163,34 +163,47 @@ async function submit() {
     @update:model-value="(v: boolean) => emit('update:modelValue', v)"
     @submit="submit"
   >
-    <TranslatableInput
-      v-model="form.name"
-      :locales="locales.locales"
-      :label="t('houses.fields.name')"
-      required
-      :error="errors.name"
-    />
-    <TranslatableInput
-      v-model="form.description"
-      :locales="locales.locales"
-      :label="t('houses.fields.description')"
-      type="wysiwyg"
-      :icons="iconList"
-      :rich-labels="editorLabels"
-    />
-    <ImageUpload
-      v-model="image"
-      :current-url="currentImage"
-      :label="t('houses.fields.image')"
-      :drag-text="t('common.imageDrag')"
-      :hint-text="t('common.imageHint')"
-      :too-large-text="t('common.fileTooLarge')"
-      :invalid-type-text="t('common.fileType')"
-      @remove="onRemoveImage"
-    />
+    <!-- Grupos del sistema compartido (.form-fieldset + .form-row): la
+         ficha (nombre + descripción, wysiwyg a doble columna) y la
+         presentación (fila de imagen: input a todo el alto a la izquierda;
+         color y publicación apilados a la derecha). -->
+    <fieldset class="form-fieldset">
+      <legend>{{ t('houses.form.sheet') }}</legend>
+      <TranslatableInput
+        v-model="form.name"
+        :locales="locales.locales"
+        :label="t('houses.fields.name')"
+        required
+        :error="errors.name"
+      />
+      <TranslatableInput
+        v-model="form.description"
+        :locales="locales.locales"
+        :label="t('houses.fields.description')"
+        type="wysiwyg"
+        :icons="iconList"
+        :rich-labels="editorLabels"
+      />
+    </fieldset>
 
-    <PaletteColorPicker v-model="form.color" :label="t('houses.fields.color')" />
-
-    <BaseCheckbox v-model="form.is_published" :label="t('houses.fields.published')" />
+    <fieldset class="form-fieldset">
+      <legend>{{ t('houses.form.media') }}</legend>
+      <div class="form-row form-row--media">
+        <ImageUpload
+          v-model="image"
+          :current-url="currentImage"
+          :label="t('houses.fields.image')"
+          :drag-text="t('common.imageDrag')"
+          :hint-text="t('common.imageHint')"
+          :too-large-text="t('common.fileTooLarge')"
+          :invalid-type-text="t('common.fileType')"
+          @remove="onRemoveImage"
+        />
+        <div class="form-row__stack">
+          <PaletteColorPicker v-model="form.color" :label="t('houses.fields.color')" />
+          <BaseCheckbox v-model="form.is_published" :label="t('houses.fields.published')" />
+        </div>
+      </div>
+    </fieldset>
   </EditModal>
 </template>

@@ -117,6 +117,10 @@
     "motor": "{name} v{version} · locales {locales}"
   },
   "houses": {
+    "form": {
+      "sheet": "Details",
+      "media": "Presentation"
+    },
     "title": "Houses",
     "new": "New house",
     "edit": "Edit house",
@@ -160,6 +164,10 @@
     }
   },
   "schemes": {
+    "form": {
+      "sheet": "Details",
+      "media": "Image and publishing"
+    },
     "title": "Schemes",
     "new": "New scheme",
     "edit": "Edit scheme",
@@ -204,6 +212,11 @@
     }
   },
   "characters": {
+    "form": {
+      "sheet": "Details",
+      "stats": "Statistics",
+      "media": "Image and publishing"
+    },
     "title": "Characters",
     "new": "New character",
     "edit": "Edit character",
@@ -374,6 +387,11 @@
       "metaDescription": "Meta description (SEO)",
       "published": "Published",
       "printable": "Printable (PDF)"
+    },
+    "form": {
+      "content": "Content",
+      "settings": "Settings",
+      "seo": "SEO"
     },
     "templates": {
       "default": "Default",

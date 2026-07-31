@@ -117,6 +117,10 @@
     "motor": "{name} v{version} · hizkuntzak {locales}"
   },
   "houses": {
+    "form": {
+      "sheet": "Fitxa",
+      "media": "Aurkezpena"
+    },
     "title": "Etxeak",
     "new": "Etxe berria",
     "edit": "Etxea editatu",
@@ -160,6 +164,10 @@
     }
   },
   "schemes": {
+    "form": {
+      "sheet": "Fitxa",
+      "media": "Irudia eta argitalpena"
+    },
     "title": "Argaziak",
     "new": "Argazi berria",
     "edit": "Argazia editatu",
@@ -204,6 +212,11 @@
     }
   },
   "characters": {
+    "form": {
+      "sheet": "Fitxa",
+      "stats": "Estatistikak",
+      "media": "Irudia eta argitalpena"
+    },
     "title": "Pertsonaiak",
     "new": "Pertsonaia berria",
     "edit": "Pertsonaia editatu",
@@ -374,6 +387,11 @@
       "metaDescription": "Meta deskribapena (SEO)",
       "published": "Argitaratuta",
       "printable": "Inprimagarria (PDF)"
+    },
+    "form": {
+      "content": "Edukia",
+      "settings": "Ezarpenak",
+      "seo": "SEO"
     },
     "templates": {
       "default": "Lehenetsia",

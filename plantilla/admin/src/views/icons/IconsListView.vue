@@ -150,21 +150,30 @@ async function del(icon: Icon) {
       :cancel-label="t('common.cancel')"
       @submit="save"
     >
-      <BaseInput v-model="form.name" :label="t('icons.nameLabel')" required :error="errors.name" />
-      <!-- Al editar se muestra la imagen ACTUAL del icono; elegir otra solo
-           la sustituye al guardar (la imagen es obligatoria: sin "quitar") -->
-      <ImageUpload
-        v-model="form.image"
-        :current-url="editing?.url ?? null"
-        :label="editing ? t('icons.imageReplaceLabel') : t('icons.imageLabel')"
-        accept=".svg,.png,.jpg,.jpeg,.webp"
-        :max-size="2"
-        :drag-text="t('common.imageDrag')"
-        :hint-text="t('icons.imageHint')"
-        :too-large-text="t('common.fileTooLarge')"
-        :invalid-type-text="t('common.fileType')"
-        :error="errors.image"
-      />
+      <!-- Nombre e imagen en una fila del sistema compartido (.form-row):
+           en un modal angosto apilan. Al editar se muestra la imagen ACTUAL
+           del icono; elegir otra solo la sustituye al guardar (la imagen es
+           obligatoria: sin "quitar") -->
+      <div class="form-row">
+        <BaseInput
+          v-model="form.name"
+          :label="t('icons.nameLabel')"
+          required
+          :error="errors.name"
+        />
+        <ImageUpload
+          v-model="form.image"
+          :current-url="editing?.url ?? null"
+          :label="editing ? t('icons.imageReplaceLabel') : t('icons.imageLabel')"
+          accept=".svg,.png,.jpg,.jpeg,.webp"
+          :max-size="2"
+          :drag-text="t('common.imageDrag')"
+          :hint-text="t('icons.imageHint')"
+          :too-large-text="t('common.fileTooLarge')"
+          :invalid-type-text="t('common.fileType')"
+          :error="errors.image"
+        />
+      </div>
     </EditModal>
   </div>
 </template>

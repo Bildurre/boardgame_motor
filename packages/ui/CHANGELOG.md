@@ -4,6 +4,33 @@ Componentes Vue 3 + SCSS para las webs públicas (y piezas compartidas con el
 admin). Paquete **fuente** (se consume vía Vite). Versión de tren con
 `edc-motor/core` y `@edc-motor/admin-kit`.
 
+## [Sin publicar]
+
+### Añadido
+
+- **Sistema compartido de filas de formulario `.form-row`**
+  (`_form-row.scss`): un único lenguaje de layout para TODOS los
+  formularios modales del admin. Base de dos columnas fijas iguales (el
+  antiguo `__common-row` de PageBlocks), `--3` (tres columnas fijas),
+  `--wide-left` (izquierda 2:1 — para un textarea/wysiwyg con su campo
+  pequeño natural al lado; 2fr y no 2.5fr para que en el modal `md` la
+  columna derecha conserve ~170px, lo justo para un select con etiqueta) y
+  `--media` (la fila de imagen: la celda izquierda —el input con su
+  etiqueta— llena TODO el alto de la fila y la derecha es una pila de
+  filas `.form-row__stack` con los ajustes). PROHIBIDO `auto-fit`/
+  `auto-fill` en todo el sistema: columnas fijas + cortes EXPLÍCITOS de
+  container query — el auto-fit re-resolvía sus pistas contra el ancho de
+  `modal-body` (dependiente de la scrollbar), dejaba pistas fantasma a 0px
+  y producía `1fr` fraccionales desiguales: temblor al repintar con hover
+  a DPI 125/150 %. Cortes: la fila de 3 apila DIRECTA a una columna por
+  debajo de 564px de `modal-body` (3·180px + 2 gaps, sin estadio 2+1 con
+  celda huérfana); todas las variantes apilan por debajo de `$bp-sm`.
+- **`.form-fieldset`**: separador de grupos de campos relacionados
+  (`<fieldset>` + `<legend>`): raya superior dashed (el lenguaje de la
+  divisoria de la sección General del form de bloque) con el legend
+  discreto asentado sobre ella, ritmo interior `$space-4` (el de
+  `.edit-modal__body`); el primer grupo del formulario no lleva raya.
+
 ## [0.5.6] — 2026-07-31
 
 ### Arreglado
