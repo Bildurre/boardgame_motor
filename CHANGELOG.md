@@ -12,6 +12,21 @@ El formato sigue [Keep a Changelog](https://keepachangelog.com/es/) y el
 versionado, [SemVer](https://semver.org/lang/es/) (mientras estemos en `0.x`,
 los cambios de API pueden llegar en versiones menores).
 
+## [Sin publicar]
+
+- **`AppRightSidebar` con `overlayAlways`: sin hueco posible, en ninguna
+  circunstancia** (`@edc-motor/ui`): el modo overlay se decide en el propio
+  setup (no en `mounted`) y `--docked` queda vetado por construcción con la
+  prop puesta — la única versión del drawer es la estrecha (ancho acotado,
+  telón, superpuesta al main, asa) en TODAS las anchuras.
+- **Mitigación del «baile» al hover en el modal de bloque**
+  (`@edc-motor/ui`): dentro de un modal los campos de formulario cambian el
+  realce de hover/focus sin transición — la animación de
+  border-color/box-shadow repintaba en cadena un área mayor que el campo y
+  con DPI fraccionario (125 %/150 %) podía hacer temblar a los vecinos de
+  las filas del esquema; no reproducido en automatización a DPR 1/1.25/1.5
+  (mitigación de causa plausible, no verificada contra el temblor real).
+
 ## [0.5.5] — 2026-07-31
 
 - **`AppRightSidebar` con modo drawer permanente** (`@edc-motor/ui`): nueva

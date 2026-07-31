@@ -59,9 +59,16 @@ const { hasContent, collapsed, mobileOpen, overlay, title, isOpen, toggle, close
 const OVERLAY_BREAKPOINT = 900
 
 function checkOverlay() {
-  overlay.value = props.overlayAlways || window.innerWidth < OVERLAY_BREAKPOINT
+  overlay.value =
+    props.overlayAlways || (typeof window !== 'undefined' && window.innerWidth < OVERLAY_BREAKPOINT)
   if (!overlay.value) mobileOpen.value = false
 }
+
+// EAGER, en el propio setup (no esperar a mounted): que no exista NI UN
+// frame en el que overlayAlways pudiera pintarse como columna atracada
+// (p. ej. si el singleton del composable se recrea en caliente con HMR y
+// `overlay` vuelve a su valor inicial `false`).
+checkOverlay()
 
 // Si el consumidor cambia el modo en caliente, el estado se recalcula.
 watch(() => props.overlayAlways, checkOverlay)
@@ -87,8 +94,13 @@ const handleLabel = computed(() => (isOpen.value ? props.closeLabel : props.open
 
 // Desplegada en ANCHO: el cascarón le hace hueco (body:has en su scss).
 // hasContent va en la clase porque v-show (display: none) no saca al aside
-// de los selectores :has.
-const docked = computed(() => hasContent.value && !overlay.value && !collapsed.value)
+// de los selectores :has. Con `overlayAlways`, `--docked` es imposible por
+// construcción (aunque `overlay` aún no se hubiera recalculado): el
+// cascarón no puede hacerle hueco JAMÁS y el drawer estrecho es la única
+// versión que existe.
+const docked = computed(
+  () => !props.overlayAlways && hasContent.value && !overlay.value && !collapsed.value,
+)
 </script>
 
 <template>

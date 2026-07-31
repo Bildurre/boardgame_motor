@@ -4,6 +4,32 @@ Componentes Vue 3 + SCSS para las webs públicas (y piezas compartidas con el
 admin). Paquete **fuente** (se consume vía Vite). Versión de tren con
 `edc-motor/core` y `@edc-motor/admin-kit`.
 
+## [Sin publicar]
+
+### Arreglado
+
+- **`AppRightSidebar` con `overlayAlways`: blindaje contra cualquier hueco
+  en ancho** — el modo overlay se calcula EAGER en el propio setup (no en
+  `mounted`), de modo que no existe ni un frame en que la barra pudiera
+  pintarse como columna atracada (p. ej. si el singleton del composable se
+  recrea en caliente y `overlay` vuelve a `false`); además la clase
+  `--docked` es ahora imposible por construcción con la prop puesta: el
+  cascarón no puede hacerle hueco al contenido JAMÁS. El drawer estrecho
+  (ancho acotado + telón + asa) es la única versión que existe en todas
+  las anchuras.
+- **Mitigación del «baile» al hover en el modal de bloque (DPI
+  fraccionario)** — dentro de un modal, los inputs/selects/textareas
+  cambian el realce de hover/focus SIN transición: la animación de
+  `border-color`/`box-shadow` forzaba ~10 repintados seguidos con un área
+  de invalidación mayor que el propio campo y, con las filas del esquema
+  en columnas de ancho fraccional y un `devicePixelRatio` no entero
+  (125 %/150 %), esa re-rasterización repetida podía hacer temblar los
+  campos vecinos («Texto del botón», «Alineación del botón»…). No se logró
+  reproducir en pruebas automatizadas a DPR 1/1.25/1.5 (rects y píxeles de
+  vecinos estables), así que se aplica esta mitigación de raíz plausible:
+  un único repintado por cambio de estado, mismo aspecto final. Fuera de
+  modales las transiciones siguen igual.
+
 ## [0.5.5] — 2026-07-31
 
 ### Añadido

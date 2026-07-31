@@ -87,6 +87,23 @@ $icon-chevron-down: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000
     cursor: pointer;
   }
 
+  // MITIGACIÓN del «baile» al hover en el modal de bloque (DPI fraccionario):
+  // dentro de un modal, el realce de hover/focus es INSTANTÁNEO. La
+  // transición de border-color/box-shadow fuerza ~10 repintados seguidos con
+  // un área de invalidación mayor que el propio input (el box-shadow pinta
+  // fuera de su caja) y, con las filas del esquema en columnas de ancho
+  // fraccional (auto-fit 1fr) y un devicePixelRatio no entero (125%/150%),
+  // esa re-rasterización repetida puede hacer temblar los campos VECINOS.
+  // Un único repintado por cambio de estado elimina el tembleque sin tocar
+  // la geometría ni el aspecto final.
+  .modal & {
+    &__input,
+    &__textarea,
+    &__select {
+      transition: none;
+    }
+  }
+
   &--error &__input,
   &--error &__textarea,
   &--error &__select {
