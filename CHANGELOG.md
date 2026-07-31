@@ -12,7 +12,7 @@ El formato sigue [Keep a Changelog](https://keepachangelog.com/es/) y el
 versionado, [SemVer](https://semver.org/lang/es/) (mientras estemos en `0.x`,
 los cambios de API pueden llegar en versiones menores).
 
-## [Sin publicar]
+## [0.5.6] — 2026-07-31
 
 - **`AppRightSidebar` con `overlayAlways`: sin hueco posible, en ninguna
   circunstancia** (`@edc-motor/ui`): el modo overlay se decide en el propio
