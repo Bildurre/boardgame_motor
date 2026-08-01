@@ -14,6 +14,28 @@ los cambios de API pueden llegar en versiones menores).
 
 ## [Sin publicar]
 
+- **Colores DINÁMICOS en el fondo de bloque** (`edc-motor/core` +
+  `@edc-motor/ui` + `@edc-motor/admin-kit`): el campo común `background`
+  ofrece, además de la paleta de hexes (retrocompatible), presets que
+  siguen al tema claro/oscuro — «Fondo de tarjeta» (`token:surface`),
+  «Superficie 2/3» (`token:surface-2/-3`) y «Acento» (`token:accent-500`).
+  Serialización SEMÁNTICA y estable (`token:<nombre>`, nunca el `var(...)`
+  crudo) validada en servidor (un token desconocido es 422); `BlockShell`
+  la resuelve a `var(--<nombre>)` dentro del `color-mix` del tinte; el
+  picker del admin pinta los presets resueltos con el tema ACTUAL (nueva
+  prop `presets`, vía `->options()` del DSL + `SchemaFields`), con
+  etiquetas es/en/eu en los cascarones.
+- **La imagen de fondo de página arranca justo bajo el header**
+  (`@edc-motor/ui` + cascarones): `.page-background` respeta la nueva
+  custom property `--page-background-top` (top + altura recortada; 0 si no
+  se define) y plantilla/playground la definen en `_app-header.scss` con
+  la altura estable por CSS de su site-header (fila 1; + la fila de
+  navegación en ancho).
+- **La cita del bloque `quote`, más contenida** (`@edc-motor/ui`): 28px
+  (antes 32), 24px en estrecho y `line-height: 1.25`.
+- **Tabs con icono: solo el icono en estrecho** (`@edc-motor/ui`): el
+  texto desaparece visualmente (sigue accesible y el botón lleva `title`);
+  antes se apilaban icono + etiqueta pequeña.
 - **Sistema compartido de filas y grupos de formulario `.form-row` /
   `.form-fieldset`** (`@edc-motor/ui`): un único lenguaje para TODOS los
   formularios modales del admin — filas de columnas FIJAS (2, 3, ancha-

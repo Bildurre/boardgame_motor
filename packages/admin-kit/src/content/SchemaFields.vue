@@ -15,6 +15,7 @@ import {
   RichTextInput,
   TranslatableImage,
   TranslatableInput,
+  type ColorPreset,
   type RichIcon,
   type RichTextLabels,
   type SelectOption,
@@ -202,6 +203,16 @@ function selectOptions(field: FieldSchema): SelectOption[] {
   }))
 }
 
+/** Presets DINÁMICOS de un campo color (sus options, valores token:* — hoy
+ *  solo el `background` común de los bloques los declara): mismas etiquetas
+ *  y mismo camino i18n que las opciones de un select. */
+function colorPresets(field: FieldSchema): ColorPreset[] {
+  return Object.entries(field.options ?? {}).map(([value, text]) => ({
+    value,
+    label: props.translate?.(`blockOptions.${field.key}.${value}`, text) ?? text,
+  }))
+}
+
 // --- Anidados (group / repeater) ---
 
 function groupValue(field: FieldSchema): Record<string, unknown> {
@@ -379,6 +390,7 @@ function addLabel(): string {
             <span class="form-field__label">{{ label(field) }}</span>
             <PaletteColorPicker
               :model-value="(modelValue[field.key] as string) ?? null"
+              :presets="colorPresets(field)"
               @update:model-value="(v) => set(field.key, v)"
             />
           </div>

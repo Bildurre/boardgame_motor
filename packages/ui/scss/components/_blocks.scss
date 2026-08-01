@@ -377,17 +377,24 @@
     }
   }
 
-  // Cita: sin adorno de borde, en GRANDE ($fs-32, el mismo tamaño que un
-  // título de bloque) y del color de acento.
+  // Cita: sin adorno de borde, en grande ($fs-28, el mismo cuerpo que un
+  // título de bloque; antes $fs-32 — un ~10% menos) y del color de acento,
+  // con interlineado propio (1.25: las citas de varias líneas respiraban
+  // de más con el line-height del cuerpo). En estrecho baja a $fs-24.
   &--quote .block__quote {
     margin: 0;
     // Fuente "especial" de la configuración de la web (doc 10); las fuentes
     // decorativas piden un cuerpo mayor.
     font-family: var(--font-special, inherit);
-    font-size: $fs-32;
+    font-size: $fs-28;
+    line-height: 1.25;
     font-style: italic;
     font-weight: $k-fw-semibold;
     color: $accent-500;
+
+    @container content (max-width: #{$bp-sm - 1px}) {
+      font-size: $fs-24;
+    }
 
     // La cita llega como richtext y .rich-content fija su propio cuerpo
     // ($fs-16): aquí debe heredar el tamaño grande de la cita.

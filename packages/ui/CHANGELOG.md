@@ -8,6 +8,47 @@ admin). Paquete **fuente** (se consume vía Vite). Versión de tren con
 
 ### Añadido
 
+- **`PaletteColorPicker`: presets DINÁMICOS del tema** — nueva prop
+  `presets` (`ColorPreset[]`, `{ value, label }`, exportado): valores
+  `token:<nombre>` que el swatch resuelve a `var(--<nombre>)` con el tema
+  ACTUAL (los tokens del tema son custom properties también en el admin),
+  pintados delante de la paleta con `title` descriptivo. Selección y
+  deselección exactamente como con un hex; un token seleccionado no
+  «contamina» el swatch custom (la pipeta sigue idle). El swatch
+  `--dynamic` lleva borde siempre visible (su color puede confundirse con
+  la superficie del formulario), check en color de texto del tema (el
+  blanco fijo desaparecía sobre superficies claras) y anillo de selección
+  en color de texto (el del propio color no se veía sobre un fondo igual).
+  Sin `presets`, el picker es EXACTAMENTE el de siempre (facciones,
+  ajustes… no cambian).
+- **`.page-background` respeta `--page-background-top`** — el top de la
+  imagen de fondo de página queda justo debajo del header: `top:
+  var(--page-background-top, 0px)` y altura `calc(100lvh - …)` (con
+  fallback `100vh`). La variable la define el LAYOUT del cascarón con la
+  altura real de su site-header (si es estable por CSS basta scss — así lo
+  hacen plantilla y playground en `_app-header.scss`, junto a
+  `--app-right-sidebar-top`; si fuera variable, medirla con JS y pisarla
+  inline). Sin definirla vale 0: comportamiento de siempre.
+
+### Cambiado
+
+- **`BlockShell` resuelve fondos `token:*`** — el campo común `background`
+  admite, además del hex de siempre (retrocompatible), un preset dinámico
+  del tema serializado SEMÁNTICO (`token:surface`, `token:accent-500`…):
+  se resuelve a `var(--surface)`/`var(--accent-500)` DENTRO del mismo
+  `color-mix` del tinte (`--block-tint`), así el fondo sigue al tema
+  claro/oscuro en runtime. El nombre del token se sanea a `[a-z0-9-]`
+  antes de tocar CSS.
+- **La cita del bloque `quote` baja de cuerpo**: `$fs-28` (antes `$fs-32`,
+  ~10 % menos) con `line-height: 1.25` propio, y `$fs-24` en estrecho
+  (corte de container query sobre `content` en `< $bp-sm`, como el resto
+  del fichero).
+- **Tabs con icono: en estrecho desaparece el TEXTO** (`BaseTabs` +
+  `_tabs.scss`) — la tab con icono queda SOLO con el icono (antes apilaba
+  icono + etiqueta a 10px): la etiqueta pasa a visually hidden (no
+  `display: none` — sigue en el árbol de accesibilidad dando nombre al
+  botón) y el botón lleva `title` con su etiqueta. De `$bp-sm` (container
+  `content`) para arriba, icono + texto en línea como siempre.
 - **Sistema compartido de filas de formulario `.form-row`**
   (`_form-row.scss`): un único lenguaje de layout para TODOS los
   formularios modales del admin. Base de dos columnas fijas iguales (el

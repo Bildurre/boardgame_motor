@@ -129,6 +129,44 @@ it('valida los bloques con las reglas derivadas del esquema', function () {
     ])->assertCreated();
 });
 
+it('el fondo de bloque acepta hex y presets dinámicos del tema (token:*)', function () {
+    $admin = motorUser('admin');
+    $page = makePage();
+
+    // La paleta serializa los presets dinámicos del campo común background
+    // (el picker del admin los pinta de options, como en un select).
+    $header = collect($this->actingAs($admin)->getJson('/api/admin/block-types')->json('data'))
+        ->firstWhere('key', 'header');
+    $background = collect($header['common'])->firstWhere('key', 'background');
+    expect(array_keys($background['options']))
+        ->toContain('token:surface', 'token:surface-2', 'token:surface-3', 'token:accent-500');
+
+    // Un hex sigue valiendo (retrocompat con los fondos ya guardados)…
+    $this->actingAs($admin)->postJson("/api/admin/pages/{$page->id}/blocks", [
+        'type' => 'header',
+        'settings' => ['title' => ['es' => 'Hex'], 'background' => '#a75da5'],
+    ])->assertCreated();
+
+    // …un preset declarado se guarda TAL CUAL (serialización semántica,
+    // estable frente a cambios del tema)…
+    $id = $this->actingAs($admin)->postJson("/api/admin/pages/{$page->id}/blocks", [
+        'type' => 'header',
+        'settings' => ['title' => ['es' => 'Token'], 'background' => 'token:surface'],
+    ])->assertCreated()->json('data.id');
+    expect(Block::find($id)->settings['background'])->toBe('token:surface');
+
+    // …y localizeSettings lo deja pasar intacto al render público.
+    $localized = app(BlockTypeRegistry::class)->get('header')
+        ->localizeSettings(Block::find($id)->settings, 'es');
+    expect($localized['background'])->toBe('token:surface');
+
+    // Un token que no esté entre los presets declarados es 422.
+    $this->actingAs($admin)->postJson("/api/admin/pages/{$page->id}/blocks", [
+        'type' => 'header',
+        'settings' => ['title' => ['es' => 'Rota'], 'background' => 'token:nope'],
+    ])->assertUnprocessable();
+});
+
 it('anida bloques en varios niveles (sin límite, solo se prohíben los ciclos) y el índice saca la profundidad real', function () {
     $admin = motorUser('admin');
     $page = makePage();

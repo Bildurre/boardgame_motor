@@ -19,6 +19,17 @@ const headingAlign = (key: 'title_align' | 'subtitle_align', prefix: string) => 
   return value && value !== 'inherit' ? `block--${prefix}-${value}` : ''
 }
 
+// El color de fondo puede ser un hex fijo o un preset DINÁMICO del tema
+// serializado como `token:<nombre>` (p. ej. token:surface): se resuelve a
+// su custom property (var(--surface)) — color-mix admite vars — y así el
+// tinte sigue al tema claro/oscuro. El nombre se sanea a [a-z0-9-] (el
+// value viene del admin, pero un token roto no debe inyectar CSS).
+const TOKEN_PREFIX = 'token:'
+function resolveColor(value: string): string {
+  if (!value.startsWith(TOKEN_PREFIX)) return value
+  return `var(--${value.slice(TOKEN_PREFIX.length).replace(/[^a-z0-9-]/gi, '')})`
+}
+
 // La alineación va por CLASE (block--align-*, _blocks.scss), no por style en
 // línea: un style inline no se puede pisar desde CSS (bloqueaba el cambio a
 // izquierda del justificado en estrecho, DC-03 ampliado).
@@ -26,7 +37,7 @@ const style = computed<CSSProperties>(() => {
   const background = props.settings.background as string | undefined
   return {
     '--block-bg': background
-      ? `color-mix(in srgb, ${background} var(--block-tint, 15%), transparent)`
+      ? `color-mix(in srgb, ${resolveColor(background)} var(--block-tint, 15%), transparent)`
       : 'transparent',
   }
 })
