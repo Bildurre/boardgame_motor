@@ -6,10 +6,6 @@ admin). Paquete **fuente** (se consume vía Vite). Versión de tren con
 
 ## [0.5.8] — 2026-08-02
 
-- Sin cambios propios: versión de tren.
-
-## [0.5.7] — 2026-08-01
-
 ### Añadido
 
 - **`PaletteColorPicker`: presets DINÁMICOS del tema** — nueva prop
@@ -53,6 +49,11 @@ admin). Paquete **fuente** (se consume vía Vite). Versión de tren con
   `display: none` — sigue en el árbol de accesibilidad dando nombre al
   botón) y el botón lleva `title` con su etiqueta. De `$bp-sm` (container
   `content`) para arriba, icono + texto en línea como siempre.
+
+## [0.5.7] — 2026-08-01
+
+### Añadido
+
 - **Sistema compartido de filas de formulario `.form-row`**
   (`_form-row.scss`): un único lenguaje de layout para TODOS los
   formularios modales del admin. Base de dos columnas fijas iguales (el

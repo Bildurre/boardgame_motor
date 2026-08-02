@@ -5,10 +5,6 @@ Kit de construcción del panel de administración (sobre `@edc-motor/ui`). Paque
 
 ## [0.5.8] — 2026-08-02
 
-- Sin cambios propios: versión de tren.
-
-## [0.5.7] — 2026-08-01
-
 ### Cambiado
 
 - **`SchemaFields`: un campo `color` con `options` pasa sus presets
@@ -19,6 +15,11 @@ Kit de construcción del panel de administración (sobre `@edc-motor/ui`). Paque
   (`blockOptions.<campo>.<valor>`, fallback al castellano serializado).
   Los campos color sin options (y los usos directos del picker) no
   cambian.
+
+## [0.5.7] — 2026-08-01
+
+### Cambiado
+
 - **`SchemaFields` sobre el sistema compartido `.form-row` del ui** — fuera
   la maquinaria propia (`__field--pair` con `auto-fit`, `__field--row` con
   el select de alineación a 140px, `__field--image-group`,
@@ -31,7 +32,7 @@ Kit de construcción del panel de administración (sobre `@edc-motor/ui`). Paque
   sola celda a todo el alto de la fila y los ajustes (posición, escalado,
   reparto de columnas) van apilados en la columna derecha. Sin `auto-fit`
   en ningún caso: columnas fijas + cortes explícitos (el porqué del
-  temblor a DPI fraccionario, en el Sin publicar de `@edc-motor/ui`). Las
+  temblor a DPI fraccionario, en el [0.5.7] de `@edc-motor/ui`). Las
   filas del repeater (`.schema-fields__row`) no cambian.
 - **`PageBlocks`: la sección General y los campos del tipo, en
   `.form-fieldset`** — el modal de bloque usa el mismo lenguaje que el

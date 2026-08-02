@@ -14,10 +14,6 @@ los cambios de API pueden llegar en versiones menores).
 
 ## [0.5.8] — 2026-08-02
 
-- Sin cambios propios: versión de tren.
-
-## [0.5.7] — 2026-08-01
-
 - **Colores DINÁMICOS en el fondo de bloque** (`edc-motor/core` +
   `@edc-motor/ui` + `@edc-motor/admin-kit`): el campo común `background`
   ofrece, además de la paleta de hexes (retrocompatible), presets que
@@ -40,6 +36,9 @@ los cambios de API pueden llegar en versiones menores).
 - **Tabs con icono: solo el icono en estrecho** (`@edc-motor/ui`): el
   texto desaparece visualmente (sigue accesible y el botón lleva `title`);
   antes se apilaban icono + etiqueta pequeña.
+
+## [0.5.7] — 2026-08-01
+
 - **Sistema compartido de filas y grupos de formulario `.form-row` /
   `.form-fieldset`** (`@edc-motor/ui`): un único lenguaje para TODOS los
   formularios modales del admin — filas de columnas FIJAS (2, 3, ancha-
