@@ -1,6 +1,9 @@
 <script setup lang="ts">
 import type { Component } from 'vue'
 
+// Una tab CON icono lleva además title con su etiqueta: en estrecho el
+// texto desaparece y queda solo el icono (la etiqueta sigue en el DOM
+// accesible, visually hidden — ver _tabs.scss).
 interface Tab {
   key: string
   label: string
@@ -20,6 +23,7 @@ defineEmits<{ 'update:modelValue': [string] }>()
       type="button"
       class="tabs__tab"
       :class="{ 'tabs__tab--active': modelValue === tab.key, 'tabs__tab--has-icon': !!tab.icon }"
+      :title="tab.icon ? tab.label : undefined"
       @click="$emit('update:modelValue', tab.key)"
     >
       <component :is="tab.icon" v-if="tab.icon" class="tabs__icon" :size="16" />

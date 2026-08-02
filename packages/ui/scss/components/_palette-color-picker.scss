@@ -52,6 +52,21 @@
 
     &--selected { box-shadow: 0 0 0 2px $surface, 0 0 0 4px var(--swatch-color); }
 
+    // Preset DINÁMICO del tema (token:* → var(--token), resuelto con el
+    // tema ACTUAL): borde siempre visible (su color puede confundirse con
+    // la superficie del formulario) y check en color de texto del tema (el
+    // blanco fijo desaparecía sobre las superficies claras). El anillo de
+    // selección en color de texto, como el custom: con el swatch del color
+    // del fondo, el anillo del propio color no se veía.
+    &--dynamic {
+      border-color: $border-strong;
+      color: $text-1;
+    }
+
+    &--dynamic#{&}--selected {
+      box-shadow: 0 0 0 2px $surface, 0 0 0 4px $text-1;
+    }
+
     &--custom { overflow: hidden; }
 
     &--custom-idle {

@@ -6,11 +6,16 @@
 // evita que compita con el contenido.
 .page-background {
   position: fixed;
-  top: 0;
+  // El TOP de la imagen queda justo debajo del header de la página: el
+  // LAYOUT (cascarón) define --page-background-top con la altura real de su
+  // site-header (si es estable por CSS, en scss; si no, medida con JS).
+  // Sin definirla vale 0px: comportamiento de siempre (toda la ventana).
+  top: var(--page-background-top, 0px);
   left: 0;
   width: 100%;
-  height: 100vh; // fallback
-  height: 100lvh; // altura SIN la barra del navegador móvil
+  height: calc(100vh - var(--page-background-top, 0px)); // fallback
+  // altura SIN la barra del navegador móvil
+  height: calc(100lvh - var(--page-background-top, 0px));
   background-size: cover;
   background-position: top;
   background-repeat: no-repeat;

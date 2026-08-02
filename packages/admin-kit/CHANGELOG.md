@@ -7,6 +7,14 @@ Kit de construcción del panel de administración (sobre `@edc-motor/ui`). Paque
 
 ### Cambiado
 
+- **`SchemaFields`: un campo `color` con `options` pasa sus presets
+  dinámicos al `PaletteColorPicker`** — las options del esquema (valores
+  `token:*` del core; hoy solo las declara el `background` común de los
+  bloques) se convierten en la prop `presets` del picker, con las
+  etiquetas por el MISMO camino i18n que las opciones de un select
+  (`blockOptions.<campo>.<valor>`, fallback al castellano serializado).
+  Los campos color sin options (y los usos directos del picker) no
+  cambian.
 - **`SchemaFields` sobre el sistema compartido `.form-row` del ui** — fuera
   la maquinaria propia (`__field--pair` con `auto-fit`, `__field--row` con
   el select de alineación a 140px, `__field--image-group`,

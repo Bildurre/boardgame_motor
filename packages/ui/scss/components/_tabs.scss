@@ -29,10 +29,11 @@
     min-width: 0;
     justify-content: center;
 
-    // Estrecho: las tabs con icono se apilan (icono + etiqueta pequeña)
+    // Estrecho: las tabs con icono se quedan SOLO con el icono — el texto
+    // desaparece (la etiqueta, visually hidden más abajo, sigue en el DOM
+    // accesible y el botón lleva title; antes se apilaban icono + etiqueta
+    // pequeña).
     &--has-icon {
-      flex-direction: column;
-      gap: 2px;
       padding: $space-1;
     }
 
@@ -42,7 +43,6 @@
       padding: $space-2;
 
       &--has-icon {
-        flex-direction: row;
         gap: $space-1;
         padding: $space-2;
       }
@@ -78,17 +78,24 @@
     text-overflow: ellipsis;
     white-space: nowrap;
 
+    // En estrecho, la etiqueta de una tab CON icono desaparece VISUALMENTE
+    // (patrón visually-hidden, no display:none: sigue en el árbol de
+    // accesibilidad y da nombre al botón; el title del botón cubre el
+    // hover). De $bp-sm para arriba vuelve al flujo, en línea con el icono.
     .tabs__tab--has-icon & {
-      font-size: 10px;
-      line-height: 1;
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      margin: -1px;
+      padding: 0;
+      clip-path: inset(50%);
 
       @container content (min-width: #{$bp-sm}) {
-        font-size: $fs-12;
-        line-height: inherit;
-      }
-
-      @container content (min-width: #{$bp-md}) {
-        font-size: $fs-14;
+        position: static;
+        width: auto;
+        height: auto;
+        margin: 0;
+        clip-path: none;
       }
     }
   }

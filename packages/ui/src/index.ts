@@ -12,7 +12,10 @@ export { default as BaseSelect, type SelectOption } from './components/BaseSelec
 export { default as SearchSelect, type SearchSelectOption } from './components/SearchSelect.vue'
 export { default as BaseCheckbox } from './components/BaseCheckbox.vue'
 export { default as NumericInput } from './components/NumericInput.vue'
-export { default as PaletteColorPicker } from './components/PaletteColorPicker.vue'
+export {
+  default as PaletteColorPicker,
+  type ColorPreset,
+} from './components/PaletteColorPicker.vue'
 export { default as TranslatableInput } from './components/TranslatableInput.vue'
 export { default as TranslatableImage } from './components/TranslatableImage.vue'
 // Locale global de un formulario: EditModal lo provee solo (selector compacto
