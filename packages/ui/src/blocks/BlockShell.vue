@@ -2,10 +2,12 @@
 import { computed, type CSSProperties } from 'vue'
 
 // Envoltorio común de todos los bloques públicos: aplica los campos comunes
-// (align, width, background) que el motor añade a cada tipo. El color de
-// fondo NO se aplica opaco: es un tinte semitransparente (--block-tint,
+// (align, width, background) que el motor añade a cada tipo. Un hex de la
+// paleta NO se aplica opaco: es un tinte semitransparente (--block-tint,
 // distinto por tema, patrón CDL) para que la imagen de fondo de la página se
-// vea a través. La anchura del CONTENIDO (full/wide/narrow) va por clase.
+// vea a través. Los presets DINÁMICOS (`token:*`) sí van opacos: un token de
+// superficie ya ES un color de fondo pensado para contrastar con la página,
+// y al 15% resultaba inapreciable. La anchura del CONTENIDO va por clase.
 const props = defineProps<{ settings: Record<string, unknown> }>()
 
 const width = computed(() => `block--w-${(props.settings.width as string) || 'wide'}`)
@@ -21,12 +23,16 @@ const headingAlign = (key: 'title_align' | 'subtitle_align', prefix: string) => 
 
 // El color de fondo puede ser un hex fijo o un preset DINÁMICO del tema
 // serializado como `token:<nombre>` (p. ej. token:surface): se resuelve a
-// su custom property (var(--surface)) — color-mix admite vars — y así el
-// tinte sigue al tema claro/oscuro. El nombre se sanea a [a-z0-9-] (el
-// value viene del admin, pero un token roto no debe inyectar CSS).
+// su custom property (var(--surface)) y se aplica OPACO, sin el mix del
+// tinte — un token de superficie ya es un fondo de nivel de tema que sigue
+// al claro/oscuro; mezclado al 15% con transparente era invisible sobre la
+// página. El nombre se sanea a [a-z0-9-] (el value viene del admin, pero un
+// token roto no debe inyectar CSS).
 const TOKEN_PREFIX = 'token:'
-function resolveColor(value: string): string {
-  if (!value.startsWith(TOKEN_PREFIX)) return value
+function isToken(value: string): boolean {
+  return value.startsWith(TOKEN_PREFIX)
+}
+function resolveToken(value: string): string {
   return `var(--${value.slice(TOKEN_PREFIX.length).replace(/[^a-z0-9-]/gi, '')})`
 }
 
@@ -35,11 +41,13 @@ function resolveColor(value: string): string {
 // izquierda del justificado en estrecho, DC-03 ampliado).
 const style = computed<CSSProperties>(() => {
   const background = props.settings.background as string | undefined
-  return {
-    '--block-bg': background
-      ? `color-mix(in srgb, ${resolveColor(background)} var(--block-tint, 15%), transparent)`
-      : 'transparent',
+  let bg = 'transparent'
+  if (background) {
+    bg = isToken(background)
+      ? resolveToken(background)
+      : `color-mix(in srgb, ${background} var(--block-tint, 15%), transparent)`
   }
+  return { '--block-bg': bg }
 })
 </script>
 

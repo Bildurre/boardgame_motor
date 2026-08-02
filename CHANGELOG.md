@@ -12,6 +12,17 @@ El formato sigue [Keep a Changelog](https://keepachangelog.com/es/) y el
 versionado, [SemVer](https://semver.org/lang/es/) (mientras estemos en `0.x`,
 los cambios de API pueden llegar en versiones menores).
 
+## [Sin publicar]
+
+- **Los fondos dinámicos de bloque (`token:*`) se aplican OPACOS**
+  (`@edc-motor/ui`): `BlockShell` ya no mete el token en el `color-mix`
+  del tinte (`--block-tint`, 15%) — a ese porcentaje un token de
+  superficie era inapreciable sobre el fondo de página. Ahora
+  `token:surface` (y resto de presets) se pintan como `var(--<token>)` a
+  palo seco: un token de superficie ya ES un color de fondo del tema
+  pensado para contrastar con la página, en claro y en oscuro. Los hexes
+  de la paleta conservan el tinte semitransparente de siempre.
+
 ## [0.5.8] — 2026-08-02
 
 - **Colores DINÁMICOS en el fondo de bloque** (`edc-motor/core` +

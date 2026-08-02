@@ -4,6 +4,20 @@ Componentes Vue 3 + SCSS para las webs públicas (y piezas compartidas con el
 admin). Paquete **fuente** (se consume vía Vite). Versión de tren con
 `edc-motor/core` y `@edc-motor/admin-kit`.
 
+## [Sin publicar]
+
+### Cambiado
+
+- **`BlockShell`: los fondos `token:*` van OPACOS** — el preset dinámico
+  ya no se resuelve DENTRO del `color-mix` del tinte (`--block-tint`,
+  15%): mezclado al 15% con transparente, un token de superficie era
+  inapreciable sobre el blanco/negro de la página. Ahora un `token:*` se
+  aplica como `var(--<token>)` directo, sin mezcla — un token de
+  superficie ya es un color de fondo del tema, diseñado para contrastar
+  con la página en claro y en oscuro. Los hexes de la paleta NO cambian:
+  conservan el tinte semitransparente de siempre (la imagen de fondo de
+  página sigue viéndose a través).
+
 ## [0.5.8] — 2026-08-02
 
 ### Añadido
