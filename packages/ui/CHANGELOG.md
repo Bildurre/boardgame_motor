@@ -6,17 +6,27 @@ admin). Paquete **fuente** (se consume vía Vite). Versión de tren con
 
 ## [Sin publicar]
 
+### Añadido
+
+- **Tokens de tema para los fondos dinámicos de bloque** (`_theme.scss`):
+  `--neutral-soft` / `--neutral` / `--neutral-strong` — tres grises
+  TRANSLÚCIDOS sobre la base neutra slate (`#64748B`, el «Gris» de la
+  paleta) con grado FIJO por token y por tema (claro 10/20/32 %, oscuro
+  7/12/22 %) — y `--accent-soft` (el acento al 20 % claro / 16 % oscuro).
+  El grado medio equivale EXACTO al «Gris» estático de la paleta al
+  `--block-tint` del tema; suave y fuerte son sus grados de menos/más
+  contraste.
+
 ### Cambiado
 
-- **`BlockShell`: los fondos `token:*` van OPACOS** — el preset dinámico
-  ya no se resuelve DENTRO del `color-mix` del tinte (`--block-tint`,
-  15%): mezclado al 15% con transparente, un token de superficie era
-  inapreciable sobre el blanco/negro de la página. Ahora un `token:*` se
-  aplica como `var(--<token>)` directo, sin mezcla — un token de
-  superficie ya es un color de fondo del tema, diseñado para contrastar
-  con la página en claro y en oscuro. Los hexes de la paleta NO cambian:
-  conservan el tinte semitransparente de siempre (la imagen de fondo de
-  página sigue viéndose a través).
+- **`BlockShell`: un fondo `token:*` se aplica TAL CUAL (`var(--<token>)`),
+  sin el `color-mix` del tinte** — el grado de transparencia de cada
+  preset lo fija el TEMA, no el `--block-tint` del hex libre: los presets
+  actuales (`token:neutral*`, `token:accent-soft`) ya son translúcidos en
+  `_theme.scss` (la imagen de fondo de página se ve a través), y los
+  antiguos aún guardados (`token:surface*`, `token:accent-500`) siguen
+  siendo el color opaco del tema, como cuando se guardaron. Los hexes de
+  la paleta NO cambian: conservan el tinte semitransparente de siempre.
 
 ## [0.5.8] — 2026-08-02
 

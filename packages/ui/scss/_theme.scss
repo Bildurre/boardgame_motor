@@ -43,6 +43,21 @@
   // va atenuada — en claro admiten más presencia que en oscuro.
   --block-tint: 20%;
   --page-bg-opacity: 0.2;
+
+  // Fondos DINÁMICOS de bloque (presets token:* del campo común
+  // `background`): tres grises translúcidos por GRADOS de intensidad sobre
+  // la misma base neutra que el «Gris» de la paleta (slate #64748B =
+  // rgb(100 116 139)), con grados FIJOS por token y POR TEMA — el medio
+  // (--neutral) equivale EXACTO al gris estático de la paleta al
+  // --block-tint del tema (20% claro / 12% oscuro), el suave contrasta
+  // menos y el fuerte más. El acento translúcido (--accent-soft) es el
+  // cuarto preset. BlockShell los resuelve como cualquier token
+  // (var(--<nombre>)) y ya llegan translúcidos: la imagen de fondo de la
+  // página se ve a través, en claro y en oscuro.
+  --neutral-soft: rgb(100 116 139 / 10%);
+  --neutral: rgb(100 116 139 / 20%);
+  --neutral-strong: rgb(100 116 139 / 32%);
+  --accent-soft: color-mix(in srgb, var(--accent-500) 20%, transparent);
 }
 
 [data-theme="dark"] {
@@ -71,4 +86,11 @@
 
   --block-tint: 12%;
   --page-bg-opacity: 0.1;
+
+  // Grises dinámicos de bloque en oscuro: mismos tokens, grados propios —
+  // el medio calca el gris estático (#64748B al --block-tint oscuro, 12%).
+  --neutral-soft: rgb(100 116 139 / 7%);
+  --neutral: rgb(100 116 139 / 12%);
+  --neutral-strong: rgb(100 116 139 / 22%);
+  --accent-soft: color-mix(in srgb, var(--accent-500) 16%, transparent);
 }

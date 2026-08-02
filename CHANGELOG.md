@@ -14,14 +14,25 @@ los cambios de API pueden llegar en versiones menores).
 
 ## [Sin publicar]
 
-- **Los fondos dinámicos de bloque (`token:*`) se aplican OPACOS**
-  (`@edc-motor/ui`): `BlockShell` ya no mete el token en el `color-mix`
-  del tinte (`--block-tint`, 15%) — a ese porcentaje un token de
-  superficie era inapreciable sobre el fondo de página. Ahora
-  `token:surface` (y resto de presets) se pintan como `var(--<token>)` a
-  palo seco: un token de superficie ya ES un color de fondo del tema
-  pensado para contrastar con la página, en claro y en oscuro. Los hexes
-  de la paleta conservan el tinte semitransparente de siempre.
+- **Rediseño de los fondos DINÁMICOS de bloque: grises translúcidos por
+  grados** (`edc-motor/core` + `@edc-motor/ui`): los presets del campo
+  común `background` pasan a ser tres GRISES translúcidos por grados de
+  intensidad — «Gris suave» (`token:neutral-soft`), «Gris»
+  (`token:neutral`) y «Gris fuerte» (`token:neutral-strong`) — más el
+  «Acento» translúcido (`token:accent-soft`). Cada token resuelve a una
+  custom property del tema (`_theme.scss`) con la base neutra slate
+  (`#64748B`, el «Gris» de la paleta) y un grado FIJO por token y por
+  tema (claro 10/20/32 %, oscuro 7/12/22 %): el gris medio se ve EXACTO
+  al «Gris» estático de la paleta al `--block-tint` del tema, y la imagen
+  de fondo de la página vuelve a verse a través también con preset
+  dinámico. Los presets de superficie opacos de 0.5.8
+  (`token:surface*`/`token:accent-500`) se RETIRAN del picker pero lo
+  guardado con ellos sigue validando (nuevo `->legacyValues()` del DSL) y
+  renderizando opaco como hasta ahora.
+- **Descarga de PDF en línea** (`edc-motor/core`): `GET
+  /api/pdfs/{id}/download?inline=1` responde `Content-Disposition:
+  inline` — el navegador abre el PDF en la pestaña en vez de descargarlo
+  (mismas reglas de acceso).
 
 ## [0.5.8] — 2026-08-02
 
