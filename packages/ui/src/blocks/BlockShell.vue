@@ -7,11 +7,12 @@ import { computed, type CSSProperties } from 'vue'
 // distinto por tema, patrón CDL) para que la imagen de fondo de la página se
 // vea a través. Los presets DINÁMICOS (`token:*`) se resuelven a su custom
 // property TAL CUAL (var(--<nombre>), sin el mix del tinte): los presets
-// actuales (token:neutral-soft/neutral/neutral-strong y token:accent-soft)
-// ya SON translúcidos en _theme.scss — grados fijos por token y por tema
-// sobre la base neutra slate — y los tokens antiguos aún guardados
-// (token:surface*/accent-500) siguen siendo el color OPACO del tema, como
-// cuando se guardaron. La anchura del CONTENIDO va por clase.
+// actuales (token:veil-15/-30/-60/-85 y token:accent-soft) ya SON
+// translúcidos en _theme.scss — los velos son el fondo de página del tema
+// (--bg) a esa opacidad, ennegrecen en oscuro y emblanquecen en claro — y
+// los tokens antiguos aún guardados renderizan como cuando eran preset:
+// token:surface*/accent-500 el color OPACO del tema, token:neutral* los
+// grises translúcidos de 0.5.10. La anchura del CONTENIDO va por clase.
 const props = defineProps<{ settings: Record<string, unknown> }>()
 
 const width = computed(() => `block--w-${(props.settings.width as string) || 'wide'}`)
@@ -26,8 +27,8 @@ const headingAlign = (key: 'title_align' | 'subtitle_align', prefix: string) => 
 }
 
 // El color de fondo puede ser un hex fijo o un preset DINÁMICO del tema
-// serializado como `token:<nombre>` (p. ej. token:neutral): se resuelve a
-// su custom property (var(--neutral)) SIN el mix del tinte — el grado de
+// serializado como `token:<nombre>` (p. ej. token:veil-30): se resuelve a
+// su custom property (var(--veil-30)) SIN el mix del tinte — el grado de
 // transparencia de cada token lo fija el TEMA (_theme.scss), no el
 // --block-tint del hex libre. El nombre se sanea a [a-z0-9-] (el value
 // viene del admin, pero un token roto no debe inyectar CSS).

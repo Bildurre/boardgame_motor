@@ -18,6 +18,25 @@ los cambios de API pueden llegar en versiones menores).
 
 ## [0.5.9] — 2026-08-02
 
+- **Fondos DINÁMICOS de bloque: VELOS del color de fondo de página**
+  (`edc-motor/core` + `@edc-motor/ui`): los presets del campo común
+  `background` pasan a ser cuatro velos del COLOR DE FONDO DE PÁGINA del
+  tema — «Velo 15 %» (`token:veil-15`), «Velo 30 %» (`token:veil-30`),
+  «Velo 60 %» (`token:veil-60`) y «Velo 85 %» (`token:veil-85`): `--bg` a
+  esa opacidad (`color-mix` en `_theme.scss`), de modo que sobre la imagen
+  de fondo de página el bloque se «re-acerca» al fondo del tema (ennegrece
+  en oscuro, emblanquece en claro) tanto más cuanto mayor el grado — más
+  el «Acento» translúcido (`token:accent-soft`), que se mantiene. Los
+  grises neutros de 0.5.10 (`token:neutral-soft|neutral|neutral-strong`)
+  se RETIRAN del picker pero lo guardado con ellos sigue validando
+  (`legacyValues`, como los `token:surface*`/`token:accent-500` de 0.5.8)
+  y renderizando igual (sus custom properties siguen en el tema).
+
+<!-- Sección de abajo: entradas ya publicadas en 0.5.10 (working tree por
+     detrás de main; recolocar en el rebase). -->
+
+## [Sin publicar — ya salió en 0.5.10]
+
 - **Rediseño de los fondos DINÁMICOS de bloque: grises translúcidos por
   grados** (`edc-motor/core` + `@edc-motor/ui`): los presets del campo
   común `background` pasan a ser tres GRISES translúcidos por grados de
