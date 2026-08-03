@@ -12,11 +12,7 @@ El formato sigue [Keep a Changelog](https://keepachangelog.com/es/) y el
 versionado, [SemVer](https://semver.org/lang/es/) (mientras estemos en `0.x`,
 los cambios de API pueden llegar en versiones menores).
 
-## [0.5.10] — 2026-08-03
-
-- Sin cambios propios: versión de tren.
-
-## [0.5.9] — 2026-08-02
+## [Sin publicar]
 
 - **Fondos DINÁMICOS de bloque: VELOS del color de fondo de página**
   (`edc-motor/core` + `@edc-motor/ui`): los presets del campo común
@@ -32,10 +28,7 @@ los cambios de API pueden llegar en versiones menores).
   (`legacyValues`, como los `token:surface*`/`token:accent-500` de 0.5.8)
   y renderizando igual (sus custom properties siguen en el tema).
 
-<!-- Sección de abajo: entradas ya publicadas en 0.5.10 (working tree por
-     detrás de main; recolocar en el rebase). -->
-
-## [Sin publicar — ya salió en 0.5.10]
+## [0.5.10] — 2026-08-03
 
 - **Rediseño de los fondos DINÁMICOS de bloque: grises translúcidos por
   grados** (`edc-motor/core` + `@edc-motor/ui`): los presets del campo
@@ -56,6 +49,17 @@ los cambios de API pueden llegar en versiones menores).
   /api/pdfs/{id}/download?inline=1` responde `Content-Disposition:
   inline` — el navegador abre el PDF en la pestaña en vez de descargarlo
   (mismas reglas de acceso).
+
+## [0.5.9] — 2026-08-02
+
+- **Los fondos dinámicos de bloque (`token:*`) se aplican OPACOS**
+  (`@edc-motor/ui`): `BlockShell` ya no mete el token en el `color-mix`
+  del tinte (`--block-tint`, 15%) — a ese porcentaje un token de
+  superficie era inapreciable sobre el fondo de página. Ahora
+  `token:surface` (y resto de presets) se pintan como `var(--<token>)` a
+  palo seco: un token de superficie ya ES un color de fondo del tema
+  pensado para contrastar con la página, en claro y en oscuro. Los hexes
+  de la paleta conservan el tinte semitransparente de siempre.
 
 ## [0.5.8] — 2026-08-02
 

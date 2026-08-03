@@ -4,11 +4,7 @@ Componentes Vue 3 + SCSS para las webs públicas (y piezas compartidas con el
 admin). Paquete **fuente** (se consume vía Vite). Versión de tren con
 `edc-motor/core` y `@edc-motor/admin-kit`.
 
-## [0.5.10] — 2026-08-03
-
-- Sin cambios propios: versión de tren.
-
-## [0.5.9] — 2026-08-02
+## [Sin publicar]
 
 ### Añadido
 
@@ -26,10 +22,7 @@ admin). Paquete **fuente** (se consume vía Vite). Versión de tren con
   properties se CONSERVAN para que lo guardado con `token:neutral*` siga
   renderizando igual.
 
-<!-- Sección de abajo: entradas ya publicadas en 0.5.10 (working tree por
-     detrás de main; recolocar en el rebase). -->
-
-## [Sin publicar — ya salió en 0.5.10]
+## [0.5.10] — 2026-08-03
 
 ### Añadido
 
@@ -52,6 +45,20 @@ admin). Paquete **fuente** (se consume vía Vite). Versión de tren con
   antiguos aún guardados (`token:surface*`, `token:accent-500`) siguen
   siendo el color opaco del tema, como cuando se guardaron. Los hexes de
   la paleta NO cambian: conservan el tinte semitransparente de siempre.
+
+## [0.5.9] — 2026-08-02
+
+### Cambiado
+
+- **`BlockShell`: los fondos `token:*` van OPACOS** — el preset dinámico
+  ya no se resuelve DENTRO del `color-mix` del tinte (`--block-tint`,
+  15%): mezclado al 15% con transparente, un token de superficie era
+  inapreciable sobre el blanco/negro de la página. Ahora un `token:*` se
+  aplica como `var(--<token>)` directo, sin mezcla — un token de
+  superficie ya es un color de fondo del tema, diseñado para contrastar
+  con la página en claro y en oscuro. Los hexes de la paleta NO cambian:
+  conservan el tinte semitransparente de siempre (la imagen de fondo de
+  página sigue viéndose a través).
 
 ## [0.5.8] — 2026-08-02
 
