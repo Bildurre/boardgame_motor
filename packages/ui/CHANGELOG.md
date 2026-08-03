@@ -8,13 +8,14 @@ admin). Paquete **fuente** (se consume vía Vite). Versión de tren con
 
 ### Añadido
 
-- **Velos del fondo de página para los fondos dinámicos de bloque**
+- **Velos de superficie para los fondos dinámicos de bloque**
   (`_theme.scss`): `--veil-15` / `--veil-30` / `--veil-60` / `--veil-85`
-  — el COLOR DE FONDO DE PÁGINA del tema (`--bg`) a la opacidad que dice
-  el nombre (`color-mix(in srgb, var(--bg) N%, transparent)`), declarados
-  UNA vez en `:root` (el `var(--bg)` se sustituye con el del tema activo:
+  — el COLOR DE SUPERFICIE del tema (`--surface`, el fondo de tarjeta) a
+  la opacidad que dice el nombre (`color-mix(in srgb, var(--surface) N%,
+  transparent)`), declarados UNA vez en `:root` (el `var(--surface)` se
+  sustituye con el del tema activo:
   `data-theme` vive en el propio `<html>`). Sobre la imagen de fondo de
-  página, un velo «re-acerca» el bloque al fondo del tema — ennegrece en
+  página, un velo «re-acerca» el bloque a la superficie del tema — ennegrece en
   oscuro, emblanquece en claro — tanto más cuanto mayor el grado. Son los
   nuevos presets del campo común `background` (junto a `--accent-soft`,
   que se mantiene); los grises neutros de 0.5.10 (`--neutral-soft` /

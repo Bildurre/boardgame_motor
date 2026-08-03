@@ -45,20 +45,21 @@
   --page-bg-opacity: 0.2;
 
   // Fondos DINÁMICOS de bloque (presets token:* del campo común
-  // `background`): cuatro VELOS del COLOR DE FONDO DE PÁGINA del tema
-  // (--bg) a distintas opacidades — 15/30/60/85 %, el número del token es
-  // su opacidad. Sobre la imagen de fondo de página, un velo «re-acerca»
-  // el bloque al fondo del tema: en oscuro ennegrece, en claro
-  // emblanquece, y cuanto mayor el grado más tapa la imagen. Se declaran
-  // UNA vez aquí (sirven a ambos temas): var(--bg) se sustituye con el
-  // --bg que gane en <html> — el data-theme del tema vive en el propio
-  // :root, así que el velo sigue al claro/oscuro solo. El acento
-  // translúcido (--accent-soft) es el quinto preset; BlockShell resuelve
-  // cualquier token a var(--<nombre>) y ya llegan translúcidos.
-  --veil-15: color-mix(in srgb, var(--bg) 15%, transparent);
-  --veil-30: color-mix(in srgb, var(--bg) 30%, transparent);
-  --veil-60: color-mix(in srgb, var(--bg) 60%, transparent);
-  --veil-85: color-mix(in srgb, var(--bg) 85%, transparent);
+  // `background`): cuatro VELOS del COLOR DE SUPERFICIE del tema
+  // (--surface, el fondo de tarjeta) a distintas opacidades — 15/30/60/
+  // 85 %, el número del token es su opacidad. Sobre la imagen de fondo de
+  // página, un velo «re-acerca» el bloque a la superficie del tema: en
+  // oscuro ennegrece, en claro emblanquece, y cuanto mayor el grado más
+  // tapa la imagen. Se declaran UNA vez aquí (sirven a ambos temas):
+  // var(--surface) se sustituye con el que gane en <html> — el data-theme
+  // del tema vive en el propio :root, así que el velo sigue al
+  // claro/oscuro solo. El acento translúcido (--accent-soft) es el quinto
+  // preset; BlockShell resuelve cualquier token a var(--<nombre>) y ya
+  // llegan translúcidos.
+  --veil-15: color-mix(in srgb, var(--surface) 15%, transparent);
+  --veil-30: color-mix(in srgb, var(--surface) 30%, transparent);
+  --veil-60: color-mix(in srgb, var(--surface) 60%, transparent);
+  --veil-85: color-mix(in srgb, var(--surface) 85%, transparent);
   --accent-soft: color-mix(in srgb, var(--accent-500) 20%, transparent);
 
   // LEGACY (presets de 0.5.10, retirados del picker en favor de los
@@ -98,7 +99,7 @@
   --page-bg-opacity: 0.1;
 
   // Los velos (--veil-*) NO se redeclaran: la definición de :root ya lee
-  // este --bg oscuro. El acento translúcido sí baja de grado en oscuro.
+  // este --surface oscuro. El acento translúcido sí baja de grado en oscuro.
   --accent-soft: color-mix(in srgb, var(--accent-500) 16%, transparent);
 
   // LEGACY (grises 0.5.10 retirados del picker): grados propios del oscuro.
