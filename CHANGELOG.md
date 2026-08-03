@@ -14,13 +14,14 @@ los cambios de API pueden llegar en versiones menores).
 
 ## [Sin publicar]
 
-- **Fondos DINÁMICOS de bloque: VELOS del color de fondo de página**
+- **Fondos DINÁMICOS de bloque: VELOS del color de superficie**
   (`edc-motor/core` + `@edc-motor/ui`): los presets del campo común
-  `background` pasan a ser cuatro velos del COLOR DE FONDO DE PÁGINA del
+  `background` pasan a ser cuatro velos del COLOR DE SUPERFICIE del
   tema — «Velo 15 %» (`token:veil-15`), «Velo 30 %» (`token:veil-30`),
-  «Velo 60 %» (`token:veil-60`) y «Velo 85 %» (`token:veil-85`): `--bg` a
-  esa opacidad (`color-mix` en `_theme.scss`), de modo que sobre la imagen
-  de fondo de página el bloque se «re-acerca» al fondo del tema (ennegrece
+  «Velo 60 %» (`token:veil-60`) y «Velo 85 %» (`token:veil-85`):
+  `--surface` (el fondo de tarjeta) a esa opacidad (`color-mix` en
+  `_theme.scss`), de modo que sobre la imagen de fondo de página el bloque
+  se «re-acerca» a la superficie del tema (ennegrece
   en oscuro, emblanquece en claro) tanto más cuanto mayor el grado — más
   el «Acento» translúcido (`token:accent-soft`), que se mantiene. Los
   grises neutros de 0.5.10 (`token:neutral-soft|neutral|neutral-strong`)
