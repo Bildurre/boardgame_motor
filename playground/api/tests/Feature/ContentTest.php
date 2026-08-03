@@ -142,8 +142,8 @@ it('el fondo de bloque acepta hex y presets dinámicos del tema (token:*)', func
         ->firstWhere('key', 'header');
     $background = collect($header['common'])->firstWhere('key', 'background');
     expect(array_keys($background['options']))
-        ->toContain('token:veil-15', 'token:veil-30', 'token:veil-60', 'token:veil-85', 'token:accent-soft')
-        ->not->toContain('token:surface', 'token:accent-500', 'token:neutral');
+        ->toContain('token:veil-60', 'token:veil-80', 'token:accent-soft')
+        ->not->toContain('token:surface', 'token:accent-500', 'token:neutral', 'token:veil-15');
 
     // Un hex sigue valiendo (retrocompat con los fondos ya guardados)…
     $this->actingAs($admin)->postJson("/api/admin/pages/{$page->id}/blocks", [
@@ -155,14 +155,14 @@ it('el fondo de bloque acepta hex y presets dinámicos del tema (token:*)', func
     // estable frente a cambios del tema)…
     $id = $this->actingAs($admin)->postJson("/api/admin/pages/{$page->id}/blocks", [
         'type' => 'header',
-        'settings' => ['title' => ['es' => 'Token'], 'background' => 'token:veil-30'],
+        'settings' => ['title' => ['es' => 'Token'], 'background' => 'token:veil-80'],
     ])->assertCreated()->json('data.id');
-    expect(Block::find($id)->settings['background'])->toBe('token:veil-30');
+    expect(Block::find($id)->settings['background'])->toBe('token:veil-80');
 
     // …y localizeSettings lo deja pasar intacto al render público.
     $localized = app(BlockTypeRegistry::class)->get('header')
         ->localizeSettings(Block::find($id)->settings, 'es');
-    expect($localized['background'])->toBe('token:veil-30');
+    expect($localized['background'])->toBe('token:veil-80');
 
     // …los presets RETIRADOS (legacyValues) siguen validando: lo guardado
     // cuando eran preset no se rompe (superficies de 0.5.8 y grises
