@@ -134,12 +134,15 @@ it('el fondo de bloque acepta hex y presets dinámicos del tema (token:*)', func
     $page = makePage();
 
     // La paleta serializa los presets dinámicos del campo común background
-    // (el picker del admin los pinta de options, como en un select).
+    // (el picker del admin los pinta de options, como en un select): los
+    // tres grises translúcidos por grados + el acento translúcido. Los
+    // retirados (surface*/accent-500) ya NO viajan como preset…
     $header = collect($this->actingAs($admin)->getJson('/api/admin/block-types')->json('data'))
         ->firstWhere('key', 'header');
     $background = collect($header['common'])->firstWhere('key', 'background');
     expect(array_keys($background['options']))
-        ->toContain('token:surface', 'token:surface-2', 'token:surface-3', 'token:accent-500');
+        ->toContain('token:neutral-soft', 'token:neutral', 'token:neutral-strong', 'token:accent-soft')
+        ->not->toContain('token:surface', 'token:accent-500');
 
     // Un hex sigue valiendo (retrocompat con los fondos ya guardados)…
     $this->actingAs($admin)->postJson("/api/admin/pages/{$page->id}/blocks", [
@@ -151,14 +154,21 @@ it('el fondo de bloque acepta hex y presets dinámicos del tema (token:*)', func
     // estable frente a cambios del tema)…
     $id = $this->actingAs($admin)->postJson("/api/admin/pages/{$page->id}/blocks", [
         'type' => 'header',
-        'settings' => ['title' => ['es' => 'Token'], 'background' => 'token:surface'],
+        'settings' => ['title' => ['es' => 'Token'], 'background' => 'token:neutral'],
     ])->assertCreated()->json('data.id');
-    expect(Block::find($id)->settings['background'])->toBe('token:surface');
+    expect(Block::find($id)->settings['background'])->toBe('token:neutral');
 
     // …y localizeSettings lo deja pasar intacto al render público.
     $localized = app(BlockTypeRegistry::class)->get('header')
         ->localizeSettings(Block::find($id)->settings, 'es');
-    expect($localized['background'])->toBe('token:surface');
+    expect($localized['background'])->toBe('token:neutral');
+
+    // …los presets RETIRADOS (legacyValues) siguen validando: lo guardado
+    // cuando eran preset no se rompe…
+    $this->actingAs($admin)->postJson("/api/admin/pages/{$page->id}/blocks", [
+        'type' => 'header',
+        'settings' => ['title' => ['es' => 'Legacy'], 'background' => 'token:surface-3'],
+    ])->assertCreated();
 
     // Un token que no esté entre los presets declarados es 422.
     $this->actingAs($admin)->postJson("/api/admin/pages/{$page->id}/blocks", [

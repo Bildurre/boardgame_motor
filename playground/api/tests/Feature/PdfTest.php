@@ -277,8 +277,13 @@ it('regenera, borra y descarga desde la API', function () {
 
     $pdf = app(PdfService::class)->generate('house-schemes', $house, 'es', sync: true)->refresh();
 
-    // Descarga pública (permanente y listo).
-    $this->get("/api/pdfs/{$pdf->id}/download")->assertOk();
+    // Descarga pública (permanente y listo): attachment por defecto…
+    $this->get("/api/pdfs/{$pdf->id}/download")->assertOk()
+        ->assertHeader('Content-Disposition', "attachment; filename={$pdf->filename}.pdf");
+
+    // …e inline con ?inline=1 (el botón «ver» abre el PDF en la pestaña).
+    $this->get("/api/pdfs/{$pdf->id}/download?inline=1")->assertOk()
+        ->assertHeader('Content-Disposition', "inline; filename={$pdf->filename}.pdf");
 
     // Regenerar lo deja pendiente (en cola).
     Queue::fake();

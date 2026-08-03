@@ -5,9 +5,13 @@ import { computed, type CSSProperties } from 'vue'
 // (align, width, background) que el motor añade a cada tipo. Un hex de la
 // paleta NO se aplica opaco: es un tinte semitransparente (--block-tint,
 // distinto por tema, patrón CDL) para que la imagen de fondo de la página se
-// vea a través. Los presets DINÁMICOS (`token:*`) sí van opacos: un token de
-// superficie ya ES un color de fondo pensado para contrastar con la página,
-// y al 15% resultaba inapreciable. La anchura del CONTENIDO va por clase.
+// vea a través. Los presets DINÁMICOS (`token:*`) se resuelven a su custom
+// property TAL CUAL (var(--<nombre>), sin el mix del tinte): los presets
+// actuales (token:neutral-soft/neutral/neutral-strong y token:accent-soft)
+// ya SON translúcidos en _theme.scss — grados fijos por token y por tema
+// sobre la base neutra slate — y los tokens antiguos aún guardados
+// (token:surface*/accent-500) siguen siendo el color OPACO del tema, como
+// cuando se guardaron. La anchura del CONTENIDO va por clase.
 const props = defineProps<{ settings: Record<string, unknown> }>()
 
 const width = computed(() => `block--w-${(props.settings.width as string) || 'wide'}`)
@@ -22,12 +26,11 @@ const headingAlign = (key: 'title_align' | 'subtitle_align', prefix: string) => 
 }
 
 // El color de fondo puede ser un hex fijo o un preset DINÁMICO del tema
-// serializado como `token:<nombre>` (p. ej. token:surface): se resuelve a
-// su custom property (var(--surface)) y se aplica OPACO, sin el mix del
-// tinte — un token de superficie ya es un fondo de nivel de tema que sigue
-// al claro/oscuro; mezclado al 15% con transparente era invisible sobre la
-// página. El nombre se sanea a [a-z0-9-] (el value viene del admin, pero un
-// token roto no debe inyectar CSS).
+// serializado como `token:<nombre>` (p. ej. token:neutral): se resuelve a
+// su custom property (var(--neutral)) SIN el mix del tinte — el grado de
+// transparencia de cada token lo fija el TEMA (_theme.scss), no el
+// --block-tint del hex libre. El nombre se sanea a [a-z0-9-] (el value
+// viene del admin, pero un token roto no debe inyectar CSS).
 const TOKEN_PREFIX = 'token:'
 function isToken(value: string): boolean {
   return value.startsWith(TOKEN_PREFIX)
