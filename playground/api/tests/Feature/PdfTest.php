@@ -460,6 +460,46 @@ it('al autenticarse se adopta la colección del invitado (items y PDF a la cuent
         ->and(GeneratedPdf::find($pdfId)->guest_token)->toBeNull();
 });
 
+it('el índice de la colección incluye los PDF temporales vigentes (generated)', function () {
+    $character = makeCharacter(['is_published' => true]);
+    $owner = motorUser();
+    $service = app(PdfService::class);
+    $items = [['entity' => 'character', 'id' => $character->id, 'copies' => 1]];
+
+    // Uno LISTO, uno CADUCADO (no debe salir) y uno de OTRO dueño (tampoco).
+    $ready = $service->generateCollection($owner, $items, 'es', sync: true)->refresh();
+    $expired = $service->generateCollection($owner, $items, 'es', sync: true)->refresh();
+    $expired->update(['expires_at' => now()->subHour()]);
+    $service->generateCollection(motorUser(), $items, 'es', sync: true);
+
+    // Un invitado con su token no ve los de otros dueños (lista vacía).
+    // OJO: va ANTES de cualquier actingAs — la sesión de test persiste y,
+    // con usuario + cabecera de invitado, lo del invitado se adoptaría.
+    $this->getJson('/api/pdf-collection', ['X-Collection-Token' => 'guest-0123456789abcdef'])
+        ->assertOk()
+        ->assertJsonCount(0, 'generated');
+
+    // Y uno PENDIENTE (encolado): también sale, aún sin URL ni tamaño.
+    Queue::fake();
+    $this->actingAs($owner)->postJson('/api/pdf-collection/items', [
+        'entity' => 'character', 'id' => $character->id,
+    ])->assertCreated();
+    $pendingId = $this->actingAs($owner)->postJson('/api/pdf-collection/generate')
+        ->assertAccepted()
+        ->json('data.id');
+
+    $response = $this->actingAs($owner)->getJson('/api/pdf-collection')->assertOk();
+    expect($response->json('generated'))->toHaveCount(2)
+        ->and($response->json('generated.0.id'))->toBe($pendingId)
+        ->and($response->json('generated.0.status'))->toBe('pending')
+        ->and($response->json('generated.0.url'))->toBeNull()
+        ->and($response->json('generated.1.id'))->toBe($ready->id)
+        ->and($response->json('generated.1.status'))->toBe('ready')
+        ->and($response->json('generated.1.url'))->toContain('pdfs/collection/')
+        ->and($response->json('generated.1.size'))->toBeGreaterThan(0)
+        ->and($response->json('generated.1.expires_at'))->not->toBeNull();
+});
+
 it('el PDF temporal de un invitado solo se descarga con su token', function () {
     $character = makeCharacter(['is_published' => true]);
     $token = 'guest-0123456789abcdef';
