@@ -14,6 +14,11 @@ los cambios de API pueden llegar en versiones menores).
 
 ## [0.5.13] — 2026-08-03
 
+- **El índice de la colección expone los PDF temporales vigentes**
+  (`edc-motor/core`): `GET /api/pdf-collection` devuelve además
+  `generated` — los PDF temporales de la colección del dueño actual aún
+  no caducados (`ready` con su URL de descarga, `pending` para retomar el
+  sondeo) — para que la SPA conserve el enlace de descarga tras recargar.
 - **Solo dos velos: 60 y 80 %** (`edc-motor/core` + `@edc-motor/ui`): los
   presets del fondo de bloque quedan en «Velo 60 %» (`token:veil-60`),
   «Velo 80 %» (`token:veil-80`, nuevo) y «Acento»; los velos 15/30/85 se
