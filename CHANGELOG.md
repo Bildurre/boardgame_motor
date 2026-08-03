@@ -12,7 +12,7 @@ El formato sigue [Keep a Changelog](https://keepachangelog.com/es/) y el
 versionado, [SemVer](https://semver.org/lang/es/) (mientras estemos en `0.x`,
 los cambios de API pueden llegar en versiones menores).
 
-## [Sin publicar]
+## [0.5.11] — 2026-08-03
 
 - **Fondos DINÁMICOS de bloque: VELOS del color de fondo de página**
   (`edc-motor/core` + `@edc-motor/ui`): los presets del campo común
