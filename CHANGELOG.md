@@ -19,6 +19,14 @@ los cambios de API pueden llegar en versiones menores).
   `generated` — los PDF temporales de la colección del dueño actual aún
   no caducados (`ready` con su URL de descarga, `pending` para retomar el
   sondeo) — para que la SPA conserve el enlace de descarga tras recargar.
+- **El PDF de páginas del CRM con el estilo del viejo CDL**
+  (`edc-motor/core`): la plantilla `motor::pdf.page` deja de ser texto
+  plano — fuentes del sitio embebidas en base64 (con caída elegante a
+  serif/sans si el formato no vale para DomPDF), jerarquía de títulos
+  21–13pt sin saltos tras título, imágenes flotadas con el texto
+  alrededor según la posición configurada, cita con la fuente especial
+  en cursiva y centrada, y los bloques de datos del juego reducidos a su
+  parte textual.
 - **Solo dos velos: 60 y 80 %** (`edc-motor/core` + `@edc-motor/ui`): los
   presets del fondo de bloque quedan en «Velo 60 %» (`token:veil-60`),
   «Velo 80 %» (`token:veil-80`, nuevo) y «Acento»; los velos 15/30/85 se
