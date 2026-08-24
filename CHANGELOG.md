@@ -22,6 +22,13 @@ los cambios de API pueden llegar en versiones menores).
 
 ## [0.5.13] — 2026-08-03
 
+- **Listas del wysiwyg con el marcador a ras del texto** (`@edc-motor/ui`):
+  en todos los bloques, las listas del contenido enriquecido se sangran
+  hacia adentro con el número/viñeta exactamente en el borde del texto de
+  los párrafos (marcador propio posicionado; anidadas con relevo de
+  viñeta), y junto a una imagen flotada la lista entera se coloca al lado
+  del float — antes el marcador quedaba pegado a la imagen, descolgado del
+  texto.
 - **El índice de la colección expone los PDF temporales vigentes**
   (`edc-motor/core`): `GET /api/pdf-collection` devuelve además
   `generated` — los PDF temporales de la colección del dueño actual aún
