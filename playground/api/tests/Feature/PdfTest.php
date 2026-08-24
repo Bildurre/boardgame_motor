@@ -194,6 +194,36 @@ it('genera el PDF de una página imprimible del CRM (vista propia, sin rejilla)'
         ->assertJsonPath('data.0.sources.0.label', 'Reglamento');
 });
 
+it('la plantilla compact-blocks imprime con la clase compacta (bloques enteros)', function () {
+    $admin = motorUser('admin');
+    $pageId = $this->actingAs($admin)->postJson('/api/admin/pages', [
+        'title' => ['es' => 'Compendio'], 'is_published' => true, 'is_printable' => true,
+        'template' => 'compact-blocks',
+    ])->assertCreated()->json('data.id');
+    $this->actingAs($admin)->postJson("/api/admin/pages/{$pageId}/blocks", [
+        'type' => 'text', 'settings' => ['title' => ['es' => 'Reglas'], 'body' => ['es' => '<p>Compacto.</p>']],
+    ]);
+
+    // El PDF real se genera sin errores con la variante compacta.
+    $page = Page::find($pageId);
+    $pdf = app(PdfService::class)->generate('pages', $page, 'es', sync: true)->refresh();
+    expect($pdf->status)->toBe(GeneratedPdf::STATUS_READY);
+
+    // La plantilla de la página viaja como clase del body (tpl-{clave}) y la
+    // hoja compacta prohíbe partir un bloque entre páginas.
+    $html = view('motor::pdf.page', ['pdf' => $pdf])->render();
+    expect($html)->toContain('<body class="tpl-compact-blocks">')
+        ->toContain('.tpl-compact-blocks .block { margin-bottom: 1.2em; page-break-inside: avoid; }');
+
+    // Una página sin plantilla explícita sale con la clase por defecto.
+    $plainId = $this->actingAs($admin)->postJson('/api/admin/pages', [
+        'title' => ['es' => 'Normal'], 'is_published' => true, 'is_printable' => true,
+    ])->json('data.id');
+    $plainPdf = app(PdfService::class)->generate('pages', Page::find($plainId), 'es', sync: true)->refresh();
+    expect(view('motor::pdf.page', ['pdf' => $plainPdf])->render())
+        ->toContain('<body class="tpl-default">');
+});
+
 it('un bloque con pdfView se imprime con su vista propia (characters-grid)', function () {
     makeCharacter(['is_published' => true]);
     $admin = motorUser('admin');

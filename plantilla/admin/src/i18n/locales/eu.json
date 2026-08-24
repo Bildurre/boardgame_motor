@@ -227,6 +227,7 @@
     },
     "templates": {
       "default": "Lehenetsia",
+      "compact-blocks": "Bloke trinkoak (PDF)",
       "landing": "Azala (zabalera osoa)"
     },
     "toast": {

@@ -85,11 +85,12 @@ it('solo puede haber una home y el borrado pasa las hijas a raíz', function () 
 it('expone el catálogo de plantillas y valida la plantilla de la página', function () {
     $admin = motorUser('admin');
 
-    // Catálogo: la del motor + la registrada por el juego (AppServiceProvider).
+    // Catálogo: las del motor (default y compact-blocks, la de imprimir con
+    // bloques enteros) + la registrada por el juego (AppServiceProvider).
     $keys = collect($this->actingAs($admin)->getJson('/api/admin/pages/templates')
         ->assertOk()
         ->json('data'))->pluck('key');
-    expect($keys)->toContain('default', 'landing');
+    expect($keys)->toContain('default', 'compact-blocks', 'landing');
 
     // La clave viaja al guardar… y una desconocida es 422.
     $this->actingAs($admin)->postJson('/api/admin/pages', [

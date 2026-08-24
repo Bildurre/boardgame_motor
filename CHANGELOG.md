@@ -14,6 +14,20 @@ los cambios de API pueden llegar en versiones menores).
 
 ## [Sin publicar]
 
+- **Plantilla de página «Bloques compactos»** (`edc-motor/core`): nueva
+  plantilla del motor (`compact-blocks` en `motor.content.templates`)
+  pensada para imprimir — en el PDF de páginas cada bloque viaja entero
+  (si no cabe salta completo a la página siguiente) con escala
+  tipográfica y espaciados compactos (cuerpo 10pt, títulos un escalón
+  menos, interlineado 1.15); en la web renderiza como la plantilla por
+  defecto. La clave de plantilla viaja como clase del `body` del PDF
+  (`tpl-{clave}`), el gancho para plantillas propias de un juego con
+  efecto en papel. Etiquetas es/en/eu en los admin del playground y de
+  la plantilla-cascarón.
+- **Iconos del wysiwyg centrados en la línea del PDF de páginas**
+  (`edc-motor/core`): DomPDF trata `vertical-align: middle` como
+  `baseline` y los iconos salían desplazados hacia arriba; ahora bajan
+  con un desplazamiento en pt que replica la geometría del render web.
 - **Los PDF generados se llaman como lo que son** (`edc-motor/core`): cada
   export resuelve un nombre LEGIBLE por idioma (`displayName`) — el
   título de la página, el nombre traducible de la entidad dueña, la

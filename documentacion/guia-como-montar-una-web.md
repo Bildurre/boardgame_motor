@@ -767,6 +767,19 @@ que la plantilla solo aporta el aire de portada (más padding vertical en el
 primer bloque). Una plantilla es el sitio para diferencias de LAYOUT; la
 anchura es cosa de los bloques.
 
+El motor trae además **`compact-blocks`** («Bloques compactos»): en la web no
+cambia nada (sin entrada en el registry de la SPA cae al layout por defecto),
+pero su PDF imprimible sale con cada bloque ENTERO (`page-break-inside:
+avoid` por bloque: el que no cabe salta completo a la página siguiente; uno
+más largo que una página DomPDF lo parte igual) y con la escala compacta
+(cuerpo 10pt, títulos un escalón menos, interlineado 1.15 y spacings
+reducidos). La clave de plantilla viaja como clase del `body` del PDF
+(`tpl-{clave}`): un juego que quiera plantillas propias con efecto en papel
+puede publicar la vista (`resources/views/vendor/motor/pdf/page.blade.php`) y
+estilar su clase. Ojo con los configs de API publicados que redefinen
+`motor.content.templates`: pisan el catálogo del paquete, así que deben
+listar también las plantillas del motor que quieran ofrecer.
+
 ### 6bis.1b Configuración de la web (Fase 5.5)
 
 El admin trae una página **Configuración** (`GET/PUT /api/admin/settings/site`;

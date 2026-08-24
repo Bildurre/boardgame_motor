@@ -227,6 +227,7 @@
     },
     "templates": {
       "default": "Default",
+      "compact-blocks": "Compact blocks (PDF)",
       "landing": "Landing (full width)"
     },
     "toast": {

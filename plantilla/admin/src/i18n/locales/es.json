@@ -227,6 +227,7 @@
     },
     "templates": {
       "default": "Por defecto",
+      "compact-blocks": "Bloques compactos (PDF)",
       "landing": "Portada (ancho completo)"
     },
     "toast": {
