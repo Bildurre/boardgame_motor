@@ -39,4 +39,10 @@ class CharactersExport extends PdfExport
     {
         return "characters-{$locale}";
     }
+
+    /** Nombre legible por idioma (card de Descargas y pestaña del navegador). */
+    protected function labels(): array
+    {
+        return ['es' => 'Personajes', 'eu' => 'Pertsonaiak', 'en' => 'Characters'];
+    }
 }

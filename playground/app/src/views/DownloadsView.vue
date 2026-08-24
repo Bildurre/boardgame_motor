@@ -16,6 +16,9 @@ import { useSiteStore } from '@/stores/site'
 interface DownloadItem {
   id: number
   filename: string
+  // Nombre legible en el locale del PDF (displayName del export): lo que
+  // pinta la card; el filename (slug de la BD) queda de reserva.
+  title: string | null
   locale: string
   url: string
   size: number | null
@@ -128,7 +131,7 @@ function formatSize(bytes: number | null): string {
       <h2>{{ typeLabel(group.type) }}</h2>
       <ul class="downloads__list">
         <li v-for="item in group.items" :key="item.id" class="downloads__item">
-          <span class="downloads__name">{{ item.filename }}</span>
+          <span class="downloads__name">{{ item.title || item.filename }}</span>
           <span class="downloads__meta">
             <span class="chip">{{ item.locale.toUpperCase() }}</span>
             <span v-if="item.size" class="downloads__size">{{ formatSize(item.size) }}</span>

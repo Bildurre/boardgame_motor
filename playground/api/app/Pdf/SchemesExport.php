@@ -31,4 +31,10 @@ class SchemesExport extends PdfExport
     {
         return "schemes-{$locale}";
     }
+
+    /** Nombre legible por idioma (card de Descargas y pestaña del navegador). */
+    protected function labels(): array
+    {
+        return ['es' => 'Argucias', 'eu' => 'Amarruak', 'en' => 'Schemes'];
+    }
 }

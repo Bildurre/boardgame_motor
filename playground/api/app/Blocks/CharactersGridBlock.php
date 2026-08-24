@@ -38,6 +38,15 @@ class CharactersGridBlock extends BlockType
         ];
     }
 
+    /**
+     * Impresión propia en el PDF de páginas (demo del gancho del motor):
+     * la rejilla se imprime como tabla sencilla de atributos.
+     */
+    public function pdfView(): ?string
+    {
+        return 'pdf.blocks.characters-grid';
+    }
+
     public function resolveData(Block $block, string $locale): array
     {
         $settings = $this->localizeSettings($block->settings, $locale);

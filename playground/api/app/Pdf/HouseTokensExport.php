@@ -42,4 +42,10 @@ class HouseTokensExport extends PdfExport
     {
         return "house-tokens-{$locale}";
     }
+
+    /** Nombre legible por idioma (card de Descargas y pestaña del navegador). */
+    protected function labels(): array
+    {
+        return ['es' => 'Tokens de casa', 'eu' => 'Etxeen fitxak', 'en' => 'House tokens'];
+    }
 }

@@ -2,11 +2,14 @@
 
 use App\Models\House;
 use App\Models\Scheme;
+use Edc\Core\Content\BlockTypeRegistry;
 use Edc\Core\Content\Models\Page;
 use Edc\Core\Pdf\Jobs\GeneratePdfJob;
 use Edc\Core\Pdf\Models\GeneratedPdf;
 use Edc\Core\Pdf\Models\PdfCollectionItem;
 use Edc\Core\Pdf\PdfExport;
+use Edc\Core\Pdf\PdfExportRegistry;
+use Edc\Core\Pdf\PdfPageAssets;
 use Edc\Core\Pdf\PdfService;
 use Edc\Core\Support\Facades\Pdfs;
 use Illuminate\Database\Eloquent\Model;
@@ -191,6 +194,76 @@ it('genera el PDF de una página imprimible del CRM (vista propia, sin rejilla)'
         ->assertJsonPath('data.0.sources.0.label', 'Reglamento');
 });
 
+it('un bloque con pdfView se imprime con su vista propia (characters-grid)', function () {
+    makeCharacter(['is_published' => true]);
+    $admin = motorUser('admin');
+    $pageId = $this->actingAs($admin)->postJson('/api/admin/pages', [
+        'title' => ['es' => 'Elenco'], 'is_published' => true, 'is_printable' => true,
+    ])->json('data.id');
+    $this->actingAs($admin)->postJson("/api/admin/pages/{$pageId}/blocks", [
+        'type' => 'characters-grid', 'settings' => ['title' => ['es' => 'Personajes']],
+    ]);
+
+    // El PDF real se compone sin errores con la vista del bloque dentro.
+    $page = Page::find($pageId);
+    $pdf = app(PdfService::class)->generate('pages', $page, 'es', sync: true)->refresh();
+    expect($pdf->status)->toBe(GeneratedPdf::STATUS_READY);
+
+    // La vista declarada imprime la tabla de personajes (no la rejilla web).
+    $type = app(BlockTypeRegistry::class)->get('characters-grid');
+    expect($type->pdfView())->toBe('pdf.blocks.characters-grid');
+
+    $block = $page->blocks()->first();
+    $html = view($type->pdfView(), [
+        'block' => $block,
+        's' => $type->localizeSettings($block->settings, 'es'),
+        'data' => $type->resolveData($block, 'es'),
+        'locale' => 'es',
+        'assets' => app(PdfPageAssets::class),
+        'hTitle' => 'h2',
+        'hSubtitle' => 'h3',
+        'styleAttr' => fn ($align) => '',
+        'headingAlign' => fn ($s, $field) => null,
+        'bodyAlign' => fn ($s) => null,
+    ])->render();
+
+    expect($html)->toContain('Personajes')
+        ->toContain('Tyrion')
+        ->toContain('<thead>');
+});
+
+it('normaliza las tablas del wysiwyg: la fila de th pasa a un thead real', function () {
+    $assets = app(PdfPageAssets::class);
+
+    // TipTap emite la fila de cabeceras dentro del tbody: se mueve a un
+    // <thead> para que DomPDF la repita en cada página al cruzar de página.
+    $out = $assets->normalizeTables('<table><tbody><tr><th>A</th><th>B</th></tr><tr><td>1</td><td>2</td></tr></tbody></table>');
+    expect($out)->toContain('<thead><tr><th>A</th><th>B</th></tr></thead>')
+        ->toContain('<tbody><tr><td>1</td><td>2</td></tr></tbody>');
+
+    // Con thead propio no se duplica…
+    $withThead = $assets->normalizeTables('<table><thead><tr><th>A</th></tr></thead><tbody><tr><td>1</td></tr></tbody></table>');
+    expect(substr_count($withThead, '<thead>'))->toBe(1);
+
+    // …y una primera fila mixta (th + td) no es cabecera: no se toca.
+    $mixed = $assets->normalizeTables('<table><tbody><tr><th>A</th><td>1</td></tr></tbody></table>');
+    expect($mixed)->not->toContain('<thead>');
+});
+
+it('separa el arranque del contenido para que viaje con el título (splitFirstElement)', function () {
+    $assets = app(PdfPageAssets::class);
+
+    [$first, $rest] = $assets->splitFirstElement('<p>Uno</p><p>Dos</p><p>Tres</p>');
+    expect($first)->toBe('<p>Uno</p>')
+        ->and($rest)->toBe('<p>Dos</p><p>Tres</p>');
+
+    // Un arranque ALTO (tabla, lista) no se agrupa: todo queda como resto y
+    // el título se protege con el page-break-after: avoid del block__lead.
+    $conTabla = '<table><tbody><tr><td>1</td></tr></tbody></table><p>Después</p>';
+    [$first, $rest] = $assets->splitFirstElement($conTabla);
+    expect($first)->toBe('')->and($rest)->toBe($conTabla);
+});
+
 it('marca el PDF como failed si no hay ítems', function () {
     $house = makeHouseWithSchemes(0);
 
@@ -277,13 +350,15 @@ it('regenera, borra y descarga desde la API', function () {
 
     $pdf = app(PdfService::class)->generate('house-schemes', $house, 'es', sync: true)->refresh();
 
-    // Descarga pública (permanente y listo): attachment por defecto…
+    // Descarga pública (permanente y listo): attachment por defecto, con el
+    // nombre LEGIBLE de la entidad dueña (no el slug de la BD)…
     $this->get("/api/pdfs/{$pdf->id}/download")->assertOk()
-        ->assertHeader('Content-Disposition', "attachment; filename={$pdf->filename}.pdf");
+        ->assertHeader('Content-Disposition', 'attachment; filename="Casa Stark.pdf"');
 
-    // …e inline con ?inline=1 (el botón «ver» abre el PDF en la pestaña).
+    // …e inline con ?inline=1 (el botón «ver» abre el PDF en la pestaña, y
+    // Chrome titula la pestaña con este nombre).
     $this->get("/api/pdfs/{$pdf->id}/download?inline=1")->assertOk()
-        ->assertHeader('Content-Disposition', "inline; filename={$pdf->filename}.pdf");
+        ->assertHeader('Content-Disposition', 'inline; filename="Casa Stark.pdf"');
 
     // Regenerar lo deja pendiente (en cola).
     Queue::fake();
@@ -541,6 +616,98 @@ it('las descargas públicas listan los PDF permanentes listos, agrupados por tip
         ->and($response->json('data.0.items.0.size'))->toBeGreaterThan(0);
 });
 
+// --- Nombres human readable (title en downloads y Content-Disposition) ---
+
+it('las descargas exponen el título legible en el locale de cada PDF', function () {
+    $service = app(PdfService::class);
+
+    // Página del CRM: el título traducido de la página.
+    $admin = motorUser('admin');
+    $pageId = $this->actingAs($admin)->postJson('/api/admin/pages', [
+        'title' => ['es' => 'Reglas del juego', 'en' => 'Game rules'],
+        'is_published' => true, 'is_printable' => true,
+    ])->json('data.id');
+    $this->actingAs($admin)->postJson("/api/admin/pages/{$pageId}/blocks", [
+        'type' => 'text', 'settings' => ['body' => ['es' => '<p>Hola</p>', 'en' => '<p>Hi</p>']],
+    ]);
+    $page = Page::find($pageId);
+    $service->generate('pages', $page, 'es', sync: true);
+    $service->generate('pages', $page, 'en', sync: true);
+
+    // Export global con etiquetas declaradas por locale (labels()).
+    makeCharacter(['is_published' => true]);
+    $service->generate('characters', null, 'es', sync: true);
+    $service->generate('characters', null, 'en', sync: true);
+
+    // Export por entidad: el nombre traducible de la casa.
+    $house = makeHouseWithSchemes(1);
+    $house->setTranslations('name', ['es' => 'Casa Dragón', 'en' => 'House Dragon']);
+    $house->save();
+    $service->generate('house-schemes', $house, 'es', sync: true);
+
+    $items = collect($this->getJson('/api/downloads')->assertOk()->json('data'))->keyBy('type');
+
+    $pages = collect($items['pages']['items'])->keyBy('locale');
+    expect($pages['es']['title'])->toBe('Reglas del juego')
+        ->and($pages['en']['title'])->toBe('Game rules')
+        ->and($pages['es']['filename'])->toStartWith('page-'); // el slug de la BD no cambia
+
+    $characters = collect($items['characters']['items'])->keyBy('locale');
+    expect($characters['es']['title'])->toBe('Personajes')
+        ->and($characters['en']['title'])->toBe('Characters')
+        ->and($characters['es']['filename'])->toBe('characters-es');
+
+    expect($items['house-schemes']['items'][0]['title'])->toBe('Casa Dragón');
+});
+
+it('la descarga escapa el nombre UTF-8: filename* RFC 5987 + fallback ASCII', function () {
+    $house = makeHouseWithSchemes(1);
+    $house->setTranslations('name', ['es' => 'Casa Dragón']);
+    $house->save();
+
+    $pdf = app(PdfService::class)->generate('house-schemes', $house, 'es', sync: true)->refresh();
+
+    $disposition = $this->get("/api/pdfs/{$pdf->id}/download?inline=1")
+        ->assertOk()
+        ->headers->get('Content-Disposition');
+
+    expect($disposition)->toStartWith('inline;')
+        ->toContain('filename="Casa Dragon.pdf"') // fallback transliterado
+        ->toContain("filename*=utf-8''Casa%20Drag%C3%B3n.pdf");
+});
+
+it('sin etiqueta ni entidad dueña, el nombre legible cae al filename embellecido', function () {
+    Pdfs::register('mega-pack', MegaPackExport::class);
+
+    $export = app(PdfExportRegistry::class)->get('mega-pack');
+
+    // Sin labels(): guiones a espacios, mayúscula inicial y sin sufijo de idioma.
+    expect($export->displayName(null, 'es'))->toBe('Mega pack')
+        ->and($export->displayName(null, 'en'))->toBe('Mega pack');
+});
+
+it('los PDF de USUARIO conservan su filename: ni title en la card ni nombre nuevo al descargar', function () {
+    $character = makeCharacter(['is_published' => true]);
+    $owner = motorUser();
+
+    $pdf = app(PdfService::class)->generateCollection(
+        $owner,
+        [['entity' => 'character', 'id' => $character->id, 'copies' => 1]],
+        'es',
+        sync: true,
+    )->refresh();
+
+    // La card de "Mi colección" sigue pintando el filename (sin title).
+    $generated = $this->actingAs($owner)->getJson('/api/pdf-collection')->assertOk()->json('generated.0');
+    expect($generated)->not->toHaveKey('title')
+        ->and($generated['filename'])->toStartWith('collection-');
+
+    // Y la descarga mantiene el filename de siempre.
+    $this->actingAs($owner)->get("/api/pdfs/{$pdf->id}/download")
+        ->assertOk()
+        ->assertHeader('Content-Disposition', "attachment; filename={$pdf->filename}.pdf");
+});
+
 it('el PDF temporal solo lo descarga su dueño (o un admin)', function () {
     $character = makeCharacter(['is_published' => true]);
     $owner = motorUser();
@@ -585,6 +752,25 @@ it('pdf:cleanup borra los temporales caducados', function () {
     Storage::disk('public')->assertExists($alive->path);
     expect(GeneratedPdf::count())->toBe(1);
 });
+
+/** Export global SIN labels(): demuestra el fallback embellecido del nombre. */
+class MegaPackExport extends PdfExport
+{
+    public function sourceModel(): ?string
+    {
+        return null;
+    }
+
+    public function items(?Model $source, string $locale): array
+    {
+        return [];
+    }
+
+    public function filename(?Model $source, string $locale): string
+    {
+        return "mega-pack-{$locale}";
+    }
+}
 
 /** Export deliberadamente roto para el test de errores saneados. */
 class RotoExport extends PdfExport

@@ -12,6 +12,31 @@ El formato sigue [Keep a Changelog](https://keepachangelog.com/es/) y el
 versionado, [SemVer](https://semver.org/lang/es/) (mientras estemos en `0.x`,
 los cambios de API pueden llegar en versiones menores).
 
+## [Sin publicar]
+
+- **Los PDF generados se llaman como lo que son** (`edc-motor/core`): cada
+  export resuelve un nombre LEGIBLE por idioma (`displayName`) — el
+  título de la página, el nombre traducible de la entidad dueña, la
+  etiqueta por locale que declare el export global (`labels()`) o, de
+  reserva, el filename embellecido. `GET /api/downloads` añade `title`
+  con ese nombre (el `filename`/slug de la BD no cambia) y la descarga
+  manda el `Content-Disposition` con él (`filename*` UTF-8 RFC 5987 +
+  fallback ASCII): la pestaña del navegador y el fichero descargado se
+  titulan «Reglas del Juego.pdf», no «page-reglas-del-juego-es.pdf».
+  Los PDF de USUARIO (colecciones temporales) siguen exactamente igual.
+- **PDF de páginas del CRM, tanda de estilo e imprenta**
+  (`edc-motor/core`): el bloque cita va sobre una banda de fondo gris
+  muy claro y la tarjeta de texto se imprime como recuadro con borde,
+  levemente más estrecha que la columna del cuerpo; el título/subtítulo
+  de un bloque ya no quedan huérfanos al final de página (viajan con el
+  arranque de su contenido en un contenedor que DomPDF no parte); las
+  tablas del wysiwyg pierden aire vertical en las celdas y su fila de
+  cabeceras pasa a un `<thead>` real que DomPDF repite en cada página al
+  cruzar de página; y un bloque de datos puede declarar su IMPRESIÓN
+  PROPIA con `BlockType::pdfView()` (recibe lo mismo que su render
+  público) — el playground lo demuestra imprimiendo la rejilla de
+  personajes como tabla de atributos.
+
 ## [0.5.16] — 2026-08-24
 
 - **Listas del wysiwyg con el marcador a ras del texto** (`@edc-motor/ui`):

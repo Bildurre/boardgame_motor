@@ -40,4 +40,10 @@ class HouseCountersExport extends PdfExport
     {
         return "house-counters-{$locale}";
     }
+
+    /** Nombre legible por idioma (card de Descargas y pestaña del navegador). */
+    protected function labels(): array
+    {
+        return ['es' => 'Contadores de casa', 'eu' => 'Etxeen kontagailuak', 'en' => 'House counters'];
+    }
 }
