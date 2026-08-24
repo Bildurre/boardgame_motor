@@ -43,12 +43,54 @@
   h5 { font-size: $fs-16; }
   h6 { font-size: $fs-14; }
 
+  // Listas del wysiwyg: sangradas hacia ADENTRO con el marcador A RAS del
+  // texto de los párrafos (con el marcador nativo `outside`, el número
+  // quedaba colgando fuera del borde del texto). Marcador propio por
+  // ::before en absoluta: el li se sangra con el padding de la lista y el
+  // número/viñeta se pinta exactamente en el borde del párrafo
+  // (left = -sangría). Aguanta los <li><p>…</p></li> del wysiwyg (un
+  // marcador nativo `inside` se quedaría solo en su línea) y las listas
+  // anidadas: cada nivel sangra desde el texto del padre y cada <ol> lleva
+  // su propio contador (scoped por counter-reset).
   ul,
   ol {
-    padding-left: 1.4em;
+    // Junto a una imagen FLOTADA (posición clear-*/izquierda/derecha del
+    // bloque), la caja de la lista se coloca ENTERA al lado del float:
+    // sin esto solo se desplazaban los line boxes del texto y el marcador
+    // (pintado contra la caja del li, que sigue bajo el float) quedaba
+    // pegado a la imagen, descolgado del texto.
+    display: flow-root;
+    list-style: none;
+    padding-left: 1.8em;
+
+    > li {
+      position: relative;
+
+      &::before {
+        position: absolute;
+        left: -1.8em;
+        top: 0;
+      }
+    }
 
     li + li { margin-block-start: $space-1; }
   }
+
+  ol {
+    counter-reset: rc-item;
+
+    > li {
+      counter-increment: rc-item;
+
+      &::before { content: counter(rc-item) '.'; }
+    }
+  }
+
+  ul > li::before { content: '•'; }
+
+  // Viñetas anidadas: el relevo clásico disco → círculo → cuadrado.
+  ul ul > li::before { content: '◦'; }
+  ul ul ul > li::before { content: '▪'; }
 
   // Cita: borde a la izquierda + texto atenuado en cursiva (mismo criterio
   // que la vista de edición de RichTextInput).

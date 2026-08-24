@@ -8,6 +8,15 @@ admin). Paquete **fuente** (se consume vía Vite). Versión de tren con
 
 ### Cambiado
 
+- **Listas del wysiwyg: sangradas hacia adentro con el marcador a ras del
+  texto** (`_rich-content.scss`): marcador propio por `::before` en
+  posición absoluta — el número/viñeta queda exactamente en el borde del
+  texto de los párrafos y el item se sangra 1.8em (líneas envueltas
+  alineadas a la sangría); las anidadas relevan disco → círculo → cuadrado
+  y cada `ol` lleva su contador. Además `display: flow-root`: junto a una
+  imagen FLOTADA del bloque, la lista se coloca entera al lado del float —
+  antes solo se desplazaba el texto y el marcador quedaba pegado a la
+  imagen, descolgado.
 - **Solo dos velos: 60 y 80 %** (`_theme.scss`): nuevo `--veil-80`
   (`var(--surface)` al 80 %); `--veil-15/-30/-85` pasan a legacy (sus
   custom properties se conservan para lo ya guardado).
