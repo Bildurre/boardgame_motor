@@ -12,6 +12,10 @@ El formato sigue [Keep a Changelog](https://keepachangelog.com/es/) y el
 versionado, [SemVer](https://semver.org/lang/es/) (mientras estemos en `0.x`,
 los cambios de API pueden llegar en versiones menores).
 
+## [0.5.18] — 2026-08-25
+
+- Sin cambios propios: versión de tren.
+
 ## [0.5.17] — 2026-08-24
 
 - **Plantilla de página «Bloques compactos»** (`edc-motor/core`): nueva
