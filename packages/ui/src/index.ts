@@ -53,7 +53,15 @@ export { default as LocaleSelector } from './components/LocaleSelector.vue'
 export { default as AppBreadcrumbs, type Crumb } from './components/AppBreadcrumbs.vue'
 export { default as PreviewGrid, type PreviewGridItem } from './components/PreviewGrid.vue'
 export { createApi, type CreateApiOptions } from './lib/createApi'
-export { watchSplash, dismissSplash, type WatchSplashOptions } from './lib/splash'
+export {
+  watchSplash,
+  dismissSplash,
+  setupNavigationSplash,
+  type WatchSplashOptions,
+  type NavigationSplashOptions,
+  type SplashRouterLike,
+} from './lib/splash'
+export { readCache, writeCache } from './lib/localCache'
 export { useToast, type Toast } from './composables/useToast'
 export { useConfirm, type ConfirmOptions } from './composables/useConfirm'
 export { useTheme, type ThemeMode } from './composables/useTheme'

@@ -4,7 +4,7 @@ import type { RouteLocationRaw } from 'vue-router'
 import { useRoute, useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { ChevronDown, FileDown, LayoutDashboard, LogIn, LogOut, Menu } from '@lucide/vue'
-import { LocaleSelector, MotorBadge, ThemeSelector } from '@edc-motor/ui'
+import { LocaleSelector, MotorBadge, ThemeSelector, readCache, writeCache } from '@edc-motor/ui'
 import { api } from '@/lib/api'
 import { entitySections } from '@/entities/registry'
 import { DOWNLOAD_PATHS } from '@/router/downloads'
@@ -36,6 +36,8 @@ const collection = useCollectionStore()
 // AppRightSidebar (@edc-motor/ui) trae su propia asa anclada a la barra,
 // fija desde el borde inferior de esta cabecera hasta abajo.
 
+const MENU_CACHE_KEY = 'edc_app_cache_menu'
+
 interface MenuNode {
   id: number
   type: 'page' | 'route'
@@ -54,7 +56,9 @@ interface NavEntry {
   children: NavEntry[]
 }
 
-const menu = ref<MenuNode[]>([])
+// Último menú bueno (stale-while-revalidate): en visitas repetidas la nav
+// sale al instante; el fetch del onMounted lo refresca.
+const menu = ref<MenuNode[]>(readCache<MenuNode[]>(MENU_CACHE_KEY) ?? [])
 const navOpen = ref(false)
 
 // El submenú vive del :hover: al hacer clic en una hija seguiría abierto
@@ -193,6 +197,7 @@ onMounted(async () => {
   try {
     const { data } = await api.get('/menu')
     menu.value = data.data
+    writeCache(MENU_CACHE_KEY, data.data)
   } catch {
     // sin menú: la cabecera sigue funcionando (marca, acciones, idioma…)
   }

@@ -4,6 +4,25 @@ Componentes Vue 3 + SCSS para las webs públicas (y piezas compartidas con el
 admin). Paquete **fuente** (se consume vía Vite). Versión de tren con
 `edc-motor/core` y `@edc-motor/admin-kit`.
 
+## [Sin publicar]
+
+### Añadido
+
+- **`setupNavigationSplash(router)`** (`lib/splash`): el splash es también
+  el estado de carga de las navegaciones SPA — si tras `showDelayMs`
+  (120 ms) la navegación sigue pendiente o hay peticiones en vuelo, el velo
+  vuelve a cubrir la ventana (tapando el «negro» de la vista sin datos) y
+  cae en el siguiente reposo de red; una navegación rápida no lo ve ni un
+  frame. `dismissSplash()` ahora OCULTA el elemento en vez de eliminarlo
+  (las navegaciones lo reutilizan), y el `index.html` puede definir
+  `window.__edcSplashRefresh` para re-elegir su contenido (p. ej. el logo
+  según idioma) en cada re-show.
+- **`readCache()` / `writeCache()`** (`lib/localCache`): caché ligera en
+  localStorage para el arranque (stale-while-revalidate) — settings, menús
+  y locales de la visita anterior se pintan al instante mientras se
+  refrescan en segundo plano. Sin localStorage no hay caché y todo funciona
+  como siempre.
+
 ## [0.5.19] — 2026-08-26
 
 - Nuevos `watchSplash()` y `dismissSplash()` (`lib/splash`): retiran el

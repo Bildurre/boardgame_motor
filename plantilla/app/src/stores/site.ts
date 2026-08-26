@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia'
 import { computed, ref } from 'vue'
+import { readCache, writeCache } from '@edc-motor/ui'
 import { api } from '@/lib/api'
 import { useLocalesStore } from '@/stores/locales'
 
@@ -43,9 +44,13 @@ export function fontFacesCss(fonts: Record<string, SiteFont>): string {
     .join('\n')
 }
 
+const CACHE_KEY = 'edc_app_cache_site'
+
 export const useSiteStore = defineStore('site', () => {
   const locales = useLocalesStore()
-  const settings = ref<SiteSettings | null>(null)
+  // Última configuración buena (stale-while-revalidate): en visitas
+  // repetidas el header pinta el logo y el título reales al instante.
+  const settings = ref<SiteSettings | null>(readCache<SiteSettings>(CACHE_KEY))
   const currentAccent = ref<string | null>(null)
 
   const title = computed(() => {
@@ -133,19 +138,36 @@ export const useSiteStore = defineStore('site', () => {
   }
 
   let inflight: Promise<void> | null = null
+  let fresh = false
+  let appliedFromCache = false
 
-  /** Carga la configuración y la aplica (fuentes, favicon, acento). */
+  /** Aplica la configuración actual (fuentes, favicon, acento, título). */
+  function applySettings() {
+    applyFonts()
+    applyFavicon()
+    if (settings.value?.accent_mode === 'random') pickAccent()
+    else if (settings.value) applyAccent(settings.value.accent_color)
+    if (!document.title) document.title = documentTitle()
+  }
+
+  /** Carga la configuración y la aplica (fuentes, favicon, acento). Con la
+   *  caché de la visita anterior se aplica YA (sin esperar a la red) y la
+   *  respuesta fresca solo re-aplica si algo cambió. */
   function load(): Promise<void> {
-    if (settings.value) return Promise.resolve()
+    if (fresh) return Promise.resolve()
+    const hadCache = settings.value !== null
+    if (hadCache && !appliedFromCache) {
+      appliedFromCache = true
+      applySettings()
+    }
     inflight ??= api
       .get('/site')
       .then(({ data }) => {
+        fresh = true
+        const changed = JSON.stringify(data.data) !== JSON.stringify(settings.value)
         settings.value = data.data
-        applyFonts()
-        applyFavicon()
-        if (settings.value?.accent_mode === 'random') pickAccent()
-        else if (settings.value) applyAccent(settings.value.accent_color)
-        if (!document.title) document.title = documentTitle()
+        writeCache(CACHE_KEY, data.data)
+        if (changed) applySettings()
       })
       .catch(() => {
         // sin configuración: la web funciona con los defaults del tema
@@ -153,7 +175,7 @@ export const useSiteStore = defineStore('site', () => {
       .finally(() => {
         inflight = null
       })
-    return inflight
+    return hadCache ? Promise.resolve() : inflight
   }
 
   /** Disparador extra del modo aleatorio: re-sortea al navegar por la SPA. */

@@ -1,6 +1,6 @@
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
-import { catalogRoutesKey, watchSplash } from '@edc-motor/ui'
+import { catalogRoutesKey, setupNavigationSplash, watchSplash } from '@edc-motor/ui'
 import './assets/scss/main.scss'
 import App from './App.vue'
 import router from './router'
@@ -25,5 +25,9 @@ router.afterEach(() => {
 // el arranque (todas las peticiones pasan por `api`): registrar ANTES de
 // montar, o las peticiones del onMounted saldrían sin contar.
 watchSplash({ api })
+// …y también es el estado de carga al NAVEGAR: si la vista nueva tarda en
+// tener sus datos, el velo vuelve (nunca skeletons); una navegación rápida
+// no lo ve ni un frame.
+setupNavigationSplash(router)
 
 app.mount('#app')

@@ -14,6 +14,15 @@ los cambios de API pueden llegar en versiones menores).
 
 ## [Sin publicar]
 
+- `@edc-motor/ui`: `setupNavigationSplash(router)` — el splash es también
+  el estado de carga al navegar por la SPA (reaparece si la vista nueva
+  tarda >120 ms en tener sus datos y cae en el siguiente reposo de red;
+  nunca skeletons) — y `readCache()`/`writeCache()`, caché localStorage de
+  arranque (stale-while-revalidate).
+- Plantilla y playground (app): settings, menú y locales se cachean en
+  localStorage — en visitas repetidas el header pinta la marca y la nav al
+  instante mientras se refrescan en segundo plano; `main.ts` registra
+  `setupNavigationSplash(router)`.
 - Plantilla y playground: la Home ya no pinta su contenido de fallback
   («Web pública», ping del motor, botón de cuenta) MIENTRAS carga la home
   del CRM — con la latencia de producción llegaba a verse como un
