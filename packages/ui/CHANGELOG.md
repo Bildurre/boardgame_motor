@@ -4,6 +4,15 @@ Componentes Vue 3 + SCSS para las webs públicas (y piezas compartidas con el
 admin). Paquete **fuente** (se consume vía Vite). Versión de tren con
 `edc-motor/core` y `@edc-motor/admin-kit`.
 
+## [Sin publicar]
+
+- Nuevos `watchSplash()` y `dismissSplash()` (`lib/splash`): retiran el
+  splash estático `#edc-splash` del `index.html` cuando el arranque termina
+  de verdad — cuentan las peticiones en vuelo del cliente axios y el velo
+  cae en el primer reposo de red (`quietMs`, 200 ms por defecto), con tope
+  de seguridad (`maxWaitMs`, 8 s) para que una API caída nunca lo deje
+  puesto. Registrar ANTES de `app.mount()`.
+
 ## [0.5.18] — 2026-08-25
 
 - Sin cambios propios: versión de tren.

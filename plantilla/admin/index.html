@@ -5,8 +5,50 @@
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>EdC Admin</title>
+    <!-- Tema ANTES del primer pintado: el data-theme de arriba es solo el
+         arranque; sin esto, quien guardó tema claro ve un flashazo oscuro. -->
+    <script>
+      try {
+        var t = localStorage.getItem('theme') || 'dark'
+        if (t === 'system') t = matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
+        document.documentElement.setAttribute('data-theme', t)
+      } catch (e) {}
+    </script>
+    <style>
+      /* Splash de arranque: velo estático y AUTOSUFICIENTE (cero peticiones)
+         visible desde el fotograma cero, antes incluso de descargar el
+         bundle. Lo retira watchSplash() (@edc-motor/ui) en el primer reposo
+         de red, cuando la SPA ya tiene sus datos; hasta entonces tapa los
+         renders provisionales (header con textos por defecto, vistas
+         vacías). Colores duplicados del tema a propósito: aquí aún no hay
+         CSS de la app. Cada juego personaliza este bloque con su marca. */
+      #edc-splash {
+        position: fixed;
+        inset: 0;
+        z-index: 9999;
+        display: grid;
+        place-items: center;
+        background: #0f1115;
+        transition: opacity 0.25s ease;
+      }
+      [data-theme='light'] #edc-splash { background: #fafafa; }
+      #edc-splash.edc-splash--done { opacity: 0; pointer-events: none; }
+      .edc-splash-spinner {
+        width: 44px;
+        height: 44px;
+        border: 3px solid rgb(108 92 231 / 25%);
+        border-top-color: #6c5ce7;
+        border-radius: 50%;
+        animation: edc-splash-spin 0.9s linear infinite;
+      }
+      @keyframes edc-splash-spin { to { transform: rotate(1turn); } }
+      @media (prefers-reduced-motion: reduce) {
+        .edc-splash-spinner { animation: none; }
+      }
+    </style>
   </head>
   <body>
+    <div id="edc-splash" aria-hidden="true"><div class="edc-splash-spinner"></div></div>
     <div id="app"></div>
     <script type="module" src="/src/main.ts"></script>
   </body>

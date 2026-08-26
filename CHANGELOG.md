@@ -12,6 +12,18 @@ El formato sigue [Keep a Changelog](https://keepachangelog.com/es/) y el
 versionado, [SemVer](https://semver.org/lang/es/) (mientras estemos en `0.x`,
 los cambios de API pueden llegar en versiones menores).
 
+## [Sin publicar]
+
+- `@edc-motor/ui`: splash de arranque — `watchSplash()` retira el velo
+  estático del `index.html` en el primer reposo de red del cliente API, y
+  con él el fotograma provisional (header con textos por defecto, vistas
+  vacías) que en producción se veía mientras la SPA pedía sus datos.
+- Plantilla y playground: `index.html` con el splash genérico autosuficiente
+  (fondo según tema + spinner) y el tema aplicado ANTES del primer pintado
+  (sin flashazo oscuro para quien guardó tema claro); `main.ts` registra
+  `watchSplash({ api })` antes de montar. Cada juego personaliza el splash
+  con su marca en su propio `index.html`.
+
 ## [0.5.18] — 2026-08-25
 
 - Sin cambios propios: versión de tren.
