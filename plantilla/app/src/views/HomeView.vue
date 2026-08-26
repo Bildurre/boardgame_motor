@@ -28,6 +28,10 @@ const { t } = useI18n()
 const locales = useLocalesStore()
 const site = useSiteStore()
 const homePage = ref<HomePage | null>(null)
+// El fallback solo cuando la carga TERMINÓ sin home del CRM: mientras se
+// carga no se pinta nada (en producción la respuesta tarda unas décimas y
+// el fallback llegaba a verse como un fotogramazo antes de la home real).
+const loaded = ref(false)
 
 async function loadHome() {
   try {
@@ -37,6 +41,7 @@ async function loadHome() {
   } catch {
     homePage.value = null // sin home del CRM: fallback
   }
+  loaded.value = true
 
   // SEO (doc 10): la home canónica es la raíz de cada locale.
   const origin = window.location.origin
@@ -88,7 +93,7 @@ onMounted(async () => {
     </component>
   </template>
 
-  <main v-else class="home">
+  <main v-else-if="loaded" class="home">
     <MotorBadge label="EdC" :version="ping?.version ?? ''" />
     <h1>Web pública</h1>
     <p v-if="auth.user">

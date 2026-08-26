@@ -12,6 +12,15 @@ El formato sigue [Keep a Changelog](https://keepachangelog.com/es/) y el
 versionado, [SemVer](https://semver.org/lang/es/) (mientras estemos en `0.x`,
 los cambios de API pueden llegar en versiones menores).
 
+## [Sin publicar]
+
+- Plantilla y playground: la Home ya no pinta su contenido de fallback
+  («Web pública», ping del motor, botón de cuenta) MIENTRAS carga la home
+  del CRM — con la latencia de producción llegaba a verse como un
+  fotogramazo antes de la página real. Nuevo flag `loaded`: durante la
+  carga no se pinta nada, y el fallback queda solo para cuando la carga
+  terminó sin home publicada.
+
 ## [0.5.19] — 2026-08-26
 
 - `@edc-motor/ui`: splash de arranque — `watchSplash()` retira el velo
