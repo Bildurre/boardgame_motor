@@ -4,7 +4,7 @@ Componentes Vue 3 + SCSS para las webs públicas (y piezas compartidas con el
 admin). Paquete **fuente** (se consume vía Vite). Versión de tren con
 `edc-motor/core` y `@edc-motor/admin-kit`.
 
-## [Sin publicar]
+## [0.5.19] — 2026-08-26
 
 - Nuevos `watchSplash()` y `dismissSplash()` (`lib/splash`): retiran el
   splash estático `#edc-splash` del `index.html` cuando el arranque termina
