@@ -45,7 +45,7 @@ async function load() {
   loading.value = true
   try {
     await site.load() // el head usa documentTitle: sin carreras en el prerender
-    const { data } = await api.get(current.endpoint)
+    const { data } = await api.get(current.endpoint, { edcBackground: true })
     items.value = data.data
   } catch {
     items.value = []

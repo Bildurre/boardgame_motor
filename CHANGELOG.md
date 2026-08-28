@@ -14,6 +14,14 @@ los cambios de API pueden llegar en versiones menores).
 
 ## [Sin publicar]
 
+- `@edc-motor/ui`: `createSwrGet()` (caché SWR en memoria del contenido) y
+  peticiones `edcBackground` que no disparan el velo de navegación (que
+  además sube su umbral de 120 a 250 ms) — antes el velo saltaba en CADA
+  navegación de producción.
+- Plantilla y playground (app): home, páginas del CRM y singles cargan vía
+  SWR (revisitar es instantáneo, sin velo, con revalidación silenciosa);
+  índices, descargas, sondeos de colección y refrescos de arranque marcados
+  DE FONDO — el velo queda solo para la primera visita a una página.
 - Plantilla y playground: PWA — manifests con `id` (identidad estable de la
   app instalada), `lang`/`dir` (idioma único declarado: el manifest no
   tiene i18n) y `scope` explícito; `<meta name="theme-color">` estático en

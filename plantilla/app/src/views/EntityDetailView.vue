@@ -4,7 +4,7 @@ import { useRoute, useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { ArrowLeft } from '@lucide/vue'
 import { PageBackground, useHead } from '@edc-motor/ui'
-import { api } from '@/lib/api'
+import { swrGet } from '@/lib/swr'
 import { sectionFor } from '@/entities/registry'
 import AddToCollection from '@/components/AddToCollection.vue'
 import { useLocalesStore } from '@/stores/locales'
@@ -60,8 +60,13 @@ async function load() {
 
   try {
     await site.load() // el head usa documentTitle: sin carreras en el prerender
-    const { data } = await api.get(`${current.endpoint}/${slug.value}`)
-    item.value = data.data
+    await swrGet<{ data: EntityPayload }>(
+      `${current.endpoint}/${slug.value}`,
+      undefined,
+      ({ data }) => {
+        item.value = data
+      },
+    )
   } catch {
     failed.value = true
     return

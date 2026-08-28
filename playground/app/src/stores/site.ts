@@ -164,8 +164,9 @@ export const useSiteStore = defineStore('site', () => {
       appliedFromCache = true
       applySettings()
     }
+    // Con caché aplicada, el refresco es DE FONDO (no cuenta para el velo).
     inflight ??= api
-      .get('/site')
+      .get('/site', hadCache ? { edcBackground: true } : undefined)
       .then(({ data }) => {
         fresh = true
         const changed = JSON.stringify(data.data) !== JSON.stringify(settings.value)

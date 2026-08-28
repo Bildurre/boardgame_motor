@@ -62,6 +62,7 @@ export {
   type SplashRouterLike,
 } from './lib/splash'
 export { readCache, writeCache } from './lib/localCache'
+export { createSwrGet, type SwrGetter } from './lib/swr'
 export { useToast, type Toast } from './composables/useToast'
 export { useConfirm, type ConfirmOptions } from './composables/useConfirm'
 export { useTheme, type ThemeMode } from './composables/useTheme'

@@ -29,9 +29,10 @@ export const useLocalesStore = defineStore('locales', () => {
   let fresh = false
   let inflight: Promise<void> | null = null
 
-  function fetchFresh(): Promise<void> {
+  function fetchFresh(background = false): Promise<void> {
+    // El refresco con caché es DE FONDO: no cuenta para el velo del splash.
     inflight ??= api
-      .get('/locales')
+      .get('/locales', background ? { edcBackground: true } : undefined)
       .then(({ data }) => {
         locales.value = data.locales
         defaultLocale.value = data.default
@@ -48,7 +49,7 @@ export const useLocalesStore = defineStore('locales', () => {
     if (fresh) return Promise.resolve()
     if (locales.value.length) {
       // Con caché no se espera a la red: refresco en segundo plano.
-      void fetchFresh().catch(() => {})
+      void fetchFresh(true).catch(() => {})
       return Promise.resolve()
     }
     return fetchFresh()

@@ -4,6 +4,24 @@ Componentes Vue 3 + SCSS para las webs públicas (y piezas compartidas con el
 admin). Paquete **fuente** (se consume vía Vite). Versión de tren con
 `edc-motor/core` y `@edc-motor/admin-kit`.
 
+## [Sin publicar]
+
+### Añadido
+
+- **`createSwrGet(api)`** (`lib/swr`): caché SWR en MEMORIA para los GET de
+  contenido — la primera visita a una URL espera a la red; las siguientes
+  se sirven al instante mientras una revalidación DE FONDO trae lo fresco y
+  solo re-aplica si cambió. La clave incluye el `?locale` del cliente.
+
+### Cambiado
+
+- **`lib/splash`: peticiones DE FONDO** — con `edcBackground: true` en el
+  config de axios la petición no cuenta para el velo (relleno con su propia
+  presentación de carga, revalidaciones SWR, sondeos): el velo queda solo
+  para las cargas de página. Y el `showDelayMs` del velo de navegación sube
+  de 120 a 250 ms — con 120, la latencia normal de producción lo hacía
+  saltar en CADA navegación.
+
 ## [0.5.20] — 2026-08-29
 
 ### Añadido

@@ -49,7 +49,7 @@ export const useCollectionStore = defineStore('collection', () => {
 
   async function load() {
     try {
-      const { data } = await api.get('/pdf-collection')
+      const { data } = await api.get('/pdf-collection', { edcBackground: true })
       items.value = data.data
     } catch {
       items.value = []
@@ -86,7 +86,9 @@ export const useCollectionStore = defineStore('collection', () => {
       poll = setInterval(async () => {
         if (!pdf.value) return
         try {
-          const { data: status } = await api.get(`/pdf-collection/pdfs/${pdf.value.id}`)
+          const { data: status } = await api.get(`/pdf-collection/pdfs/${pdf.value.id}`, {
+            edcBackground: true,
+          })
           pdf.value = status.data
         } catch {
           if (pdf.value) pdf.value = { ...pdf.value, status: 'failed' }

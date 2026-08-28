@@ -33,6 +33,16 @@ import type { AxiosInstance } from 'axios'
 const SPLASH_ID = 'edc-splash'
 const DONE_CLASS = 'edc-splash--done'
 
+// Peticiones DE FONDO: con `edcBackground: true` en el config de axios, la
+// petición no cuenta para el velo — es relleno o refresco (catálogos con su
+// propia presentación de carga, revalidaciones SWR, sondeos), no «la página
+// aún no puede pintarse». Así el velo queda solo para las cargas de página.
+declare module 'axios' {
+  interface AxiosRequestConfig {
+    edcBackground?: boolean
+  }
+}
+
 export interface WatchSplashOptions {
   /** Cliente(s) axios cuyas peticiones marcan el arranque (createApi). */
   api?: AxiosInstance | AxiosInstance[]
@@ -114,17 +124,19 @@ export function watchSplash(options: WatchSplashOptions = {}): void {
 
   for (const api of apis) {
     api.interceptors.request.use((config) => {
-      inflight++
-      clearTimeout(quietTimer)
+      if (!config.edcBackground) {
+        inflight++
+        clearTimeout(quietTimer)
+      }
       return config
     })
     api.interceptors.response.use(
       (response) => {
-        if (--inflight <= 0) armQuiet()
+        if (!response.config.edcBackground && --inflight <= 0) armQuiet()
         return response
       },
-      (error) => {
-        if (--inflight <= 0) armQuiet()
+      (error: { config?: { edcBackground?: boolean } }) => {
+        if (!error?.config?.edcBackground && --inflight <= 0) armQuiet()
         return Promise.reject(error)
       },
     )
@@ -150,7 +162,9 @@ export function setupNavigationSplash(
   if (typeof document === 'undefined') return
   if (!splashEl()) return
 
-  const showDelayMs = options.showDelayMs ?? 120
+  // 250 ms: una API razonable responde antes y el velo ni aparece; por
+  // debajo saltaba en CADA navegación de producción (feo y alarmante).
+  const showDelayMs = options.showDelayMs ?? 250
   const maxWaitMs = options.maxWaitMs ?? 8000
 
   let navPending = false

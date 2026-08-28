@@ -3,7 +3,7 @@ import { computed, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { PageBackground, useHead } from '@edc-motor/ui'
-import { api } from '@/lib/api'
+import { swrGet } from '@/lib/swr'
 import { blockRegistry } from '@/blocks/registry'
 import { templateFor } from '@/templates/registry'
 import { useLocalesStore } from '@/stores/locales'
@@ -45,8 +45,9 @@ async function load() {
     // La config del sitio entra en el head (documentTitle): esperarla evita
     // títulos sin el sufijo del sitio en el prerender.
     await site.load()
-    const { data } = await api.get(`/pages/${slug.value}`)
-    page.value = data.data
+    await swrGet<{ data: PagePayload }>(`/pages/${slug.value}`, undefined, ({ data }) => {
+      page.value = data
+    })
 
     // Canónica: si el slug de la URL no es el del idioma activo, se sustituye.
     const canonical = page.value?.slugs?.[locales.current]

@@ -195,7 +195,8 @@ onMounted(async () => {
   collection.load()
   await locales.load()
   try {
-    const { data } = await api.get('/menu')
+    // Con el menú de la caché ya pintado, el refresco es DE FONDO.
+    const { data } = await api.get('/menu', menu.value.length ? { edcBackground: true } : undefined)
     menu.value = data.data
     writeCache(MENU_CACHE_KEY, data.data)
   } catch {

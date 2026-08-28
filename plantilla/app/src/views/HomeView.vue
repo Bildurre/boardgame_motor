@@ -4,6 +4,7 @@ import { LogIn, User } from '@lucide/vue'
 import { useI18n } from 'vue-i18n'
 import { MotorBadge, BaseButton, PageBackground, useHead } from '@edc-motor/ui'
 import { api } from '@/lib/api'
+import { swrGet } from '@/lib/swr'
 import { blockRegistry } from '@/blocks/registry'
 import { templateFor } from '@/templates/registry'
 import { useAuthStore } from '@/stores/auth'
@@ -36,8 +37,9 @@ const loaded = ref(false)
 async function loadHome() {
   try {
     await site.load() // el head usa documentTitle: sin carreras en el prerender
-    const { data } = await api.get('/pages/home')
-    homePage.value = data.data
+    await swrGet<{ data: HomePage }>('/pages/home', undefined, ({ data }) => {
+      homePage.value = data
+    })
   } catch {
     homePage.value = null // sin home del CRM: fallback
   }
