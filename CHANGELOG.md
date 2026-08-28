@@ -12,6 +12,15 @@ El formato sigue [Keep a Changelog](https://keepachangelog.com/es/) y el
 versionado, [SemVer](https://semver.org/lang/es/) (mientras estemos en `0.x`,
 los cambios de API pueden llegar en versiones menores).
 
+## [Sin publicar]
+
+- Plantilla y playground: PWA — manifests con `id` (identidad estable de la
+  app instalada), `lang`/`dir` (idioma único declarado: el manifest no
+  tiene i18n) y `scope` explícito; `<meta name="theme-color">` estático en
+  los `index.html` y, en la app pública, `applyAccent()` del store del
+  sitio lo tiñe en caliente — la barra del sistema (Android) y la barra de
+  título de la ventana instalada siguen al acento, también al sorteado.
+
 ## [0.5.20] — 2026-08-29
 
 - `@edc-motor/ui`: `setupNavigationSplash(router)` — el splash es también

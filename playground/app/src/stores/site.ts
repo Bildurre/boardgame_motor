@@ -90,6 +90,10 @@ export const useSiteStore = defineStore('site', () => {
   /** Deriva los tonos del acento a partir de un HEX (via color-mix del navegador). */
   function applyAccent(hex: string) {
     currentAccent.value = hex
+    // La barra del sistema (Android) y la barra de título de la PWA
+    // instalada siguen al acento: el <meta name="theme-color"> pisa en
+    // caliente al theme_color estático del manifest.
+    document.querySelector('meta[name="theme-color"]')?.setAttribute('content', hex)
     const root = document.documentElement.style
     root.setProperty('--accent-200', `color-mix(in srgb, ${hex} 30%, white)`)
     root.setProperty('--accent-300', `color-mix(in srgb, ${hex} 55%, white)`)

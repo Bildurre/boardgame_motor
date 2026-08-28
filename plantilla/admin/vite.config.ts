@@ -11,12 +11,19 @@ export default defineConfig({
     VitePWA({
       registerType: 'autoUpdate',
       manifest: {
+        // Identidad estable, idioma único declarado (el manifest no tiene
+        // i18n) y perímetro explícito de la PWA. Cada juego añade encima lo
+        // suyo: shortcuts a sus herramientas, categories, screenshots…
+        id: '/',
+        lang: 'es',
+        dir: 'ltr',
         name: 'Plantilla EdC Admin',
         short_name: 'Plantilla Admin',
         description: 'Panel de administración del juego',
         theme_color: '#6c5ce7',
         background_color: '#0f1115',
         display: 'standalone',
+        scope: '/',
         start_url: '/',
         icons: [
           { src: '/pwa-192.png', sizes: '192x192', type: 'image/png' },
