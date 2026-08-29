@@ -12,7 +12,7 @@ El formato sigue [Keep a Changelog](https://keepachangelog.com/es/) y el
 versionado, [SemVer](https://semver.org/lang/es/) (mientras estemos en `0.x`,
 los cambios de API pueden llegar en versiones menores).
 
-## [Sin publicar]
+## [0.5.21] — 2026-08-29
 
 - `@edc-motor/ui`: `createSwrGet()` (caché SWR en memoria del contenido) y
   peticiones `edcBackground` que no disparan el velo de navegación (que
