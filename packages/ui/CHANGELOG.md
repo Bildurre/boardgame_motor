@@ -13,6 +13,12 @@ admin). Paquete **fuente** (se consume vía Vite). Versión de tren con
   se sirven al instante mientras una revalidación DE FONDO trae lo fresco y
   solo re-aplica si cambió. La clave incluye el `?locale` del cliente.
 
+- **`isStandalonePwa()`** (`lib/standalone`): ¿corre la web como PWA
+  instalada? (`display-mode` standalone/minimal-ui/fullscreen, más el
+  `navigator.standalone` de iOS). Para decisiones de UX que dependen de
+  tener o no pestañas — p. ej. abrir un PDF inline (navegador) frente a
+  lanzar la descarga nativa (app instalada).
+
 ### Cambiado
 
 - **`lib/splash`: peticiones DE FONDO** — con `edcBackground: true` en el
