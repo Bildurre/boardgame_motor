@@ -21,7 +21,9 @@ los cambios de API pueden llegar en versiones menores).
 - Plantilla y playground (app): home, páginas del CRM y singles cargan vía
   SWR (revisitar es instantáneo, sin velo, con revalidación silenciosa);
   índices, descargas, sondeos de colección y refrescos de arranque marcados
-  DE FONDO — el velo queda solo para la primera visita a una página.
+  DE FONDO — y el velo de navegación se RETIRA: el splash queda solo en el
+  arranque (modelo admin); el cascarón persiste al navegar y la primera
+  visita a una página muestra su hueco unas décimas.
 - Plantilla y playground: PWA — manifests con `id` (identidad estable de la
   app instalada), `lang`/`dir` (idioma único declarado: el manifest no
   tiene i18n) y `scope` explícito; `<meta name="theme-color">` estático en
