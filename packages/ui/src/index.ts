@@ -63,6 +63,7 @@ export {
 } from './lib/splash'
 export { readCache, writeCache } from './lib/localCache'
 export { createSwrGet, type SwrGetter } from './lib/swr'
+export { isStandalonePwa } from './lib/standalone'
 export { useToast, type Toast } from './composables/useToast'
 export { useConfirm, type ConfirmOptions } from './composables/useConfirm'
 export { useTheme, type ThemeMode } from './composables/useTheme'

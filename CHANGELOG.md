@@ -18,6 +18,9 @@ los cambios de API pueden llegar en versiones menores).
   peticiones `edcBackground` que no disparan el velo de navegación (que
   además sube su umbral de 120 a 250 ms) — antes el velo saltaba en CADA
   navegación de producción.
+- `@edc-motor/ui`: `isStandalonePwa()` — detecta la PWA instalada, para UX
+  que depende de tener o no pestañas (p. ej. PDF inline en navegador
+  frente a descarga nativa en la app instalada).
 - Plantilla y playground (app): home, páginas del CRM y singles cargan vía
   SWR (revisitar es instantáneo, sin velo, con revalidación silenciosa);
   índices, descargas, sondeos de colección y refrescos de arranque marcados
