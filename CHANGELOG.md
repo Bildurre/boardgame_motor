@@ -12,6 +12,13 @@ El formato sigue [Keep a Changelog](https://keepachangelog.com/es/) y el
 versionado, [SemVer](https://semver.org/lang/es/) (mientras estemos en `0.x`,
 los cambios de API pueden llegar en versiones menores).
 
+## [Sin publicar]
+
+- `edc-motor/core`: la rejilla de impresión no pinta marcas de corte
+  encima de la pieza vecina cuando el hueco del layout es menor que la
+  marca (piezas casi pegadas): solo las del espacio libre — bordes de
+  página o hueco sin vecino.
+
 ## [0.5.22] — 2026-08-29
 
 - `@edc-motor/ui`: `isStandalonePwa()` — detecta la PWA instalada, para UX
