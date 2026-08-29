@@ -12,7 +12,7 @@ El formato sigue [Keep a Changelog](https://keepachangelog.com/es/) y el
 versionado, [SemVer](https://semver.org/lang/es/) (mientras estemos en `0.x`,
 los cambios de API pueden llegar en versiones menores).
 
-## [Sin publicar]
+## [0.5.23] — 2026-08-29
 
 - `edc-motor/core`: la rejilla de impresión no pinta marcas de corte
   encima de la pieza vecina cuando el hueco del layout es menor que la
