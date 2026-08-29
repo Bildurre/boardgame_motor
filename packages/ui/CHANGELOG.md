@@ -4,6 +4,16 @@ Componentes Vue 3 + SCSS para las webs públicas (y piezas compartidas con el
 admin). Paquete **fuente** (se consume vía Vite). Versión de tren con
 `edc-motor/core` y `@edc-motor/admin-kit`.
 
+## [Sin publicar]
+
+### Añadido
+
+- **`isStandalonePwa()`** (`lib/standalone`): ¿corre la web como PWA
+  instalada? (`display-mode` standalone/minimal-ui/fullscreen, más el
+  `navigator.standalone` de iOS). Para decisiones de UX que dependen de
+  tener o no pestañas — p. ej. abrir un PDF inline (navegador) frente a
+  lanzar la descarga nativa (app instalada).
+
 ## [0.5.21] — 2026-08-29
 
 ### Añadido
@@ -12,12 +22,6 @@ admin). Paquete **fuente** (se consume vía Vite). Versión de tren con
   contenido — la primera visita a una URL espera a la red; las siguientes
   se sirven al instante mientras una revalidación DE FONDO trae lo fresco y
   solo re-aplica si cambió. La clave incluye el `?locale` del cliente.
-
-- **`isStandalonePwa()`** (`lib/standalone`): ¿corre la web como PWA
-  instalada? (`display-mode` standalone/minimal-ui/fullscreen, más el
-  `navigator.standalone` de iOS). Para decisiones de UX que dependen de
-  tener o no pestañas — p. ej. abrir un PDF inline (navegador) frente a
-  lanzar la descarga nativa (app instalada).
 
 ### Cambiado
 
