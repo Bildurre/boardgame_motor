@@ -12,6 +12,13 @@ El formato sigue [Keep a Changelog](https://keepachangelog.com/es/) y el
 versionado, [SemVer](https://semver.org/lang/es/) (mientras estemos en `0.x`,
 los cambios de API pueden llegar en versiones menores).
 
+## [Sin publicar]
+
+- `edc-motor/core`: las imágenes de la rejilla van a DomPDF reescaladas a
+  la resolución de impresión (`motor.pdf.print_dpi`, 300 por defecto) y
+  aplanadas a JPEG — la ruta del alfa de los PNG grandes multiplicaba
+  x100 el render y ponía cada PDF recortable en ~5 minutos.
+
 ## [0.5.23] — 2026-08-29
 
 - `edc-motor/core`: la rejilla de impresión no pinta marcas de corte
