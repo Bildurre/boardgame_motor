@@ -12,7 +12,7 @@ El formato sigue [Keep a Changelog](https://keepachangelog.com/es/) y el
 versionado, [SemVer](https://semver.org/lang/es/) (mientras estemos en `0.x`,
 los cambios de API pueden llegar en versiones menores).
 
-## [Sin publicar]
+## [0.5.26] — 2026-08-30
 
 - Móvil: alturas con viewport dinámico (`100dvh` con fallback) en la base
   del ui, el layout del admin y el panel de navegación móvil de plantilla y
