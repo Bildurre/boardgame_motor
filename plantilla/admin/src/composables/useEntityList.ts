@@ -47,6 +47,23 @@ export function useEntityList<T extends EntityBase>(options: EntityListOptions<T
     sidebar.reveal()
   }
 
+  // Flechas del panel: anterior/siguiente DENTRO del listado visible (mismo
+  // orden que las cards; sin dar la vuelta en los extremos — en el borde la
+  // flecha se deshabilita). Así se recorre el listado sin deseleccionar.
+  const selectedIndex = computed(() => items.value.findIndex((i) => i.id === selectedId.value))
+  const hasPrev = computed(() => selectedIndex.value > 0)
+  const hasNext = computed(
+    () => selectedIndex.value >= 0 && selectedIndex.value < items.value.length - 1,
+  )
+
+  function selectPrev() {
+    if (hasPrev.value) select(items.value[selectedIndex.value - 1] as T)
+  }
+
+  function selectNext() {
+    if (hasNext.value) select(items.value[selectedIndex.value + 1] as T)
+  }
+
   const status = ref('published')
   const search = ref('')
 
@@ -209,6 +226,10 @@ export function useEntityList<T extends EntityBase>(options: EntityListOptions<T
     selectedId,
     selected,
     select,
+    selectPrev,
+    selectNext,
+    hasPrev,
+    hasNext,
     hasPreview: !!options.previewKey,
     formOpen,
     formMode,

@@ -69,6 +69,7 @@ export { useConfirm, type ConfirmOptions } from './composables/useConfirm'
 export { useTheme, type ThemeMode } from './composables/useTheme'
 export { useHead, type HeadInput } from './composables/useHead'
 export { useAppRightSidebar, type AppRightSidebarToken } from './composables/useAppRightSidebar'
+export { useScrollLock } from './composables/useScrollLock'
 
 // Bloques de presentación del CRM (doc 03).
 export * from './blocks'

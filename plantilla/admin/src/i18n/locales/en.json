@@ -89,7 +89,11 @@
     "confirm": "Confirm",
     "yes": "Yes",
     "no": "No",
-    "stateKicker": "State"
+    "stateKicker": "State",
+    "pagination": {
+      "prev": "Previous",
+      "next": "Next"
+    }
   },
   "login": {
     "title": "Panel access",

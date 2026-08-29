@@ -77,6 +77,7 @@
 .right-sidebar__body {
   flex: 1;
   overflow-y: auto;
+  overscroll-behavior: contain; // el gesto no encadena al fondo
   padding: $space-3;
   // Contenedor `content`: los botones con icono pasan a modo vertical
   // (mini-etiqueta bajo el icono) en el ancho del panel.

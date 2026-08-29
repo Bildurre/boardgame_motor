@@ -3,6 +3,8 @@ import { useI18n } from 'vue-i18n'
 import {
   ArrowRight,
   Camera,
+  ChevronLeft,
+  ChevronRight,
   Eye,
   EyeOff,
   FlameKindling,
@@ -27,6 +29,9 @@ defineProps<{
   kicker: string
   /** Texto cuando no hay selección. */
   empty: string
+  /** Hay elemento anterior/siguiente en el listado (flechas del panel). */
+  hasPrev?: boolean
+  hasNext?: boolean
   /** La entidad se renderiza a PNG: muestra regenerar + imágenes por idioma. */
   hasPreview?: boolean
 }>()
@@ -39,6 +44,9 @@ defineEmits<{
   del: []
   restore: []
   forceDelete: []
+  /** Flechas del panel: ir al elemento anterior/siguiente del listado. */
+  prev: []
+  next: []
 }>()
 
 defineSlots<{
@@ -55,7 +63,32 @@ const locales = useLocalesStore()
     <div class="manager-panel">
       <p v-if="!item" class="manager-panel__empty">{{ empty }}</p>
       <template v-else>
-        <p class="manager-panel__kicker">{{ kicker }}</p>
+        <div class="manager-panel__kicker-row">
+          <p class="manager-panel__kicker">{{ kicker }}</p>
+          <!-- Anterior/siguiente sin deseleccionar (mismo listado) -->
+          <div v-if="hasPrev || hasNext" class="manager-panel__nav">
+            <button
+              type="button"
+              class="manager-panel__nav-btn"
+              :disabled="!hasPrev"
+              :title="t('common.pagination.prev')"
+              :aria-label="t('common.pagination.prev')"
+              @click="$emit('prev')"
+            >
+              <ChevronLeft :size="16" />
+            </button>
+            <button
+              type="button"
+              class="manager-panel__nav-btn"
+              :disabled="!hasNext"
+              :title="t('common.pagination.next')"
+              :aria-label="t('common.pagination.next')"
+              @click="$emit('next')"
+            >
+              <ChevronRight :size="16" />
+            </button>
+          </div>
+        </div>
 
         <!-- Acciones PRIMERO; después, secciones separadas (patrón panel) -->
         <div class="manager-detail__actions">

@@ -33,6 +33,10 @@ const {
   selectedId,
   selected,
   select,
+  selectPrev,
+  selectNext,
+  hasPrev,
+  hasNext,
 } = useEntityList<House>({
   resource: '/admin/houses',
   ns: 'houses',
@@ -108,6 +112,10 @@ onMounted(init)
       :name="selected ? tr(selected.name) : ''"
       :kicker="t('houses.panelTitle')"
       :empty="t('houses.panelEmpty')"
+      :has-prev="hasPrev"
+      :has-next="hasNext"
+      @prev="selectPrev"
+      @next="selectNext"
       @open="selected && goSingle(selected)"
       @edit="selected && edit(selected)"
       @toggle-publish="selected && togglePublish(selected)"

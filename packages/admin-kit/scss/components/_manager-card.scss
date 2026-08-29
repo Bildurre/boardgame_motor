@@ -178,6 +178,43 @@
     margin: 0;
   }
 
+  // Fila del kicker con las flechas anterior/siguiente del panel.
+  &__kicker-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: $space-2;
+  }
+
+  &__nav {
+    display: flex;
+    gap: $space-1;
+  }
+
+  &__nav-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 26px;
+    height: 26px;
+    border: 1px solid $border;
+    border-radius: $radius-sm;
+    background: $surface-2;
+    color: $text-2;
+    cursor: pointer;
+    transition: color 0.15s ease, border-color 0.15s ease;
+
+    &:hover:not(:disabled) {
+      color: $text-1;
+      border-color: $border-strong;
+    }
+
+    &:disabled {
+      opacity: 0.4;
+      cursor: default;
+    }
+  }
+
   // Separador entre bloques del panel (acciones | sección | sección…):
   // TODOS los paneles derechos siguen el mismo orden.
   &__divider {

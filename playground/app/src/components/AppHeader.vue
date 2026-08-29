@@ -4,7 +4,14 @@ import type { RouteLocationRaw } from 'vue-router'
 import { useRoute, useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { ChevronDown, FileDown, LayoutDashboard, LogIn, LogOut, Menu, X } from '@lucide/vue'
-import { LocaleSelector, MotorBadge, ThemeSelector, readCache, writeCache } from '@edc-motor/ui'
+import {
+  LocaleSelector,
+  MotorBadge,
+  ThemeSelector,
+  readCache,
+  writeCache,
+  useScrollLock,
+} from '@edc-motor/ui'
 import { api } from '@/lib/api'
 import { entitySections } from '@/entities/registry'
 import { DOWNLOAD_PATHS } from '@/router/downloads'
@@ -60,6 +67,9 @@ interface NavEntry {
 // sale al instante; el fetch del onMounted lo refresca.
 const menu = ref<MenuNode[]>(readCache<MenuNode[]>(MENU_CACHE_KEY) ?? [])
 const navOpen = ref(false)
+
+// Con el panel de navegación móvil abierto, la página de fondo no scrollea.
+useScrollLock(navOpen)
 
 // El submenú vive del :hover: al hacer clic en una hija seguiría abierto
 // (el ratón no se ha movido). Se SUPRIME al navegar y se libera cuando el

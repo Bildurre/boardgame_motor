@@ -4,6 +4,23 @@ Componentes Vue 3 + SCSS para las webs públicas (y piezas compartidas con el
 admin). Paquete **fuente** (se consume vía Vite). Versión de tren con
 `edc-motor/core` y `@edc-motor/admin-kit`.
 
+## [Sin publicar]
+
+### Añadido
+
+- **`useScrollLock()`**: bloquea el scroll de la PÁGINA mientras un drawer
+  superpuesto está abierto (contador global; libera al desmontar). Lo usa
+  `AppRightSidebar` en modo overlay — sin esto, en el teléfono el gesto de
+  scroll dentro del drawer «se escapaba» al fondo.
+
+### Cambiado
+
+- **Móvil: alturas con viewport DINÁMICO** — `_base.scss` añade
+  `min-height: 100dvh` (con `100vh` de fallback): la barra del navegador
+  del teléfono aparece y desaparece y `100vh` dejaba el final tapado. El
+  cuerpo de `AppRightSidebar` lleva `overscroll-behavior: contain` (su
+  scroll ya no encadena a la página de fondo).
+
 ## [0.5.25] — 2026-08-29
 
 - Sin cambios propios: versión de tren.

@@ -348,7 +348,8 @@ $header-row2: 46px;
     max-width: 100%;
   }
 
-  height: calc(100vh - var(--header-row1));
+  height: calc(100vh - var(--header-row1)); // fallback
+  height: calc(100dvh - var(--header-row1)); // viewport dinámico (barra del navegador móvil)
   background: $surface;
   border-right: 1px solid $border;
   transform: translateX(-100%);

@@ -3,6 +3,22 @@
 Kit de construcción del panel de administración (sobre `@edc-motor/ui`). Paquete
 **fuente** (se consume vía Vite). Versión de tren con `edc-motor/core` y `@edc-motor/ui`.
 
+## [Sin publicar]
+
+### Añadido
+
+- **Estilos de las flechas anterior/siguiente del panel derecho**
+  (`_manager-card.scss`: `manager-panel__kicker-row/__nav/__nav-btn`): la
+  fila del kicker acoge dos botones compactos para recorrer el listado sin
+  deseleccionar (los usan los `EntityPanel` de los juegos).
+
+### Cambiado
+
+- **Móvil: el layout del admin mide en `100dvh`** (fallback `100vh`): con
+  la barra del navegador del teléfono visible, el pie del panel y de la
+  barra lateral quedaban tapados. El cuerpo del panel derecho lleva
+  `overscroll-behavior: contain` (su scroll no encadena al fondo).
+
 ## [0.5.25] — 2026-08-29
 
 - Sin cambios propios: versión de tren.

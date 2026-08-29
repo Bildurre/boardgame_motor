@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed, onBeforeUnmount, onMounted, watch } from 'vue'
+import { useScrollLock } from '../composables/useScrollLock'
 import { Funnel, X } from '@lucide/vue'
 import { useAppRightSidebar } from '../composables/useAppRightSidebar'
 
@@ -72,6 +73,10 @@ checkOverlay()
 
 // Si el consumidor cambia el modo en caliente, el estado se recalcula.
 watch(() => props.overlayAlways, checkOverlay)
+
+// Con el drawer superpuesto abierto, la página de fondo no scrollea (en el
+// teléfono el gesto se escapaba al fondo y aparecían scrolls raros).
+useScrollLock(computed(() => overlay.value && isOpen.value))
 
 // En el drawer, Escape cierra (el click fuera lo cubre el telón).
 function onKeydown(e: KeyboardEvent) {

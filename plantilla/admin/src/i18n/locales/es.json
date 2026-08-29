@@ -89,7 +89,11 @@
     "confirm": "Confirmar",
     "yes": "Sí",
     "no": "No",
-    "stateKicker": "Estado"
+    "stateKicker": "Estado",
+    "pagination": {
+      "prev": "Anterior",
+      "next": "Siguiente"
+    }
   },
   "login": {
     "title": "Acceso al panel",

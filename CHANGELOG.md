@@ -12,6 +12,19 @@ El formato sigue [Keep a Changelog](https://keepachangelog.com/es/) y el
 versionado, [SemVer](https://semver.org/lang/es/) (mientras estemos en `0.x`,
 los cambios de API pueden llegar en versiones menores).
 
+## [Sin publicar]
+
+- Móvil: alturas con viewport dinámico (`100dvh` con fallback) en la base
+  del ui, el layout del admin y el panel de navegación móvil de plantilla y
+  playground — la barra del navegador del teléfono tapaba el final de las
+  barras laterales; `useScrollLock()` nuevo en el ui (los drawers
+  superpuestos bloquean el scroll de fondo: adiós a los scrolls raros) y
+  `overscroll-behavior: contain` en los cuerpos con scroll.
+- Admin (plantilla y playground): flechas anterior/siguiente en el panel
+  derecho — con un elemento seleccionado se recorre el listado sin
+  deseleccionar (`selectPrev`/`selectNext` en `useEntityList`, flechas en
+  `EntityPanel`, deshabilitadas en los extremos).
+
 ## [0.5.25] — 2026-08-29
 
 - Sin cambios propios: versión de tren.

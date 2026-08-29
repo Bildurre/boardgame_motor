@@ -71,6 +71,8 @@
   &__body {
     flex: 1;
     overflow-y: auto;
+    // El gesto de scroll muere aquí: no encadena a la página de fondo.
+    overscroll-behavior: contain;
     padding: $space-4;
   }
 

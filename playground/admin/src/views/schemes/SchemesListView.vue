@@ -34,6 +34,10 @@ const {
   selectedId,
   selected,
   select,
+  selectPrev,
+  selectNext,
+  hasPrev,
+  hasNext,
   hasPreview,
 } = useEntityList<Scheme>({
   resource: '/admin/schemes',
@@ -109,6 +113,10 @@ onMounted(init)
       :kicker="t('schemes.panelTitle')"
       :empty="t('schemes.panelEmpty')"
       :has-preview="hasPreview"
+      :has-prev="hasPrev"
+      :has-next="hasNext"
+      @prev="selectPrev"
+      @next="selectNext"
       @open="selected && goSingle(selected)"
       @edit="selected && edit(selected)"
       @toggle-publish="selected && togglePublish(selected)"
