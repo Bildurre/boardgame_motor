@@ -4,6 +4,25 @@ Componentes Vue 3 + SCSS para las webs públicas (y piezas compartidas con el
 admin). Paquete **fuente** (se consume vía Vite). Versión de tren con
 `edc-motor/core` y `@edc-motor/admin-kit`.
 
+## [Sin publicar]
+
+### Añadido
+
+- **`interceptInternalLinks(router)`**: delegador global de clics que
+  convierte los `<a>` internos (mismo origen) en `router.push` — los CTA de
+  bloque y los enlaces del contenido enriquecido llegan del CRM como HTML
+  plano y recargaban la SPA entera (con su splash). Respeta clics con
+  modificadora, `target`, `download`, anclas y otros esquemas, y excluye por
+  defecto `/api`, `/storage` y `/admin` (configurable); devuelve la función
+  que lo retira.
+
+### Cambiado
+
+- **`NumericInput`**: la raíz es un contenedor con nombre (`numeric-field`)
+  y por debajo de 120px de ancho los botones -/+ dejan los lados y pasan a
+  una COLUMNA a la derecha (+ arriba, - abajo), para que el campo pueda
+  encogerse mucho más sin romperse.
+
 ## [0.5.26] — 2026-08-30
 
 ### Añadido

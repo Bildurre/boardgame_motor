@@ -12,6 +12,16 @@ El formato sigue [Keep a Changelog](https://keepachangelog.com/es/) y el
 versionado, [SemVer](https://semver.org/lang/es/) (mientras estemos en `0.x`,
 los cambios de API pueden llegar en versiones menores).
 
+## [Sin publicar]
+
+- `@edc-motor/ui`: `interceptInternalLinks(router)` — los `<a>` internos que
+  no son RouterLink (CTA de bloque, enlaces del contenido enriquecido)
+  navegan como SPA en vez de recargar la web entera (y re-enseñar el
+  splash); registrado en las apps públicas de plantilla y playground.
+- `@edc-motor/ui`: `NumericInput` — por debajo de 120px de ancho del campo
+  los botones -/+ pasan a una columna a la derecha (+ arriba, - abajo) para
+  ocupar menos de ancho.
+
 ## [0.5.26] — 2026-08-30
 
 - Móvil: alturas con viewport dinámico (`100dvh` con fallback) en la base

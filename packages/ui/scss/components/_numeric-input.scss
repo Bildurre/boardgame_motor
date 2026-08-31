@@ -1,6 +1,14 @@
 @use "tokens" as *;
 
 // Campo numérico con botones -/+ (portado de kontuan).
+
+// La raíz del componente es un contenedor con nombre: por debajo de un
+// umbral MUY estrecho los botones -/+ dejan los lados y pasan a una columna
+// a la DERECHA (+ arriba, - abajo), para que el campo ocupe menos de ancho.
+.form-field--numeric {
+  container: numeric-field / inline-size;
+}
+
 .numeric-input {
   display: flex;
   align-items: center;
@@ -49,5 +57,37 @@
     &::-webkit-outer-spin-button,
     &::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
     -moz-appearance: textfield;
+  }
+}
+
+// (después del bloque base: misma especificidad, gana por cascada)
+@container numeric-field (max-width: 120px) {
+  .numeric-input {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    grid-template-rows: 1fr 1fr;
+    grid-template-areas:
+      "field plus"
+      "field minus";
+
+    .numeric-input__btn {
+      height: 100%;
+      border-left: 1px solid $input-border;
+
+      &:first-of-type {
+        // El botón - (primero en el DOM) va ABAJO, como los spinners.
+        grid-area: minus;
+        border-top: 1px solid $input-border;
+      }
+
+      &:last-of-type {
+        grid-area: plus;
+      }
+    }
+
+    .numeric-input__field {
+      grid-area: field;
+      height: 100%;
+    }
   }
 }

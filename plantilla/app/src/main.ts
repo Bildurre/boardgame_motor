@@ -1,6 +1,6 @@
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
-import { catalogRoutesKey, watchSplash } from '@edc-motor/ui'
+import { catalogRoutesKey, interceptInternalLinks, watchSplash } from '@edc-motor/ui'
 import './assets/scss/main.scss'
 import App from './App.vue'
 import router from './router'
@@ -28,4 +28,7 @@ router.afterEach(() => {
 // el contenido llega en sitio (SWR + edcBackground) y la primera visita a
 // una página muestra el hueco unas décimas.
 watchSplash({ api })
+// Los <a> internos del contenido del CRM (CTA de bloque, texto enriquecido)
+// navegan como SPA en vez de recargar (y re-enseñar el splash).
+interceptInternalLinks(router)
 app.mount('#app')

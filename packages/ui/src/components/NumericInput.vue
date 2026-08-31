@@ -73,7 +73,7 @@ function increment() {
 </script>
 
 <template>
-  <div class="form-field" :class="{ 'form-field--error': error }">
+  <div class="form-field form-field--numeric" :class="{ 'form-field--error': error }">
     <label v-if="label" :for="inputId" class="form-field__label">
       {{ label }}<span v-if="required" class="form-field__required">*</span>
     </label>
