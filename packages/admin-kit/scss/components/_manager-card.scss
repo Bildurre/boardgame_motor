@@ -242,6 +242,21 @@
     width: 100%;
   }
 
+  // Divisorias HUÉRFANAS fuera: dos seguidas (la fija de las acciones + la
+  // propia de la sección que viene detrás), la primera de una sección que
+  // ya sigue a una divisoria, o una final sin nada debajo.
+  &__divider + &__divider {
+    display: none;
+  }
+
+  &__divider:last-child {
+    display: none;
+  }
+
+  &__divider + &__section > &__divider:first-child {
+    display: none;
+  }
+
   // Sección del panel (divisoria + kicker + contenido) con el aire justo
   // entre el kicker y lo suyo: reutilizable por cualquier panel derecho
   // (la usa el panel de bloque de PageBlocks).

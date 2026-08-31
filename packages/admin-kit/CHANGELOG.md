@@ -18,6 +18,10 @@ Kit de construcción del panel de administración (sobre `@edc-motor/ui`). Paque
 - **Los toasts de las acciones de previews y PDF llevan el nombre**: el
   mensaje del servidor va prefijado con la tarjeta o el elemento sobre el
   que se actuó (antes no se sabía de quién era la acción).
+- **Sin divisorias huérfanas en los paneles** (`_manager-card.scss`): dos
+  `manager-panel__divider` seguidas (la fija tras las acciones + la propia
+  de la sección siguiente), la primera de una `__section` que sigue a una
+  divisoria, o una final sin nada debajo, se ocultan por CSS.
 
 ## [0.5.27] — 2026-08-31
 
