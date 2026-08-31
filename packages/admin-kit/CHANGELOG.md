@@ -3,6 +3,22 @@
 Kit de construcción del panel de administración (sobre `@edc-motor/ui`). Paquete
 **fuente** (se consume vía Vite). Versión de tren con `edc-motor/core` y `@edc-motor/ui`.
 
+## [Sin publicar]
+
+### Cambiado
+
+- **Los paneles derechos de los gestores dejan de repetir el tipo de
+  modelo**: la fila superior es ahora el NOMBRE del elemento (la tarjeta
+  activa) con las flechas anterior/siguiente al lado — `PreviewManager`,
+  `PdfManager` y el panel de bloque de `PageBlocks` (que pierde el título
+  duplicado de abajo). Los combobox de elemento de previews/PDF ganan sus
+  propias flechas al lado (`manager-panel__select-row`/`__select`, nuevos
+  en `_manager-card.scss`), y el nombre de la fila superior encoge sin
+  empujar los botones. Labels nuevos `prev`/`next` en los tres gestores.
+- **Los toasts de las acciones de previews y PDF llevan el nombre**: el
+  mensaje del servidor va prefijado con la tarjeta o el elemento sobre el
+  que se actuó (antes no se sabía de quién era la acción).
+
 ## [0.5.27] — 2026-08-31
 
 - Sin cambios propios: versión de tren.

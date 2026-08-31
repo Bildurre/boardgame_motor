@@ -39,6 +39,8 @@ const labels = computed<PreviewManagerLabels>(() => ({
   confirm: t('previewsManager.confirm'),
   cancel: t('common.cancel'),
   error: t('common.errors.action'),
+  prev: t('common.pagination.prev'),
+  next: t('common.pagination.next'),
 }))
 </script>
 

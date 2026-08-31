@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, onMounted, reactive, ref } from 'vue'
 import type { AxiosInstance } from 'axios'
-import { Download, FilePlus, RefreshCw, Trash2 } from '@lucide/vue'
+import { ChevronLeft, ChevronRight, Download, FilePlus, RefreshCw, Trash2 } from '@lucide/vue'
 import { BaseButton, IconButton, SearchSelect, useConfirm, useToast } from '@edc-motor/ui'
 import ManagerCard from '../components/ManagerCard.vue'
 import { useRightSidebar } from '../composables/useRightSidebar'
@@ -41,6 +41,8 @@ export interface PdfManagerLabels {
   noResults: string
   generatedAt: string
   total: string
+  prev: string
+  next: string
 }
 
 const defaultLabels: PdfManagerLabels = {
@@ -69,6 +71,8 @@ const defaultLabels: PdfManagerLabels = {
   noResults: 'Sin resultados.',
   generatedAt: 'Generado',
   total: 'Total',
+  prev: 'Anterior',
+  next: 'Siguiente',
 }
 
 const props = withDefaults(
@@ -139,6 +143,38 @@ function hasMissing(exp: ExportInfo): boolean {
 }
 
 const activeExport = computed(() => exports.value.find((e) => e.type === activeType.value) ?? null)
+
+// Anterior/siguiente del panel: el EXPORT (la tarjeta activa) arriba, y la
+// entidad dueña del combobox (orden alfabético) junto al propio select.
+const typeIndex = computed(() => sortedExports.value.findIndex((e) => e.type === activeType.value))
+const hasPrevType = computed(() => typeIndex.value > 0)
+const hasNextType = computed(
+  () => typeIndex.value >= 0 && typeIndex.value < sortedExports.value.length - 1,
+)
+function prevType() {
+  if (hasPrevType.value) activate(sortedExports.value[typeIndex.value - 1])
+}
+function nextType() {
+  if (hasNextType.value) activate(sortedExports.value[typeIndex.value + 1])
+}
+
+const sourceIndex = computed(() =>
+  filteredSources.value.findIndex((s) => s.id === selectedSourceId.value),
+)
+const hasPrevSource = computed(() => sourceIndex.value > 0)
+const hasNextSource = computed(
+  () => sourceIndex.value >= 0 && sourceIndex.value < filteredSources.value.length - 1,
+)
+function prevSource() {
+  if (hasPrevSource.value) selectSource(filteredSources.value[sourceIndex.value - 1].id)
+}
+function nextSource() {
+  if (hasNextSource.value) selectSource(filteredSources.value[sourceIndex.value + 1].id)
+}
+
+const selectedSourceLabel = computed(
+  () => activeExport.value?.sources.find((s) => s.id === selectedSourceId.value)?.label ?? null,
+)
 
 /**
  * Fuentes del combobox del panel: filtradas por el buscador (en cliente) y
@@ -223,15 +259,19 @@ async function refreshAll() {
   }
 }
 
-/** Envuelve una acción: bloquea botones, toast y refresco del catálogo. */
-async function run(action: () => Promise<{ data: { message?: string } }>) {
+/**
+ * Envuelve una acción: bloquea botones, toast y refresco del catálogo. El
+ * mensaje va PREFIJADO con el nombre de la tarjeta/elemento (label) para
+ * saber de qué era la acción.
+ */
+async function run(action: () => Promise<{ data: { message?: string } }>, label?: string) {
   busy.value = true
   try {
     const { data } = await action()
-    if (data.message) toast.success(data.message)
+    if (data.message) toast.success(label ? `${label}: ${data.message}` : data.message)
     await refreshAll()
   } catch {
-    toast.danger(L.error)
+    toast.danger(label ? `${label}: ${L.error}` : L.error)
   } finally {
     busy.value = false
   }
@@ -240,7 +280,7 @@ async function run(action: () => Promise<{ data: { message?: string } }>) {
 // --- Acciones "de todas" del export (espejo de las previews) ---
 
 function generateMissing(exp: ExportInfo) {
-  run(() => props.api.post('/admin/pdfs/generate-missing', { type: exp.type }))
+  run(() => props.api.post('/admin/pdfs/generate-missing', { type: exp.type }), typeName(exp))
 }
 
 async function regenerateAll(exp: ExportInfo) {
@@ -251,7 +291,7 @@ async function regenerateAll(exp: ExportInfo) {
     variant: 'primary',
   })
   if (!ok) return
-  run(() => props.api.post('/admin/pdfs/regenerate-all', { type: exp.type }))
+  run(() => props.api.post('/admin/pdfs/regenerate-all', { type: exp.type }), typeName(exp))
 }
 
 async function deleteAll(exp: ExportInfo) {
@@ -262,22 +302,27 @@ async function deleteAll(exp: ExportInfo) {
     variant: 'danger',
   })
   if (!ok) return
-  run(() => props.api.delete('/admin/pdfs', { params: { type: exp.type } }))
+  run(() => props.api.delete('/admin/pdfs', { params: { type: exp.type } }), typeName(exp))
 }
 
 // --- Acciones del elemento del panel ---
 
 function generate(type: string, sourceId: number | null) {
-  run(() =>
-    props.api.post('/admin/pdfs/generate', {
-      type,
-      source_id: sourceId ?? undefined,
-    }),
+  run(
+    () =>
+      props.api.post('/admin/pdfs/generate', {
+        type,
+        source_id: sourceId ?? undefined,
+      }),
+    selectedSourceLabel.value ?? (activeExport.value ? typeName(activeExport.value) : undefined),
   )
 }
 
 function regenerate(pdf: PdfRow) {
-  run(() => props.api.post(`/admin/pdfs/${pdf.id}/regenerate`))
+  run(
+    () => props.api.post(`/admin/pdfs/${pdf.id}/regenerate`),
+    `${pdf.filename} (${pdf.locale.toUpperCase()})`,
+  )
 }
 
 async function del(pdf: PdfRow) {
@@ -288,7 +333,10 @@ async function del(pdf: PdfRow) {
     variant: 'danger',
   })
   if (!ok) return
-  run(() => props.api.delete(`/admin/pdfs/${pdf.id}`))
+  run(
+    () => props.api.delete(`/admin/pdfs/${pdf.id}`),
+    `${pdf.filename} (${pdf.locale.toUpperCase()})`,
+  )
 }
 
 function statusLabel(pdf: PdfRow): string {
@@ -351,7 +399,32 @@ defineExpose({ refreshAll })
       <div class="manager-panel">
         <p v-if="!activeExport" class="manager-panel__empty">{{ L.panelEmpty }}</p>
         <template v-else>
-          <p class="manager-panel__kicker">{{ typeName(activeExport) }}</p>
+          <!-- Nombre de la tarjeta (el export) + anterior/siguiente -->
+          <div class="manager-panel__kicker-row">
+            <h3 class="manager-detail__title">{{ typeName(activeExport) }}</h3>
+            <div class="manager-panel__nav">
+              <button
+                type="button"
+                class="manager-panel__nav-btn"
+                :disabled="!hasPrevType"
+                :title="L.prev"
+                :aria-label="L.prev"
+                @click="prevType"
+              >
+                <ChevronLeft :size="16" />
+              </button>
+              <button
+                type="button"
+                class="manager-panel__nav-btn"
+                :disabled="!hasNextType"
+                :title="L.next"
+                :aria-label="L.next"
+                @click="nextType"
+              >
+                <ChevronRight :size="16" />
+              </button>
+            </div>
+          </div>
 
           <!-- Acciones del export, PRIMERO (mismas que las previews) -->
           <div class="manager-detail__actions">
@@ -375,16 +448,40 @@ defineExpose({ refreshAll })
           <hr class="manager-panel__divider" />
 
           <!-- Por entidad: combobox (con buscador) de la entidad dueña -->
-          <SearchSelect
-            v-if="!activeExport.global"
-            :model-value="selectedSourceId"
-            :options="filteredSources"
-            :placeholder="L.selectSource"
-            :search-placeholder="L.searchPlaceholder"
-            :no-results="L.noResults"
-            @update:model-value="(id) => selectSource(Number(id))"
-            @search="(q) => (sourceSearch = q)"
-          />
+          <div v-if="!activeExport.global" class="manager-panel__select-row">
+            <SearchSelect
+              class="manager-panel__select"
+              :model-value="selectedSourceId"
+              :options="filteredSources"
+              :placeholder="L.selectSource"
+              :search-placeholder="L.searchPlaceholder"
+              :no-results="L.noResults"
+              @update:model-value="(id) => selectSource(Number(id))"
+              @search="(q) => (sourceSearch = q)"
+            />
+            <div class="manager-panel__nav">
+              <button
+                type="button"
+                class="manager-panel__nav-btn"
+                :disabled="!hasPrevSource"
+                :title="L.prev"
+                :aria-label="L.prev"
+                @click="prevSource"
+              >
+                <ChevronLeft :size="16" />
+              </button>
+              <button
+                type="button"
+                class="manager-panel__nav-btn"
+                :disabled="!hasNextSource"
+                :title="L.next"
+                :aria-label="L.next"
+                @click="nextSource"
+              >
+                <ChevronRight :size="16" />
+              </button>
+            </div>
+          </div>
 
           <div v-if="panelRows" class="manager-detail">
             <div v-if="!activeExport.global" class="manager-detail__actions">

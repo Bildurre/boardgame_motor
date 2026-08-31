@@ -178,12 +178,30 @@
     margin: 0;
   }
 
-  // Fila del kicker con las flechas anterior/siguiente del panel.
+  // Fila del NOMBRE del elemento con las flechas anterior/siguiente del
+  // panel (el tipo de modelo no se repite: la sección ya se sabe).
   &__kicker-row {
     display: flex;
     align-items: center;
     justify-content: space-between;
     gap: $space-2;
+
+    // El nombre encoge y parte sin empujar las flechas.
+    .manager-detail__title {
+      min-width: 0;
+    }
+  }
+
+  // Combobox del panel con las flechas del ELEMENTO al lado.
+  &__select-row {
+    display: flex;
+    align-items: center;
+    gap: $space-2;
+  }
+
+  &__select {
+    flex: 1 1 auto;
+    min-width: 0;
   }
 
   &__nav {

@@ -32,5 +32,7 @@ export function usePdfLabels(): ComputedRef<PdfManagerLabels> {
     noResults: t('pdfs.noResults'),
     generatedAt: t('pdfs.generatedAt'),
     total: t('previewsManager.total'),
+    prev: t('common.pagination.prev'),
+    next: t('common.pagination.next'),
   }))
 }

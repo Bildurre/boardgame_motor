@@ -1,7 +1,16 @@
 <script setup lang="ts">
 import { computed, onBeforeUnmount, onMounted, reactive, ref } from 'vue'
 import type { AxiosInstance } from 'axios'
-import { GripVertical, List, Plus, Printer, SquarePen, Trash2 } from '@lucide/vue'
+import {
+  ChevronLeft,
+  ChevronRight,
+  GripVertical,
+  List,
+  Plus,
+  Printer,
+  SquarePen,
+  Trash2,
+} from '@lucide/vue'
 import {
   BaseButton,
   BaseCheckbox,
@@ -49,6 +58,8 @@ export interface PageBlocksLabels {
   confirmDelete: string
   error: string
   panelTitle: string
+  prev: string
+  next: string
   panelEmpty: string
   panelContent: string
   parent: string
@@ -75,6 +86,8 @@ const defaultLabels: PageBlocksLabels = {
   confirmDelete: '¿Borrar este bloque?',
   error: 'No se ha podido completar la acción.',
   panelTitle: 'Bloque',
+  prev: 'Anterior',
+  next: 'Siguiente',
   panelEmpty: 'Selecciona un bloque para ver sus acciones.',
   panelContent: 'Contenido',
   parent: 'Bloque padre (índices indentados)',
@@ -131,6 +144,19 @@ const types = ref<BlockTypeSchema[]>([])
 const blocks = ref<BlockRow[]>([])
 const selectedId = ref<number | null>(null)
 const selected = computed(() => blocks.value.find((b) => b.id === selectedId.value) ?? null)
+
+// Anterior/siguiente del panel, sobre el MISMO orden del listado de bloques.
+const selectedIndex = computed(() => blocks.value.findIndex((b) => b.id === selectedId.value))
+const hasPrev = computed(() => selectedIndex.value > 0)
+const hasNext = computed(
+  () => selectedIndex.value >= 0 && selectedIndex.value < blocks.value.length - 1,
+)
+function selectPrev() {
+  if (hasPrev.value) selectedId.value = blocks.value[selectedIndex.value - 1].id
+}
+function selectNext() {
+  if (hasNext.value) selectedId.value = blocks.value[selectedIndex.value + 1].id
+}
 
 /** Toda la fila selecciona, salvo sus controles interiores y el grip. */
 function selectBlock(block: BlockRow, event: MouseEvent) {
@@ -732,7 +758,32 @@ defineExpose({ reload: load })
           <p class="manager-panel__empty">{{ L.panelEmpty }}</p>
         </slot>
         <template v-else>
-          <p class="manager-panel__kicker">{{ L.panelTitle }}</p>
+          <!-- El TIPO del bloque (su nombre) + anterior/siguiente -->
+          <div class="manager-panel__kicker-row">
+            <h3 class="manager-detail__title">{{ typeName(selected.type) }}</h3>
+            <div class="manager-panel__nav">
+              <button
+                type="button"
+                class="manager-panel__nav-btn"
+                :disabled="!hasPrev"
+                :title="L.prev"
+                :aria-label="L.prev"
+                @click="selectPrev"
+              >
+                <ChevronLeft :size="16" />
+              </button>
+              <button
+                type="button"
+                class="manager-panel__nav-btn"
+                :disabled="!hasNext"
+                :title="L.next"
+                :aria-label="L.next"
+                @click="selectNext"
+              >
+                <ChevronRight :size="16" />
+              </button>
+            </div>
+          </div>
 
           <!-- Acciones de verdad (patrón panel): los interruptores
                PDF/Índice van en su propia sección, debajo -->
@@ -772,10 +823,6 @@ defineExpose({ reload: load })
               {{ L.indexableShort }}
             </BaseButton>
           </div>
-
-          <!-- El TIPO del bloque como título del panel (patrón de los
-               paneles de entidad), debajo del estado y fuera de secciones -->
-          <h3 class="manager-detail__title">{{ typeName(selected.type) }}</h3>
 
           <!-- Contenido: cada campo del bloque con su valor (truncado) -->
           <section v-if="selectedFields.length" class="manager-panel__section">

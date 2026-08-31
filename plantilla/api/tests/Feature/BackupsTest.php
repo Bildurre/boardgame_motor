@@ -41,8 +41,10 @@ it('el admin crea (en cola), lista, descarga y borra copias de seguridad', funct
 
     // Crear va SIEMPRE en cola (202); en tests la cola sync ejecuta el job
     // inline, así que el listado de la respuesta ya trae la copia nueva,
-    // con el prefijo manual- (origen) y el pendiente limpiado.
-    $created = $this->actingAs($admin)->postJson('/api/admin/backups')
+    // con el prefijo manual- (origen) y el pendiente limpiado. Con la BBDD
+    // de tests en :memory: no hay fichero que copiar: la manual pide el
+    // storage (include_media) para que el zip tenga contenido.
+    $created = $this->actingAs($admin)->postJson('/api/admin/backups', ['include_media' => true])
         ->assertAccepted()
         ->assertJsonPath('queued', true);
     $file = $created->json('data.0.file');

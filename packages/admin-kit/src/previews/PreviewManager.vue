@@ -1,7 +1,15 @@
 <script setup lang="ts">
 import { computed, onMounted, reactive, ref } from 'vue'
 import type { AxiosInstance } from 'axios'
-import { Eraser, ImageOff, ImagePlus, RefreshCw, Trash2 } from '@lucide/vue'
+import {
+  ChevronLeft,
+  ChevronRight,
+  Eraser,
+  ImageOff,
+  ImagePlus,
+  RefreshCw,
+  Trash2,
+} from '@lucide/vue'
 import { BaseButton, SearchSelect, useConfirm, useToast } from '@edc-motor/ui'
 import ManagerCard from '../components/ManagerCard.vue'
 import { useRightSidebar } from '../composables/useRightSidebar'
@@ -39,6 +47,8 @@ export interface PreviewManagerLabels {
   confirm: string
   cancel: string
   error: string
+  prev: string
+  next: string
 }
 
 const defaultLabels: PreviewManagerLabels = {
@@ -64,6 +74,8 @@ const defaultLabels: PreviewManagerLabels = {
   confirm: 'Confirmar',
   cancel: 'Cancelar',
   error: 'No se ha podido completar la acción.',
+  prev: 'Anterior',
+  next: 'Siguiente',
 }
 
 const props = withDefaults(
@@ -132,6 +144,32 @@ const itemOptions = computed(() =>
 
 const activeStatus = computed(() => types.value.find((t) => t.key === activeType.value) ?? null)
 const selectedItem = computed(() => items.value.find((i) => i.id === selectedId.value) ?? null)
+
+// Anterior/siguiente del panel: el TIPO (la tarjeta activa) arriba, y el
+// ELEMENTO del combobox (orden alfabético) junto al propio select.
+const typeIndex = computed(() => sortedTypes.value.findIndex((t) => t.key === activeType.value))
+const hasPrevType = computed(() => typeIndex.value > 0)
+const hasNextType = computed(
+  () => typeIndex.value >= 0 && typeIndex.value < sortedTypes.value.length - 1,
+)
+function prevType() {
+  if (hasPrevType.value) activate(sortedTypes.value[typeIndex.value - 1].key)
+}
+function nextType() {
+  if (hasNextType.value) activate(sortedTypes.value[typeIndex.value + 1].key)
+}
+
+const itemIndex = computed(() => itemOptions.value.findIndex((o) => o.id === selectedId.value))
+const hasPrevItem = computed(() => itemIndex.value > 0)
+const hasNextItem = computed(
+  () => itemIndex.value >= 0 && itemIndex.value < itemOptions.value.length - 1,
+)
+function prevItem() {
+  if (hasPrevItem.value) selectedId.value = Number(itemOptions.value[itemIndex.value - 1].id)
+}
+function nextItem() {
+  if (hasNextItem.value) selectedId.value = Number(itemOptions.value[itemIndex.value + 1].id)
+}
 const missingLocales = computed(() =>
   selectedItem.value
     ? Object.entries(selectedItem.value.previews)
@@ -203,15 +241,23 @@ async function refreshAll() {
   if (activeType.value) await loadItems()
 }
 
-/** Envuelve una acción: bloquea botones, toast con el mensaje del servidor. */
-async function run(action: () => Promise<{ data: { message?: string } }>, after?: () => void) {
+/**
+ * Envuelve una acción: bloquea botones, toast con el mensaje del servidor —
+ * PREFIJADO con el nombre de la tarjeta/elemento (label) para saber de qué
+ * era la acción.
+ */
+async function run(
+  action: () => Promise<{ data: { message?: string } }>,
+  after?: () => void,
+  label?: string,
+) {
   busy.value = true
   try {
     const { data } = await action()
-    if (data.message) toast.success(data.message)
+    if (data.message) toast.success(label ? `${label}: ${data.message}` : data.message)
     after?.()
   } catch {
-    toast.danger(L.error)
+    toast.danger(label ? `${label}: ${L.error}` : L.error)
   } finally {
     busy.value = false
   }
@@ -220,7 +266,7 @@ async function run(action: () => Promise<{ data: { message?: string } }>, after?
 // --- Acciones "de todas" (tarjeta) ---
 
 function generateType(type: TypeStatus) {
-  run(() => props.api.post(`/admin/previews/${type.key}/generate`))
+  run(() => props.api.post(`/admin/previews/${type.key}/generate`), undefined, typeName(type))
 }
 
 async function regenerateType(type: TypeStatus) {
@@ -231,7 +277,7 @@ async function regenerateType(type: TypeStatus) {
     variant: 'primary',
   })
   if (!ok) return
-  run(() => props.api.post(`/admin/previews/${type.key}/regenerate`))
+  run(() => props.api.post(`/admin/previews/${type.key}/regenerate`), undefined, typeName(type))
 }
 
 async function deleteType(type: TypeStatus) {
@@ -245,6 +291,7 @@ async function deleteType(type: TypeStatus) {
   run(
     () => props.api.delete(`/admin/previews/${type.key}`),
     () => refreshAll(),
+    typeName(type),
   )
 }
 
@@ -266,12 +313,14 @@ function regenerateItem() {
   run(
     () => props.api.post(`/admin/previews/${activeType.value}/${selectedId.value}/regenerate`),
     () => refreshAll(),
+    selectedItem.value?.label,
   )
 }
 
 /** Encola solo los idiomas que faltan del elemento elegido. */
 async function generateMissingItem() {
   if (!activeType.value || !selectedId.value) return
+  const label = selectedItem.value?.label
   busy.value = true
   let message: string | undefined
   try {
@@ -282,10 +331,10 @@ async function generateMissingItem() {
       )
       message = data.message ?? message
     }
-    if (message) toast.success(message)
+    if (message) toast.success(label ? `${label}: ${message}` : message)
     await refreshAll()
   } catch {
-    toast.danger(L.error)
+    toast.danger(label ? `${label}: ${L.error}` : L.error)
   } finally {
     busy.value = false
   }
@@ -303,6 +352,7 @@ async function deleteItem() {
   run(
     () => props.api.delete(`/admin/previews/${activeType.value}/${selectedId.value}`),
     () => refreshAll(),
+    selectedItem.value?.label,
   )
 }
 
@@ -353,7 +403,32 @@ defineExpose({ refreshAll })
       <div class="manager-panel">
         <p v-if="!activeStatus" class="manager-panel__empty">{{ L.panelEmpty }}</p>
         <template v-else>
-          <p class="manager-panel__kicker">{{ typeName(activeStatus) }}</p>
+          <!-- Nombre de la tarjeta (el tipo) + anterior/siguiente -->
+          <div class="manager-panel__kicker-row">
+            <h3 class="manager-detail__title">{{ typeName(activeStatus) }}</h3>
+            <div class="manager-panel__nav">
+              <button
+                type="button"
+                class="manager-panel__nav-btn"
+                :disabled="!hasPrevType"
+                :title="L.prev"
+                :aria-label="L.prev"
+                @click="prevType"
+              >
+                <ChevronLeft :size="16" />
+              </button>
+              <button
+                type="button"
+                class="manager-panel__nav-btn"
+                :disabled="!hasNextType"
+                :title="L.next"
+                :aria-label="L.next"
+                @click="nextType"
+              >
+                <ChevronRight :size="16" />
+              </button>
+            </div>
+          </div>
 
           <!-- Acciones PRIMERO; después, secciones separadas (patrón panel) -->
           <div class="manager-detail__actions">
@@ -376,18 +451,45 @@ defineExpose({ refreshAll })
 
           <hr class="manager-panel__divider" />
 
-          <SearchSelect
-            :model-value="selectedId"
-            :options="itemOptions"
-            :placeholder="L.selectItem"
-            :search-placeholder="L.searchPlaceholder"
-            :no-results="L.noResults"
-            :load-more-label="L.loadMore"
-            :can-load-more="page.current < page.last"
-            @update:model-value="(id) => (selectedId = Number(id))"
-            @search="onSearch"
-            @load-more="loadItems(page.current + 1)"
-          />
+          <!-- El combobox con las flechas del ELEMENTO al lado (recorren
+               sus opciones en el mismo orden alfabético) -->
+          <div class="manager-panel__select-row">
+            <SearchSelect
+              class="manager-panel__select"
+              :model-value="selectedId"
+              :options="itemOptions"
+              :placeholder="L.selectItem"
+              :search-placeholder="L.searchPlaceholder"
+              :no-results="L.noResults"
+              :load-more-label="L.loadMore"
+              :can-load-more="page.current < page.last"
+              @update:model-value="(id) => (selectedId = Number(id))"
+              @search="onSearch"
+              @load-more="loadItems(page.current + 1)"
+            />
+            <div class="manager-panel__nav">
+              <button
+                type="button"
+                class="manager-panel__nav-btn"
+                :disabled="!hasPrevItem"
+                :title="L.prev"
+                :aria-label="L.prev"
+                @click="prevItem"
+              >
+                <ChevronLeft :size="16" />
+              </button>
+              <button
+                type="button"
+                class="manager-panel__nav-btn"
+                :disabled="!hasNextItem"
+                :title="L.next"
+                :aria-label="L.next"
+                @click="nextItem"
+              >
+                <ChevronRight :size="16" />
+              </button>
+            </div>
+          </div>
 
           <div v-if="selectedItem" class="manager-detail">
             <h3 class="manager-detail__title">{{ selectedItem.label }}</h3>
