@@ -88,9 +88,14 @@ it('la copia automática puede llevar el storage y la manual decide por su cuent
         'keep_days' => 14, 'include_media' => true,
     ])->assertOk()->assertJsonPath('schedule.include_media', true);
 
-    // …y gobierna la config de spatie que usa el scheduler (sin argumento).
+    // …y gobierna la config de spatie que usa el scheduler (sin argumento):
+    // SOLO los originales (previews y PDF generados quedan fuera) y con
+    // entradas relativas al proyecto (restaurables en otra instalación).
     MotorBackup::applyConfig();
-    expect(config('backup.backup.source.files.include'))->toContain(storage_path('app/public'));
+    expect(config('backup.backup.source.files.include'))->toContain(storage_path('app/public'))
+        ->and(config('backup.backup.source.files.exclude'))->toContain(storage_path('app/public/previews'))
+        ->and(config('backup.backup.source.files.exclude'))->toContain(storage_path('app/public/pdfs'))
+        ->and(config('backup.backup.source.files.relative_path'))->toBe(base_path());
 
     // La manual decide explícitamente: sin marcar, va SIN storage aunque la
     // automática lo lleve (el job reaplica la config con su elección).
@@ -184,6 +189,35 @@ it('restaurar una copia importa el dump SQL machacando la BBDD actual', function
         ->assertOk()
         ->assertJsonPath('restored', 'db-dumps/sqlite-database.sql');
     expect(DB::table('restore_probe')->value('name'))->toBe('desde-la-copia');
+
+    @unlink($zip);
+});
+
+it('restaurar devuelve a su sitio el storage que traiga la copia (originales)', function () {
+    $admin = motorUser('admin');
+    Storage::fake('public');
+
+    // Una copia con BBDD y dos ficheros de storage (uno relativo al
+    // proyecto, como los hace MotorBackup; otro con ruta absoluta, como las
+    // copias viejas), más una preview, que también vuelve si viene.
+    $dump = "CREATE TABLE restore_probe (id INTEGER PRIMARY KEY, name TEXT);\n";
+    $zip = makeBackupZip([
+        'db-dumps/sqlite-database.sql' => $dump,
+        'storage/app/public/card/1/arte.png' => 'PNG-ARTE',
+        'var/www/otra/storage/app/public/icon/2/icono.svg' => '<svg/>',
+        'storage/app/public/../../fuera.txt' => 'nunca',
+    ]);
+    Storage::disk('backups')->putFileAs(config('backup.backup.name'), $zip, 'upload-con-storage.zip');
+
+    $this->actingAs($admin)->postJson('/api/admin/backups/upload-con-storage.zip/restore')
+        ->assertOk()
+        ->assertJsonPath('restored', 'db-dumps/sqlite-database.sql')
+        ->assertJsonPath('restored_files', 2);
+
+    Storage::disk('public')->assertExists('card/1/arte.png');
+    Storage::disk('public')->assertExists('icon/2/icono.svg');
+    // La entrada con `..` se ha saltado (restored_files = 2, no 3).
+    expect(Storage::disk('public')->get('card/1/arte.png'))->toBe('PNG-ARTE');
 
     @unlink($zip);
 });
