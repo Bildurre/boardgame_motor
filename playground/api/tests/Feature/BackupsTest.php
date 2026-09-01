@@ -73,6 +73,31 @@ it('el admin crea (en cola), lista, descarga y borra copias de seguridad', funct
         ->assertNotFound();
 });
 
+it('la copia automática puede llevar el storage y la manual decide por su cuenta', function () {
+    $admin = motorUser('admin');
+
+    // Por defecto la automática va sin storage y el índice lo dice.
+    $this->actingAs($admin)->getJson('/api/admin/backups')
+        ->assertOk()
+        ->assertJsonPath('schedule.include_media', false)
+        ->assertJsonPath('upload_max_mb', (int) config('motor.backup.upload_max_mb'));
+
+    // Activar el storage en la automática se guarda con el resto del horario…
+    $this->actingAs($admin)->putJson('/api/admin/backups/schedule', [
+        'auto' => true, 'frequency' => 'daily', 'time' => '03:00', 'weekday' => 1,
+        'keep_days' => 14, 'include_media' => true,
+    ])->assertOk()->assertJsonPath('schedule.include_media', true);
+
+    // …y gobierna la config de spatie que usa el scheduler (sin argumento).
+    MotorBackup::applyConfig();
+    expect(config('backup.backup.source.files.include'))->toContain(storage_path('app/public'));
+
+    // La manual decide explícitamente: sin marcar, va SIN storage aunque la
+    // automática lo lleve (el job reaplica la config con su elección).
+    MotorBackup::applyConfig(includeMedia: false);
+    expect(config('backup.backup.source.files.include'))->not->toContain(storage_path('app/public'));
+});
+
 it('la copia manual va en cola con flag pending mientras el worker no acaba', function () {
     $admin = motorUser('admin');
 
