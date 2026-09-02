@@ -792,14 +792,21 @@ de **`GET /api/site`** al arrancar):
   del locale actual con fallback al por defecto — `logoUrl`/`logoInline` del
   store del sitio) y **favicon**. Cada logo SVG viaja **inlineado** en el
   payload (`logo_inline`, mapa por idioma) y se pinta con `currentColor`:
-  hereda el acento activo (un fichero cross-origin no valdría — fetch/mask
+  hereda el acento de marca (un fichero cross-origin no valdría — fetch/mask
   exigen CORS). Basta `fill="currentColor"` / `stroke="currentColor"` en las
   formas del SVG; lo que lleve color propio se queda como esté.
-- **Acento:** fijo (un color) o **ALEATORIO estilo CDL**: una lista de colores
-  candidatos de la que la SPA sortea uno al cargar **y re-sortea en cada
-  navegación** (`router.afterEach` → `site.onNavigate()`, el disparador extra
-  que necesita una SPA que no recarga). Los tonos 200–700 se derivan del HEX
-  con `color-mix`; el logo SVG se recolorea con cada sorteo.
+- **Acentos:** DOS colores fijos, `accent_color` (**acento 1, marca**: logos,
+  enlaces, foco, selección, navegación) y `accent_2_color` (**acento 2,
+  acción**: botón primario, CTA, kickers, cifras), elegidos de la **paleta de
+  18 tonos de la rueda OKLCH** del tema (`_theme.scss` de `@edc-motor/ui`:
+  cada 20° desde el rojo, un tono por color, el mismo en claro y oscuro; los
+  nodos rojo/amarillo/verde/azul son a la vez danger/warning/success/info).
+  Cada acento pisa solo el `--accent-500` / `--accent-2-500` del tema
+  (`applyAccents()` del ui, desde el store del sitio de la app y desde
+  `loadSiteAccents(api)` en el arranque del admin, que viste la misma
+  pareja); el resto de tonos (`100…700`, `-soft`) los deriva el tema por
+  `color-mix`. Ya no hay modo aleatorio: las claves antiguas `accent_mode` y
+  `accent_colors` se ignoran y `update()` las retira de lo guardado.
 - **Fuentes:** títulos y texto por separado, del catálogo
   `motor.site.fonts`. Una entrada puede ser una pila CSS a secas (pilas del
   sistema) o `{label, stack, files}` — los `files` son woff2 en
