@@ -13,6 +13,16 @@ admin). Paquete **fuente** (se consume vía Vite). Versión de tren con
   OKLCH) a un matiz cálido (75°, croma 0,010) con las MISMAS luminosidades:
   los contrastes no cambian, solo la temperatura. Fondo claro `#fef9f3`,
   oscuro `#14100c`.
+- **Textos secundarios con más presencia.** `--text-2` y `--text-3` suben de
+  contraste en los dos temas, sobre todo en el claro: en claro pasan a
+  `#5c5751` (6,8:1 sobre el fondo, antes 5,2:1) y `#706b64` (5,0:1, antes
+  3,7:1); en oscuro a `#b6b0a9` (8,8:1) y `#97918a` (6,1:1).
+
+## [0.5.37] — 2026-09-02
+
+- Sin cambios propios: versión de tren.
+
+## [0.5.36] — 2026-09-02
 
 ### Revertido
 

@@ -12,7 +12,7 @@ El formato sigue [Keep a Changelog](https://keepachangelog.com/es/) y el
 versionado, [SemVer](https://semver.org/lang/es/) (mientras estemos en `0.x`,
 los cambios de API pueden llegar en versiones menores).
 
-## [Sin publicar]
+## [0.5.37] — 2026-09-02
 - Plantilla y playground: se revierten la Configuración con dos acentos de
   0.5.35 y el color del juego de 0.5.36; vuelve el acento fijo o aleatorio (store del sitio con sorteo al
   navegar, formulario, i18n, seeders y tests) y los colores estáticos del
