@@ -4,6 +4,16 @@ Componentes Vue 3 + SCSS para las webs públicas (y piezas compartidas con el
 admin). Paquete **fuente** (se consume vía Vite). Versión de tren con
 `edc-motor/core` y `@edc-motor/admin-kit`.
 
+## [Sin publicar]
+
+### Corregido
+
+- **Checkbox en fila con un campo con etiqueta** (`.form-row > .checkbox`,
+  p. ej. `Field::boolean()->row()` junto a un select): la casilla queda
+  centrada con la CAJA del input de al lado, no con etiqueta + input (se
+  pega al fondo de la fila y mide lo que un input). Apilado en el modal
+  angosto vuelve a su alto natural.
+
 ## [0.5.31] — 2026-09-02
 
 - Sin cambios propios: versión de tren.

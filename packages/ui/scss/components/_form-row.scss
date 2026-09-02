@@ -28,8 +28,16 @@
   > * { min-width: 0; }
 
   // Un checkbox como celda: flex para que se comporte como bloque de su
-  // celda junto a sus compañeros de fila.
-  > .checkbox { display: flex; }
+  // celda y, junto a un campo con etiqueta, CENTRADO con la caja del input
+  // (no con el conjunto etiqueta + input): la celda se pega al fondo de la
+  // fila —donde asienta el input de al lado— y mide lo que un input, con
+  // la casilla centrada dentro.
+  > .checkbox {
+    display: flex;
+    align-items: center;
+    align-self: end;
+    min-height: $input-height;
+  }
 
   // Tres columnas fijas iguales, para filas de 3 campos pequeños.
   &--3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
@@ -90,6 +98,12 @@
     &--wide-left,
     &--media {
       grid-template-columns: minmax(0, 1fr);
+    }
+
+    // Apilado: el checkbox ya no tiene input al lado con el que alinearse.
+    > .checkbox {
+      align-self: start;
+      min-height: 0;
     }
   }
 }
