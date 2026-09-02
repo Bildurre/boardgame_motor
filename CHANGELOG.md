@@ -18,6 +18,8 @@ los cambios de API pueden llegar en versiones menores).
   del admin con `loadSiteAccents`, formulario e i18n, seeders y tests);
   colores estáticos de manifest e index.html al violeta de marca.
 
+## [0.5.34] — 2026-09-02
+
 - Plantilla y playground: el `<meta name="theme-color">` vuelve a ser
   estático (el mismo color que el `theme_color` del manifest); `applyAccent()`
   del store del sitio ya no lo tiñe en caliente. Chrome en Android no lo

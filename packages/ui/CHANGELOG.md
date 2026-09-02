@@ -25,6 +25,10 @@ admin). Paquete **fuente** (se consume vía Vite). Versión de tren con
   acentos de la Configuración del sitio; el store del sitio de la app y el
   arranque del admin los usan (misma pareja en las dos SPA).
 
+## [0.5.34] — 2026-09-02
+
+- Sin cambios propios: versión de tren.
+
 ## [0.5.33] — 2026-09-02
 
 ### Corregido
