@@ -220,8 +220,25 @@
 // rompan el grid ni re-aniden gaps.
 .form-row > .schema-fields { display: contents; }
 
-// El checkbox de un campo del esquema se centra en vertical junto a sus
-// compañeros de fila (que llevan etiqueta encima y quedarían descolgados).
+// El checkbox de un campo del esquema, en fila con compañeros que llevan
+// etiqueta encima: NO se centra con el campo entero (etiqueta + input), se
+// alinea con la CAJA del input de al lado — la celda se pega al fondo de
+// la fila, donde asienta ese input, y mide lo que un input con la casilla
+// centrada dentro. Cuando la fila apila (modal angosto) vuelve a su alto.
 .form-row .schema-fields__field:has(> .schema-fields__field-main > .checkbox) {
-  align-self: center;
+  align-self: end;
+
+  > .schema-fields__field-main {
+    display: flex;
+    align-items: center;
+    min-height: $input-height;
+  }
+}
+
+@container modal-body (max-width: #{$bp-sm - 1px}) {
+  .form-row .schema-fields__field:has(> .schema-fields__field-main > .checkbox) {
+    align-self: start;
+
+    > .schema-fields__field-main { min-height: 0; }
+  }
 }

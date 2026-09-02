@@ -3,6 +3,16 @@
 Kit de construcción del panel de administración (sobre `@edc-motor/ui`). Paquete
 **fuente** (se consume vía Vite). Versión de tren con `edc-motor/core` y `@edc-motor/ui`.
 
+## [Sin publicar]
+
+### Corregido
+
+- **Checkbox de un campo del esquema en fila** (`Field::boolean()->row()`
+  junto a un select, p. ej. «Tarjetas estrechas» del índice de entidad):
+  se alinea con la CAJA del input de al lado, no con el campo entero
+  (etiqueta + input): la celda va al fondo de la fila y mide lo que un
+  input, con la casilla centrada. Apilado en el modal angosto, alto natural.
+
 ## [0.5.33] — 2026-09-02
 
 - Sin cambios propios: versión de tren.
