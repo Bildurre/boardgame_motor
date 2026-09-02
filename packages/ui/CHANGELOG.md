@@ -4,14 +4,15 @@ Componentes Vue 3 + SCSS para las webs públicas (y piezas compartidas con el
 admin). Paquete **fuente** (se consume vía Vite). Versión de tren con
 `edc-motor/core` y `@edc-motor/admin-kit`.
 
-## [Sin publicar]
+## [0.5.36] — 2026-09-02
 
 ### Revertido
 
 - **Vuelve el tema de 0.5.34**: acento morado con escala fija, semánticos en
   hex, toasts con sus fondos, PaletteColorPicker con la paleta heredada de
   kontuan. Desaparecen la paleta de 18 tonos (`--palette-*`), el acento 2 y
-  `applyAccents()`/`loadSiteAccents()`: se revierte la 0.5.35 entera.
+  `applyAccents()`/`loadSiteAccents()`: se revierten la 0.5.35 y la 0.5.36 enteras (paleta, acentos 2 y 3,
+  neutros carbón/hueso).
 
 ## [0.5.35] — 2026-09-02
 

@@ -13,10 +13,15 @@ versionado, [SemVer](https://semver.org/lang/es/) (mientras estemos en `0.x`,
 los cambios de API pueden llegar en versiones menores).
 
 ## [Sin publicar]
-- Plantilla y playground: se revierte la Configuración con dos acentos de
-  0.5.35; vuelve el acento fijo o aleatorio (store del sitio con sorteo al
+- Plantilla y playground: se revierten la Configuración con dos acentos de
+  0.5.35 y el color del juego de 0.5.36; vuelve el acento fijo o aleatorio (store del sitio con sorteo al
   navegar, formulario, i18n, seeders y tests) y los colores estáticos del
   manifest e index.html al morado.
+
+## [0.5.36] — 2026-09-02
+- Plantilla y playground: Configuración con el **color del juego**
+  (`game_color`) en vez de dos acentos; store, formulario, i18n, seeders,
+  tests y colores estáticos de manifest/index.html al índigo de marca.
 
 ## [0.5.35] — 2026-09-02
 - Plantilla y playground: Configuración con DOS acentos (marca y acción)
