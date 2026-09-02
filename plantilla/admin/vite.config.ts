@@ -20,7 +20,7 @@ export default defineConfig({
         name: 'Plantilla EdC Admin',
         short_name: 'Plantilla Admin',
         description: 'Panel de administración del juego',
-        theme_color: '#6c5ce7',
+        theme_color: '#955dcd',
         background_color: '#0f1115',
         display: 'standalone',
         scope: '/',

@@ -20,7 +20,7 @@ export default defineConfig({
         name: 'EdC Playground Admin',
         short_name: 'EdC Admin',
         description: 'Panel de administración de prueba del EdC Motor',
-        theme_color: '#6c5ce7',
+        theme_color: '#955dcd',
         background_color: '#0f1115',
         display: 'standalone',
         scope: '/',

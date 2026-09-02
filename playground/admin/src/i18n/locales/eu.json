@@ -491,7 +491,8 @@
     "background": {
       "token:veil-60": "% 60eko beloa",
       "token:veil-80": "% 80ko beloa",
-      "token:accent-soft": "Azentua"
+      "token:accent-soft": "1. azentua",
+      "token:accent-2-soft": "2. azentua"
     },
     "image_position": {
       "top": "Goian",
@@ -523,10 +524,9 @@
       "logo": "Logoa (SVG/PNG)",
       "favicon": "Favicon-a (PNG/SVG)",
       "faviconHint": "Nabigatzailearen fitxako ikonoa",
-      "accentMode": "Azentu-kolorea",
-      "accentColor": "Kolorea",
-      "accentColors": "Gehitu kolore hautagaia",
-      "accentColorsHint": "Kolore hauetako bat zozketatzen da weba kargatzean eta nabigatzean.",
+      "accentColor": "1. azentua (marka)",
+      "accent2Color": "2. azentua (ekintza)",
+      "accentHint": "Marka: logoak, estekak, fokua eta hautapena. Ekintza: botoi nagusia, ekintzarako deiak eta zifrak. Webean eta administrazioan aplikatzen dira.",
       "fontHeadings": "Izenburuen letra-tipoa",
       "fontBody": "Testuaren letra-tipoa",
       "footerText": "Oinaren testua",
@@ -536,11 +536,6 @@
       "fontDrag": "Arrastatu letra-tipo bat edo egin klik",
       "fontSpecial": "Letra berezia (aipuak)"
     },
-    "accentModes": {
-      "fixed": "Finkoa",
-      "random": "Ausazkoa (CDL erakoa)"
-    },
-    "addColor": "Gehitu",
     "fontPreviewHeading": "Zazpi erresumak — Adibide izenburua",
     "fontPreviewBody": "Nahastu sorta eta banatu bost karta jokalari bakoitzari.",
     "fonts": {

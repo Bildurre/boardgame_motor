@@ -1,8 +1,33 @@
 // =========================================================
-// EdC Tokens — adaptados de kontuan (acento morado)
+// EdC Tokens — adaptados de kontuan
 // =========================================================
 
-// Acento (CSS vars, ver _theme.scss) — un juego puede sobreescribirlas
+// Paleta de 18 tonos de la rueda OKLCH (CSS vars, ver _theme.scss): un
+// tono por color, el mismo en ambos temas. Cuatro los fija la función
+// (rojo/amarillo/verde/azul = danger/warning/success/info); el resto queda
+// libre para fondos, casas, gráficas y acentos.
+$palette-rojo: var(--palette-rojo);
+$palette-coral: var(--palette-coral);
+$palette-naranja: var(--palette-naranja);
+$palette-amarillo: var(--palette-amarillo);
+$palette-lima: var(--palette-lima);
+$palette-hierba: var(--palette-hierba);
+$palette-verde: var(--palette-verde);
+$palette-esmeralda: var(--palette-esmeralda);
+$palette-teal: var(--palette-teal);
+$palette-cian: var(--palette-cian);
+$palette-celeste: var(--palette-celeste);
+$palette-azur: var(--palette-azur);
+$palette-azul: var(--palette-azul);
+$palette-indigo: var(--palette-indigo);
+$palette-violeta: var(--palette-violeta);
+$palette-purpura: var(--palette-purpura);
+$palette-fucsia: var(--palette-fucsia);
+$palette-carmin: var(--palette-carmin);
+
+// Acento 1, MARCA (CSS vars, ver _theme.scss): logos, enlaces, foco,
+// selección, navegación. Un juego puede sobreescribir el 500 y la escala
+// se deriva sola.
 $accent-100: var(--accent-100);
 $accent-200: var(--accent-200);
 $accent-300: var(--accent-300);
@@ -11,11 +36,24 @@ $accent-500: var(--accent-500);
 $accent-600: var(--accent-600);
 $accent-700: var(--accent-700);
 
-// Semánticos
-$info: #6c8cff;
-$success: #4ade80;
-$warning: #fbbf24;
-$danger: #ff6b6b;
+// Acento 2, ACCIÓN: botón primario, CTA de bloque, kickers, cifras.
+$accent-2-100: var(--accent-2-100);
+$accent-2-200: var(--accent-2-200);
+$accent-2-300: var(--accent-2-300);
+$accent-2-400: var(--accent-2-400);
+$accent-2-500: var(--accent-2-500);
+$accent-2-600: var(--accent-2-600);
+$accent-2-700: var(--accent-2-700);
+
+// Semánticos (los cuatro nodos anclados de la paleta) y su fondo teñido.
+$info: var(--info);
+$success: var(--success);
+$warning: var(--warning);
+$danger: var(--danger);
+$info-soft: var(--info-soft);
+$success-soft: var(--success-soft);
+$warning-soft: var(--warning-soft);
+$danger-soft: var(--danger-soft);
 
 // Neutros (CSS vars, themed)
 $bg: var(--bg);
@@ -91,6 +129,7 @@ $color-text: $text-1;
 $color-text-muted: $text-2;
 $color-accent: $accent-500;
 $color-accent-dark: $accent-600;
+$color-accent-2: $accent-2-500;
 $font-sans: $k-font-sans;
 
 // Sombras (CSS vars)

@@ -495,7 +495,8 @@
     "background": {
       "token:veil-60": "Veil 60%",
       "token:veil-80": "Veil 80%",
-      "token:accent-soft": "Accent"
+      "token:accent-soft": "Accent 1",
+      "token:accent-2-soft": "Accent 2"
     },
     "image_position": {
       "top": "Top",
@@ -527,10 +528,9 @@
       "logo": "Logo (SVG/PNG)",
       "favicon": "Favicon (PNG/SVG)",
       "faviconHint": "Browser tab icon",
-      "accentMode": "Accent color",
-      "accentColor": "Color",
-      "accentColors": "Add candidate color",
-      "accentColorsHint": "One of these colors is drawn on page load and while navigating.",
+      "accentColor": "Accent 1 (brand)",
+      "accent2Color": "Accent 2 (action)",
+      "accentHint": "Brand: logos, links, focus and selection. Action: primary button, calls to action and figures. Applied on the site and in the admin.",
       "fontHeadings": "Headings font",
       "fontBody": "Body font",
       "footerText": "Footer text",
@@ -540,11 +540,6 @@
       "fontDrag": "Drag a font or click",
       "fontSpecial": "Special font (quotes)"
     },
-    "accentModes": {
-      "fixed": "Fixed",
-      "random": "Random (CDL style)"
-    },
-    "addColor": "Add",
     "fontPreviewHeading": "The seven kingdoms — Sample heading",
     "fontPreviewBody": "Shuffle the deck and deal five cards to each player.",
     "fonts": {

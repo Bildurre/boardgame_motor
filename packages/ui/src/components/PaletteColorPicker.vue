@@ -29,19 +29,29 @@ const props = withDefaults(
 
 const emit = defineEmits<{ 'update:modelValue': [value: string] }>()
 
-// Paleta base: espectro cálido → frío, con el gris al final (el tono "Slate"
-// heredado de kontuan). Los valores viajan como HEX, no como clave.
+// Paleta base: los 18 tonos de la rueda OKLCH del tema (_theme.scss, en el
+// orden de la rueda desde el rojo) más el gris. Los valores viajan como HEX,
+// no como clave: son los mismos hex que las custom properties --palette-*.
 const PALETTE = [
-  { name: 'Rojo', hex: '#f15959' },
-  { name: 'Naranja', hex: '#f1753a' },
-  { name: 'Lima', hex: '#88b033' },
-  { name: 'Verde', hex: '#29ab5f' },
-  { name: 'Esmeralda', hex: '#31a28e' },
-  { name: 'Cian', hex: '#3999cd' },
-  { name: 'Azul', hex: '#408cfd' },
-  { name: 'Violeta', hex: '#7a64c8' },
-  { name: 'Magenta', hex: '#a75da5' },
-  { name: 'Gris', hex: '#64748B' },
+  { name: 'Rojo', hex: '#cf4946' },
+  { name: 'Coral', hex: '#cb5300' },
+  { name: 'Naranja', hex: '#b26900' },
+  { name: 'Amarillo', hex: '#c09000' },
+  { name: 'Lima', hex: '#898000' },
+  { name: 'Hierba', hex: '#698b00' },
+  { name: 'Verde', hex: '#229633' },
+  { name: 'Esmeralda', hex: '#0b936b' },
+  { name: 'Teal', hex: '#0c9185' },
+  { name: 'Cian', hex: '#108e99' },
+  { name: 'Celeste', hex: '#0a8aae' },
+  { name: 'Azur', hex: '#0083cf' },
+  { name: 'Azul', hex: '#4a76e1' },
+  { name: 'Índigo', hex: '#7669dc' },
+  { name: 'Violeta', hex: '#955dcd' },
+  { name: 'Púrpura', hex: '#ae53b4' },
+  { name: 'Fucsia', hex: '#c04b94' },
+  { name: 'Carmín', hex: '#cb4770' },
+  { name: 'Gris', hex: '#64748b' },
 ]
 
 const TOKEN_PREFIX = 'token:'

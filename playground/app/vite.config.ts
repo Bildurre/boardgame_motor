@@ -20,7 +20,7 @@ export default defineConfig({
         name: 'EdC Playground',
         short_name: 'EdC',
         description: 'Web pública de prueba del EdC Motor',
-        theme_color: '#6c5ce7',
+        theme_color: '#955dcd',
         background_color: '#0f1115',
         display: 'standalone',
         scope: '/',

@@ -278,10 +278,9 @@
       "logo": "Logo (SVG/PNG)",
       "favicon": "Favicon (PNG/SVG)",
       "faviconHint": "Icono de la pestaña del navegador",
-      "accentMode": "Color de acento",
-      "accentColor": "Color",
-      "accentColors": "Añadir color candidato",
-      "accentColorsHint": "Se sortea uno de estos colores al cargar la web y al navegar.",
+      "accentColor": "Acento 1 (marca)",
+      "accent2Color": "Acento 2 (acción)",
+      "accentHint": "Marca: logos, enlaces, foco y selección. Acción: botón primario, llamadas a la acción y cifras. Se aplican en la web y en el admin.",
       "fontHeadings": "Fuente de los títulos",
       "fontBody": "Fuente del texto",
       "footerText": "Texto del pie",
@@ -291,11 +290,6 @@
       "fontDrag": "Arrastra una fuente o haz clic",
       "fontSpecial": "Fuente especial (citas)"
     },
-    "accentModes": {
-      "fixed": "Fijo",
-      "random": "Aleatorio (estilo CDL)"
-    },
-    "addColor": "Añadir",
     "fontPreviewHeading": "Los siete reinos — Título de ejemplo",
     "fontPreviewBody": "Baraja el mazo y reparte cinco cartas a cada jugador.",
     "fonts": {

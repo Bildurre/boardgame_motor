@@ -10,8 +10,9 @@ use Illuminate\Support\Facades\Storage;
 it('sirve los ajustes públicos con defaults y catálogo de fuentes', function () {
     $response = $this->getJson('/api/site')->assertOk();
 
-    expect($response->json('data.accent_mode'))->toBe('fixed')
-        ->and($response->json('data.accent_color'))->toBe('#6c5ce7')
+    // Dos acentos fijos (marca y acción), por defecto los del tema del motor.
+    expect($response->json('data.accent_color'))->toBe('#955dcd')
+        ->and($response->json('data.accent_2_color'))->toBe('#b26900')
         ->and($response->json('data.font_headings'))->toBe('system')
         ->and($response->json('data.fonts'))->toHaveKey('serif')
         // Webfonts del juego (AppServiceProvider): con ficheros resueltos
@@ -63,18 +64,17 @@ it('guarda la configuración desde el admin y el público la refleja', function 
 
     $this->actingAs($admin)->putJson('/api/admin/settings/site', [
         'title' => ['es' => 'Choque de Leyendas', 'en' => 'Clash of Legends'],
-        'accent_mode' => 'random',
-        'accent_colors' => ['#29ab5f', '#f15959', '#408cfd'],
+        'accent_2_color' => '#0c9185',
         'font_headings' => 'serif',
         'footer_text' => ['es' => 'Un juego de mesa imprimible.'],
-    ])->assertOk()->assertJsonPath('data.accent_mode', 'random');
+    ])->assertOk()->assertJsonPath('data.accent_2_color', '#0c9185');
 
     $public = $this->getJson('/api/site')->assertOk();
     expect($public->json('data.title.es'))->toBe('Choque de Leyendas')
-        ->and($public->json('data.accent_colors'))->toBe(['#29ab5f', '#f15959', '#408cfd'])
+        ->and($public->json('data.accent_2_color'))->toBe('#0c9185')
         ->and($public->json('data.font_headings'))->toBe('serif')
         // Lo no tocado conserva su default.
-        ->and($public->json('data.accent_color'))->toBe('#6c5ce7');
+        ->and($public->json('data.accent_color'))->toBe('#955dcd');
 });
 
 it('el logo es traducible y los svg del disco viajan inlineados por idioma', function () {
@@ -124,14 +124,12 @@ it('guarda los fondos de las vistas índice y el público los refleja', function
     expect($this->getJson('/api/site')->json('data.index_backgrounds'))->toBe([]);
 });
 
-it('valida colores, modo y fuentes', function () {
+it('valida colores y fuentes', function () {
     $admin = motorUser('admin');
 
     $this->actingAs($admin)->putJson('/api/admin/settings/site', ['accent_color' => 'rojo'])
         ->assertUnprocessable();
-    $this->actingAs($admin)->putJson('/api/admin/settings/site', ['accent_colors' => ['#123']])
-        ->assertUnprocessable();
-    $this->actingAs($admin)->putJson('/api/admin/settings/site', ['accent_mode' => 'disco'])
+    $this->actingAs($admin)->putJson('/api/admin/settings/site', ['accent_2_color' => '#123'])
         ->assertUnprocessable();
     $this->actingAs($admin)->putJson('/api/admin/settings/site', ['font_body' => 'comic-sans'])
         ->assertUnprocessable();

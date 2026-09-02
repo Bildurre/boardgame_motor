@@ -1,23 +1,78 @@
 // =========================================================
-// CSS Custom Properties (theming light/dark) — acento morado
+// CSS Custom Properties (theming light/dark)
 // El <html> arranca en data-theme="dark" (identidad EdC).
 // =========================================================
+//
+// PALETA: 18 tonos de la rueda OKLCH, cada 20° desde el rojo (25°), todos
+// con la misma luminosidad y croma (L 0,59 · C 0,17; el amarillo sube a
+// L 0,68 porque a la luz de los demás se vuelve ocre). UN SOLO TONO por
+// color, el mismo en tema claro y oscuro: la luminosidad es la que iguala
+// el contraste sobre blanco y sobre negro (≈4 en ambos: texto grande,
+// iconos e interfaz; para texto pequeño están los grises de texto).
+// Cuatro nodos los fija la FUNCIÓN (rojo = danger, amarillo = warning,
+// verde = success, azul = info; en los juegos, dados y atributos) y el
+// resto queda libre: fondos de bloque, colores de casa, series de gráficas
+// y los dos ACENTOS.
+//
+// ACENTOS: dos. El 1 (marca: logos, enlaces, foco, selección, navegación)
+// y el 2 (acción: botón primario, CTA de bloque, kickers, cifras). Cada
+// escala 100…700 se DERIVA por color-mix de su 500, así un juego (o la
+// Configuración del sitio, vía applyAccents del ui) solo pisa el 500.
 
 :root {
   color-scheme: light;
 
-  --accent-100: #ece9fb;
-  --accent-200: #cdc7f7;
-  --accent-300: #a99ff2;
-  --accent-400: #8577ec;
-  --accent-500: #6c5ce7;
-  --accent-600: #5b4bd6;
-  --accent-700: #4c3cc4;
+  --palette-rojo: #cf4946;
+  --palette-coral: #cb5300;
+  --palette-naranja: #b26900;
+  --palette-amarillo: #c09000;
+  --palette-lima: #898000;
+  --palette-hierba: #698b00;
+  --palette-verde: #229633;
+  --palette-esmeralda: #0b936b;
+  --palette-teal: #0c9185;
+  --palette-cian: #108e99;
+  --palette-celeste: #0a8aae;
+  --palette-azur: #0083cf;
+  --palette-azul: #4a76e1;
+  --palette-indigo: #7669dc;
+  --palette-violeta: #955dcd;
+  --palette-purpura: #ae53b4;
+  --palette-fucsia: #c04b94;
+  --palette-carmin: #cb4770;
 
-  --info: #6c8cff;
-  --success: #4ade80;
-  --warning: #fbbf24;
-  --danger: #ff6b6b;
+  // Acento 1 (marca) y acento 2 (acción): por defecto violeta y naranja.
+  --accent-500: var(--palette-violeta);
+  --accent-2-500: var(--palette-naranja);
+
+  // Escalas derivadas del 500 (las mismas mezclas que aplicaba el store del
+  // sitio): el 100 es el tinte sobre la superficie del tema (fondo de
+  // pestaña/menú activos) y sigue al claro/oscuro solo, vía --surface.
+  --accent-100: color-mix(in srgb, var(--accent-500) 12%, var(--surface));
+  --accent-200: color-mix(in srgb, var(--accent-500) 30%, white);
+  --accent-300: color-mix(in srgb, var(--accent-500) 55%, white);
+  --accent-400: color-mix(in srgb, var(--accent-500) 80%, white);
+  --accent-600: color-mix(in srgb, var(--accent-500) 85%, black);
+  --accent-700: color-mix(in srgb, var(--accent-500) 70%, black);
+  --accent-2-100: color-mix(in srgb, var(--accent-2-500) 12%, var(--surface));
+  --accent-2-200: color-mix(in srgb, var(--accent-2-500) 30%, white);
+  --accent-2-300: color-mix(in srgb, var(--accent-2-500) 55%, white);
+  --accent-2-400: color-mix(in srgb, var(--accent-2-500) 80%, white);
+  --accent-2-600: color-mix(in srgb, var(--accent-2-500) 85%, black);
+  --accent-2-700: color-mix(in srgb, var(--accent-2-500) 70%, black);
+
+  // Semánticos = los cuatro nodos anclados de la paleta (mismo tono en
+  // ambos temas). Los -soft son su fondo teñido (toasts, filas, chips):
+  // el grado lo pone --tint, distinto por tema.
+  --tint: 12%;
+  --info: var(--palette-azul);
+  --success: var(--palette-verde);
+  --warning: var(--palette-amarillo);
+  --danger: var(--palette-rojo);
+  --info-soft: color-mix(in srgb, var(--info) var(--tint), transparent);
+  --success-soft: color-mix(in srgb, var(--success) var(--tint), transparent);
+  --warning-soft: color-mix(in srgb, var(--warning) var(--tint), transparent);
+  --danger-soft: color-mix(in srgb, var(--danger) var(--tint), transparent);
 
   --bg: #fafafa;
   --surface: #ffffff;
@@ -33,10 +88,12 @@
   --shadow-md: 0 6px 18px rgba(0, 0, 0, 0.08);
   --shadow-lg: 0 14px 36px rgba(0, 0, 0, 0.12);
 
-  --toast-success-bg: #ecfdf5;
-  --toast-warning-bg: #fffbeb;
-  --toast-danger-bg: #fef2f2;
-  --toast-info-bg: #eff6ff;
+  // LEGACY: los fondos de toast son ahora los -soft de cada semántico (se
+  // conservan los nombres para quien los lea).
+  --toast-success-bg: var(--success-soft);
+  --toast-warning-bg: var(--warning-soft);
+  --toast-danger-bg: var(--danger-soft);
+  --toast-info-bg: var(--info-soft);
 
   // CRM público (patrón CDL): el fondo de color de un bloque es un TINTE
   // semitransparente del color elegido, y la imagen de fondo de la página
@@ -59,6 +116,7 @@
   --veil-60: color-mix(in srgb, var(--surface) 60%, transparent);
   --veil-80: color-mix(in srgb, var(--surface) 80%, transparent);
   --accent-soft: color-mix(in srgb, var(--accent-500) 20%, transparent);
+  --accent-2-soft: color-mix(in srgb, var(--accent-2-500) 20%, transparent);
 
   // LEGACY (velos de 0.5.11/0.5.12 retirados del picker): lo guardado con
   // ellos sigue renderizando igual.
@@ -78,7 +136,9 @@
 [data-theme="dark"] {
   color-scheme: dark;
 
-  --accent-100: #1e1b2e;
+  // La paleta, los acentos y los semánticos NO se redeclaran: son el mismo
+  // tono en ambos temas. Solo sube el grado de los fondos teñidos.
+  --tint: 16%;
 
   --bg: #0f1115;
   --surface: #1a1d24;
@@ -94,17 +154,13 @@
   --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.35);
   --shadow-lg: 0 18px 48px rgba(0, 0, 0, 0.45);
 
-  --toast-success-bg: #0d2818;
-  --toast-warning-bg: #2a2008;
-  --toast-danger-bg: #2a0e0e;
-  --toast-info-bg: #0e1a2e;
-
   --block-tint: 12%;
   --page-bg-opacity: 0.1;
 
   // Los velos (--veil-*) NO se redeclaran: la definición de :root ya lee
   // este --surface oscuro. El acento translúcido sí baja de grado en oscuro.
   --accent-soft: color-mix(in srgb, var(--accent-500) 16%, transparent);
+  --accent-2-soft: color-mix(in srgb, var(--accent-2-500) 16%, transparent);
 
   // LEGACY (grises 0.5.10 retirados del picker): grados propios del oscuro.
   --neutral-soft: rgb(100 116 139 / 7%);

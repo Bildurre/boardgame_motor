@@ -13,6 +13,10 @@ versionado, [SemVer](https://semver.org/lang/es/) (mientras estemos en `0.x`,
 los cambios de API pueden llegar en versiones menores).
 
 ## [Sin publicar]
+- Plantilla y playground: Configuración con DOS acentos (marca y acción)
+  sobre la paleta de 18 tonos, sin modo aleatorio (store del sitio, arranque
+  del admin con `loadSiteAccents`, formulario e i18n, seeders y tests);
+  colores estáticos de manifest e index.html al violeta de marca.
 
 - Plantilla y playground: el `<meta name="theme-color">` vuelve a ser
   estático (el mismo color que el `theme_color` del manifest); `applyAccent()`

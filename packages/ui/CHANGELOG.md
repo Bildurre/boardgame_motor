@@ -4,6 +4,27 @@ Componentes Vue 3 + SCSS para las webs públicas (y piezas compartidas con el
 admin). Paquete **fuente** (se consume vía Vite). Versión de tren con
 `edc-motor/core` y `@edc-motor/admin-kit`.
 
+## [Sin publicar]
+
+### Cambiado
+
+- **Paleta de 18 tonos de la rueda OKLCH** en el tema (`--palette-rojo` …
+  `--palette-carmin`, cada 20° desde el rojo; L 0,59 · C 0,17, el amarillo a
+  L 0,68): un solo tono por color, el mismo en tema claro y oscuro. Variables
+  SCSS `$palette-*`. PaletteColorPicker ofrece esos 18 (más el gris) en vez
+  de la paleta heredada de kontuan.
+- **Semánticos = nodos anclados:** `--danger/--warning/--success/--info` son
+  el rojo, amarillo, verde y azul de la paleta (`$danger` y compañía pasan
+  de hex a `var(--…)`), con fondo teñido `--*-soft` (12 % en claro, 16 % en
+  oscuro; los `--toast-*-bg` son ahora alias). IconButton y Toast los leen.
+- **Dos acentos, escalas derivadas.** `--accent-500` (marca, violeta por
+  defecto) y nuevo `--accent-2-500` (acción, naranja); el resto de cada
+  escala (`100…700`, `-soft`) se deriva por `color-mix` en el tema, así solo
+  hay que pisar el 500. Variables `$accent-2-*`, `$color-accent-2`.
+- **`applyAccents()` y `loadSiteAccents(api)`** (lib): aplican los dos
+  acentos de la Configuración del sitio; el store del sitio de la app y el
+  arranque del admin los usan (misma pareja en las dos SPA).
+
 ## [0.5.33] — 2026-09-02
 
 ### Corregido
