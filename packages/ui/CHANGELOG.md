@@ -4,6 +4,17 @@ Componentes Vue 3 + SCSS para las webs públicas (y piezas compartidas con el
 admin). Paquete **fuente** (se consume vía Vite). Versión de tren con
 `edc-motor/core` y `@edc-motor/admin-kit`.
 
+## [Sin publicar]
+
+### Cambiado
+
+- **Tema claro con la escalera hacia la luz.** Como en oscuro, lo elevado es
+  siempre más claro que lo que tiene debajo: fondo `#e2ded7`, `--surface`
+  `#ece7e1`, `--surface-2` `#f5f0ea`, `--surface-3` `#fef9f3`; bordes
+  `#d3cec8` y `#bdb9b3`. Sustituye al espejo por luminosidad de 0.5.39, que
+  dejaba las tarjetas más oscuras que la página. Textos secundarios: 5,3:1 y
+  3,9:1 sobre el fondo, 5,8:1 y 4,3:1 sobre surface.
+
 ## [0.5.39] — 2026-09-02
 
 ### Cambiado
