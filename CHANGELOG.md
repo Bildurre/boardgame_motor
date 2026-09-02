@@ -12,6 +12,14 @@ El formato sigue [Keep a Changelog](https://keepachangelog.com/es/) y el
 versionado, [SemVer](https://semver.org/lang/es/) (mientras estemos en `0.x`,
 los cambios de API pueden llegar en versiones menores).
 
+## [Sin publicar]
+
+- Plantilla y playground: el `<meta name="theme-color">` vuelve a ser
+  estático (el mismo color que el `theme_color` del manifest); `applyAccent()`
+  del store del sitio ya no lo tiñe en caliente. Chrome en Android no lo
+  aplicaba de forma fiable a la barra del sistema de la app instalada, y la
+  identidad visual pasa a acentos fijos heredados del motor.
+
 ## [0.5.33] — 2026-09-02
 
 - Sin cambios propios: versión de tren.
