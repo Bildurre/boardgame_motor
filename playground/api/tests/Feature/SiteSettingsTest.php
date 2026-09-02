@@ -10,9 +10,8 @@ use Illuminate\Support\Facades\Storage;
 it('sirve los ajustes públicos con defaults y catálogo de fuentes', function () {
     $response = $this->getJson('/api/site')->assertOk();
 
-    // Dos acentos fijos (marca y acción), por defecto los del tema del motor.
-    expect($response->json('data.accent_color'))->toBe('#955dcd')
-        ->and($response->json('data.accent_2_color'))->toBe('#b26900')
+    // Color del juego (acento 3), por defecto el del tema del motor.
+    expect($response->json('data.game_color'))->toBe('#0b936b')
         ->and($response->json('data.font_headings'))->toBe('system')
         ->and($response->json('data.fonts'))->toHaveKey('serif')
         // Webfonts del juego (AppServiceProvider): con ficheros resueltos
@@ -64,17 +63,15 @@ it('guarda la configuración desde el admin y el público la refleja', function 
 
     $this->actingAs($admin)->putJson('/api/admin/settings/site', [
         'title' => ['es' => 'Choque de Leyendas', 'en' => 'Clash of Legends'],
-        'accent_2_color' => '#0c9185',
-        'font_headings' => 'serif',
+        'game_color' => '#0a8aae',
         'footer_text' => ['es' => 'Un juego de mesa imprimible.'],
-    ])->assertOk()->assertJsonPath('data.accent_2_color', '#0c9185');
+    ])->assertOk()->assertJsonPath('data.game_color', '#0a8aae');
 
     $public = $this->getJson('/api/site')->assertOk();
     expect($public->json('data.title.es'))->toBe('Choque de Leyendas')
-        ->and($public->json('data.accent_2_color'))->toBe('#0c9185')
-        ->and($public->json('data.font_headings'))->toBe('serif')
+        ->and($public->json('data.game_color'))->toBe('#0a8aae')
         // Lo no tocado conserva su default.
-        ->and($public->json('data.accent_color'))->toBe('#955dcd');
+        ->and($public->json('data.font_headings'))->toBe('system');
 });
 
 it('el logo es traducible y los svg del disco viajan inlineados por idioma', function () {
@@ -127,9 +124,9 @@ it('guarda los fondos de las vistas índice y el público los refleja', function
 it('valida colores y fuentes', function () {
     $admin = motorUser('admin');
 
-    $this->actingAs($admin)->putJson('/api/admin/settings/site', ['accent_color' => 'rojo'])
+    $this->actingAs($admin)->putJson('/api/admin/settings/site', ['game_color' => 'rojo'])
         ->assertUnprocessable();
-    $this->actingAs($admin)->putJson('/api/admin/settings/site', ['accent_2_color' => '#123'])
+    $this->actingAs($admin)->putJson('/api/admin/settings/site', ['game_color' => '#123'])
         ->assertUnprocessable();
     $this->actingAs($admin)->putJson('/api/admin/settings/site', ['font_body' => 'comic-sans'])
         ->assertUnprocessable();

@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Storage;
 
 /**
  * Configuración demo de la web (doc 10): título, logo/favicon generados,
- * fuentes y los dos acentos (marca y acción) de la paleta del motor.
+ * fuentes y el color del juego (acento 3) de la paleta del motor.
  * Idempotente: si ya hay configuración guardada, no toca nada.
  */
 class SiteSettingsSeeder extends Seeder
@@ -25,9 +25,8 @@ class SiteSettingsSeeder extends Seeder
             'description' => ['es' => 'El juego de cartas imprimible de las grandes casas.'],
             'logo' => ['es' => $this->logo()], // por idioma; el resto usa el fallback
             'favicon' => $this->favicon(),
-            // Dos acentos de la paleta del motor: marca (violeta) y acción (naranja).
-            'accent_color' => '#955dcd',
-            'accent_2_color' => '#b26900',
+            // Color del juego (acento 3), un nodo de la paleta del motor.
+            'game_color' => '#0b936b',
             'font_headings' => 'ebgaramond', // webfont del juego (public/fonts)
             'font_body' => 'lora',
             'font_special' => 'italianno', // solo la usa el bloque cita

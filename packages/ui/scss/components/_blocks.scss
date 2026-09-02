@@ -99,7 +99,8 @@
     font-weight: $k-fw-semibold;
     text-transform: uppercase;
     letter-spacing: 0.05em;
-    color: $accent-500;
+    // Kicker: el COLOR DEL JUEGO (acento 3), el sitio editorial por excelencia.
+    color: $accent-3-500;
 
     &--left { text-align: left; }
     &--center { text-align: center; }
@@ -290,7 +291,7 @@
   // acento, igual por los cuatro bordes, además de su sombra normal.
   &--cta .block__card,
   &--text-card .block__card {
-    box-shadow: $shadow-sm, 0 0 18px color-mix(in srgb, $accent-500 30%, transparent);
+    box-shadow: $shadow-sm, 0 0 18px color-mix(in srgb, $accent-2-500 30%, transparent);
   }
 
   &--cta.block--image-right .block__media-layout .block__image-frame,
@@ -390,7 +391,7 @@
     line-height: 1.25;
     font-style: italic;
     font-weight: $k-fw-semibold;
-    color: $accent-500;
+    color: $accent-2-500;
 
     @container content (max-width: #{$bp-sm - 1px}) {
       font-size: $fs-24;

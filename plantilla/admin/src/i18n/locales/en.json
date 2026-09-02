@@ -327,8 +327,9 @@
     "background": {
       "token:veil-60": "Veil 60%",
       "token:veil-80": "Veil 80%",
-      "token:accent-soft": "Accent 1",
-      "token:accent-2-soft": "Accent 2"
+      "token:accent-soft": "Brand",
+      "token:accent-2-soft": "Action",
+      "token:accent-3-soft": "Game"
     },
     "image_position": {
       "top": "Top",
@@ -360,9 +361,8 @@
       "logo": "Logo (SVG/PNG)",
       "favicon": "Favicon (PNG/SVG)",
       "faviconHint": "Browser tab icon",
-      "accentColor": "Accent 1 (brand)",
-      "accent2Color": "Accent 2 (action)",
-      "accentHint": "Brand: logos, links, focus and selection. Action: primary button, calls to action and figures. Applied on the site and in the admin.",
+      "gameColor": "Game color",
+      "gameColorHint": "The indigo brand and coral action colors are fixed for Espadas de Ceniza. This third color gives the game its personality: kickers, section headings, dividers and badges, on the site and in the admin.",
       "fontHeadings": "Headings font",
       "fontBody": "Body font",
       "footerText": "Footer text",

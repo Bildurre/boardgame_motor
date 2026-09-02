@@ -42,10 +42,9 @@ const savedFavicon = ref<string | null>(null)
 
 const faviconFile = computed(() => (favicon.value instanceof File ? favicon.value : null))
 const faviconUrl = computed(() => (typeof favicon.value === 'string' ? favicon.value : null))
-// Dos acentos (marca y acción): pisan el 500 de cada escala del tema del
-// ui, en la web pública y en el propio admin.
-const accentColor = ref('#955dcd')
-const accent2Color = ref('#b26900')
+// Color del juego (acento 3 del tema; marca y acción son fijos de la IP):
+// pisa el 500 de su escala en la web pública y en el propio admin.
+const gameColor = ref('#0b936b')
 const fontHeadings = ref('system')
 const fontBody = ref('system')
 const fontSpecial = ref('system')
@@ -141,8 +140,7 @@ async function load() {
     savedLogo.value = { ...(s.logo ?? {}) }
     favicon.value = s.favicon
     savedFavicon.value = s.favicon
-    accentColor.value = s.accent_color
-    accent2Color.value = s.accent_2_color
+    gameColor.value = s.game_color
     fontHeadings.value = s.font_headings
     fontBody.value = s.font_body
     fontSpecial.value = s.font_special ?? 'system'
@@ -182,8 +180,7 @@ async function save() {
       description: description.value,
       logo: logoResolved,
       favicon: faviconResolved,
-      accent_color: accentColor.value,
-      accent_2_color: accent2Color.value,
+      game_color: gameColor.value,
       font_headings: fontHeadings.value,
       font_body: fontBody.value,
       font_special: fontSpecial.value,
@@ -291,9 +288,8 @@ onMounted(async () => {
           <h2>{{ t('settings.sections.appearance') }}</h2>
           <!-- Los dos acentos (marca y acción), cada uno con la paleta de 18
                tonos del tema. -->
-          <p class="settings-view__hint">{{ t('settings.fields.accentHint') }}</p>
-          <PaletteColorPicker v-model="accentColor" :label="t('settings.fields.accentColor')" />
-          <PaletteColorPicker v-model="accent2Color" :label="t('settings.fields.accent2Color')" />
+          <p class="settings-view__hint">{{ t('settings.fields.gameColorHint') }}</p>
+          <PaletteColorPicker v-model="gameColor" :label="t('settings.fields.gameColor')" />
 
           <div class="settings-view__fonts">
             <div>

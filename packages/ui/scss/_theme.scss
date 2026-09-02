@@ -14,10 +14,20 @@
 // resto queda libre: fondos de bloque, colores de casa, series de gráficas
 // y los dos ACENTOS.
 //
-// ACENTOS: dos. El 1 (marca: logos, enlaces, foco, selección, navegación)
-// y el 2 (acción: botón primario, CTA de bloque, kickers, cifras). Cada
-// escala 100…700 se DERIVA por color-mix de su 500, así un juego (o la
-// Configuración del sitio, vía applyAccents del ui) solo pisa el 500.
+// ACENTOS: tres. El 1 es la MARCA de la IP (índigo: logos, enlaces, foco,
+// selección, navegación) y el 2 la ACCIÓN (coral, vértice de la triada del
+// índigo: botón primario, CTA de bloque, cifras que piden clic); ambos son
+// FIJOS de Espadas de Ceniza (otra IP los pisa en su SCSS). El 3 es el
+// COLOR DEL JUEGO, contenido (kickers, cabeceras de sección, separadores,
+// badges editoriales): lo elige cada juego en la Configuración del sitio
+// (applyAccents del ui pisa su 500). Cada escala 100…700 se DERIVA por
+// color-mix de su 500.
+//
+// NEUTROS: carbón, ceniza y hueso, también derivados por regla: los grises
+// oscuros (tema oscuro, texto del claro) salen del nodo de marca (285°) con
+// croma casi nulo; los claros (tema claro, texto del oscuro) de su
+// complementario (lima, 105°), que es lo que da un hueso cálido y no un
+// blanco azulado.
 
 :root {
   color-scheme: light;
@@ -41,9 +51,11 @@
   --palette-fucsia: #c04b94;
   --palette-carmin: #cb4770;
 
-  // Acento 1 (marca) y acento 2 (acción): por defecto violeta y naranja.
-  --accent-500: var(--palette-violeta);
-  --accent-2-500: var(--palette-naranja);
+  // Acento 1 (marca, índigo) y acento 2 (acción, coral): fijos de la IP.
+  // Acento 3 (juego): el tercer vértice de la triada por defecto.
+  --accent-500: var(--palette-indigo);
+  --accent-2-500: var(--palette-coral);
+  --accent-3-500: var(--palette-esmeralda);
 
   // Escalas derivadas del 500 (las mismas mezclas que aplicaba el store del
   // sitio): el 100 es el tinte sobre la superficie del tema (fondo de
@@ -60,6 +72,12 @@
   --accent-2-400: color-mix(in srgb, var(--accent-2-500) 80%, white);
   --accent-2-600: color-mix(in srgb, var(--accent-2-500) 85%, black);
   --accent-2-700: color-mix(in srgb, var(--accent-2-500) 70%, black);
+  --accent-3-100: color-mix(in srgb, var(--accent-3-500) 12%, var(--surface));
+  --accent-3-200: color-mix(in srgb, var(--accent-3-500) 30%, white);
+  --accent-3-300: color-mix(in srgb, var(--accent-3-500) 55%, white);
+  --accent-3-400: color-mix(in srgb, var(--accent-3-500) 80%, white);
+  --accent-3-600: color-mix(in srgb, var(--accent-3-500) 85%, black);
+  --accent-3-700: color-mix(in srgb, var(--accent-3-500) 70%, black);
 
   // Semánticos = los cuatro nodos anclados de la paleta (mismo tono en
   // ambos temas). Los -soft son su fondo teñido (toasts, filas, chips):
@@ -74,15 +92,17 @@
   --warning-soft: color-mix(in srgb, var(--warning) var(--tint), transparent);
   --danger-soft: color-mix(in srgb, var(--danger) var(--tint), transparent);
 
-  --bg: #fafafa;
-  --surface: #ffffff;
-  --surface-2: #f2f3f4;
-  --surface-3: #eaecf0;
-  --text-1: #101216;
-  --text-2: #636a77;
-  --text-3: #7b8290;
-  --border: #e2e3e7;
-  --border-strong: #cfd2d9;
+  // Hueso (claros de lima 105°, croma ≤ 0,014) y carbón para el texto
+  // (índigo 285°). text-2 5,4:1 y text-3 4,1:1 sobre el fondo.
+  --bg: #f4f4ec;
+  --surface: #fcfbf7;
+  --surface-2: #eeede4;
+  --surface-3: #e4e4d9;
+  --text-1: #1a1a21;
+  --text-2: #62626f;
+  --text-3: #767682;
+  --border: #ddddd3;
+  --border-strong: #cccbc0;
 
   --shadow-sm: 0 2px 6px rgba(0, 0, 0, 0.06);
   --shadow-md: 0 6px 18px rgba(0, 0, 0, 0.08);
@@ -117,6 +137,7 @@
   --veil-80: color-mix(in srgb, var(--surface) 80%, transparent);
   --accent-soft: color-mix(in srgb, var(--accent-500) 20%, transparent);
   --accent-2-soft: color-mix(in srgb, var(--accent-2-500) 20%, transparent);
+  --accent-3-soft: color-mix(in srgb, var(--accent-3-500) 20%, transparent);
 
   // LEGACY (velos de 0.5.11/0.5.12 retirados del picker): lo guardado con
   // ellos sigue renderizando igual.
@@ -140,15 +161,17 @@
   // tono en ambos temas. Solo sube el grado de los fondos teñidos.
   --tint: 16%;
 
-  --bg: #0f1115;
-  --surface: #1a1d24;
-  --surface-2: #20242d;
-  --surface-3: #2b2f3a;
-  --text-1: #e6e8ee;
-  --text-2: #9aa0ad;
-  --text-3: #7b8290;
-  --border: #2b2f3a;
-  --border-strong: #3a4150;
+  // Carbón (oscuros de índigo 285°, croma 0,014) y hueso para el texto
+  // (lima 105°). text-2 7,1:1 y text-3 4,8:1 sobre el fondo.
+  --bg: #0f0f15;
+  --surface: #1a1a21;
+  --surface-2: #23232b;
+  --surface-3: #2f2f37;
+  --text-1: #e8e8e2;
+  --text-2: #9d9da7;
+  --text-3: #7f7f88;
+  --border: #2f2f37;
+  --border-strong: #41414a;
 
   --shadow-sm: 0 2px 6px rgba(0, 0, 0, 0.30);
   --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.35);
@@ -161,6 +184,7 @@
   // este --surface oscuro. El acento translúcido sí baja de grado en oscuro.
   --accent-soft: color-mix(in srgb, var(--accent-500) 16%, transparent);
   --accent-2-soft: color-mix(in srgb, var(--accent-2-500) 16%, transparent);
+  --accent-3-soft: color-mix(in srgb, var(--accent-3-500) 16%, transparent);
 
   // LEGACY (grises 0.5.10 retirados del picker): grados propios del oscuro.
   --neutral-soft: rgb(100 116 139 / 7%);

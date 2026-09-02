@@ -5,9 +5,9 @@ import { api } from '@/lib/api'
 import { useLocalesStore } from '@/stores/locales'
 
 // Configuración de la web (doc 10, GET /api/site): título, logo, favicon,
-// fuentes y los dos acentos (marca y acción), que pisan el 500 de cada
-// escala del tema del ui (applyAccents); el resto de tonos los deriva el
-// propio tema por color-mix.
+// fuentes y el color del juego (acento 3), que pisa el 500 de su escala en
+// el tema del ui (applyAccents; marca y acción son fijos de la IP); el resto
+// de tonos los deriva el propio tema por color-mix.
 export interface SiteFont {
   label: string
   stack: string
@@ -20,16 +20,14 @@ export interface SiteSettings {
   description: Record<string, string>
   logo: Record<string, string>
   favicon: string | null
-  /** Acento 1, marca. */
-  accent_color: string
-  /** Acento 2, acción. */
-  accent_2_color: string
+  /** Acento 3, color del juego. */
+  game_color: string
   font_headings: string
   font_body: string
   font_special: string
   footer_text: Record<string, string>
   fonts: Record<string, SiteFont>
-  /** SVG de cada logo inlineado por la API (currentColor hereda el acento). */
+  /** SVG de cada logo inlineado por la API (currentColor hereda la marca). */
   logo_inline: Record<string, string>
 }
 

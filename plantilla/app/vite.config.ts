@@ -20,7 +20,7 @@ export default defineConfig({
         name: 'Plantilla EdC',
         short_name: 'Plantilla',
         description: 'Web pública del juego',
-        theme_color: '#955dcd',
+        theme_color: '#7669dc',
         background_color: '#0f1115',
         display: 'standalone',
         scope: '/',

@@ -12,6 +12,11 @@ El formato sigue [Keep a Changelog](https://keepachangelog.com/es/) y el
 versionado, [SemVer](https://semver.org/lang/es/) (mientras estemos en `0.x`,
 los cambios de API pueden llegar en versiones menores).
 
+## [Sin publicar]
+- Plantilla y playground: Configuración con el **color del juego**
+  (`game_color`) en vez de dos acentos; store, formulario, i18n, seeders,
+  tests y colores estáticos de manifest/index.html al índigo de marca.
+
 ## [0.5.35] — 2026-09-02
 - Plantilla y playground: Configuración con DOS acentos (marca y acción)
   sobre la paleta de 18 tonos, sin modo aleatorio (store del sitio, arranque
