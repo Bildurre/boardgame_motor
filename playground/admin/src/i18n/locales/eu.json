@@ -491,9 +491,7 @@
     "background": {
       "token:veil-60": "% 60eko beloa",
       "token:veil-80": "% 80ko beloa",
-      "token:accent-soft": "Marka",
-      "token:accent-2-soft": "Ekintza",
-      "token:accent-3-soft": "Jokoa"
+      "token:accent-soft": "Azentua"
     },
     "image_position": {
       "top": "Goian",
@@ -525,8 +523,10 @@
       "logo": "Logoa (SVG/PNG)",
       "favicon": "Favicon-a (PNG/SVG)",
       "faviconHint": "Nabigatzailearen fitxako ikonoa",
-      "gameColor": "Jokoaren kolorea",
-      "gameColorHint": "Markako indigoa eta ekintzako korala finkoak dira Espadas de Cenizan. Hirugarren kolore honek jokoari nortasuna ematen dio: kickerrak, atalen goiburuak, bereizleak eta badgeak, webean eta administrazioan.",
+      "accentMode": "Azentu-kolorea",
+      "accentColor": "Kolorea",
+      "accentColors": "Gehitu kolore hautagaia",
+      "accentColorsHint": "Kolore hauetako bat zozketatzen da weba kargatzean eta nabigatzean.",
       "fontHeadings": "Izenburuen letra-tipoa",
       "fontBody": "Testuaren letra-tipoa",
       "footerText": "Oinaren testua",
@@ -536,6 +536,11 @@
       "fontDrag": "Arrastatu letra-tipo bat edo egin klik",
       "fontSpecial": "Letra berezia (aipuak)"
     },
+    "accentModes": {
+      "fixed": "Finkoa",
+      "random": "Ausazkoa (CDL erakoa)"
+    },
+    "addColor": "Gehitu",
     "fontPreviewHeading": "Zazpi erresumak — Adibide izenburua",
     "fontPreviewBody": "Nahastu sorta eta banatu bost karta jokalari bakoitzari.",
     "fonts": {

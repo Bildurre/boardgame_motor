@@ -6,24 +6,12 @@ admin). Paquete **fuente** (se consume vía Vite). Versión de tren con
 
 ## [Sin publicar]
 
-### Cambiado
+### Revertido
 
-- **Identidad Espadas de Ceniza en el tema.** Acento 1 = **marca, índigo**
-  (`--accent-500: var(--palette-indigo)`) y acento 2 = **acción, coral**
-  (`--accent-2-500: var(--palette-coral)`, vértice de la triada del índigo),
-  FIJOS de la IP; nuevo **acento 3 = color del juego** (`--accent-3-*`,
-  `$accent-3-*`, `$color-accent-3`, `--accent-3-soft`; por defecto la
-  esmeralda, tercer vértice) que cada juego elige en Configuración.
-  `applyAccents()`/`loadSiteAccents()` pasan a aplicar solo `game_color`.
-- **Neutros carbón, ceniza y hueso**, derivados por regla: los oscuros del
-  nodo índigo (285°) con croma 0,014 y los claros de su complementario
-  (lima, 105°), que da un hueso cálido. Cambian `--bg`, `--surface*`,
-  `--text-*` y `--border*` de ambos temas (contrastes de texto iguales o
-  mejores que antes).
-- **Papeles por componente:** el botón primario (`BaseButton --primary`) y
-  el CTA de bloque (`.block-button`) pasan al acento 2; el kicker de bloque
-  (`.block__label`) al acento 3. Todo lo demás (enlaces, foco, selección,
-  navegación, tarjetas activas) sigue en el acento 1.
+- **Vuelve el tema de 0.5.34**: acento morado con escala fija, semánticos en
+  hex, toasts con sus fondos, PaletteColorPicker con la paleta heredada de
+  kontuan. Desaparecen la paleta de 18 tonos (`--palette-*`), el acento 2 y
+  `applyAccents()`/`loadSiteAccents()`: se revierte la 0.5.35 entera.
 
 ## [0.5.35] — 2026-09-02
 

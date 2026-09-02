@@ -1,119 +1,42 @@
 // =========================================================
-// CSS Custom Properties (theming light/dark)
+// CSS Custom Properties (theming light/dark) — acento morado
 // El <html> arranca en data-theme="dark" (identidad EdC).
 // =========================================================
-//
-// PALETA: 18 tonos de la rueda OKLCH, cada 20° desde el rojo (25°), todos
-// con la misma luminosidad y croma (L 0,59 · C 0,17; el amarillo sube a
-// L 0,68 porque a la luz de los demás se vuelve ocre). UN SOLO TONO por
-// color, el mismo en tema claro y oscuro: la luminosidad es la que iguala
-// el contraste sobre blanco y sobre negro (≈4 en ambos: texto grande,
-// iconos e interfaz; para texto pequeño están los grises de texto).
-// Cuatro nodos los fija la FUNCIÓN (rojo = danger, amarillo = warning,
-// verde = success, azul = info; en los juegos, dados y atributos) y el
-// resto queda libre: fondos de bloque, colores de casa, series de gráficas
-// y los dos ACENTOS.
-//
-// ACENTOS: tres. El 1 es la MARCA de la IP (índigo: logos, enlaces, foco,
-// selección, navegación) y el 2 la ACCIÓN (coral, vértice de la triada del
-// índigo: botón primario, CTA de bloque, cifras que piden clic); ambos son
-// FIJOS de Espadas de Ceniza (otra IP los pisa en su SCSS). El 3 es el
-// COLOR DEL JUEGO, contenido (kickers, cabeceras de sección, separadores,
-// badges editoriales): lo elige cada juego en la Configuración del sitio
-// (applyAccents del ui pisa su 500). Cada escala 100…700 se DERIVA por
-// color-mix de su 500.
-//
-// NEUTROS: carbón, ceniza y hueso, también derivados por regla: los grises
-// oscuros (tema oscuro, texto del claro) salen del nodo de marca (285°) con
-// croma casi nulo; los claros (tema claro, texto del oscuro) de su
-// complementario (lima, 105°), que es lo que da un hueso cálido y no un
-// blanco azulado.
 
 :root {
   color-scheme: light;
 
-  --palette-rojo: #cf4946;
-  --palette-coral: #cb5300;
-  --palette-naranja: #b26900;
-  --palette-amarillo: #c09000;
-  --palette-lima: #898000;
-  --palette-hierba: #698b00;
-  --palette-verde: #229633;
-  --palette-esmeralda: #0b936b;
-  --palette-teal: #0c9185;
-  --palette-cian: #108e99;
-  --palette-celeste: #0a8aae;
-  --palette-azur: #0083cf;
-  --palette-azul: #4a76e1;
-  --palette-indigo: #7669dc;
-  --palette-violeta: #955dcd;
-  --palette-purpura: #ae53b4;
-  --palette-fucsia: #c04b94;
-  --palette-carmin: #cb4770;
+  --accent-100: #ece9fb;
+  --accent-200: #cdc7f7;
+  --accent-300: #a99ff2;
+  --accent-400: #8577ec;
+  --accent-500: #6c5ce7;
+  --accent-600: #5b4bd6;
+  --accent-700: #4c3cc4;
 
-  // Acento 1 (marca, índigo) y acento 2 (acción, coral): fijos de la IP.
-  // Acento 3 (juego): el tercer vértice de la triada por defecto.
-  --accent-500: var(--palette-indigo);
-  --accent-2-500: var(--palette-coral);
-  --accent-3-500: var(--palette-esmeralda);
+  --info: #6c8cff;
+  --success: #4ade80;
+  --warning: #fbbf24;
+  --danger: #ff6b6b;
 
-  // Escalas derivadas del 500 (las mismas mezclas que aplicaba el store del
-  // sitio): el 100 es el tinte sobre la superficie del tema (fondo de
-  // pestaña/menú activos) y sigue al claro/oscuro solo, vía --surface.
-  --accent-100: color-mix(in srgb, var(--accent-500) 12%, var(--surface));
-  --accent-200: color-mix(in srgb, var(--accent-500) 30%, white);
-  --accent-300: color-mix(in srgb, var(--accent-500) 55%, white);
-  --accent-400: color-mix(in srgb, var(--accent-500) 80%, white);
-  --accent-600: color-mix(in srgb, var(--accent-500) 85%, black);
-  --accent-700: color-mix(in srgb, var(--accent-500) 70%, black);
-  --accent-2-100: color-mix(in srgb, var(--accent-2-500) 12%, var(--surface));
-  --accent-2-200: color-mix(in srgb, var(--accent-2-500) 30%, white);
-  --accent-2-300: color-mix(in srgb, var(--accent-2-500) 55%, white);
-  --accent-2-400: color-mix(in srgb, var(--accent-2-500) 80%, white);
-  --accent-2-600: color-mix(in srgb, var(--accent-2-500) 85%, black);
-  --accent-2-700: color-mix(in srgb, var(--accent-2-500) 70%, black);
-  --accent-3-100: color-mix(in srgb, var(--accent-3-500) 12%, var(--surface));
-  --accent-3-200: color-mix(in srgb, var(--accent-3-500) 30%, white);
-  --accent-3-300: color-mix(in srgb, var(--accent-3-500) 55%, white);
-  --accent-3-400: color-mix(in srgb, var(--accent-3-500) 80%, white);
-  --accent-3-600: color-mix(in srgb, var(--accent-3-500) 85%, black);
-  --accent-3-700: color-mix(in srgb, var(--accent-3-500) 70%, black);
-
-  // Semánticos = los cuatro nodos anclados de la paleta (mismo tono en
-  // ambos temas). Los -soft son su fondo teñido (toasts, filas, chips):
-  // el grado lo pone --tint, distinto por tema.
-  --tint: 12%;
-  --info: var(--palette-azul);
-  --success: var(--palette-verde);
-  --warning: var(--palette-amarillo);
-  --danger: var(--palette-rojo);
-  --info-soft: color-mix(in srgb, var(--info) var(--tint), transparent);
-  --success-soft: color-mix(in srgb, var(--success) var(--tint), transparent);
-  --warning-soft: color-mix(in srgb, var(--warning) var(--tint), transparent);
-  --danger-soft: color-mix(in srgb, var(--danger) var(--tint), transparent);
-
-  // Hueso (claros de lima 105°, croma ≤ 0,014) y carbón para el texto
-  // (índigo 285°). text-2 5,4:1 y text-3 4,1:1 sobre el fondo.
-  --bg: #f4f4ec;
-  --surface: #fcfbf7;
-  --surface-2: #eeede4;
-  --surface-3: #e4e4d9;
-  --text-1: #1a1a21;
-  --text-2: #62626f;
-  --text-3: #767682;
-  --border: #ddddd3;
-  --border-strong: #cccbc0;
+  --bg: #fafafa;
+  --surface: #ffffff;
+  --surface-2: #f2f3f4;
+  --surface-3: #eaecf0;
+  --text-1: #101216;
+  --text-2: #636a77;
+  --text-3: #7b8290;
+  --border: #e2e3e7;
+  --border-strong: #cfd2d9;
 
   --shadow-sm: 0 2px 6px rgba(0, 0, 0, 0.06);
   --shadow-md: 0 6px 18px rgba(0, 0, 0, 0.08);
   --shadow-lg: 0 14px 36px rgba(0, 0, 0, 0.12);
 
-  // LEGACY: los fondos de toast son ahora los -soft de cada semántico (se
-  // conservan los nombres para quien los lea).
-  --toast-success-bg: var(--success-soft);
-  --toast-warning-bg: var(--warning-soft);
-  --toast-danger-bg: var(--danger-soft);
-  --toast-info-bg: var(--info-soft);
+  --toast-success-bg: #ecfdf5;
+  --toast-warning-bg: #fffbeb;
+  --toast-danger-bg: #fef2f2;
+  --toast-info-bg: #eff6ff;
 
   // CRM público (patrón CDL): el fondo de color de un bloque es un TINTE
   // semitransparente del color elegido, y la imagen de fondo de la página
@@ -136,8 +59,6 @@
   --veil-60: color-mix(in srgb, var(--surface) 60%, transparent);
   --veil-80: color-mix(in srgb, var(--surface) 80%, transparent);
   --accent-soft: color-mix(in srgb, var(--accent-500) 20%, transparent);
-  --accent-2-soft: color-mix(in srgb, var(--accent-2-500) 20%, transparent);
-  --accent-3-soft: color-mix(in srgb, var(--accent-3-500) 20%, transparent);
 
   // LEGACY (velos de 0.5.11/0.5.12 retirados del picker): lo guardado con
   // ellos sigue renderizando igual.
@@ -157,25 +78,26 @@
 [data-theme="dark"] {
   color-scheme: dark;
 
-  // La paleta, los acentos y los semánticos NO se redeclaran: son el mismo
-  // tono en ambos temas. Solo sube el grado de los fondos teñidos.
-  --tint: 16%;
+  --accent-100: #1e1b2e;
 
-  // Carbón (oscuros de índigo 285°, croma 0,014) y hueso para el texto
-  // (lima 105°). text-2 7,1:1 y text-3 4,8:1 sobre el fondo.
-  --bg: #0f0f15;
-  --surface: #1a1a21;
-  --surface-2: #23232b;
-  --surface-3: #2f2f37;
-  --text-1: #e8e8e2;
-  --text-2: #9d9da7;
-  --text-3: #7f7f88;
-  --border: #2f2f37;
-  --border-strong: #41414a;
+  --bg: #0f1115;
+  --surface: #1a1d24;
+  --surface-2: #20242d;
+  --surface-3: #2b2f3a;
+  --text-1: #e6e8ee;
+  --text-2: #9aa0ad;
+  --text-3: #7b8290;
+  --border: #2b2f3a;
+  --border-strong: #3a4150;
 
   --shadow-sm: 0 2px 6px rgba(0, 0, 0, 0.30);
   --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.35);
   --shadow-lg: 0 18px 48px rgba(0, 0, 0, 0.45);
+
+  --toast-success-bg: #0d2818;
+  --toast-warning-bg: #2a2008;
+  --toast-danger-bg: #2a0e0e;
+  --toast-info-bg: #0e1a2e;
 
   --block-tint: 12%;
   --page-bg-opacity: 0.1;
@@ -183,8 +105,6 @@
   // Los velos (--veil-*) NO se redeclaran: la definición de :root ya lee
   // este --surface oscuro. El acento translúcido sí baja de grado en oscuro.
   --accent-soft: color-mix(in srgb, var(--accent-500) 16%, transparent);
-  --accent-2-soft: color-mix(in srgb, var(--accent-2-500) 16%, transparent);
-  --accent-3-soft: color-mix(in srgb, var(--accent-3-500) 16%, transparent);
 
   // LEGACY (grises 0.5.10 retirados del picker): grados propios del oscuro.
   --neutral-soft: rgb(100 116 139 / 7%);

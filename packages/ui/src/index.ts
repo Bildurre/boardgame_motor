@@ -64,7 +64,6 @@ export {
 export { readCache, writeCache } from './lib/localCache'
 export { createSwrGet, type SwrGetter } from './lib/swr'
 export { isStandalonePwa } from './lib/standalone'
-export { applyAccents, loadSiteAccents, type SiteAccents } from './lib/accents'
 export {
   interceptInternalLinks,
   type InternalLinksRouterLike,

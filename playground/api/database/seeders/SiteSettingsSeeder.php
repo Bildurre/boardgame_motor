@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Storage;
 
 /**
  * Configuración demo de la web (doc 10): título, logo/favicon generados,
- * fuentes y el color del juego (acento 3) de la paleta del motor.
+ * fuentes y el modo "acento ALEATORIO" con los tres colores clásicos de CDL.
  * Idempotente: si ya hay configuración guardada, no toca nada.
  */
 class SiteSettingsSeeder extends Seeder
@@ -25,8 +25,8 @@ class SiteSettingsSeeder extends Seeder
             'description' => ['es' => 'El juego de cartas imprimible de las grandes casas.'],
             'logo' => ['es' => $this->logo()], // por idioma; el resto usa el fallback
             'favicon' => $this->favicon(),
-            // Color del juego (acento 3), un nodo de la paleta del motor.
-            'game_color' => '#0b936b',
+            'accent_mode' => 'random',
+            'accent_colors' => ['#29ab5f', '#f15959', '#408cfd'], // verde/rojo/azul de CDL
             'font_headings' => 'ebgaramond', // webfont del juego (public/fonts)
             'font_body' => 'lora',
             'font_special' => 'italianno', // solo la usa el bloque cita
@@ -39,7 +39,7 @@ class SiteSettingsSeeder extends Seeder
         ]);
     }
 
-    /** Logo SVG sencillo: hereda el acento de marca vía currentColor. */
+    /** Logo SVG sencillo: hereda el acento sorteado vía currentColor. */
     protected function logo(): string
     {
         $svg = <<<'SVG'

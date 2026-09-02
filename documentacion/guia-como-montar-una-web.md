@@ -792,26 +792,14 @@ de **`GET /api/site`** al arrancar):
   del locale actual con fallback al por defecto — `logoUrl`/`logoInline` del
   store del sitio) y **favicon**. Cada logo SVG viaja **inlineado** en el
   payload (`logo_inline`, mapa por idioma) y se pinta con `currentColor`:
-  hereda el acento de marca (un fichero cross-origin no valdría — fetch/mask
+  hereda el acento activo (un fichero cross-origin no valdría — fetch/mask
   exigen CORS). Basta `fill="currentColor"` / `stroke="currentColor"` en las
   formas del SVG; lo que lleve color propio se queda como esté.
-- **Colores:** la identidad de Espadas de Ceniza fija en el tema del ui
-  (`_theme.scss` de `@edc-motor/ui`) el **acento 1, marca** (índigo 285°:
-  logos, enlaces, foco, selección, navegación) y el **acento 2, acción**
-  (coral 45°, vértice de la triada del índigo: botón primario, CTA de
-  bloque, cifras que piden clic), sobre neutros **carbón, ceniza y hueso**
-  derivados por regla (oscuros del índigo, claros de su complementario). La
-  Configuración solo elige el **acento 3, color del juego** (`game_color`:
-  kickers, cabeceras de sección, separadores, badges editoriales), un nodo
-  de la **paleta de 18 tonos de la rueda OKLCH** (cada 20° desde el rojo, un
-  tono por color, el mismo en claro y oscuro; rojo/amarillo/verde/azul son a
-  la vez danger/warning/success/info). `applyAccents()` del ui pisa solo el
-  `--accent-3-500` (desde el store del sitio de la app y desde
-  `loadSiteAccents(api)` en el arranque del admin); el resto de tonos
-  (`100…700`, `-soft`) los deriva el tema por `color-mix`. Otra IP que use el
-  motor pisa los 500 de marca y acción en su SCSS. Las claves antiguas
-  (`accent_mode`, `accent_colors`, `accent_color`, `accent_2_color`) se
-  ignoran y `update()` las retira de lo guardado.
+- **Acento:** fijo (un color) o **ALEATORIO estilo CDL**: una lista de colores
+  candidatos de la que la SPA sortea uno al cargar **y re-sortea en cada
+  navegación** (`router.afterEach` → `site.onNavigate()`, el disparador extra
+  que necesita una SPA que no recarga). Los tonos 200–700 se derivan del HEX
+  con `color-mix`; el logo SVG se recolorea con cada sorteo.
 - **Fuentes:** títulos y texto por separado, del catálogo
   `motor.site.fonts`. Una entrada puede ser una pila CSS a secas (pilas del
   sistema) o `{label, stack, files}` — los `files` son woff2 en

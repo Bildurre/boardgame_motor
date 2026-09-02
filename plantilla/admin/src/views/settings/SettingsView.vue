@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, onMounted, ref, watchEffect } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { Save, Upload, X } from '@lucide/vue'
+import { Plus, Save, Upload, X } from '@lucide/vue'
 import {
   BaseButton,
   BaseInput,
@@ -42,9 +42,9 @@ const savedFavicon = ref<string | null>(null)
 
 const faviconFile = computed(() => (favicon.value instanceof File ? favicon.value : null))
 const faviconUrl = computed(() => (typeof favicon.value === 'string' ? favicon.value : null))
-// Color del juego (acento 3 del tema; marca y acción son fijos de la IP):
-// pisa el 500 de su escala en la web pública y en el propio admin.
-const gameColor = ref('#0b936b')
+const accentMode = ref<'fixed' | 'random'>('fixed')
+const accentColor = ref('#6c5ce7')
+const accentColors = ref<string[]>([])
 const fontHeadings = ref('system')
 const fontBody = ref('system')
 const fontSpecial = ref('system')
@@ -88,6 +88,17 @@ watchEffect(() => {
     )
     .join('\n')
 })
+
+/** Candidato del modo aleatorio elegido en el picker (se añade a la lista). */
+const candidate = ref('#22c55e')
+
+function addColor() {
+  if (!accentColors.value.includes(candidate.value)) accentColors.value.push(candidate.value)
+}
+
+function removeColor(index: number) {
+  accentColors.value.splice(index, 1)
+}
 
 // --- Fuentes propias (font uploader) ---
 const fontName = ref('')
@@ -140,7 +151,9 @@ async function load() {
     savedLogo.value = { ...(s.logo ?? {}) }
     favicon.value = s.favicon
     savedFavicon.value = s.favicon
-    gameColor.value = s.game_color
+    accentMode.value = s.accent_mode
+    accentColor.value = s.accent_color
+    accentColors.value = s.accent_colors ?? []
     fontHeadings.value = s.font_headings
     fontBody.value = s.font_body
     fontSpecial.value = s.font_special ?? 'system'
@@ -180,7 +193,9 @@ async function save() {
       description: description.value,
       logo: logoResolved,
       favicon: faviconResolved,
-      game_color: gameColor.value,
+      accent_mode: accentMode.value,
+      accent_color: accentColor.value,
+      accent_colors: accentColors.value,
       font_headings: fontHeadings.value,
       font_body: fontBody.value,
       font_special: fontSpecial.value,
@@ -286,10 +301,46 @@ onMounted(async () => {
         <!-- Apariencia -->
         <section class="settings-view__section">
           <h2>{{ t('settings.sections.appearance') }}</h2>
-          <!-- Los dos acentos (marca y acción), cada uno con la paleta de 18
-               tonos del tema. -->
-          <p class="settings-view__hint">{{ t('settings.fields.gameColorHint') }}</p>
-          <PaletteColorPicker v-model="gameColor" :label="t('settings.fields.gameColor')" />
+          <BaseSelect
+            v-model="accentMode"
+            :label="t('settings.fields.accentMode')"
+            :options="[
+              { value: 'fixed', label: t('settings.accentModes.fixed') },
+              { value: 'random', label: t('settings.accentModes.random') },
+            ]"
+          />
+
+          <PaletteColorPicker
+            v-if="accentMode === 'fixed'"
+            v-model="accentColor"
+            :label="t('settings.fields.accentColor')"
+          />
+
+          <template v-else>
+            <p class="settings-view__hint">{{ t('settings.fields.accentColorsHint') }}</p>
+            <!-- Candidatos como etiquetas en fila (con wrap) -->
+            <ul v-if="accentColors.length" class="settings-view__colors">
+              <li v-for="(color, index) in accentColors" :key="color">
+                <span class="settings-view__swatch" :style="{ background: color }" />
+                <code>{{ color }}</code>
+                <button
+                  type="button"
+                  class="settings-view__chip-remove"
+                  :title="t('common.actions.delete')"
+                  @click="removeColor(index)"
+                >
+                  <X :size="12" />
+                </button>
+              </li>
+            </ul>
+            <div class="settings-view__add-color">
+              <PaletteColorPicker v-model="candidate" :label="t('settings.fields.accentColors')" />
+              <BaseButton variant="text" @click="addColor">
+                <template #icon><Plus :size="14" /></template>
+                {{ t('settings.addColor') }}
+              </BaseButton>
+            </div>
+          </template>
 
           <div class="settings-view__fonts">
             <div>

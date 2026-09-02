@@ -1,13 +1,13 @@
 import { defineStore } from 'pinia'
 import { computed, ref } from 'vue'
-import { applyAccents, readCache, writeCache } from '@edc-motor/ui'
+import { readCache, writeCache } from '@edc-motor/ui'
 import { api } from '@/lib/api'
 import { useLocalesStore } from '@/stores/locales'
 
 // Configuración de la web (doc 10, GET /api/site): título, logo, favicon,
-// fuentes y el color del juego (acento 3), que pisa el 500 de su escala en
-// el tema del ui (applyAccents; marca y acción son fijos de la IP); el resto
-// de tonos los deriva el propio tema por color-mix.
+// fuentes y color de acento — fijo o ALEATORIO estilo CDL: se sortea uno de
+// los candidatos al cargar la página y se re-sortea al navegar (la SPA no
+// recarga, así que el disparador extra es router.afterEach → onNavigate()).
 export interface SiteFont {
   label: string
   stack: string
@@ -20,14 +20,15 @@ export interface SiteSettings {
   description: Record<string, string>
   logo: Record<string, string>
   favicon: string | null
-  /** Acento 3, color del juego. */
-  game_color: string
+  accent_mode: 'fixed' | 'random'
+  accent_color: string
+  accent_colors: string[]
   font_headings: string
   font_body: string
   font_special: string
   footer_text: Record<string, string>
   fonts: Record<string, SiteFont>
-  /** SVG de cada logo inlineado por la API (currentColor hereda la marca). */
+  /** SVG de cada logo inlineado por la API (currentColor hereda el acento). */
   logo_inline: Record<string, string>
 }
 
@@ -50,6 +51,7 @@ export const useSiteStore = defineStore('site', () => {
   // Última configuración buena (stale-while-revalidate): en visitas
   // repetidas el header pinta el logo y el título reales al instante.
   const settings = ref<SiteSettings | null>(readCache<SiteSettings>(CACHE_KEY))
+  const currentAccent = ref<string | null>(null)
 
   const title = computed(() => {
     const map = settings.value?.title ?? {}
@@ -83,6 +85,26 @@ export const useSiteStore = defineStore('site', () => {
   /** Título del documento: "página · sitio" (o solo una de las partes). */
   function documentTitle(pageTitle?: string): string {
     return [pageTitle, title.value].filter(Boolean).join(' · ')
+  }
+
+  /** Deriva los tonos del acento a partir de un HEX (via color-mix del navegador). */
+  function applyAccent(hex: string) {
+    currentAccent.value = hex
+    const root = document.documentElement.style
+    root.setProperty('--accent-200', `color-mix(in srgb, ${hex} 30%, white)`)
+    root.setProperty('--accent-300', `color-mix(in srgb, ${hex} 55%, white)`)
+    root.setProperty('--accent-400', `color-mix(in srgb, ${hex} 80%, white)`)
+    root.setProperty('--accent-500', hex)
+    root.setProperty('--accent-600', `color-mix(in srgb, ${hex} 85%, black)`)
+    root.setProperty('--accent-700', `color-mix(in srgb, ${hex} 70%, black)`)
+  }
+
+  /** Sortea un acento de los candidatos (evitando repetir el actual si hay más). */
+  function pickAccent() {
+    const pool = settings.value?.accent_colors ?? []
+    if (!pool.length) return
+    const candidates = pool.length > 1 ? pool.filter((c) => c !== currentAccent.value) : pool
+    applyAccent(candidates[Math.floor(Math.random() * candidates.length)])
   }
 
   function applyFonts() {
@@ -123,7 +145,8 @@ export const useSiteStore = defineStore('site', () => {
   function applySettings() {
     applyFonts()
     applyFavicon()
-    if (settings.value) applyAccents(settings.value)
+    if (settings.value?.accent_mode === 'random') pickAccent()
+    else if (settings.value) applyAccent(settings.value.accent_color)
     if (!document.title) document.title = documentTitle()
   }
 
@@ -156,6 +179,11 @@ export const useSiteStore = defineStore('site', () => {
     return hadCache ? Promise.resolve() : inflight
   }
 
+  /** Disparador extra del modo aleatorio: re-sortea al navegar por la SPA. */
+  function onNavigate() {
+    if (settings.value?.accent_mode === 'random') pickAccent()
+  }
+
   return {
     settings,
     title,
@@ -165,5 +193,6 @@ export const useSiteStore = defineStore('site', () => {
     logoInline,
     documentTitle,
     load,
+    onNavigate,
   }
 })

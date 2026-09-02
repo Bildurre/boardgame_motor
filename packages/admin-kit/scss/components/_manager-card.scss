@@ -370,7 +370,7 @@
     // y texto/stroke del color de la acción; en hover el color pasa al
     // fondo y el texto al color de texto normal.
     @each $variant, $color in (
-      primary: $accent-2-500,
+      primary: $accent-500,
       info: $info,
       warning: $warning,
       success: $success,

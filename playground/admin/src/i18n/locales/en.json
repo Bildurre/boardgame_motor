@@ -495,9 +495,7 @@
     "background": {
       "token:veil-60": "Veil 60%",
       "token:veil-80": "Veil 80%",
-      "token:accent-soft": "Brand",
-      "token:accent-2-soft": "Action",
-      "token:accent-3-soft": "Game"
+      "token:accent-soft": "Accent"
     },
     "image_position": {
       "top": "Top",
@@ -529,8 +527,10 @@
       "logo": "Logo (SVG/PNG)",
       "favicon": "Favicon (PNG/SVG)",
       "faviconHint": "Browser tab icon",
-      "gameColor": "Game color",
-      "gameColorHint": "The indigo brand and coral action colors are fixed for Espadas de Ceniza. This third color gives the game its personality: kickers, section headings, dividers and badges, on the site and in the admin.",
+      "accentMode": "Accent color",
+      "accentColor": "Color",
+      "accentColors": "Add candidate color",
+      "accentColorsHint": "One of these colors is drawn on page load and while navigating.",
       "fontHeadings": "Headings font",
       "fontBody": "Body font",
       "footerText": "Footer text",
@@ -540,6 +540,11 @@
       "fontDrag": "Drag a font or click",
       "fontSpecial": "Special font (quotes)"
     },
+    "accentModes": {
+      "fixed": "Fixed",
+      "random": "Random (CDL style)"
+    },
+    "addColor": "Add",
     "fontPreviewHeading": "The seven kingdoms — Sample heading",
     "fontPreviewBody": "Shuffle the deck and deal five cards to each player.",
     "fonts": {

@@ -1,6 +1,6 @@
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
-import { loadSiteAccents, watchSplash } from '@edc-motor/ui'
+import { watchSplash } from '@edc-motor/ui'
 import './assets/scss/main.scss'
 import App from './App.vue'
 import router from './router'
@@ -11,8 +11,5 @@ import { api } from '@/lib/api'
 // el arranque (todas las peticiones pasan por `api`): registrar ANTES de
 // montar, o las peticiones del onMounted saldrían sin contar.
 watchSplash({ api })
-// Los dos acentos de la Configuración del sitio (marca y acción) también
-// visten el admin: misma pareja que la web pública.
-void loadSiteAccents(api)
 
 createApp(App).use(createPinia()).use(i18n).use(router).mount('#app')

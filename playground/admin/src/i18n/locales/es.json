@@ -446,8 +446,10 @@
       "logo": "Logo (SVG/PNG)",
       "favicon": "Favicon (PNG/SVG)",
       "faviconHint": "Icono de la pestaña del navegador",
-      "gameColor": "Color del juego",
-      "gameColorHint": "El índigo de marca y el coral de acción son fijos de Espadas de Ceniza. Este tercer color da personalidad al juego: kickers, cabeceras de sección, separadores y badges, en la web y en el admin.",
+      "accentMode": "Color de acento",
+      "accentColor": "Color",
+      "accentColors": "Añadir color candidato",
+      "accentColorsHint": "Se sortea uno de estos colores al cargar la web y al navegar.",
       "fontHeadings": "Fuente de los títulos",
       "fontBody": "Fuente del texto",
       "footerText": "Texto del pie",
@@ -457,6 +459,11 @@
       "fontDrag": "Arrastra una fuente o haz clic",
       "fontSpecial": "Fuente especial (citas)"
     },
+    "accentModes": {
+      "fixed": "Fijo",
+      "random": "Aleatorio (estilo CDL)"
+    },
+    "addColor": "Añadir",
     "fontPreviewHeading": "Los siete reinos — Título de ejemplo",
     "fontPreviewBody": "Baraja el mazo y reparte cinco cartas a cada jugador.",
     "fonts": {

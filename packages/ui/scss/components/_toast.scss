@@ -10,10 +10,10 @@
   box-shadow: $shadow-md;
   font-size: $fs-14;
 
-  &--success { background: $success-soft; color: $success; border-color: $success; }
-  &--warning { background: $warning-soft; color: $warning; border-color: $warning; }
-  &--danger  { background: $danger-soft;  color: $danger;  border-color: $danger; }
-  &--info    { background: $info-soft;    color: $info;    border-color: $info; }
+  &--success { background: var(--toast-success-bg); color: $success; border-color: $success; }
+  &--warning { background: var(--toast-warning-bg); color: $warning; border-color: $warning; }
+  &--danger  { background: var(--toast-danger-bg);  color: $danger;  border-color: $danger; }
+  &--info    { background: var(--toast-info-bg);    color: $info;    border-color: $info; }
 
   &__message { flex: 1; }
   &__close {

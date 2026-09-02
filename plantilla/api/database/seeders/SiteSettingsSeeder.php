@@ -25,8 +25,8 @@ class SiteSettingsSeeder extends Seeder
             'description' => ['es' => 'Un juego de mesa imprimible montado sobre EdC Motor.'],
             'logo' => ['es' => $this->logo()], // por idioma; el resto usa el fallback
             'favicon' => $this->favicon(),
-            // Color del juego (acento 3), un nodo de la paleta del motor.
-            'game_color' => '#0b936b',
+            'accent_mode' => 'random',
+            'accent_colors' => ['#6c5ce7'],
             'font_headings' => 'ebgaramond',
             'font_body' => 'lora',
             'font_special' => 'italianno', // solo la usa el bloque cita

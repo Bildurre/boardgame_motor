@@ -49,16 +49,16 @@
     }
   }
 
-  // Relleno del ACENTO 2 (acción: «pulsa aquí»): el texto NO es fijo —
-  // claro u oscuro según el fondo real (contrast-text de tokens).
+  // Relleno de color: el texto NO es fijo — claro u oscuro según el fondo
+  // real (contrast-text de tokens), que el acento lo elige el usuario.
   &--primary {
-    background: $color-accent-2;
-    @include contrast-text($color-accent-2);
+    background: $color-accent;
+    @include contrast-text($color-accent);
 
-    // Hover bien visible: el 600 apenas se distingue del 500.
+    // Hover bien visible: accent-600 apenas se distingue del 500.
     &:hover:not(:disabled) {
-      background: color-mix(in srgb, $color-accent-2 72%, black);
-      @include contrast-text(color-mix(in srgb, $color-accent-2 72%, black));
+      background: color-mix(in srgb, $color-accent 72%, black);
+      @include contrast-text(color-mix(in srgb, $color-accent 72%, black));
     }
   }
 

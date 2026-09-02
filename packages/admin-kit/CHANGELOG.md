@@ -3,13 +3,6 @@
 Kit de construcción del panel de administración (sobre `@edc-motor/ui`). Paquete
 **fuente** (se consume vía Vite). Versión de tren con `edc-motor/core` y `@edc-motor/ui`.
 
-## [Sin publicar]
-
-### Cambiado
-
-- **Botones de acción del panel derecho** (`manager-detail__actions`): la
-  variante `primary` pasa al acento 2 (acción), como el botón primario del ui.
-
 ## [0.5.35] — 2026-09-02
 
 - Sin cambios propios: versión de tren.
