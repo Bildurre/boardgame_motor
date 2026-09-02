@@ -4,6 +4,20 @@ Componentes Vue 3 + SCSS para las webs públicas (y piezas compartidas con el
 admin). Paquete **fuente** (se consume vía Vite). Versión de tren con
 `edc-motor/core` y `@edc-motor/admin-kit`.
 
+## [Sin publicar]
+
+### Cambiado
+
+- **Tema claro en espejo del oscuro.** La escalera de superficies del claro
+  baja desde el fondo con los mismos saltos de luminosidad con los que sube
+  en oscuro (casi blanco = casi negro, gris = gris, gris oscuro = gris
+  claro): `--surface` `#ece7e1`, `--surface-2` `#e2ded7`, `--surface-3`
+  `#d3cec8`, `--border` `#d3cec8`, `--border-strong` `#bdb9b3`. Antes la
+  superficie era blanco puro (más clara que el fondo) y las demás bajaban:
+  las tarjetas flotaban hacia el blanco mientras inputs y hovers se
+  hundían. Las tarjetas del claro pasan a ser un hueso un punto más oscuro
+  que la página. Textos sobre surface: 5,9:1 y 4,4:1.
+
 ## [0.5.38] — 2026-09-02
 
 ### Cambiado

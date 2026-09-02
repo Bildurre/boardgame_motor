@@ -19,20 +19,24 @@
   --warning: #fbbf24;
   --danger: #ff6b6b;
 
-  // Neutros HUESO: los grises del tema claro llevan un matiz cálido (75° en
-  // OKLCH, croma 0,010; el texto 0,012) en vez del azulado de antes, con
-  // las MISMAS luminosidades, así los contrastes no cambian.
+  // Neutros HUESO (matiz cálido, 75° en OKLCH, croma 0,010): ESPEJO del
+  // tema oscuro. La escalera baja desde el fondo con los mismos saltos de
+  // luminosidad que en oscuro sube: casi blanco = casi negro, gris = gris,
+  // gris oscuro = gris claro (bg L 0,984 → surface 0,931 → surface-2 0,902
+  // → surface-3 0,854). Las tarjetas ya no son blanco puro: son un hueso
+  // un punto más oscuro que la página, como en oscuro son un punto más
+  // claras.
   --bg: #fef9f3;
-  --surface: #ffffff;
-  --surface-2: #f7f2ec;
-  --surface-3: #f0ebe5;
+  --surface: #ece7e1;
+  --surface-2: #e2ded7;
+  --surface-3: #d3cec8;
   --text-1: #15110d;
-  // Textos secundarios con más presencia: L 0,46 y 0,53 en OKLCH (6,8:1 y
-  // 5,0:1 sobre el fondo; antes 5,2:1 y 3,7:1).
+  // Textos secundarios con presencia: L 0,46 y 0,53 (6,8:1 y 5,0:1 sobre
+  // el fondo; sobre surface 5,9:1 y 4,4:1).
   --text-2: #5c5751;
   --text-3: #706b64;
-  --border: #e7e2dc;
-  --border-strong: #d6d1cb;
+  --border: #d3cec8;
+  --border-strong: #bdb9b3;
 
   --shadow-sm: 0 2px 6px rgba(0, 0, 0, 0.06);
   --shadow-md: 0 6px 18px rgba(0, 0, 0, 0.08);
