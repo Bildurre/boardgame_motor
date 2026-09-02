@@ -19,22 +19,22 @@
   --warning: #fbbf24;
   --danger: #ff6b6b;
 
-  // Neutros HUESO (matiz cálido, 75° en OKLCH, croma 0,010): la escalera
+  // Neutros HUESO (matiz cálido, 75° en OKLCH, croma 0,006): la escalera
   // SUBE desde el fondo hacia el blanco, como en oscuro sube hacia la luz:
   // lo elevado (tarjetas, inputs, hovers) es siempre más claro que lo que
   // tiene debajo, en los dos temas. bg L 0,902 → surface 0,931 →
   // surface-2 0,963 → surface-3 0,984.
-  --bg: #e2ded7;
-  --surface: #ece7e1;
-  --surface-2: #f5f0ea;
-  --surface-3: #fef9f3;
-  --text-1: #15110d;
+  --bg: #e1deda;
+  --surface: #eae7e4;
+  --surface-2: #f3f0ed;
+  --surface-3: #fcf9f5;
+  --text-1: #14110e;
   // Textos secundarios: 5,3:1 y 3,9:1 sobre el fondo; 5,8:1 y 4,3:1 sobre
   // surface; 6,4:1 y 4,7:1 sobre surface-2.
-  --text-2: #5c5751;
-  --text-3: #706b64;
-  --border: #d3cec8;
-  --border-strong: #bdb9b3;
+  --text-2: #5a5754;
+  --text-3: #6e6b67;
+  --border: #d1cecb;
+  --border-strong: #bcb9b5;
 
   --shadow-sm: 0 2px 6px rgba(0, 0, 0, 0.06);
   --shadow-md: 0 6px 18px rgba(0, 0, 0, 0.08);
@@ -88,18 +88,18 @@
   --accent-100: #1e1b2e;
 
   // Neutros CENIZA: los grises del tema oscuro con el mismo matiz cálido
-  // (75°, croma 0,010) que el hueso del claro, a las luminosidades de antes.
-  --bg: #14100c;
-  --surface: #201c18;
-  --surface-2: #27231f;
-  --surface-3: #322f2a;
-  --text-1: #ece7e1;
+  // (75°, croma 0,006) que el hueso del claro, a las luminosidades de antes.
+  --bg: #12100e;
+  --surface: #1e1c1a;
+  --surface-2: #262321;
+  --surface-3: #312f2c;
+  --text-1: #ebe7e3;
   // Textos secundarios con más presencia: L 0,76 y 0,66 (8,8:1 y 6,1:1
   // sobre el fondo; antes 7,2:1 y 4,9:1).
-  --text-2: #b6b0a9;
-  --text-3: #97918a;
-  --border: #322f2a;
-  --border-strong: #44403b;
+  --text-2: #b4b0ac;
+  --text-3: #95918d;
+  --border: #312f2c;
+  --border-strong: #43403d;
 
   --shadow-sm: 0 2px 6px rgba(0, 0, 0, 0.30);
   --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.35);

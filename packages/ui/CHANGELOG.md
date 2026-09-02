@@ -4,6 +4,16 @@ Componentes Vue 3 + SCSS para las webs públicas (y piezas compartidas con el
 admin). Paquete **fuente** (se consume vía Vite). Versión de tren con
 `edc-motor/core` y `@edc-motor/admin-kit`.
 
+## [Sin publicar]
+
+### Cambiado
+
+- **Neutros menos cálidos.** Hueso y ceniza conservan el matiz (75° en
+  OKLCH) pero con el croma a 0,006 (antes 0,010): el oscuro deja de tirar a
+  rojizo y el claro a amarillo. Mismas luminosidades, mismos contrastes.
+  Claro: `#e1deda` / `#eae7e4` / `#f3f0ed` / `#fcf9f5`; oscuro: `#12100e` /
+  `#1e1c1a` / `#262321` / `#312f2c`.
+
 ## [0.5.40] — 2026-09-03
 
 ### Cambiado
