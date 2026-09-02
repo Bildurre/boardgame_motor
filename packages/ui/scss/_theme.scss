@@ -19,15 +19,18 @@
   --warning: #fbbf24;
   --danger: #ff6b6b;
 
-  --bg: #fafafa;
+  // Neutros HUESO: los grises del tema claro llevan un matiz cálido (75° en
+  // OKLCH, croma 0,010; el texto 0,012) en vez del azulado de antes, con
+  // las MISMAS luminosidades, así los contrastes no cambian.
+  --bg: #fef9f3;
   --surface: #ffffff;
-  --surface-2: #f2f3f4;
-  --surface-3: #eaecf0;
-  --text-1: #101216;
-  --text-2: #636a77;
-  --text-3: #7b8290;
-  --border: #e2e3e7;
-  --border-strong: #cfd2d9;
+  --surface-2: #f7f2ec;
+  --surface-3: #f0ebe5;
+  --text-1: #15110d;
+  --text-2: #6d6963;
+  --text-3: #85817b;
+  --border: #e7e2dc;
+  --border-strong: #d6d1cb;
 
   --shadow-sm: 0 2px 6px rgba(0, 0, 0, 0.06);
   --shadow-md: 0 6px 18px rgba(0, 0, 0, 0.08);
@@ -80,15 +83,17 @@
 
   --accent-100: #1e1b2e;
 
-  --bg: #0f1115;
-  --surface: #1a1d24;
-  --surface-2: #20242d;
-  --surface-3: #2b2f3a;
-  --text-1: #e6e8ee;
-  --text-2: #9aa0ad;
-  --text-3: #7b8290;
-  --border: #2b2f3a;
-  --border-strong: #3a4150;
+  // Neutros CENIZA: los grises del tema oscuro con el mismo matiz cálido
+  // (75°, croma 0,010) que el hueso del claro, a las luminosidades de antes.
+  --bg: #14100c;
+  --surface: #201c18;
+  --surface-2: #27231f;
+  --surface-3: #322f2a;
+  --text-1: #ece7e1;
+  --text-2: #a49f99;
+  --text-3: #85817b;
+  --border: #322f2a;
+  --border-strong: #44403b;
 
   --shadow-sm: 0 2px 6px rgba(0, 0, 0, 0.30);
   --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.35);
