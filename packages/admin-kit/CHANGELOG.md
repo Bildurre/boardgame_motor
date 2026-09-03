@@ -14,6 +14,10 @@ Kit de construcción del panel de administración (sobre `@edc-motor/ui`). Paque
   navegacion, acciones, documentos, multimedia, tiempo, comunicacion,
   estado, comercio, objetos).
 
+## [0.5.44] — 2026-09-03
+
+- Sin cambios propios: versión de tren.
+
 ## [0.5.43] — 2026-09-03
 
 ### Añadido

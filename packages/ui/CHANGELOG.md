@@ -20,6 +20,8 @@ admin). Paquete **fuente** (se consume vía Vite). Versión de tren con
   siguen en fila; en el modal angosto apilan los tres (antes pasaban de
   tres columnas a una de golpe).
 
+## [0.5.44] — 2026-09-03
+
 ### Corregido
 
 - **Lint del catálogo de iconos**: el icono `infinity` se importa con alias
