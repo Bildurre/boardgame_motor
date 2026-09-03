@@ -3,6 +3,17 @@
 Kit de construcción del panel de administración (sobre `@edc-motor/ui`). Paquete
 **fuente** (se consume vía Vite). Versión de tren con `edc-motor/core` y `@edc-motor/ui`.
 
+## [Sin publicar]
+
+### Cambiado
+
+- **Campo `icon`**: el `IconPicker` va por categorías con «ver todos / ver
+  menos» y el elegido junto al buscador. Textos por convención
+  `iconPicker.none` / `search` / `all` / `less` / `noResults` y las
+  categorías como `iconCategories.<clave>` (juego, cartas, personas,
+  navegacion, acciones, documentos, multimedia, tiempo, comunicacion,
+  estado, comercio, objetos).
+
 ## [0.5.43] — 2026-09-03
 
 ### Añadido

@@ -83,12 +83,20 @@
   }
 
   // Cortes explícitos (en vez del auto-fit):
-  // — la fila de 3 apila ANTES que el resto: por debajo de ~564px de
+  // — la fila de 3 se reparte ANTES que el resto: por debajo de ~564px de
   //   modal-body (3 campos de 180px mínimos cómodos + 2 gaps) ya no caben
-  //   tres columnas. Pasa DIRECTA a una columna, sin estadio intermedio
-  //   2+1 que dejaría una celda huérfana descolgada.
+  //   tres columnas. Estadio 2+1: los dos primeros siguen en fila y el
+  //   TERCERO baja a todo el ancho (p. ej. entidad + origen arriba y el
+  //   check de tarjetas estrechas debajo). El .schema-fields anidado va
+  //   disuelto (display: contents), así que el último campo se busca
+  //   también dentro de él.
   @container modal-body (max-width: 563px) {
-    &--3 { grid-template-columns: minmax(0, 1fr); }
+    &--3 {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+
+      > :last-child,
+      > .schema-fields > :last-child { grid-column: 1 / -1; }
+    }
   }
 
   // — TODAS las variantes apilan a una columna en el modal angosto.

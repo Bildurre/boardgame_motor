@@ -6,6 +6,20 @@ admin). Paquete **fuente** (se consume vía Vite). Versión de tren con
 
 ## [Sin publicar]
 
+### Cambiado
+
+- **`IconPicker` por categorías**: cada categoría del catálogo enseña su
+  primera fila (12) y se despliega entera con «ver todos» (y se pliega con
+  «ver menos»); el buscador filtra dentro de cada una y saca las que casan
+  completas. El icono elegido se enseña en la misma fila que el buscador,
+  con su aspa para quitarlo (desaparece la casilla «sin icono»). Etiquetas:
+  `none` (quitar), `search`, `all`, `less`, `noResults`, y `categoryLabels`
+  por clave de categoría.
+- **Filas de 3 campos (`.form-row--3`) con estadio 2+1**: por debajo de
+  ~564px de modal el tercer campo baja a todo el ancho y los dos primeros
+  siguen en fila; en el modal angosto apilan los tres (antes pasaban de
+  tres columnas a una de golpe).
+
 ### Corregido
 
 - **Lint del catálogo de iconos**: el icono `infinity` se importa con alias

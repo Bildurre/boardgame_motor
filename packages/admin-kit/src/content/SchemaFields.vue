@@ -9,6 +9,7 @@ import {
   BaseSelect,
   BaseTextarea,
   IconButton,
+  ICON_CATALOG,
   IconPicker,
   ImageUpload,
   NumericInput,
@@ -204,18 +205,27 @@ function imageTranslations(field: FieldSchema): Record<string, string | File> {
   return value as Record<string, string | File>
 }
 
-/** Textos del selector de icono (localizables por convención: iconPicker.*). */
+/** Textos del selector de icono (localizables por convención: iconPicker.*
+ *  y las categorías del catálogo como iconCategories.<clave>). */
 const iconPickerLabels = computed<Partial<IconPickerLabels>>(() => {
   const t = (key: string, fallback: string) =>
     props.translate?.(`iconPicker.${key}`, fallback) ?? fallback
   return {
-    none: t('none', 'Sin icono'),
+    none: t('none', 'Quitar icono'),
     search: t('search', 'Buscar icono…'),
-    showMore: t('showMore', 'Mostrar más'),
-    remaining: t('remaining', '{count} más'),
+    all: t('all', 'Ver todos'),
+    less: t('less', 'Ver menos'),
     noResults: t('noResults', 'Ningún icono con ese nombre.'),
   }
 })
+const iconCategoryLabels = computed(() =>
+  Object.fromEntries(
+    ICON_CATALOG.map((category) => [
+      category.key,
+      props.translate?.(`iconCategories.${category.key}`, category.label) ?? category.label,
+    ]),
+  ),
+)
 
 function selectOptions(field: FieldSchema): SelectOption[] {
   return Object.entries(field.options ?? {}).map(([value, text]) => ({
@@ -483,6 +493,7 @@ function addLabel(): string {
             :model-value="(modelValue[field.key] as string) ?? null"
             :label="label(field)"
             :labels="iconPickerLabels"
+            :category-labels="iconCategoryLabels"
             @update:model-value="(v) => set(field.key, v)"
           />
 

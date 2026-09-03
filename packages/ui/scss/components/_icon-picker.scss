@@ -1,18 +1,12 @@
 @use "tokens" as *;
 
-// Selector de icono lucide (IconPicker): rejilla de casillas al estilo de
-// los swatches del selector de color, con buscador y «mostrar más».
+// Selector de icono lucide (IconPicker): buscador con el icono elegido al
+// lado y el catálogo por categorías, cada una con su rejilla de casillas al
+// estilo de los swatches del selector de color y su «ver todos / ver menos».
 .icon-picker {
   display: flex;
   flex-direction: column;
-  gap: $space-2;
-
-  &__head {
-    display: flex;
-    align-items: baseline;
-    justify-content: space-between;
-    gap: $space-2;
-  }
+  gap: $space-3;
 
   &__label {
     font-size: $fs-13;
@@ -20,14 +14,79 @@
     color: $text-2;
   }
 
-  // Nombre del icono elegido (kebab-case de lucide), con el propio icono.
+  // Buscador (crece) + el elegido (a su tamaño), en una fila.
+  &__bar {
+    display: flex;
+    align-items: center;
+    gap: $space-3;
+
+    > :first-child { flex: 1; min-width: 0; }
+  }
+
+  // El icono elegido: casilla con el icono, su nombre kebab-case y el aspa.
   &__current {
     display: inline-flex;
     align-items: center;
-    gap: $space-1;
+    gap: $space-2;
+    height: $input-height;
+    padding: 0 $space-2 0 $space-3;
+    border: 1px solid $accent-500;
+    border-radius: $radius-sm;
+    background: color-mix(in srgb, $accent-500 10%, transparent);
+    color: $accent-500;
+    white-space: nowrap;
+  }
+
+  &__current-name {
     font-size: $fs-13;
     font-family: $k-font-mono;
+    color: $text-2;
+  }
+
+  &__clear {
+    display: inline-flex;
+    padding: $space-1;
+    border: none;
+    border-radius: $radius-sm;
+    background: none;
     color: $text-3;
+    cursor: pointer;
+
+    &:hover { color: $danger; background: color-mix(in srgb, $danger 12%, transparent); }
+  }
+
+  &__section {
+    display: flex;
+    flex-direction: column;
+    gap: $space-2;
+  }
+
+  &__section-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: $space-2;
+  }
+
+  &__section-title {
+    font-size: $fs-12;
+    font-weight: $k-fw-semibold;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: $text-3;
+  }
+
+  &__toggle {
+    padding: 0;
+    border: none;
+    background: none;
+    color: $accent-500;
+    font: inherit;
+    font-size: $fs-13;
+    font-weight: $k-fw-medium;
+    cursor: pointer;
+
+    &:hover { text-decoration: underline; }
   }
 
   &__grid {
@@ -37,7 +96,6 @@
   }
 
   &__cell {
-    position: relative;
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -51,7 +109,7 @@
     cursor: pointer;
     transition: box-shadow 0.15s, border-color 0.15s, color 0.15s;
 
-    // Halo al hover (nunca transform: ver el selector de color).
+    // Realce al hover sin transform (ver el selector de color).
     &:hover:not(#{&}--selected) {
       border-color: $accent-500;
       color: $accent-500;
@@ -62,34 +120,11 @@
       color: $accent-500;
       box-shadow: 0 0 0 2px $surface, 0 0 0 4px $accent-500;
     }
-
-    &--none { color: $text-3; }
-  }
-
-  &__check {
-    position: absolute;
-    right: 1px;
-    bottom: 1px;
-    color: $accent-500;
   }
 
   &__empty {
     margin: 0;
     font-size: $fs-13;
     color: $text-3;
-  }
-
-  &__more {
-    align-self: flex-start;
-    padding: $space-1 0;
-    border: none;
-    background: none;
-    color: $accent-500;
-    font: inherit;
-    font-size: $fs-13;
-    font-weight: $k-fw-medium;
-    cursor: pointer;
-
-    &:hover { text-decoration: underline; }
   }
 }

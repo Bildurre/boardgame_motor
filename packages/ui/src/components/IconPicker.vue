@@ -1,21 +1,24 @@
 <script setup lang="ts">
 import { computed, ref, watch } from 'vue'
-import { Ban, Check } from '@lucide/vue'
+import { X } from '@lucide/vue'
 import BaseInput from './BaseInput.vue'
 import { ICON_CATALOG, iconComponents } from '../icons/iconCatalog'
 
 // Selector de icono lucide (mismo lenguaje que PaletteColorPicker: rejilla
-// de casillas, la elegida con anillo). Ofrece el catálogo CURADO del motor
-// (iconCatalog, ~650 iconos por categorías) por tandas — «mostrar más» va
-// destapando— y un buscador por nombre que filtra el catálogo entero. El
-// valor es el nombre kebab-case de lucide (p. ej. `layout-grid`); la
-// primera casilla («sin icono») lo vacía.
+// de casillas, la elegida con anillo). El catálogo CURADO del motor
+// (iconCatalog, ~650 iconos) va POR CATEGORÍAS: cada una enseña su primera
+// fila y se despliega entera con «ver todos» (y se vuelve a plegar con
+// «ver menos»). El buscador filtra por nombre dentro de cada categoría
+// (las que se quedan sin iconos desaparecen) y, mientras hay búsqueda, las
+// categorías salen completas. El icono elegido se enseña junto al buscador,
+// con su aspa para quitarlo. El valor es el nombre kebab-case de lucide
+// (p. ej. `layout-grid`).
 export interface IconPickerLabels {
+  /** Aspa del elegido (quitar icono). */
   none: string
   search: string
-  showMore: string
-  /** «{count} más» del botón, con el número de iconos que faltan. */
-  remaining: string
+  all: string
+  less: string
   noResults: string
 }
 
@@ -24,52 +27,56 @@ const props = withDefaults(
     modelValue: string | null
     label?: string
     labels?: Partial<IconPickerLabels>
-    /** Casillas visibles al abrir y cuántas destapa cada «mostrar más». */
-    pageSize?: number
+    /** Etiquetas de las categorías por clave (iconCategories.<key>). */
+    categoryLabels?: Record<string, string>
+    /** Iconos visibles de cada categoría plegada. */
+    collapsedSize?: number
   }>(),
-  { labels: () => ({}), pageSize: 48 },
+  { labels: () => ({}), categoryLabels: () => ({}), collapsedSize: 12 },
 )
 
 const emit = defineEmits<{ 'update:modelValue': [value: string | null] }>()
 
 const L = computed<IconPickerLabels>(() => ({
-  none: 'Sin icono',
+  none: 'Quitar icono',
   search: 'Buscar icono…',
-  showMore: 'Mostrar más',
-  remaining: '{count} más',
+  all: 'Ver todos',
+  less: 'Ver menos',
   noResults: 'Ningún icono con ese nombre.',
   ...props.labels,
 }))
 
 const query = ref('')
-const shown = ref(props.pageSize)
+const expanded = ref<Set<string>>(new Set())
 
-// Catálogo aplanado en el orden de sus categorías; el buscador casa por
-// nombre (kebab-case) y por la etiqueta de la categoría.
-const all = computed(() =>
-  ICON_CATALOG.flatMap((category) =>
-    category.icons.map((name) => ({ name, category: category.label.toLowerCase() })),
-  ),
-)
-
-const matches = computed(() => {
+// Categorías con los iconos que casan con la búsqueda; sin búsqueda, todas.
+const sections = computed(() => {
   const q = query.value.trim().toLowerCase()
-  if (!q) return all.value.map((entry) => entry.name)
-  return all.value
-    .filter((entry) => entry.name.includes(q) || entry.category.includes(q))
-    .map((entry) => entry.name)
+  return ICON_CATALOG.map((category) => {
+    const icons = q ? category.icons.filter((name) => name.includes(q)) : category.icons
+    const open = !!q || expanded.value.has(category.key)
+    return {
+      key: category.key,
+      label: props.categoryLabels[category.key] ?? category.label,
+      total: icons.length,
+      icons: open ? icons : icons.slice(0, props.collapsedSize),
+      open,
+      // Con búsqueda salen completas: el botón solo tiene sentido sin ella.
+      toggle: !q && icons.length > props.collapsedSize,
+    }
+  }).filter((section) => section.total > 0)
 })
 
-const visible = computed(() => matches.value.slice(0, shown.value))
-const remaining = computed(() => Math.max(0, matches.value.length - shown.value))
-
-// Cada búsqueda nueva vuelve a la primera tanda.
+// Cada búsqueda nueva vuelve al plegado por defecto.
 watch(query, () => {
-  shown.value = props.pageSize
+  expanded.value = new Set()
 })
 
-function showMore() {
-  shown.value += props.pageSize * 2
+function toggle(key: string) {
+  const next = new Set(expanded.value)
+  if (next.has(key)) next.delete(key)
+  else next.add(key)
+  expanded.value = next
 }
 
 function pick(name: string | null) {
@@ -79,49 +86,55 @@ function pick(name: string | null) {
 
 <template>
   <div class="icon-picker">
-    <div class="icon-picker__head">
-      <label v-if="label" class="icon-picker__label">{{ label }}</label>
-      <span v-if="modelValue" class="icon-picker__current">
-        <component :is="iconComponents[modelValue]" v-if="iconComponents[modelValue]" :size="14" />
-        {{ modelValue }}
-      </span>
+    <label v-if="label" class="icon-picker__label">{{ label }}</label>
+
+    <!-- Buscador y, al lado, el icono elegido con su aspa -->
+    <div class="icon-picker__bar">
+      <BaseInput v-model="query" type="search" :placeholder="L.search" />
+      <div v-if="modelValue" class="icon-picker__current">
+        <component :is="iconComponents[modelValue]" v-if="iconComponents[modelValue]" :size="18" />
+        <span class="icon-picker__current-name">{{ modelValue }}</span>
+        <button
+          type="button"
+          class="icon-picker__clear"
+          :title="L.none"
+          :aria-label="L.none"
+          @click="pick(null)"
+        >
+          <X :size="14" />
+        </button>
+      </div>
     </div>
 
-    <BaseInput v-model="query" type="search" :placeholder="L.search" />
+    <p v-if="!sections.length" class="icon-picker__empty">{{ L.noResults }}</p>
 
-    <div class="icon-picker__grid">
-      <!-- Sin icono -->
-      <button
-        type="button"
-        class="icon-picker__cell icon-picker__cell--none"
-        :class="{ 'icon-picker__cell--selected': !modelValue }"
-        :title="L.none"
-        :aria-label="L.none"
-        @click="pick(null)"
-      >
-        <Ban :size="16" />
-      </button>
-
-      <button
-        v-for="name in visible"
-        :key="name"
-        type="button"
-        class="icon-picker__cell"
-        :class="{ 'icon-picker__cell--selected': modelValue === name }"
-        :title="name"
-        :aria-label="name"
-        :aria-pressed="modelValue === name"
-        @click="pick(name)"
-      >
-        <component :is="iconComponents[name]" :size="18" />
-        <Check v-if="modelValue === name" class="icon-picker__check" :size="10" />
-      </button>
-    </div>
-
-    <p v-if="!matches.length" class="icon-picker__empty">{{ L.noResults }}</p>
-
-    <button v-if="remaining" type="button" class="icon-picker__more" @click="showMore">
-      {{ L.showMore }} · {{ L.remaining.replace('{count}', String(remaining)) }}
-    </button>
+    <section v-for="section in sections" :key="section.key" class="icon-picker__section">
+      <header class="icon-picker__section-head">
+        <span class="icon-picker__section-title">{{ section.label }}</span>
+        <button
+          v-if="section.toggle"
+          type="button"
+          class="icon-picker__toggle"
+          @click="toggle(section.key)"
+        >
+          {{ section.open ? L.less : `${L.all} (${section.total})` }}
+        </button>
+      </header>
+      <div class="icon-picker__grid">
+        <button
+          v-for="name in section.icons"
+          :key="name"
+          type="button"
+          class="icon-picker__cell"
+          :class="{ 'icon-picker__cell--selected': modelValue === name }"
+          :title="name"
+          :aria-label="name"
+          :aria-pressed="modelValue === name"
+          @click="pick(name)"
+        >
+          <component :is="iconComponents[name]" :size="18" />
+        </button>
+      </div>
+    </section>
   </div>
 </template>
