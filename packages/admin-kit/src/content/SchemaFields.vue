@@ -196,6 +196,18 @@ function imageTranslations(field: FieldSchema): Record<string, string | File> {
   return value as Record<string, string | File>
 }
 
+/** Opciones del campo `icon`: los iconos del juego por nombre; el valor
+ *  guardado es su URL (como los iconos insertados en el texto rico). */
+function iconOptions(): SelectOption[] {
+  return [
+    {
+      value: '',
+      label: props.translate?.('blockOptions.icon.none', '— Sin icono —') ?? '— Sin icono —',
+    },
+    ...props.icons.map((icon) => ({ value: icon.url, label: icon.name })),
+  ]
+}
+
 function selectOptions(field: FieldSchema): SelectOption[] {
   return Object.entries(field.options ?? {}).map(([value, text]) => ({
     value,
@@ -453,6 +465,22 @@ function addLabel(): string {
               <template #icon><Plus :size="14" /></template>
               {{ addLabel() }}
             </BaseButton>
+          </div>
+
+          <!-- Icono de la biblioteca del juego: se elige por nombre y se guarda su URL -->
+          <div v-else-if="field.type === 'icon'" class="schema-fields__icon">
+            <BaseSelect
+              :model-value="(modelValue[field.key] as string) ?? ''"
+              :label="label(field)"
+              :options="iconOptions()"
+              @update:model-value="(v) => set(field.key, v || null)"
+            />
+            <img
+              v-if="modelValue[field.key]"
+              class="schema-fields__icon-preview"
+              :src="String(modelValue[field.key])"
+              alt=""
+            />
           </div>
 
           <!-- Referencia a una entidad del juego: buscador sobre su endpoint -->

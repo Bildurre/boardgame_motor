@@ -7,6 +7,7 @@ import BlockHeader from './BlockHeader.vue'
 import BlockIndex from './BlockIndex.vue'
 import BlockQuote from './BlockQuote.vue'
 import BlockRelated from './BlockRelated.vue'
+import BlockTabs from './BlockTabs.vue'
 import BlockText from './BlockText.vue'
 import BlockTextCard from './BlockTextCard.vue'
 
@@ -17,11 +18,22 @@ export {
   BlockIndex,
   BlockQuote,
   BlockRelated,
+  BlockTabs,
   BlockText,
   BlockTextCard,
 }
 export { default as BlockShell } from './BlockShell.vue'
 export { default as PageBackground } from './PageBackground.vue'
+// Flujo de bloques de una página con CONTENEDORES (pestañas): la app pinta
+// sus bloques con BlockFlow en vez de recorrer la lista plana.
+export { default as BlockFlow } from './BlockFlow.vue'
+export {
+  CONTAINER_COMPONENTS,
+  containerFlow,
+  groupByDirectChild,
+  type FlowEntry,
+  type PageBlock,
+} from './blockTree'
 // Mapa de rutas del catálogo (BlockRelated): la app lo provee por inject.
 export {
   catalogRoutesKey,
@@ -40,4 +52,5 @@ export const motorBlockComponents: Record<string, Component> = {
   cta: BlockCta,
   faq: BlockFaq,
   related: BlockRelated,
+  tabs: BlockTabs,
 }

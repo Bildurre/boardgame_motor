@@ -62,6 +62,9 @@ const blockLabels = computed<Partial<PageBlocksLabels>>(() => ({
   panelContent: t('pages.blocks.panelContent'),
   parent: t('pages.blocks.parent'),
   parentNone: t('pages.blocks.parentNone'),
+  tab: t('pages.blocks.tab'),
+  tabsMissing: t('pages.blocks.tabsMissing'),
+  tabsExtra: t('pages.blocks.tabsExtra'),
   stateKicker: t('common.stateKicker'),
 }))
 

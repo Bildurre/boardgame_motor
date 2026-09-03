@@ -422,7 +422,10 @@
       "parent": "Parent block (indented indexes)",
       "parentNone": "— None —",
       "printableShort": "PDF",
-      "indexableShort": "Index"
+      "indexableShort": "Index",
+      "tab": "Tab",
+      "tabsMissing": "Tabs without a block: {count}",
+      "tabsExtra": "Extra blocks: {count}"
     },
     "panelTitle": "Page",
     "panelEmpty": "Pick a page to see its actions.",

@@ -418,7 +418,10 @@
       "parent": "Bloke gurasoa (aurkibide koskatuak)",
       "parentNone": "— Bat ere ez —",
       "printableShort": "PDF",
-      "indexableShort": "Aurkibidea"
+      "indexableShort": "Aurkibidea",
+      "tab": "Fitxa",
+      "tabsMissing": "Blokerik gabeko fitxak: {count}",
+      "tabsExtra": "Soberako blokeak: {count}"
     },
     "panelTitle": "Orria",
     "panelEmpty": "Aukeratu orri bat bere ekintzak ikusteko.",

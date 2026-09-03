@@ -67,6 +67,11 @@ export interface PageBlocksLabels {
   /** Título de la sección de interruptores (PDF/Índice) del panel, debajo
    *  de las acciones de verdad (editar, borrar…). */
   stateKicker: string
+  /** Badge de los hijos de un bloque de pestañas: «Pestaña 2 · Comunidad». */
+  tab: string
+  /** Avisos del bloque de pestañas ({count} se sustituye). */
+  tabsMissing: string
+  tabsExtra: string
 }
 
 const defaultLabels: PageBlocksLabels = {
@@ -93,6 +98,9 @@ const defaultLabels: PageBlocksLabels = {
   parent: 'Bloque padre (índices indentados)',
   parentNone: '— Ninguno —',
   stateKicker: 'Estado',
+  tab: 'Pestaña',
+  tabsMissing: 'Pestañas sin bloque: {count}',
+  tabsExtra: 'Bloques de más: {count}',
 }
 
 const props = withDefaults(
@@ -276,7 +284,41 @@ function displayText(map: Record<string, string> | null | undefined): string {
  *  contenido), completa en el index; card y paneles la truncan por CSS. */
 function summary(block: BlockRow): string {
   const type = types.value.find((t) => t.key === block.type)
-  return blockPreview(block.settings, type?.fields ?? [], displayText)
+  const text = blockPreview(block.settings, type?.fields ?? [], displayText)
+  // Pestañas sin título: sus nombres, en fila.
+  if (!text && block.type === 'tabs') {
+    return tabRows(block)
+      .map((row) => displayText(row.label as Record<string, string> | undefined))
+      .filter(Boolean)
+      .join(' · ')
+  }
+  return text
+}
+
+/** Filas del repetidor de un bloque de pestañas. */
+function tabRows(block: BlockRow): Record<string, unknown>[] {
+  const raw = block.settings?.tabs
+  return Array.isArray(raw) ? (raw as Record<string, unknown>[]) : []
+}
+
+/** Si el bloque cuelga de un contenedor de pestañas: su número y nombre. */
+function tabInfo(block: BlockRow): { n: number; label: string } | null {
+  const parent = block.parent_id ? blocks.value.find((b) => b.id === block.parent_id) : undefined
+  if (!parent || parent.type !== 'tabs') return null
+  const siblings = blocks.value.filter((b) => b.parent_id === parent.id)
+  const n = siblings.findIndex((b) => b.id === block.id) + 1
+  const label = displayText(tabRows(parent)[n - 1]?.label as Record<string, string> | undefined)
+  return { n, label }
+}
+
+/** Aviso del contenedor: pestañas declaradas sin bloque hijo, o hijos de más. */
+function tabsWarning(block: BlockRow): string {
+  if (block.type !== 'tabs') return ''
+  const declared = tabRows(block).length
+  const children = blocks.value.filter((b) => b.parent_id === block.id).length
+  if (declared > children) return L.tabsMissing.replace('{count}', String(declared - children))
+  if (children > declared) return L.tabsExtra.replace('{count}', String(children - declared))
+  return ''
 }
 
 /** URL de un campo imagen (traducible o no): la del locale actual. */
@@ -317,6 +359,8 @@ function fieldValue(field: FieldSchema, block: BlockRow): string {
     return `{ ${Object.keys(raw as object).join(', ')} }`
   }
   if (field.type === 'entity') return `#${String(raw)}`
+  if (field.type === 'icon')
+    return props.icons.find((icon) => icon.url === raw)?.name ?? String(raw)
   return String(raw)
 }
 
@@ -666,6 +710,12 @@ defineExpose({ reload: load })
         <span class="page-blocks__type">{{ typeName(block.type) }}</span>
         <span class="page-blocks__summary">{{ summary(block) }}</span>
         <span class="page-blocks__flags">
+          <!-- Pestañas: el hijo lleva su pestaña; el contenedor, el aviso de descuadre -->
+          <span v-if="tabInfo(block)" class="chip is-info">
+            {{ L.tab }} {{ tabInfo(block)!.n }}
+            <template v-if="tabInfo(block)!.label">· {{ tabInfo(block)!.label }}</template>
+          </span>
+          <span v-if="tabsWarning(block)" class="chip is-missing">{{ tabsWarning(block) }}</span>
           <span v-if="block.is_printable" class="chip is-ok">{{ L.printableShort }}</span>
           <span v-if="block.is_indexable" class="chip">{{ L.indexableShort }}</span>
         </span>

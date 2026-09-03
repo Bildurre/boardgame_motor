@@ -2,7 +2,7 @@
 import { computed, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
-import { PageBackground, useHead } from '@edc-motor/ui'
+import { BlockFlow, PageBackground, useHead, type PageBlock } from '@edc-motor/ui'
 import { swrGet } from '@/lib/swr'
 import { blockRegistry } from '@/blocks/registry'
 import { templateFor } from '@/templates/registry'
@@ -20,12 +20,7 @@ interface PagePayload {
   background_image: string | null
   meta: { title: string; description: string }
   slugs: Record<string, string>
-  blocks: {
-    id: number
-    component: string
-    settings: Record<string, unknown>
-    data: Record<string, unknown>
-  }[]
+  blocks: PageBlock[]
 }
 
 const route = useRoute()
@@ -85,14 +80,9 @@ watch([slug, () => locales.current], load, { immediate: true })
   <template v-else-if="page">
     <PageBackground :image="page.background_image" />
     <component :is="templateFor(page.template)">
-      <component
-        :is="blockRegistry[block.component]"
-        v-for="block in page.blocks.filter((b) => blockRegistry[b.component])"
-        :id="`block-${block.id}`"
-        :key="block.id"
-        :settings="block.settings"
-        :data="block.data"
-      />
+      <!-- BlockFlow pinta cada bloque con su componente del registry y
+           entrega a los contenedores (pestañas) sus bloques anidados -->
+      <BlockFlow :blocks="page.blocks" :registry="blockRegistry" />
     </component>
   </template>
 </template>

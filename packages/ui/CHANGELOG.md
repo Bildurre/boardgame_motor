@@ -6,6 +6,25 @@ admin). Paquete **fuente** (se consume vía Vite). Versión de tren con
 
 ## [Sin publicar]
 
+### Añadido
+
+- **`BlockTabs`** (bloque `tabs` del motor, en `motorBlockComponents`):
+  barra de pestañas con icono y texto (la activa subrayada con el acento) y
+  el panel de la activa, que pinta los bloques anidados por dentro. Solo se
+  MONTA la pestaña activa (un índice de entidad por pestaña registra su
+  barra derecha y su paginación únicamente mientras está a la vista).
+  Enlace directo por el hash de la URL (`#ancla` del repetidor o
+  `#tab-{id}-{n}`); al cambiar de pestaña el hash se reescribe sin navegar y
+  se siguen `hashchange`/`popstate`.
+- **`BlockFlow`** (+ `containerFlow`, `groupByDirectChild`, tipo
+  `PageBlock`): pinta la lista plana de bloques de una página con el
+  registry de la app y saca del flujo a los descendientes de los
+  contenedores, que los reciben en `children`. **Migración del cascarón**:
+  `app/src/views/PageView.vue` sustituye su `v-for` de bloques por
+  `<BlockFlow :blocks="page.blocks" :registry="blockRegistry" />` (ver
+  `plantilla/`); sin ese cambio las pestañas se pintan vacías y sus hijos
+  en flujo.
+
 ### Cambiado
 
 - **Neutros menos cálidos.** Hueso y ceniza conservan el matiz (75° en

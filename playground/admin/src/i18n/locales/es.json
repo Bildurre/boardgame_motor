@@ -422,7 +422,10 @@
       "parent": "Bloque padre (índices indentados)",
       "parentNone": "— Ninguno —",
       "printableShort": "PDF",
-      "indexableShort": "Índice"
+      "indexableShort": "Índice",
+      "tab": "Pestaña",
+      "tabsMissing": "Pestañas sin bloque: {count}",
+      "tabsExtra": "Bloques de más: {count}"
     },
     "panelTitle": "Página",
     "panelEmpty": "Selecciona una página para ver sus acciones.",

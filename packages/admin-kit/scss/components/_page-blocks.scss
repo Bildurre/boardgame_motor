@@ -242,3 +242,20 @@
     > .schema-fields__field-main { min-height: 0; }
   }
 }
+
+// Campo `icon` del DSL (bloque de pestañas): select por nombre + vista
+// previa del icono elegido, alineada con la caja del select.
+.schema-fields__icon {
+  display: flex;
+  align-items: flex-end;
+  gap: $space-2;
+
+  > :first-child { flex: 1; min-width: 0; }
+}
+
+.schema-fields__icon-preview {
+  width: 36px;
+  height: 36px;
+  object-fit: contain;
+  margin-bottom: 2px;
+}

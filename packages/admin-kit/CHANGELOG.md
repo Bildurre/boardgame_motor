@@ -3,6 +3,20 @@
 Kit de construcción del panel de administración (sobre `@edc-motor/ui`). Paquete
 **fuente** (se consume vía Vite). Versión de tren con `edc-motor/core` y `@edc-motor/ui`.
 
+## [Sin publicar]
+
+### Añadido
+
+- **Campo `icon` en `SchemaFields`**: select por nombre entre los iconos del
+  juego (prop `icons`, la misma del texto rico) con vista previa; el valor
+  guardado es la URL del icono. Etiqueta «Sin icono» localizable
+  (`blockOptions.icon.none`).
+- **Pestañas en `PageBlocks`**: los hijos de un bloque `tabs` llevan el badge
+  «Pestaña N · nombre» y el contenedor avisa si hay pestañas sin bloque o
+  bloques de más (etiquetas `tab`, `tabsMissing`, `tabsExtra`, con
+  `{count}`); el resumen de un bloque de pestañas sin título son los nombres
+  de sus pestañas.
+
 ## [0.5.40] — 2026-09-03
 
 - Sin cambios propios: versión de tren.
