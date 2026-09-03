@@ -1,16 +1,15 @@
 @use "tokens" as *;
 
-// Barra de los index (IndexToolbar.vue). El propio toolbar es el contenedor
-// de las queries: por debajo de $bp-sm de ancho REAL de la barra, la búsqueda
-// pasa a su fila y los toggles se reparten el ancho debajo.
+// Barra de los index (IndexToolbar.vue): la búsqueda crece y los toggles de
+// orden se quedan SIEMPRE a su derecha, a cualquier ancho (antes bajaban a
+// su propia fila en estrecho); pegados a ella (gap de 2px).
 .index-toolbar {
-  container-type: inline-size;
   margin-bottom: $space-4;
 
   &__inner {
     display: flex;
     align-items: center;
-    gap: $space-3;
+    gap: 2px;
   }
 
   &__search {
@@ -55,18 +54,7 @@
   &__actions {
     display: flex;
     align-items: center;
-    gap: $space-3;
+    gap: 2px;
     flex-shrink: 0;
-  }
-
-  // Estrecho: la búsqueda ocupa su fila; debajo, los toggles se reparten
-  // el ancho proporcionalmente.
-  @container (max-width: #{$bp-sm - 1px}) {
-    &__inner { flex-wrap: wrap; }
-    &__search { flex: 1 1 100%; }
-    &__actions {
-      flex: 1 1 100%;
-      > * { flex: 1 1 auto; }
-    }
   }
 }

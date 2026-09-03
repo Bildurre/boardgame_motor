@@ -15,6 +15,13 @@ admin). Paquete **fuente** (se consume vía Vite). Versión de tren con
   con su aspa para quitarlo (desaparece la casilla «sin icono»). Etiquetas:
   `none` (quitar), `search`, `all`, `less`, `noResults`, y `categoryLabels`
   por clave de categoría.
+- **Pestañas en estrecho (`BaseTabs`, y con él el bloque de pestañas)**:
+  las que llevan icono ya no esconden el texto; lo encogen (11px, 12px en
+  el tramo intermedio) y lo truncan con puntos suspensivos.
+- **Barra de búsqueda de los índices (`IndexToolbar`)**: los toggles de
+  orden se quedan siempre a la derecha de la búsqueda, a cualquier ancho
+  (antes bajaban a su fila en estrecho), y pegados a ella: `gap` de 2px en
+  `.index-toolbar__inner` y en `.sort-toggles`.
 - **Filas de 3 campos (`.form-row--3`) con estadio 2+1**: por debajo de
   ~564px de modal el tercer campo baja a todo el ancho y los dos primeros
   siguen en fila; en el modal angosto apilan los tres (antes pasaban de

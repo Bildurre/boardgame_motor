@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import type { Component } from 'vue'
 
-// Una tab CON icono lleva además title con su etiqueta: en estrecho el
-// texto desaparece y queda solo el icono (la etiqueta sigue en el DOM
-// accesible, visually hidden — ver _tabs.scss).
+// Una tab CON icono lleva además title con su etiqueta: en estrecho la
+// letra encoge y el texto se trunca con puntos suspensivos (ver
+// _tabs.scss), y el title enseña el texto completo.
 interface Tab {
   key: string
   label: string
