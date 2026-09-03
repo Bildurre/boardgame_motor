@@ -526,6 +526,9 @@
 
   > .block { padding-block: 0; }
   > .block:first-child { padding-top: $space-2; }
+  // El contenido anidado se alinea con la barra de pestañas (el aire
+  // lateral ya lo pone el contenedor).
+  > .block > .block__inner { padding-inline: 0; }
 }
 
 // Botón de los bloques (CTA, doc 03): dos tipos con hover CRUZADO.

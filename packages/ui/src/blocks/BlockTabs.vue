@@ -37,7 +37,12 @@ const props = withDefaults(
   { data: () => ({}), children: () => [], registry: () => ({}), id: '' },
 )
 
-const blockId = computed(() => Number(String(props.id).replace(/^block-/, '')) || 0)
+// Id del contenedor: el del atributo (BlockFlow) o, si no llega, el padre
+// del primer descendiente (en preorden el primero es siempre hijo directo).
+const blockId = computed(
+  () =>
+    Number(String(props.id).replace(/^block-/, '')) || Number(props.children[0]?.parent_id) || 0,
+)
 
 const tabs = computed<TabSetting[]>(() => props.settings.tabs ?? [])
 
@@ -96,7 +101,9 @@ const panelId = (index: number) => `${anchorOf(index)}-panel`
 </script>
 
 <template>
-  <BlockShell :settings="settings" class="block--tabs">
+  <!-- `id` es prop aquí (no cae solo al DOM): se vuelve a poner en la raíz
+       para que el ancla #block-{id} del índice siga funcionando -->
+  <BlockShell :id="id || undefined" :settings="settings" class="block--tabs">
     <h2 v-if="settings.title" class="block__title">{{ settings.title }}</h2>
     <p v-if="settings.subtitle" class="block__subtitle">{{ settings.subtitle }}</p>
 
