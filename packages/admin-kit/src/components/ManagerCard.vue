@@ -48,7 +48,10 @@ function onClick(event: MouseEvent) {
 
     <!-- Como EntityCard: badges (chips) arriba, meta debajo. slotHasContent
          y no $slots.x: sin contenido real, sin parte inferior vacía. -->
-    <div v-if="slotHasContent($slots.badges) || slotHasContent($slots.meta)" class="manager-card__content">
+    <div
+      v-if="slotHasContent($slots.badges) || slotHasContent($slots.meta)"
+      class="manager-card__content"
+    >
       <div v-if="slotHasContent($slots.badges)" class="manager-card__badges">
         <slot name="badges" />
       </div>

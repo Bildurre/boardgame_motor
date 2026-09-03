@@ -4,6 +4,13 @@ Componentes Vue 3 + SCSS para las webs públicas (y piezas compartidas con el
 admin). Paquete **fuente** (se consume vía Vite). Versión de tren con
 `edc-motor/core` y `@edc-motor/admin-kit`.
 
+## [Sin publicar]
+
+### Corregido
+
+- **Lint del catálogo de iconos**: el icono `infinity` se importa con alias
+  (su nombre PascalCase sombreaba el global `Infinity`).
+
 ## [0.5.43] — 2026-09-03
 
 ### Añadido

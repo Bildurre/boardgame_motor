@@ -74,10 +74,16 @@ defineSlots<{
     <!-- slotHasContent y no $slots.x: con el template declarado pero todo
          v-if falso dentro, la card no debe pintar la parte inferior vacía -->
     <div
-      v-if="slotHasContent($slots.badges) || slotHasContent($slots.meta) || slotHasContent($slots.default)"
+      v-if="
+        slotHasContent($slots.badges) ||
+        slotHasContent($slots.meta) ||
+        slotHasContent($slots.default)
+      "
       class="entity-card__content"
     >
-      <div v-if="slotHasContent($slots.badges)" class="entity-card__badges"><slot name="badges" /></div>
+      <div v-if="slotHasContent($slots.badges)" class="entity-card__badges">
+        <slot name="badges" />
+      </div>
       <div v-if="slotHasContent($slots.meta)" class="entity-card__meta"><slot name="meta" /></div>
       <slot />
     </div>
