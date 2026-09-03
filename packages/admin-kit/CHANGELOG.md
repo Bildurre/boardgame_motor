@@ -17,6 +17,10 @@ Kit de construcción del panel de administración (sobre `@edc-motor/ui`). Paque
   `{count}`); el resumen de un bloque de pestañas sin título son los nombres
   de sus pestañas.
 
+## [0.5.41] — 2026-09-03
+
+- Sin cambios propios: versión de tren.
+
 ## [0.5.40] — 2026-09-03
 
 - Sin cambios propios: versión de tren.

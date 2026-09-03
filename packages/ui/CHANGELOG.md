@@ -25,6 +25,8 @@ admin). Paquete **fuente** (se consume vía Vite). Versión de tren con
   `plantilla/`); sin ese cambio las pestañas se pintan vacías y sus hijos
   en flujo.
 
+## [0.5.41] — 2026-09-03
+
 ### Cambiado
 
 - **Neutros menos cálidos.** Hueso y ceniza conservan el matiz (75° en
