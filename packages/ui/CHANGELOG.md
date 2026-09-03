@@ -16,8 +16,15 @@ admin). Paquete **fuente** (se consume vía Vite). Versión de tren con
 
 ### Cambiado
 
-- **`BlockTabs` pinta el icono de cada pestaña por nombre lucide**
-  (`iconComponent`) en vez de una imagen por URL.
+- **`BlockTabs` usa el `BaseTabs` del ui** (la barra del admin: fuente y
+  aire por breakpoint, y en estrecho las pestañas con icono se quedan solo
+  con el icono), pinta el icono de cada pestaña por nombre lucide
+  (`iconComponent`) y provee un hueco ENCIMA de las pestañas
+  (`blockTabsToolbarKey`, ref a un elemento) al que un índice anidado
+  teletransporta su barra de búsqueda, como el FilterBar sobre las tabs
+  del admin. **Migración del cascarón** (opcional): el componente que pinta
+  la barra de búsqueda de los índices inyecta `blockTabsToolbarKey` y, si
+  hay hueco, la manda ahí con `<Teleport>` (ver CdL `CatalogFilters.vue`).
 
 ## [0.5.42] — 2026-09-03
 

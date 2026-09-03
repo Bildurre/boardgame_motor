@@ -1,18 +1,24 @@
 <script setup lang="ts">
-import { computed, onBeforeUnmount, onMounted, ref, watch, type Component } from 'vue'
+import { computed, onBeforeUnmount, onMounted, provide, ref, watch, type Component } from 'vue'
+import BaseTabs from '../components/BaseTabs.vue'
 import BlockFlow from './BlockFlow.vue'
 import BlockShell from './BlockShell.vue'
 import { groupByDirectChild, type PageBlock } from './blockTree'
+import { blockTabsToolbarKey } from './tabsToolbar'
 import { iconComponent } from '../icons/iconCatalog'
 
 // Pestañas (doc 03): contenedor cuyos bloques hijos son el contenido de
 // cada pestaña — el hijo directo n.º N es la pestaña N (con sus propios
-// descendientes dentro), en el orden del gestor. Solo se MONTA la pestaña
-// activa: un índice de entidad por pestaña registra su barra derecha y su
-// paginación únicamente mientras está a la vista. Enlace directo por el
-// hash de la URL (#ancla del repetidor, o #tab-{id}-{n}); al cambiar de
-// pestaña el hash se reescribe sin navegar (replaceState) y se escucha
-// hashchange/popstate para seguir a los enlaces de la propia página.
+// descendientes dentro), en el orden del gestor. La barra es el BaseTabs
+// del ui (el mismo del admin: fuente y aire por breakpoint, y en estrecho
+// las pestañas con icono se quedan solo con el icono). Solo se MONTA la
+// pestaña activa: un índice de entidad por pestaña registra su barra
+// derecha y su paginación únicamente mientras está a la vista, y su barra
+// de búsqueda sube al hueco de encima de las pestañas (blockTabsToolbarKey).
+// Enlace directo por el hash de la URL (#ancla del repetidor, o
+// #tab-{id}-{n}); al cambiar de pestaña el hash se reescribe sin navegar
+// (replaceState) y se escucha hashchange/popstate para seguir a los
+// enlaces de la propia página.
 interface TabSetting {
   label?: string
   icon?: string | null
@@ -62,7 +68,17 @@ function anchorOf(index: number): string {
   return custom || `tab-${blockId.value}-${index + 1}`
 }
 
+// Pestañas del BaseTabs: la clave es el ancla (única por construcción).
+const tabItems = computed(() =>
+  tabs.value.map((tab, index) => ({
+    key: anchorOf(index),
+    label: tab.label ?? '',
+    icon: iconComponent(tab.icon),
+  })),
+)
+
 const active = ref(0)
+const activeKey = computed(() => anchorOf(active.value))
 
 function indexForHash(hash: string): number {
   const wanted = hash.replace(/^#/, '')
@@ -82,6 +98,11 @@ function select(index: number) {
   window.history.replaceState(window.history.state, '', url)
 }
 
+function selectKey(key: string) {
+  const index = tabItems.value.findIndex((tab) => tab.key === key)
+  if (index >= 0) select(index)
+}
+
 onMounted(() => {
   syncFromHash()
   window.addEventListener('hashchange', syncFromHash)
@@ -98,7 +119,10 @@ watch(tabs, (list) => {
   if (active.value >= list.length) active.value = 0
 })
 
-const panelId = (index: number) => `${anchorOf(index)}-panel`
+// Hueco para la barra de búsqueda del índice de la pestaña activa (encima
+// de las pestañas, como el FilterBar del admin).
+const toolbar = ref<HTMLElement | null>(null)
+provide(blockTabsToolbarKey, toolbar)
 </script>
 
 <template>
@@ -108,41 +132,14 @@ const panelId = (index: number) => `${anchorOf(index)}-panel`
     <h2 v-if="settings.title" class="block__title">{{ settings.title }}</h2>
     <p v-if="settings.subtitle" class="block__subtitle">{{ settings.subtitle }}</p>
 
-    <div v-if="tabs.length" class="block__tabs" role="tablist">
-      <button
-        v-for="(tab, index) in tabs"
-        :id="anchorOf(index)"
-        :key="index"
-        type="button"
-        role="tab"
-        class="block__tab"
-        :class="{ 'is-active': index === active }"
-        :aria-selected="index === active"
-        :aria-controls="panelId(index)"
-        :tabindex="index === active ? 0 : -1"
-        @click="select(index)"
-      >
-        <component
-          :is="iconComponent(tab.icon)"
-          v-if="iconComponent(tab.icon)"
-          class="block__tab-icon"
-          :size="18"
-          aria-hidden="true"
-        />
-        <span class="block__tab-label">{{ tab.label }}</span>
-      </button>
-    </div>
+    <div v-if="tabs.length" class="block__tabs">
+      <div ref="toolbar" class="block__tabs-toolbar" />
+      <BaseTabs :tabs="tabItems" :model-value="activeKey" @update:model-value="selectKey" />
 
-    <!-- Solo la pestaña activa está montada (key: cada cambio remonta) -->
-    <div
-      v-if="tabs.length"
-      :id="panelId(active)"
-      :key="active"
-      class="block__tab-panel"
-      role="tabpanel"
-      :aria-labelledby="anchorOf(active)"
-    >
-      <BlockFlow :blocks="groups[active] ?? []" :registry="registry" />
+      <!-- Solo la pestaña activa está montada (key: cada cambio remonta) -->
+      <div :id="`${activeKey}-panel`" :key="active" class="block__tab-panel" role="tabpanel">
+        <BlockFlow :blocks="groups[active] ?? []" :registry="registry" />
+      </div>
     </div>
   </BlockShell>
 </template>

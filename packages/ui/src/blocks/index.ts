@@ -34,6 +34,8 @@ export {
   type FlowEntry,
   type PageBlock,
 } from './blockTree'
+// Hueco sobre las pestañas al que un índice anidado sube su barra de búsqueda.
+export { blockTabsToolbarKey } from './tabsToolbar'
 // Mapa de rutas del catálogo (BlockRelated): la app lo provee por inject.
 export {
   catalogRoutesKey,

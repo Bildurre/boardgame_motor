@@ -474,56 +474,25 @@
 }
 
 
-// Pestañas (doc 03): barra de pestañas (botones con icono del juego y
-// texto, la activa subrayada con el acento) y el panel de la activa, que
-// pinta bloques enteros por dentro: sus `.block` pierden el aire vertical
-// exterior (lo pone el panel) para no duplicar separaciones.
+// Pestañas (doc 03): la barra es el BaseTabs del ui (.tabs: mismo
+// comportamiento que en el admin — fuente y aire por breakpoint, y en
+// estrecho las pestañas con icono se quedan solo con el icono). Encima, el
+// hueco al que sube la barra de búsqueda del índice de la pestaña activa
+// (como el FilterBar del admin; vacío no ocupa). El panel pinta bloques
+// enteros por dentro: sus `.block` pierden el aire vertical exterior (lo
+// pone el panel) y su aire lateral (lo pone el contenedor).
 .block__tabs {
-  display: flex;
-  flex-wrap: wrap;
-  gap: $space-1;
-  border-bottom: 1px solid $border-strong;
+  display: grid;
+  gap: 0;
 }
 
-.block__tab {
-  display: inline-flex;
-  align-items: center;
-  gap: $space-2;
-  margin-bottom: -1px;
-  padding: $space-2 $space-4;
-  background: none;
-  border: none;
-  border-bottom: 2px solid transparent;
-  color: $text-2;
-  font: inherit;
-  font-weight: 600;
-  cursor: pointer;
-  transition: color 0.15s ease, border-color 0.15s ease;
-
-  &:hover { color: $text-1; }
-
-  &.is-active {
-    color: $accent-500;
-    border-bottom-color: $accent-500;
-  }
-
-  &:focus-visible {
-    outline: 2px solid $accent-500;
-    outline-offset: 2px;
-    border-radius: $radius-sm;
-  }
-}
-
-.block__tab-icon { flex: none; }
+.block__tabs-toolbar:not(:empty) { margin-bottom: $space-4; }
 
 .block__tab-panel {
   display: grid;
   gap: $block-gap;
 
   > .block { padding-block: 0; }
-  > .block:first-child { padding-top: $space-2; }
-  // El contenido anidado se alinea con la barra de pestañas (el aire
-  // lateral ya lo pone el contenedor).
   > .block > .block__inner { padding-inline: 0; }
 }
 
