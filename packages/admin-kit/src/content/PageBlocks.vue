@@ -23,6 +23,7 @@ import {
 } from '@edc-motor/ui'
 import SchemaFields, { type FieldSchema } from './SchemaFields.vue'
 import { blockPreview } from './blockPreview'
+import { isFieldVisible } from './fieldVisibility'
 import { collectImageUrls, deleteContentImage, uploadPendingImages } from './deferredImages'
 import { useRightSidebar } from '../composables/useRightSidebar'
 import { useCardDeselect } from '../composables/useCardDeselect'
@@ -359,8 +360,6 @@ function fieldValue(field: FieldSchema, block: BlockRow): string {
     return `{ ${Object.keys(raw as object).join(', ')} }`
   }
   if (field.type === 'entity') return `#${String(raw)}`
-  if (field.type === 'icon')
-    return props.icons.find((icon) => icon.url === raw)?.name ?? String(raw)
   return String(raw)
 }
 
@@ -368,7 +367,9 @@ function fieldValue(field: FieldSchema, block: BlockRow): string {
 const selectedFields = computed(() => {
   if (!selected.value) return []
   const type = types.value.find((t) => t.key === selected.value?.type)
-  return (type?.fields ?? [])
+  const fields = type?.fields ?? []
+  return fields
+    .filter((field) => isFieldVisible(field, selected.value?.settings ?? {}, fields))
     .map((field) => ({
       field,
       value:

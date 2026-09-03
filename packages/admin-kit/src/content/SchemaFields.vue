@@ -9,6 +9,7 @@ import {
   BaseSelect,
   BaseTextarea,
   IconButton,
+  IconPicker,
   ImageUpload,
   NumericInput,
   PaletteColorPicker,
@@ -16,11 +17,13 @@ import {
   TranslatableImage,
   TranslatableInput,
   type ColorPreset,
+  type IconPickerLabels,
   type RichIcon,
   type RichTextLabels,
   type SelectOption,
 } from '@edc-motor/ui'
 import EntityRefSelect from './EntityRefSelect.vue'
+import { isFieldVisible, type VisibleWhen } from './fieldVisibility'
 
 // Renderer del DSL de campos (DC-08): pinta el formulario de un bloque a
 // partir del esquema serializado del BlockType (GET /admin/block-types).
@@ -46,6 +49,8 @@ export interface FieldSchema {
   options_url?: string | null
   /** Fila declarada en el esquema (Field::row): mismo nombre = misma fila. */
   row?: string | null
+  /** Visibilidad condicional (Field::visibleWhen): solo con esos valores. */
+  visible_when?: VisibleWhen | null
 }
 
 const props = withDefaults(
@@ -105,11 +110,14 @@ interface LayoutItem {
 }
 
 const layout = computed<LayoutItem[]>(() => {
-  const byKey = new Map(props.fields.map((f) => [f.key, f]))
+  // Campos condicionados (Field::visibleWhen) fuera cuando no toca: su fila
+  // declarada se cierra sin ellos (y un campo solo en ella va suelto).
+  const fields = props.fields.filter((f) => isFieldVisible(f, props.modelValue, props.fields))
+  const byKey = new Map(fields.map((f) => [f.key, f]))
   const alignOf = new Map<string, FieldSchema>() // clave del campo "base" => su _align
   const consumed = new Set<string>() // claves ya emparejadas con otro campo
 
-  for (const field of props.fields) {
+  for (const field of fields) {
     if (field.type !== 'select' || !field.key.endsWith('_align') || field.row) continue
     const base = field.key.slice(0, -'_align'.length)
     if (!base) continue // el "align" general no tiene prefijo
@@ -120,7 +128,7 @@ const layout = computed<LayoutItem[]>(() => {
   }
 
   const imageSettingsOf = new Map<string, FieldSchema[]>()
-  for (const field of props.fields) {
+  for (const field of fields) {
     if (field.key !== 'image' || field.type !== 'image' || field.row) continue
     const settings = IMAGE_SETTING_KEYS.map((key) => byKey.get(key)).filter(
       (f): f is FieldSchema => !!f && !f.row,
@@ -133,7 +141,7 @@ const layout = computed<LayoutItem[]>(() => {
   // Filas declaradas: agrupa por nombre de fila los campos aún libres (sin
   // pareja de align/imagen). El grupo se pinta donde va su PRIMER campo.
   const rowGroups = new Map<string, FieldSchema[]>()
-  for (const field of props.fields) {
+  for (const field of fields) {
     if (!field.row) continue
     const group = rowGroups.get(field.row) ?? []
     group.push(field)
@@ -149,7 +157,7 @@ const layout = computed<LayoutItem[]>(() => {
     group.slice(1).forEach((f) => consumed.add(f.key))
   }
 
-  return props.fields
+  return fields
     .filter((f) => !consumed.has(f.key))
     .map((f) => ({
       field: f,
@@ -196,17 +204,18 @@ function imageTranslations(field: FieldSchema): Record<string, string | File> {
   return value as Record<string, string | File>
 }
 
-/** Opciones del campo `icon`: los iconos del juego por nombre; el valor
- *  guardado es su URL (como los iconos insertados en el texto rico). */
-function iconOptions(): SelectOption[] {
-  return [
-    {
-      value: '',
-      label: props.translate?.('blockOptions.icon.none', '— Sin icono —') ?? '— Sin icono —',
-    },
-    ...props.icons.map((icon) => ({ value: icon.url, label: icon.name })),
-  ]
-}
+/** Textos del selector de icono (localizables por convención: iconPicker.*). */
+const iconPickerLabels = computed<Partial<IconPickerLabels>>(() => {
+  const t = (key: string, fallback: string) =>
+    props.translate?.(`iconPicker.${key}`, fallback) ?? fallback
+  return {
+    none: t('none', 'Sin icono'),
+    search: t('search', 'Buscar icono…'),
+    showMore: t('showMore', 'Mostrar más'),
+    remaining: t('remaining', '{count} más'),
+    noResults: t('noResults', 'Ningún icono con ese nombre.'),
+  }
+})
 
 function selectOptions(field: FieldSchema): SelectOption[] {
   return Object.entries(field.options ?? {}).map(([value, text]) => ({
@@ -467,21 +476,15 @@ function addLabel(): string {
             </BaseButton>
           </div>
 
-          <!-- Icono de la biblioteca del juego: se elige por nombre y se guarda su URL -->
-          <div v-else-if="field.type === 'icon'" class="schema-fields__icon">
-            <BaseSelect
-              :model-value="(modelValue[field.key] as string) ?? ''"
-              :label="label(field)"
-              :options="iconOptions()"
-              @update:model-value="(v) => set(field.key, v || null)"
-            />
-            <img
-              v-if="modelValue[field.key]"
-              class="schema-fields__icon-preview"
-              :src="String(modelValue[field.key])"
-              alt=""
-            />
-          </div>
+          <!-- Icono lucide (catálogo curado del motor): rejilla con buscador y
+               «mostrar más»; se guarda el nombre kebab-case -->
+          <IconPicker
+            v-else-if="field.type === 'icon'"
+            :model-value="(modelValue[field.key] as string) ?? null"
+            :label="label(field)"
+            :labels="iconPickerLabels"
+            @update:model-value="(v) => set(field.key, v)"
+          />
 
           <!-- Referencia a una entidad del juego: buscador sobre su endpoint -->
           <EntityRefSelect

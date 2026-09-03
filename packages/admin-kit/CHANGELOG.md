@@ -3,6 +3,24 @@
 Kit de construcción del panel de administración (sobre `@edc-motor/ui`). Paquete
 **fuente** (se consume vía Vite). Versión de tren con `edc-motor/core` y `@edc-motor/ui`.
 
+## [Sin publicar]
+
+### Añadido
+
+- **Campos condicionados en `SchemaFields`** (`visible_when` del esquema,
+  `Field::visibleWhen` del core): el campo solo se pinta cuando el campo
+  condicionante vale lo declarado (su default si aún no tiene valor); su
+  fila declarada se cierra sin él. El panel de `PageBlocks` tampoco los
+  vuelca.
+
+### Cambiado
+
+- **Campo `icon` en `SchemaFields`**: el `IconPicker` del ui (rejilla de
+  iconos lucide con buscador y «mostrar más») sustituye al select de iconos
+  del juego; el valor guardado es el nombre kebab-case. Textos localizables
+  por convención (`iconPicker.none` / `search` / `showMore` / `remaining` /
+  `noResults`).
+
 ## [0.5.42] — 2026-09-03
 
 ### Añadido

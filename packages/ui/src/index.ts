@@ -16,6 +16,14 @@ export {
   default as PaletteColorPicker,
   type ColorPreset,
 } from './components/PaletteColorPicker.vue'
+export { default as IconPicker, type IconPickerLabels } from './components/IconPicker.vue'
+export {
+  ICON_CATALOG,
+  iconComponent,
+  iconComponents,
+  iconNames,
+  type IconCategory,
+} from './icons/iconCatalog'
 export { default as TranslatableInput } from './components/TranslatableInput.vue'
 export { default as TranslatableImage } from './components/TranslatableImage.vue'
 // Locale global de un formulario: EditModal lo provee solo (selector compacto

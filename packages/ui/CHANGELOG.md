@@ -4,6 +4,21 @@ Componentes Vue 3 + SCSS para las webs públicas (y piezas compartidas con el
 admin). Paquete **fuente** (se consume vía Vite). Versión de tren con
 `edc-motor/core` y `@edc-motor/admin-kit`.
 
+## [Sin publicar]
+
+### Añadido
+
+- **`IconPicker`** + catálogo `ICON_CATALOG` / `iconComponents` /
+  `iconComponent(name)`: selector visual de iconos lucide con el lenguaje
+  del selector de color (rejilla de casillas, la elegida con anillo), ~650
+  iconos curados por categorías, buscador por nombre y «mostrar más» por
+  tandas; el valor es el nombre kebab-case. Etiquetas por prop `labels`.
+
+### Cambiado
+
+- **`BlockTabs` pinta el icono de cada pestaña por nombre lucide**
+  (`iconComponent`) en vez de una imagen por URL.
+
 ## [0.5.42] — 2026-09-03
 
 ### Añadido

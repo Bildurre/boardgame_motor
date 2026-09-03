@@ -30,7 +30,7 @@ it('está registrado con un repetidor de pestañas (texto, icono y ancla)', func
     expect($tabs['type'])->toBe('repeater')
         ->and($tabs['min'])->toBe(1)
         ->and(collect($tabs['fields'])->pluck('type', 'key')->all())
-        ->toBe(['label' => 'text', 'icon' => 'icon', 'anchor' => 'text']);
+        ->toBe(['label' => 'text', 'anchor' => 'text', 'icon' => 'icon']);
 
     $label = collect($tabs['fields'])->firstWhere('key', 'label');
     expect($label['translatable'])->toBeTrue()->and($label['required'])->toBeTrue();
@@ -50,7 +50,7 @@ it('exige al menos una pestaña con texto en el idioma por defecto', function ()
 
     $this->actingAs($admin)->postJson("/api/admin/pages/{$page->id}/blocks", [
         'type' => 'tabs',
-        'settings' => ['tabs' => [['label' => ['es' => 'Una'], 'icon' => 'https://cdn.test/icons/a.svg', 'anchor' => 'una']]],
+        'settings' => ['tabs' => [['label' => ['es' => 'Una'], 'icon' => 'swords', 'anchor' => 'una']]],
     ])->assertCreated();
 });
 
@@ -64,7 +64,7 @@ it('el render público lleva el padre de cada bloque y las pestañas localizadas
             'title' => ['es' => 'Mazos'],
             'tabs' => [
                 ['label' => ['es' => 'Preconstruidos', 'en' => 'Preconstructed'], 'anchor' => 'precon'],
-                ['label' => ['es' => 'Comunidad'], 'icon' => 'https://cdn.test/icons/c.svg'],
+                ['label' => ['es' => 'Comunidad'], 'icon' => 'users'],
             ],
         ],
     ])->assertCreated()->json('data.id');
@@ -84,9 +84,9 @@ it('el render público lleva el padre de cada bloque y las pestañas localizadas
     $rendered = collect($blocks)->firstWhere('id', $tabs);
     expect($rendered['component'])->toBe('tabs')
         ->and($rendered['settings']['tabs'])->toBe([
-            ['label' => 'Preconstructed', 'icon' => null, 'anchor' => 'precon'],
+            ['label' => 'Preconstructed', 'anchor' => 'precon', 'icon' => null],
             // Sin traducción al inglés: cae al idioma por defecto.
-            ['label' => 'Comunidad', 'icon' => 'https://cdn.test/icons/c.svg', 'anchor' => null],
+            ['label' => 'Comunidad', 'anchor' => null, 'icon' => 'users'],
         ]);
 });
 

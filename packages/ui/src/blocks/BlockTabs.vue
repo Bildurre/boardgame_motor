@@ -3,6 +3,7 @@ import { computed, onBeforeUnmount, onMounted, ref, watch, type Component } from
 import BlockFlow from './BlockFlow.vue'
 import BlockShell from './BlockShell.vue'
 import { groupByDirectChild, type PageBlock } from './blockTree'
+import { iconComponent } from '../icons/iconCatalog'
 
 // Pestañas (doc 03): contenedor cuyos bloques hijos son el contenido de
 // cada pestaña — el hijo directo n.º N es la pestaña N (con sus propios
@@ -121,7 +122,13 @@ const panelId = (index: number) => `${anchorOf(index)}-panel`
         :tabindex="index === active ? 0 : -1"
         @click="select(index)"
       >
-        <img v-if="tab.icon" class="block__tab-icon" :src="tab.icon" alt="" aria-hidden="true" />
+        <component
+          :is="iconComponent(tab.icon)"
+          v-if="iconComponent(tab.icon)"
+          class="block__tab-icon"
+          :size="18"
+          aria-hidden="true"
+        />
         <span class="block__tab-label">{{ tab.label }}</span>
       </button>
     </div>
