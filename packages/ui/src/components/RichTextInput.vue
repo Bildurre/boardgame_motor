@@ -3,12 +3,7 @@ import { computed, ref, watch, onBeforeUnmount, onMounted, nextTick } from 'vue'
 import { useEditor, EditorContent } from '@tiptap/vue-3'
 import StarterKit from '@tiptap/starter-kit'
 import Image from '@tiptap/extension-image'
-import UnderlineExtension from '@tiptap/extension-underline'
-import LinkExtension from '@tiptap/extension-link'
-import TableExtension from '@tiptap/extension-table'
-import TableRow from '@tiptap/extension-table-row'
-import TableHeader from '@tiptap/extension-table-header'
-import TableCell from '@tiptap/extension-table-cell'
+import { Table, TableCell, TableHeader, TableRow } from '@tiptap/extension-table'
 import {
   Bold,
   Italic,
@@ -135,20 +130,22 @@ const editor = useEditor({
   content: props.modelValue,
   editable: !props.disabled,
   extensions: [
-    StarterKit.configure({ heading: { levels: [2, 3, 4, 5] } }),
-    UnderlineExtension,
-    // Enlaces: no se navega al hacer click dentro del editor (openOnClick),
-    // y TODOS llevan target="_blank" + rel="noopener noreferrer" por
-    // defecto (también los mailto: — ahí son inocuos, pero así no hace
-    // falta distinguir el esquema al aplicarlos).
-    LinkExtension.configure({
-      openOnClick: false,
-      autolink: false,
-      HTMLAttributes: { target: '_blank', rel: 'noopener noreferrer' },
+    // TipTap 3: el StarterKit ya trae subrayado y enlaces. Enlaces: no se
+    // navega al hacer click dentro del editor (openOnClick), y TODOS llevan
+    // target="_blank" + rel="noopener noreferrer" por defecto (también los
+    // mailto: — ahí son inocuos, pero así no hace falta distinguir el
+    // esquema al aplicarlos).
+    StarterKit.configure({
+      heading: { levels: [2, 3, 4, 5] },
+      link: {
+        openOnClick: false,
+        autolink: false,
+        HTMLAttributes: { target: '_blank', rel: 'noopener noreferrer' },
+      },
     }),
     // Tablas: sin resize de columnas (el asa de arrastre metía ruido visual
     // y no hace falta para el caso de uso del editor).
-    TableExtension.configure({ resizable: false }),
+    Table.configure({ resizable: false }),
     TableRow,
     TableHeader,
     TableCell,
@@ -166,7 +163,7 @@ watch(
   (value) => {
     if (!editor.value || source.value) return
     if (value !== (editor.value.isEmpty ? '' : editor.value.getHTML())) {
-      editor.value.commands.setContent(value || '', false)
+      editor.value.commands.setContent(value || '', { emitUpdate: false })
     }
   },
 )
@@ -397,7 +394,7 @@ function toggleSource() {
   } else {
     // Volver a visual: aplicar el HTML editado al editor (pasará por el
     // saneador del servidor al guardar; aquí no hace falta sanear).
-    editor.value?.commands.setContent(sourceHtml.value || '', false)
+    editor.value?.commands.setContent(sourceHtml.value || '', { emitUpdate: false })
   }
   source.value = !source.value
   pickerOpen.value = false

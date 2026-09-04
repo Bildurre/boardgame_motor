@@ -4,6 +4,19 @@ Componentes Vue 3 + SCSS para las webs públicas (y piezas compartidas con el
 admin). Paquete **fuente** (se consume vía Vite). Versión de tren con
 `edc-motor/core` y `@edc-motor/admin-kit`.
 
+## [Sin publicar]
+
+### Cambiado
+
+- **`RichTextInput` sobre TipTap 3** (`@tiptap/*` ^3.31): cierra el aviso
+  GHSA-cp6q-959q-f8rh de `@tiptap/core` 2.x (sin parche en esa rama). El
+  StarterKit ya trae enlace y subrayado; la tabla exporta sus piezas desde
+  `@tiptap/extension-table`. API del componente sin cambios (v-model HTML,
+  `icons`, `labels`, modo HTML, tablas). **Cascarón**: si el `package.json`
+  raíz del juego declaraba paquetes `@tiptap/*` 2.x (CdL los tenía),
+  quítalos: los aporta `@edc-motor/ui` y, duplicados, cargarían dos
+  ProseMirror («Can not convert <> to a Fragment»).
+
 ## [0.5.47] — 2026-09-04
 
 - Sin cambios propios: versión de tren.
