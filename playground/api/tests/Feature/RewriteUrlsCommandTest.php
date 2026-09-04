@@ -66,3 +66,14 @@ it('con --dry-run cuenta pero no escribe, y sin coincidencias lo dice', function
     $this->artisan('motor:rewrite-urls', ['from' => 'https://juego.test', 'to' => 'https://juego.test'])
         ->assertFailed();
 });
+
+it('con "/" deja las URL relativas a la raíz', function () {
+    $this->artisan('motor:rewrite-urls', ['from' => 'http://localhost:8010', 'to' => '/'])
+        ->expectsOutputToContain('rutas relativas')
+        ->assertSuccessful();
+
+    $row = DB::table('rewrite_probe')->find(1);
+    expect($row->title)->toBe('/storage/a.png')
+        ->and($row->body)->toBe('<p><img src="/storage/icon/1/dice.svg"> y otra /x</p>')
+        ->and(json_decode($row->settings, true))->toBe(['bg' => '/storage/bg.jpg']);
+});

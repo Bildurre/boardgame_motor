@@ -141,3 +141,22 @@ it('la configuración exige admin', function () {
     $this->putJson('/api/admin/settings/site', [])->assertUnauthorized();
     $this->actingAs(motorUser('user'))->putJson('/api/admin/settings/site', [])->assertForbidden();
 });
+
+it('guarda relativas las URL de los ajustes que apunten al propio motor (host de la petición o APP_URL)', function () {
+    $admin = motorUser('admin');
+    config(['app.url' => 'http://localhost:8000']);
+
+    // El test llama por http://localhost:8010 (host de la petición); APP_URL es otro puerto: los dos son «propios».
+    $this->actingAs($admin)->putJson('/api/admin/settings/site', [
+        'index_backgrounds' => [
+            'cards' => 'http://localhost:8010/storage/content/cartas.jpg',
+            'decks' => 'http://localhost:8000/storage/content/mazos.jpg',
+            'heroes' => 'https://cdn.example/heroes.jpg',
+        ],
+        'logo' => ['es' => 'http://localhost:8010/storage/content/logo.svg'],
+    ])->assertOk()
+        ->assertJsonPath('data.index_backgrounds.cards', '/storage/content/cartas.jpg')
+        ->assertJsonPath('data.index_backgrounds.decks', '/storage/content/mazos.jpg')
+        ->assertJsonPath('data.index_backgrounds.heroes', 'https://cdn.example/heroes.jpg')
+        ->assertJsonPath('data.logo.es', '/storage/content/logo.svg');
+});

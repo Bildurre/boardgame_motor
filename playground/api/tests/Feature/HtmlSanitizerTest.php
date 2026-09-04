@@ -80,3 +80,19 @@ it('conserva listas anidadas (ul/ol dentro de li)', function () {
     expect($out)->toContain('<li>Uno<ul><li>Uno.uno</li></ul></li>')
         ->and($out)->toContain('<li>Dos</li>');
 });
+
+it('guarda relativas a la raíz las URL absolutas al propio motor y deja las ajenas', function () {
+    config(['app.url' => 'http://localhost:8000']);
+
+    $html = '<p><img src="http://localhost:8000/storage/icon/1/dado.svg" alt="d">'
+        .'<a href="HTTP://LOCALHOST:8000/es/reglas?x=1#top">reglas</a>'
+        .'<img src="https://cdn.ajena.com/foto.png">'
+        .'<a href="/ya/relativa">ok</a></p>';
+
+    expect(sanitize($html))->toBe(
+        '<p><img src="/storage/icon/1/dado.svg" alt="d">'
+        .'<a href="/es/reglas?x=1#top">reglas</a>'
+        .'<img src="https://cdn.ajena.com/foto.png">'
+        .'<a href="/ya/relativa">ok</a></p>',
+    );
+});
