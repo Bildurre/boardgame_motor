@@ -68,6 +68,7 @@ cp .env.example .env          # ajusta DB_USERNAME / DB_PASSWORD si hace falta
 php artisan key:generate
 php artisan migrate
 php artisan motor:install     # roles base (admin/editor/user)
+php artisan motor:rewrite-urls http://localhost:8010 https://mi-dominio.com   # tras importar una BD de otro entorno: reescribe las URL absolutas del contenido (--dry-run para solo contar)
 php artisan db:seed           # demo completa: usuarios de prueba (admin@edc.test /
                               # editor@ / user@, contraseña "password"), casas,
                               # argucias, personajes y páginas del CRM (home,
