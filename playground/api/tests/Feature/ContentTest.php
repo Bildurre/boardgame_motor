@@ -543,3 +543,20 @@ it('el CRM exige admin', function () {
         ->assertForbidden();
     $this->actingAs(motorUser('user'))->getJson('/api/admin/block-types')->assertForbidden();
 });
+
+it('guarda relativas las URL propias de los ajustes de un bloque (imagen y texto rico)', function () {
+    $admin = motorUser('admin');
+    $page = makePage();
+
+    $response = $this->actingAs($admin)->postJson("/api/admin/pages/{$page->id}/blocks", [
+        'type' => 'text',
+        'settings' => [
+            'image' => ['es' => 'http://localhost:8010/storage/content/banner.jpg'],
+            'body' => ['es' => '<p><img src="http://localhost:8010/storage/icon/1/d.svg" alt="d"> y <a href="https://ajena.com/x">x</a></p>'],
+        ],
+    ])->assertCreated();
+
+    expect($response->json('data.settings.image.es'))->toBe('/storage/content/banner.jpg')
+        ->and($response->json('data.settings.body.es'))
+        ->toBe('<p><img src="/storage/icon/1/d.svg" alt="d"> y <a href="https://ajena.com/x">x</a></p>');
+});
