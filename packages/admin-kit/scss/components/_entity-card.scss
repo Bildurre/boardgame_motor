@@ -15,7 +15,7 @@
   // La tarjeta es su propio contenedor (`card`): el título, los chips y
   // los botones que monta el juego se encogen según el ancho REAL de la
   // tarjeta (a dos columnas en un móvil, en un panel estrecho…), no del
-  // viewport. Umbral: $bp-card-narrow (200px).
+  // viewport. Umbral: $bp-xxs (200px).
   container-type: inline-size;
   container-name: card;
 
@@ -95,7 +95,7 @@
     white-space: nowrap;
     min-width: 0;
 
-    @container card (max-width: #{$bp-card-narrow - 1px}) {
+    @container card (max-width: #{$bp-xxs - 1px}) {
       font-size: $fs-14;
     }
   }
@@ -148,7 +148,7 @@
       vertical-align: middle;
       line-height: 1.5;
 
-      @container card (max-width: #{$bp-card-narrow - 1px}) {
+      @container card (max-width: #{$bp-xxs - 1px}) {
         font-size: $fs-11;
         padding-inline: $space-1;
       }
