@@ -12,7 +12,9 @@ import { computed, onBeforeUnmount, ref } from 'vue'
  *   - estrecho: oculta; entra como drawer superpuesto cuando `mobileOpen`.
  *
  * El asa anclada a la propia barra llama a `toggle()`, que despliega/pliega
- * según el modo; `overlay` lo mantiene AppRightSidebar con el ancho.
+ * según el modo; `overlay` lo mantiene AppRightSidebar con el ancho. La
+ * vista puede poner en `badge` cuántos filtros tiene activos: el asa lo
+ * enseña como globito (y se limpia al desregistrar).
  *
  * La propiedad se rastrea con un token opaco para que el `unregister` de una
  * vista saliente nunca borre el contenido cuando otra vista ya ha registrado
@@ -24,6 +26,8 @@ const collapsed = ref(false)
 const mobileOpen = ref(false)
 const overlay = ref(false)
 const title = ref<string>('')
+// Indicación en el asa (nº de filtros activos de la vista): 0 = nada.
+const badge = ref(0)
 
 let ownerToken: symbol | null = null
 
@@ -73,6 +77,7 @@ export function useAppRightSidebar() {
     hasContent.value = false
     title.value = ''
     mobileOpen.value = false
+    badge.value = 0
   }
 
   function useRegister(panelTitle = ''): AppRightSidebarToken {
@@ -87,6 +92,7 @@ export function useAppRightSidebar() {
     mobileOpen,
     overlay,
     title,
+    badge,
     isOpen,
     toggleCollapsed,
     openMobile,

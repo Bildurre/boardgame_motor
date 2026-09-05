@@ -14,6 +14,12 @@ admin). Paquete **fuente** (se consume vía Vite). Versión de tren con
 - **Token `$bp-card-narrow`** (200px): umbral de «tarjeta estrecha» para
   las container queries `card` de `EntityCard` (admin-kit).
 
+### Añadido
+
+- **`useAppRightSidebar().badge`**: nº de filtros activos de la vista; con
+  `badge > 0` el asa de `AppRightSidebar` se rellena de acento y lleva un
+  globito con la cuenta. Se limpia al desregistrar la vista.
+
 ## [0.5.48] — 2026-09-04
 
 ### Cambiado

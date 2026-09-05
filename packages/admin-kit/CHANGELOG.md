@@ -20,6 +20,14 @@ Kit de construcción del panel de administración (sobre `@edc-motor/ui`). Paque
   `badges` a `$fs-11`; un chip que aun así no quepa se trunca con elipsis
   en vez de desbordar. Los juegos pueden colgar del mismo contenedor sus
   propios botones de la tarjeta (`@container card (max-width: …)`).
+- **`EntityCard`**: aire lateral a la mitad (`$space-2` en vez de
+  `$space-4`) en cabecera y contenido.
+
+### Añadido
+
+- **`useRightSidebar().badge`**: nº de filtros activos de la vista; con
+  `badge > 0` el asa del panel oculto (`.right-sidebar-handle`) se rellena
+  de acento y lleva un globito con la cuenta. Se limpia al desregistrar.
 
 ## [0.5.48] — 2026-09-04
 

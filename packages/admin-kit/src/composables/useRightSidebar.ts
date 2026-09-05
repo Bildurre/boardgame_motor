@@ -8,6 +8,9 @@ import { onBeforeUnmount, ref } from 'vue'
  *     se puede plegar con `collapsed`.
  *   - móvil: oculto; entra como drawer cuando `mobileOpen` es true.
  *
+ * La vista puede poner en `badge` cuántos filtros tiene activos: el asa del
+ * panel oculto lo enseña como globito (se limpia al desregistrar).
+ *
  * La propiedad se rastrea con un token opaco para que el `unregister` de una
  * vista saliente nunca borre el panel cuando otra vista ya ha registrado el
  * suyo (en un cambio de ruta, el setup nuevo corre antes que el onUnmounted
@@ -18,6 +21,8 @@ const collapsed = ref(false)
 const mobileOpen = ref(false)
 const title = ref<string>('')
 const handleFlashId = ref(0)
+// Indicación en el asa (nº de filtros activos de la vista): 0 = nada.
+const badge = ref(0)
 
 let ownerToken: symbol | null = null
 
@@ -63,6 +68,7 @@ export function useRightSidebar() {
     hasContent.value = false
     title.value = ''
     mobileOpen.value = false
+    badge.value = 0
   }
 
   function useRegister(panelTitle = ''): RightSidebarToken {
@@ -77,6 +83,7 @@ export function useRightSidebar() {
     mobileOpen,
     title,
     handleFlashId,
+    badge,
     toggleCollapsed,
     openMobile,
     closeMobile,

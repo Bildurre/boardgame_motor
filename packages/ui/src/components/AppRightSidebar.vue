@@ -24,7 +24,8 @@ import { useAppRightSidebar } from '../composables/useAppRightSidebar'
 // prefieren no hacer hueco ni en escritorio. Se abre y se cierra con el ASA
 // anclada a la propia barra
 // (Funnel cerrada / X abierta), visible solo si la vista registró
-// contenido; el cascarón puede ajustar su altura con
+// contenido, con un globito si la vista declara filtros activos (`badge`
+// del composable); el cascarón puede ajustar su altura con
 // --app-right-sidebar-handle-top (relativa al techo de la barra).
 // La monta App.vue una vez, dentro de .site-main.
 // Agnóstica de i18n (DC-29): textos por prop, defaults en castellano.
@@ -52,7 +53,7 @@ const props = withDefaults(
   },
 )
 
-const { hasContent, collapsed, mobileOpen, overlay, title, isOpen, toggle, closeMobile } =
+const { hasContent, collapsed, mobileOpen, overlay, title, badge, isOpen, toggle, closeMobile } =
   useAppRightSidebar()
 
 // Por debajo de este ancho la barra se superpone (drawer) en vez de hacer
@@ -129,6 +130,7 @@ const docked = computed(
     <button
       type="button"
       class="app-right-sidebar__handle"
+      :class="{ 'app-right-sidebar__handle--active': badge > 0 }"
       :aria-label="handleLabel"
       :title="handleLabel"
       :aria-expanded="isOpen"
@@ -136,6 +138,8 @@ const docked = computed(
     >
       <X v-if="isOpen" :size="18" />
       <Funnel v-else :size="18" />
+      <!-- Filtros activos de la vista (badge del composable): globito -->
+      <span v-if="badge > 0" class="app-right-sidebar__badge">{{ badge }}</span>
     </button>
 
     <div class="app-right-sidebar__panel" :inert="!isOpen">

@@ -27,6 +27,7 @@ const {
   mobileOpen,
   title,
   handleFlashId,
+  badge,
   toggleCollapsed,
   toggleMobile,
   closeMobile,
@@ -58,7 +59,8 @@ onUnmounted(() => {
 const isVisible = computed(() => (overlay.value ? mobileOpen.value : !collapsed.value))
 const panelTitle = computed(() => title.value || props.fallbackTitle)
 
-// Con el panel oculto, un destello en el asa avisa de contenido nuevo.
+// Con el panel oculto, un destello en el asa avisa de contenido nuevo; el
+// globito (badge del composable) avisa de filtros activos.
 watch(handleFlashId, () => {
   if (isVisible.value) return
   flashing.value = false
@@ -90,11 +92,13 @@ function handleToggle(e: MouseEvent) {
     v-if="hasContent && !isVisible"
     type="button"
     class="right-sidebar-handle"
-    :class="{ 'right-sidebar-handle--flash': flashing }"
+    :class="{ 'right-sidebar-handle--flash': flashing, 'right-sidebar-handle--active': badge > 0 }"
     :aria-label="showLabel"
     @click="handleToggle"
   >
     <ChevronLeft :size="16" />
+    <!-- Filtros activos de la vista (badge del composable): globito -->
+    <span v-if="badge > 0" class="right-sidebar-handle__badge">{{ badge }}</span>
   </button>
 
   <aside

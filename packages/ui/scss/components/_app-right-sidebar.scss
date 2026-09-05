@@ -104,6 +104,36 @@
       background: $surface-2;
       color: $accent-600;
     }
+
+    // Con filtros activos el asa se rellena de acento: se ve de lejos.
+    &--active {
+      background: $accent-500;
+      @include contrast-text($accent-500);
+
+      &:hover {
+        background: $accent-600;
+        @include contrast-text($accent-600);
+      }
+    }
+  }
+
+  // Globito con el nº de filtros activos, en la esquina del asa.
+  &__badge {
+    position: absolute;
+    top: -7px;
+    left: -7px;
+    min-width: 18px;
+    height: 18px;
+    padding: 0 4px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: $danger;
+    color: #fff;
+    border-radius: 999px;
+    font-size: 11px;
+    font-weight: 700;
+    line-height: 1;
   }
 
   // El contenido registrado (selects de filtros…) se apila a una columna.
