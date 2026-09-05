@@ -13,6 +13,13 @@ Kit de construcción del panel de administración (sobre `@edc-motor/ui`). Paque
   en el drawer móvil.
 - **`BaseGrid` preset `cards`**: una sola columna SOLO en el tramo más
   estrecho (a 2 desde un contenedor `content` de 320px; antes desde 480).
+- **`EntityCard` es su propio contenedor** (`container-name: card`) y se
+  encoge según su ancho REAL, no el del viewport: por debajo de
+  `$bp-card-narrow` (200px, token nuevo del ui — dos columnas en un móvil,
+  paneles estrechos) el título baja a `$fs-14` y los chips del slot
+  `badges` a `$fs-11`; un chip que aun así no quepa se trunca con elipsis
+  en vez de desbordar. Los juegos pueden colgar del mismo contenedor sus
+  propios botones de la tarjeta (`@container card (max-width: …)`).
 
 ## [0.5.48] — 2026-09-04
 

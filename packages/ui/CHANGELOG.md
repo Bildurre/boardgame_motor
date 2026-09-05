@@ -11,6 +11,8 @@ admin). Paquete **fuente** (se consume vía Vite). Versión de tren con
 - **`PreviewGrid`**: la rejilla llega a 5 columnas en `$bp-xl` y se queda
   en una sola SOLO en el tramo más estrecho (< `$bp-xs`, 360px): 1 → 2 (xs)
   → 3 (md) → 4 (lg) → 5 (xl). Antes 1 → 2 (sm) → 3 → 4.
+- **Token `$bp-card-narrow`** (200px): umbral de «tarjeta estrecha» para
+  las container queries `card` de `EntityCard` (admin-kit).
 
 ## [0.5.48] — 2026-09-04
 

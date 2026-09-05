@@ -12,6 +12,12 @@
   overflow: hidden;
   transition: border-color 0.15s ease, box-shadow 0.15s ease;
   min-width: 0;
+  // La tarjeta es su propio contenedor (`card`): el título, los chips y
+  // los botones que monta el juego se encogen según el ancho REAL de la
+  // tarjeta (a dos columnas en un móvil, en un panel estrecho…), no del
+  // viewport. Umbral: $bp-card-narrow (200px).
+  container-type: inline-size;
+  container-name: card;
 
   &--clickable {
     cursor: pointer;
@@ -86,6 +92,10 @@
     text-overflow: ellipsis;
     white-space: nowrap;
     min-width: 0;
+
+    @container card (max-width: #{$bp-card-narrow - 1px}) {
+      font-size: $fs-14;
+    }
   }
 
   // Editar en la propia tarjeta (entidades sin single). En verde ($success),
@@ -123,6 +133,24 @@
     display: flex;
     flex-wrap: wrap;
     gap: $space-1;
+    min-width: 0;
+
+    // Un chip nunca desborda la tarjeta: como bloque en línea (el chip del
+    // ui es inline-flex y ahí la elipsis no aplica) se trunca con «…» si
+    // no cabe. En tarjeta estrecha, un punto más pequeño.
+    .chip {
+      display: inline-block;
+      max-width: 100%;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      vertical-align: middle;
+      line-height: 1.5;
+
+      @container card (max-width: #{$bp-card-narrow - 1px}) {
+        font-size: $fs-11;
+        padding-inline: $space-1;
+      }
+    }
   }
 
   &__meta {
