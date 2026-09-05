@@ -3,16 +3,10 @@
 Kit de construcción del panel de administración (sobre `@edc-motor/ui`). Paquete
 **fuente** (se consume vía Vite). Versión de tren con `edc-motor/core` y `@edc-motor/ui`.
 
-## [0.5.49] — 2026-09-06
+## [Sin publicar]
 
 ### Cambiado
 
-- **`AdminLayout`**: las preferencias (tema + idioma) salen del `nav` y
-  quedan FIJAS arriba del sidebar, como el bloque de usuario abajo; solo el
-  menú de enlaces (`.sidebar-nav`) hace scroll. Vale igual en escritorio y
-  en el drawer móvil.
-- **`BaseGrid` preset `cards`**: una sola columna SOLO en el tramo más
-  estrecho (a 2 desde un contenedor `content` de 320px; antes desde 480).
 - **`EntityCard` es su propio contenedor** (`container-name: card`) y se
   encoge según su ancho REAL, no el del viewport: por debajo de
   `$bp-xxs` (200px, token nuevo del ui — dos columnas en un móvil,
@@ -28,6 +22,17 @@ Kit de construcción del panel de administración (sobre `@edc-motor/ui`). Paque
 - **`useRightSidebar().badge`**: nº de filtros activos de la vista; con
   `badge > 0` el asa del panel oculto (`.right-sidebar-handle`) se rellena
   de acento y lleva un globito con la cuenta. Se limpia al desregistrar.
+
+## [0.5.49] — 2026-09-06
+
+### Cambiado
+
+- **`AdminLayout`**: las preferencias (tema + idioma) salen del `nav` y
+  quedan FIJAS arriba del sidebar, como el bloque de usuario abajo; solo el
+  menú de enlaces (`.sidebar-nav`) hace scroll. Vale igual en escritorio y
+  en el drawer móvil.
+- **`BaseGrid` preset `cards`**: una sola columna SOLO en el tramo más
+  estrecho (a 2 desde un contenedor `content` de 320px; antes desde 480).
 
 ## [0.5.48] — 2026-09-04
 
