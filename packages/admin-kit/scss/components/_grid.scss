@@ -36,9 +36,11 @@
   }
 
   // Preset `cards` (índices de entidades): 1 → 2 → 3 → 4 → 5 con los
-  // breakpoints canónicos del contenedor `content` (480/768/1024/1280).
+  // breakpoints canónicos del contenedor `content` (768/1024/1280). Una sola
+  // columna SOLO en el tramo más estrecho: a 2 ya desde un contenedor de
+  // 320px (un móvil de 360 de viewport menos el aire del contenido).
   &--cards {
-    @container content (min-width: #{$bp-sm}) { grid-template-columns: repeat(2, 1fr); }
+    @container content (min-width: 320px) { grid-template-columns: repeat(2, 1fr); }
     @container content (min-width: #{$bp-md}) { grid-template-columns: repeat(3, 1fr); }
     @container content (min-width: #{$bp-lg}) { grid-template-columns: repeat(4, 1fr); }
     @container content (min-width: #{$bp-xl}) { grid-template-columns: repeat(5, 1fr); }

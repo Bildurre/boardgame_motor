@@ -85,12 +85,16 @@
   }
 }
 
+// Preferencias (tema + idioma): franja FIJA arriba, hermana del nav (no
+// scrollea con él), cerrada por su propio borde como el bloque de usuario.
 .sidebar-preferences {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: $space-2;
-  padding: 0 $space-3;
+  padding: $space-3;
+  border-bottom: 1px solid $border;
+  flex-shrink: 0;
 }
 
 .sidebar-divider {
@@ -99,8 +103,11 @@
   margin: $space-3;
 }
 
+// Solo el menú de enlaces hace scroll (min-height 0: sin él un flex hijo
+// no encoge por debajo de su contenido y el scroll se va al sidebar).
 .sidebar-nav {
   flex: 1;
+  min-height: 0;
   padding: $space-3 $space-2;
   overflow-y: auto;
 

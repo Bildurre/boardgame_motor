@@ -134,18 +134,19 @@ function onNavClick(event: MouseEvent) {
         </button>
       </div>
 
-      <nav class="sidebar-nav">
-        <div v-if="!sidebarCollapsed || isMobile" class="sidebar-preferences">
-          <ThemeSelector />
-          <LocaleSelector
-            v-if="locales.length"
-            :model-value="locale"
-            :locales="locales"
-            @update:model-value="(c: string) => emit('update:locale', c)"
-          />
-        </div>
-        <hr v-if="!sidebarCollapsed || isMobile" class="sidebar-divider" />
+      <!-- Preferencias (tema + idioma) FUERA del nav: quedan fijas arriba
+           (como el usuario abajo) y solo el menú de enlaces hace scroll -->
+      <div v-if="!sidebarCollapsed || isMobile" class="sidebar-preferences">
+        <ThemeSelector />
+        <LocaleSelector
+          v-if="locales.length"
+          :model-value="locale"
+          :locales="locales"
+          @update:model-value="(c: string) => emit('update:locale', c)"
+        />
+      </div>
 
+      <nav class="sidebar-nav">
         <div class="sidebar-items" @click="onNavClick">
           <slot name="nav" />
         </div>

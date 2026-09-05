@@ -4,6 +4,14 @@ Componentes Vue 3 + SCSS para las webs públicas (y piezas compartidas con el
 admin). Paquete **fuente** (se consume vía Vite). Versión de tren con
 `edc-motor/core` y `@edc-motor/admin-kit`.
 
+## [Sin publicar]
+
+### Cambiado
+
+- **`PreviewGrid`**: la rejilla llega a 5 columnas en `$bp-xl` y se queda
+  en una sola SOLO en el tramo más estrecho (< `$bp-xs`, 360px): 1 → 2 (xs)
+  → 3 (md) → 4 (lg) → 5 (xl). Antes 1 → 2 (sm) → 3 → 4.
+
 ## [0.5.48] — 2026-09-04
 
 ### Cambiado

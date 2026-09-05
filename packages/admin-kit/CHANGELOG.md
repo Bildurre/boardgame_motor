@@ -3,6 +3,17 @@
 Kit de construcción del panel de administración (sobre `@edc-motor/ui`). Paquete
 **fuente** (se consume vía Vite). Versión de tren con `edc-motor/core` y `@edc-motor/ui`.
 
+## [Sin publicar]
+
+### Cambiado
+
+- **`AdminLayout`**: las preferencias (tema + idioma) salen del `nav` y
+  quedan FIJAS arriba del sidebar, como el bloque de usuario abajo; solo el
+  menú de enlaces (`.sidebar-nav`) hace scroll. Vale igual en escritorio y
+  en el drawer móvil.
+- **`BaseGrid` preset `cards`**: una sola columna SOLO en el tramo más
+  estrecho (a 2 desde un contenedor `content` de 320px; antes desde 480).
+
 ## [0.5.48] — 2026-09-04
 
 - Sin cambios propios: versión de tren.

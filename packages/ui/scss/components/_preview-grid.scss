@@ -1,8 +1,9 @@
 @use "tokens" as *;
 
 // Rejilla de previews del catálogo público (PreviewGrid.vue). Mobile-first:
-// 1 columna → 2 → 3 → 4 (patrón CDL). Media queries y no container queries:
-// también se monta fuera de las páginas del CRM (índices, singles).
+// 1 columna SOLO en el tramo más estrecho (< xs) → 2 → 3 (md) → 4 (lg) → 5
+// (xl). Media queries y no container queries: también se monta fuera de
+// las páginas del CRM (índices, singles).
 .preview-grid {
   display: grid;
   gap: $space-5;
@@ -12,7 +13,7 @@
     grid-template-columns: minmax(0, 1fr);
     gap: $space-4;
 
-    @media (min-width: $bp-sm) {
+    @media (min-width: $bp-xs) {
       grid-template-columns: repeat(2, minmax(0, 1fr));
     }
 
@@ -22,6 +23,10 @@
 
     @media (min-width: $bp-lg) {
       grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+
+    @media (min-width: $bp-xl) {
+      grid-template-columns: repeat(5, minmax(0, 1fr));
     }
   }
 
