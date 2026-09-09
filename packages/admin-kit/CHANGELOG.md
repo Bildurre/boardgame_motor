@@ -3,6 +3,15 @@
 Kit de construcción del panel de administración (sobre `@edc-motor/ui`). Paquete
 **fuente** (se consume vía Vite). Versión de tren con `edc-motor/core` y `@edc-motor/ui`.
 
+## [Sin publicar]
+
+### Añadido
+
+- **`ExportManager`** (doc 12): formulario de exportación a JSON de los
+  modelos exportables del juego — modelo, idiomas y campos por grupo con
+  todos/ninguno — con descarga autenticada. Props `api`, `labels`,
+  `modelLabels`, `groupLabels` y `fieldLabels` (agnóstico de i18n).
+
 ## [0.5.50] — 2026-09-06
 
 ### Cambiado

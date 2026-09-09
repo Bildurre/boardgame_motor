@@ -5,6 +5,7 @@ import { useI18n } from 'vue-i18n'
 import {
   DatabaseBackup,
   Dices,
+  FileJson,
   FileText,
   Globe,
   LayoutDashboard,
@@ -162,6 +163,15 @@ const gameActive = computed(() => GAME_SECTIONS.includes(route.meta.nav as strin
         :to="{ name: 'pdfs' }"
       >
         <FileText class="nav-icon" :size="20" /><span class="nav-label">{{ t('nav.pdfs') }}</span>
+      </RouterLink>
+      <!-- Exportación a JSON: solo administradores (rol) -->
+      <RouterLink
+        v-if="auth.isAdmin"
+        class="nav-item"
+        :class="navActive('export')"
+        :to="{ name: 'export' }"
+      >
+        <FileJson class="nav-icon" :size="20" /><span class="nav-label">{{ t('nav.export') }}</span>
       </RouterLink>
 
       <!-- La web: CRM y configuración -->

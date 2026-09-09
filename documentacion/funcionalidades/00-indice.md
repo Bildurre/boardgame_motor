@@ -17,5 +17,6 @@ motor/juego · pasos · hito · riesgos.
 | 09 | [Librería Vue + tokens SCSS](09-libreria-vue-tokens.md) | @edc-motor/ui | 0–2 |
 | 10 | [Web pública y panel de usuario](10-web-publica-y-panel-usuario.md) | app + core | 6 |
 | 11 | [Comportamientos de modelo](11-comportamientos-modelo.md) | core | 2 |
+| 12 | [Exportación a JSON](12-exportacion-json.md) | core + admin-kit | 7 |
 
 Orden de construcción real en `02-plan-de-accion.md`.

@@ -2,12 +2,15 @@
 
 namespace App\Models;
 
+use Edc\Core\Export\ExportableContract;
+use Edc\Core\Export\ExportLocalizer;
 use Edc\Core\Media\Concerns\HasImage;
 use Edc\Core\Previews\Concerns\HasPreviewImage;
 use Edc\Core\Previews\PreviewableContract;
 use Edc\Core\Support\Concerns\HasFilters;
 use Edc\Core\Support\Concerns\HasPublishedState;
 use Edc\Core\Support\Concerns\ResolvesBySlug;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Spatie\MediaLibrary\HasMedia;
@@ -20,7 +23,7 @@ use Spatie\Translatable\HasTranslations;
  * poder+prestigio+intriga+dinero (se recalcula al guardar). La defensa es
  * derivada (= coste), no se almacena.
  */
-class Character extends Model implements HasMedia, PreviewableContract
+class Character extends Model implements ExportableContract, HasMedia, PreviewableContract
 {
     use HasFilters;
     use HasImage;
@@ -64,6 +67,45 @@ class Character extends Model implements HasMedia, PreviewableContract
     public function getDefenseAttribute(): int
     {
         return (int) $this->cost;
+    }
+
+    // --- Exportación a JSON (doc 12) ---
+
+    /** Catálogo de campos exportables: clave => grupo. */
+    public static function exportFields(): array
+    {
+        return [
+            'name' => 'basic',
+            'slug' => 'basic',
+            'stats' => 'basic',
+            'is_published' => 'basic',
+            'description' => 'texts',
+            'ability' => 'texts',
+        ];
+    }
+
+    public static function exportQuery(): Builder
+    {
+        return static::query()->orderBy('name->'.config('motor.default_locale'));
+    }
+
+    public function exportItem(ExportLocalizer $l): array
+    {
+        return [
+            'name' => $l->tr($this, 'name'),
+            'slug' => $l->tr($this, 'slug'),
+            'stats' => [
+                'power' => (int) $this->power,
+                'prestige' => (int) $this->prestige,
+                'intrigue' => (int) $this->intrigue,
+                'money' => (int) $this->money,
+                'cost' => (int) $this->cost,
+                'defense' => $this->defense,
+            ],
+            'is_published' => (bool) $this->is_published,
+            'description' => $l->tr($this, 'description'),
+            'ability' => $l->tr($this, 'ability'),
+        ];
     }
 
     // --- Render a PNG (doc 01) ---

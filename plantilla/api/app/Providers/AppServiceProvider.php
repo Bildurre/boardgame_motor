@@ -22,6 +22,7 @@ class AppServiceProvider extends ServiceProvider
      *   Previews::register('carta', Carta::class);          // render a PNG (§5)
      *   Pdfs::layout('card-big', [...]);                    // presets de impresión (§6)
      *   Pdfs::register('cartas', CartasExport::class);      // catálogo de PDF (§6)
+     *   Exports::register('cartas', Carta::class);           // exportación a JSON (doc 12)
      *   Blocks::register(MiBloqueConDatos::class);          // bloques con-datos (§3)
      *   Sitemap::add(fn () => [...]);                       // secciones públicas (§9)
      */

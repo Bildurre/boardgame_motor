@@ -74,6 +74,10 @@ router.beforeEach(async (to) => {
     if (to.meta.permission && !auth.can(to.meta.permission as string)) {
       return { name: 'dashboard' }
     }
+    // Secciones solo para administradores (rol, no permiso): exportación.
+    if (to.meta.role === 'admin' && !auth.isAdmin) {
+      return { name: 'dashboard' }
+    }
   }
   if (to.meta.guest && auth.isAuthenticated && auth.canAccessAdmin) return { name: 'dashboard' }
 })

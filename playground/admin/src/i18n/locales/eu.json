@@ -11,7 +11,8 @@
     "settings": "konfigurazioa",
     "backups": "kopiak",
     "users": "erabiltzaileak",
-    "menu": "menua"
+    "menu": "menua",
+    "export": "esportazioa"
   },
   "breadcrumbs": {
     "home": "Hasiera",
@@ -25,7 +26,8 @@
     "settings": "Konfigurazioa",
     "backups": "Segurtasun-kopiak",
     "users": "Erabiltzaileak",
-    "menu": "Menua"
+    "menu": "Menua",
+    "export": "Esportazioa"
   },
   "nav": {
     "dashboard": "Panela",
@@ -41,7 +43,8 @@
     "backups": "Kopiak",
     "users": "Erabiltzaileak",
     "viewSite": "Ikusi webgunea",
-    "menu": "Menua"
+    "menu": "Menua",
+    "export": "Esportazioa"
   },
   "icons": {
     "title": "Ikonoak",
@@ -99,7 +102,8 @@
     "confirm": "Berretsi",
     "yes": "Bai",
     "no": "Ez",
-    "stateKicker": "Egoera"
+    "stateKicker": "Egoera",
+    "loading": "Kargatzen…"
   },
   "login": {
     "title": "Panelerako sarrera",
@@ -666,6 +670,48 @@
     "confirmLeave": "Menuan gorde gabeko aldaketak daude. Irten hala ere?",
     "toast": {
       "saved": "Menua gordeta."
+    }
+  },
+  "export": {
+    "title": "Esportazioa",
+    "hint": "Deskargatu aukeratutako eredua JSON gisa, markatzen dituzun eremu eta hizkuntzekin. Erlazioak zabalduta doaz, izen eta datuekin, ez id-arekin, fitxategia jarraian irakurtzeko. Hizkuntza bakarrarekin testuak kate gisa doaz; batzuekin, hizkuntzako mapa gisa.",
+    "model": "Eredua",
+    "locales": "Hizkuntzak",
+    "fields": {
+      "characters": {
+        "name": "Izena",
+        "slug": "Slug",
+        "stats": "Estatistikak (boterea, ospea, azpijokoa, dirua, kostua, defentsa)",
+        "is_published": "Argitaratuta",
+        "description": "Deskribapena",
+        "ability": "Trebetasuna"
+      }
+    },
+    "all": "Guztiak",
+    "none": "Bat ere ez",
+    "export": "Esportatu JSON",
+    "exporting": "Esportatzen…",
+    "needLocale": "Aukeratu gutxienez hizkuntza bat.",
+    "needField": "Aukeratu gutxienez eremu bat.",
+    "done": "JSON deskargatuta.",
+    "error": "Ezin izan da esportatu.",
+    "groups": {
+      "basic": "Datuak",
+      "texts": "Testuak",
+      "relations": "Erlazioak"
+    },
+    "models": {
+      "characters": "Pertsonaiak"
+    },
+    "fieldLabels": {
+      "characters": {
+        "name": "Izena",
+        "slug": "Slug",
+        "stats": "Estatistikak (boterea, ospea, azpijokoa, dirua, kostua, defentsa)",
+        "is_published": "Argitaratuta",
+        "description": "Deskribapena",
+        "ability": "Trebetasuna"
+      }
     }
   }
 }

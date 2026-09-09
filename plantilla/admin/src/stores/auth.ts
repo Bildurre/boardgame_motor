@@ -17,6 +17,8 @@ export const useAuthStore = defineStore('auth', () => {
   const token = ref<string | null>(localStorage.getItem(TOKEN_KEY))
   const isAuthenticated = computed(() => !!token.value)
   const canAccessAdmin = computed(() => !!user.value?.can_access_admin)
+  /** Rol administrador (secciones que no basta con un permiso: exportación). */
+  const isAdmin = computed(() => user.value?.roles?.includes('admin') ?? false)
 
   /** Permiso del motor (manage-game / manage-web / manage-users). */
   function can(permission: string): boolean {
@@ -76,6 +78,7 @@ export const useAuthStore = defineStore('auth', () => {
     token,
     isAuthenticated,
     canAccessAdmin,
+    isAdmin,
     can,
     login,
     fetchMe,

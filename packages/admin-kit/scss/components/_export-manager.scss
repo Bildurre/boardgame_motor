@@ -1,0 +1,93 @@
+@use "tokens" as *;
+
+// Exportación a JSON (ExportManager): dos tarjetas (modelo + idiomas | campos por grupo)
+// lado a lado en ancho, en columna en estrecho, y el botón de exportar
+// debajo. Mismo lenguaje que las copias de seguridad.
+.export-manager {
+  display: grid;
+  gap: $space-4;
+
+  &__hint,
+  &__loading {
+    color: $text-3;
+    font-size: $fs-13;
+    margin: 0;
+  }
+
+  &__cards {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: $space-4;
+    align-items: start;
+
+    @container content (min-width: #{$bp-md}) {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 2fr);
+    }
+  }
+
+  &__card {
+    display: grid;
+    gap: $space-4;
+    padding: $space-4;
+    background: $surface;
+    border: 1px solid $border;
+    border-radius: $radius-lg;
+
+    h2 {
+      margin: 0;
+      font-size: $fs-16;
+      font-weight: $k-fw-semibold;
+    }
+  }
+
+  &__fieldset {
+    display: grid;
+    gap: $space-2;
+    margin: 0;
+    padding: 0;
+    border: none;
+    min-width: 0;
+
+    legend {
+      padding: 0;
+      margin-bottom: $space-2;
+      font-size: $fs-13;
+      font-weight: $k-fw-semibold;
+      color: $text-2;
+    }
+  }
+
+  &__fields-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: $space-3;
+  }
+
+  &__quick {
+    display: flex;
+    gap: $space-3;
+  }
+
+  // Todos / ninguno: botones-de-texto.
+  &__link {
+    padding: 0;
+    background: none;
+    border: none;
+    color: $accent-500;
+    font: inherit;
+    font-size: $fs-13;
+    font-weight: $k-fw-semibold;
+    cursor: pointer;
+
+    &:hover {
+      color: $accent-600;
+      text-decoration: underline;
+    }
+  }
+
+  &__actions {
+    display: flex;
+    justify-content: flex-end;
+  }
+}

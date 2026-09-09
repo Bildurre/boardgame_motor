@@ -197,6 +197,19 @@ export function createLocalizedRoutes(locale: string): RouteRecordRaw[] {
       },
     },
     {
+      path: `/${p.export}`,
+      name: 'export',
+      component: () => import('@/views/export/ExportView.vue'),
+      alias: buildAliases((t) => `/${t.export}`, locale),
+      meta: {
+        admin: true,
+        nav: 'export',
+        role: 'admin',
+        titleKey: 'export.title',
+        breadcrumbs: [{ key: 'export' }],
+      },
+    },
+    {
       path: `/${p.settings}`,
       name: 'settings',
       component: () => import('@/views/settings/SettingsView.vue'),

@@ -14,6 +14,7 @@ use App\Pdf\HouseSchemesExport;
 use App\Pdf\HouseTokensExport;
 use App\Pdf\SchemesExport;
 use Edc\Core\Support\Facades\Blocks;
+use Edc\Core\Support\Facades\Exports;
 use Edc\Core\Support\Facades\Pdfs;
 use Edc\Core\Support\Facades\Previews;
 use Edc\Core\Support\Facades\Sitemap;
@@ -37,6 +38,9 @@ class AppServiceProvider extends ServiceProvider
         // Entidades renderizables a PNG (doc 01). La clave es el segmento de
         // /_render/:entity y debe casar con el renderRegistry de la app Vue.
         Previews::register('character', Character::class);
+
+        // Exportación a JSON (doc 12): modelos exportables (solo administradores).
+        Exports::register('characters', Character::class);
         Previews::register('scheme', Scheme::class);
         // La casa tiene DOS previews (mismo componente HouseToken, tamaños
         // distintos): la por defecto es la primera registrada.

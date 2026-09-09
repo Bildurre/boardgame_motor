@@ -114,6 +114,7 @@ Lo que aporta el juego:
 - **Registros** en `app/Providers/AppServiceProvider.php` (la plantilla trae
   los huecos comentados): `Previews::register(...)` (PNG),
   `Pdfs::layout(...)` y `Pdfs::register(...)` (exports),
+  `Exports::register(...)` (exportación a JSON, doc 12),
   `Blocks::register(...)` (bloques con-datos) y `Sitemap::add(...)` (SEO).
 - **Seeder demo** con datos de todas las piezas (regla de la casa: todo lo
   que se genere, al seeder).

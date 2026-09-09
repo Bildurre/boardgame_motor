@@ -4,6 +4,7 @@ import { useRoute, useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import {
   DatabaseBackup,
+  FileJson,
   FileText,
   Globe,
   LayoutDashboard,
@@ -138,6 +139,15 @@ function navActive(section: string) {
         :to="{ name: 'pdfs' }"
       >
         <FileText class="nav-icon" :size="20" /><span class="nav-label">{{ t('nav.pdfs') }}</span>
+      </RouterLink>
+      <!-- Exportación a JSON: solo administradores (rol) -->
+      <RouterLink
+        v-if="auth.isAdmin"
+        class="nav-item"
+        :class="navActive('export')"
+        :to="{ name: 'export' }"
+      >
+        <FileJson class="nav-icon" :size="20" /><span class="nav-label">{{ t('nav.export') }}</span>
       </RouterLink>
 
       <!-- La web: CRM y configuración -->

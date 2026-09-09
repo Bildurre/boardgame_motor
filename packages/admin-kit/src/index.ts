@@ -20,6 +20,8 @@ export { default as FilterBar } from './crud/FilterBar.vue'
 export { default as EmptyState } from './crud/EmptyState.vue'
 export { default as PreviewManager, type PreviewManagerLabels } from './previews/PreviewManager.vue'
 export { default as PdfManager, type PdfManagerLabels } from './pdf/PdfManager.vue'
+// Exportación a JSON (doc 12) de los modelos exportables: solo administradores.
+export { default as ExportManager, type ExportManagerLabels } from './export/ExportManager.vue'
 export { useResource, type ResourceMeta } from './crud/useResource'
 // CRM de páginas y bloques (doc 03): editor dirigido por esquema.
 export { default as SchemaFields, type FieldSchema } from './content/SchemaFields.vue'

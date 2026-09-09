@@ -8,7 +8,8 @@
     "settings": "configuracion",
     "backups": "copias",
     "users": "usuarios",
-    "menu": "menu"
+    "menu": "menu",
+    "export": "exportacion"
   },
   "breadcrumbs": {
     "home": "Inicio",
@@ -19,7 +20,8 @@
     "settings": "Configuración",
     "backups": "Copias de seguridad",
     "users": "Usuarios",
-    "menu": "Menú"
+    "menu": "Menú",
+    "export": "Exportación"
   },
   "nav": {
     "dashboard": "Panel",
@@ -31,7 +33,8 @@
     "backups": "Copias",
     "users": "Usuarios",
     "viewSite": "Ver la web",
-    "menu": "Menú"
+    "menu": "Menú",
+    "export": "Exportación"
   },
   "icons": {
     "title": "Iconos",
@@ -93,7 +96,8 @@
     "pagination": {
       "prev": "Anterior",
       "next": "Siguiente"
-    }
+    },
+    "loading": "Cargando…"
   },
   "login": {
     "title": "Acceso al panel",
@@ -419,5 +423,36 @@
     "toast": {
       "saved": "Menú guardado."
     }
+  },
+  "export": {
+    "title": "Exportación",
+    "hint": "Descarga en JSON el modelo elegido con los campos e idiomas que marques. Las relaciones salen desplegadas con su nombre y sus datos, no con su id, para leer el fichero de seguido. Con un solo idioma los textos van como cadena; con varios, como mapa por idioma.",
+    "model": "Modelo",
+    "locales": "Idiomas",
+    "fields": {
+      "characters": {
+        "name": "Nombre",
+        "slug": "Slug",
+        "stats": "Estadísticas (poder, prestigio, intriga, dinero, coste, defensa)",
+        "is_published": "Publicado",
+        "description": "Descripción",
+        "ability": "Habilidad"
+      }
+    },
+    "all": "Todos",
+    "none": "Ninguno",
+    "export": "Exportar JSON",
+    "exporting": "Exportando…",
+    "needLocale": "Elige al menos un idioma.",
+    "needField": "Elige al menos un campo.",
+    "done": "JSON descargado.",
+    "error": "No se pudo exportar.",
+    "groups": {
+      "basic": "Datos",
+      "texts": "Textos",
+      "relations": "Relaciones"
+    },
+    "models": {},
+    "fieldLabels": {}
   }
 }

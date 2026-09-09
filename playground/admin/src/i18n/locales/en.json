@@ -11,7 +11,8 @@
     "settings": "settings",
     "backups": "backups",
     "users": "users",
-    "menu": "menu"
+    "menu": "menu",
+    "export": "export"
   },
   "breadcrumbs": {
     "home": "Home",
@@ -25,7 +26,8 @@
     "settings": "Settings",
     "backups": "Backups",
     "users": "Users",
-    "menu": "Menu"
+    "menu": "Menu",
+    "export": "Export"
   },
   "nav": {
     "dashboard": "Dashboard",
@@ -41,7 +43,8 @@
     "backups": "Backups",
     "users": "Users",
     "viewSite": "View site",
-    "menu": "Menu"
+    "menu": "Menu",
+    "export": "Export"
   },
   "icons": {
     "title": "Icons",
@@ -103,7 +106,8 @@
     "pagination": {
       "prev": "Previous",
       "next": "Next"
-    }
+    },
+    "loading": "Loading…"
   },
   "login": {
     "title": "Panel access",
@@ -670,6 +674,48 @@
     "confirmLeave": "The menu has unsaved changes. Leave anyway?",
     "toast": {
       "saved": "Menu saved."
+    }
+  },
+  "export": {
+    "title": "Export",
+    "hint": "Download the chosen model as JSON with the fields and languages you tick. Relations come expanded with their name and data instead of their id, so the file reads straight through. With one language texts are strings; with several, maps per language.",
+    "model": "Model",
+    "locales": "Languages",
+    "fields": {
+      "characters": {
+        "name": "Name",
+        "slug": "Slug",
+        "stats": "Stats (power, prestige, intrigue, money, cost, defense)",
+        "is_published": "Published",
+        "description": "Description",
+        "ability": "Ability"
+      }
+    },
+    "all": "All",
+    "none": "None",
+    "export": "Export JSON",
+    "exporting": "Exporting…",
+    "needLocale": "Pick at least one language.",
+    "needField": "Pick at least one field.",
+    "done": "JSON downloaded.",
+    "error": "Could not export.",
+    "groups": {
+      "basic": "Data",
+      "texts": "Texts",
+      "relations": "Relations"
+    },
+    "models": {
+      "characters": "Characters"
+    },
+    "fieldLabels": {
+      "characters": {
+        "name": "Name",
+        "slug": "Slug",
+        "stats": "Stats (power, prestige, intrigue, money, cost, defense)",
+        "is_published": "Published",
+        "description": "Description",
+        "ability": "Ability"
+      }
     }
   }
 }
