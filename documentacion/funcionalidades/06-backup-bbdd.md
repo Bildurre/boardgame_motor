@@ -56,6 +56,14 @@ DELETE /api/v1/admin/backups/{id}
   URL firmada (`window.location.assign`), así el navegador muestra la
   descarga con su progreso. Por la API con el token habría que bajar el zip
   entero a memoria (blob) y «aparecía» de golpe al final.
+- **Restaurar deja el storage como en la copia**: si el zip trae storage,
+  `BackupRestorer` vacía antes los originales del disco público (todas las
+  carpetas menos previews y PDF, que no van en la copia) y luego escribe los
+  del zip. Sin ese vaciado, restaurar SUMABA ficheros y el disco acumulaba
+  carpetas huérfanas (imágenes sustituidas, registros que la BBDD restaurada
+  ya no tiene). Un zip sin storage no toca el disco. Para limpiar huérfanos
+  ya acumulados (p. ej. tras restaurar solo la BBDD): `php artisan
+  motor:media:prune [--dry-run]` (doc 07).
 - **Storage en la manual**: `RunBackupJob` reaplica la config de spatie si
   la vigente en el proceso (`MotorBackup::appliedWithMedia()`: el boot o el
   último job) no es la suya. En un worker de larga vida, la config no es la

@@ -229,11 +229,16 @@ it('restaurar una copia importa el dump SQL machacando la BBDD actual', function
     $this->actingAs($admin)->postJson('/api/admin/backups/no-existe.zip/restore')
         ->assertNotFound();
 
-    // Restaurar: el esquema actual se vacía y el dump se importa.
+    // Restaurar: el esquema actual se vacía y el dump se importa. Una copia
+    // SIN storage no toca el disco público.
+    Storage::fake('public');
+    Storage::disk('public')->put('card/1/5/arte.png', 'INTACTA');
     $this->actingAs($admin)->postJson("/api/admin/backups/{$file}/restore")
         ->assertOk()
-        ->assertJsonPath('restored', 'db-dumps/sqlite-database.sql');
+        ->assertJsonPath('restored', 'db-dumps/sqlite-database.sql')
+        ->assertJsonPath('restored_files', 0);
     expect(DB::table('restore_probe')->value('name'))->toBe('desde-la-copia');
+    Storage::disk('public')->assertExists('card/1/5/arte.png');
 
     @unlink($zip);
 });
@@ -254,6 +259,14 @@ it('restaurar devuelve a su sitio el storage que traiga la copia (originales)', 
     ]);
     Storage::disk('backups')->putFileAs(config('backup.backup.name'), $zip, 'upload-con-storage.zip');
 
+    // Lo que hubiera en el disco antes: una carpeta de media que la copia no
+    // trae (huérfana: se va), una preview y un PDF (no van en la copia: se
+    // quedan) y un fichero suelto en la raíz (se queda).
+    Storage::disk('public')->put('card/9/99/vieja.png', 'HUERFANA');
+    Storage::disk('public')->put('previews/card-1-es.png', 'PREVIEW');
+    Storage::disk('public')->put('pdfs/mazo.pdf', 'PDF');
+    Storage::disk('public')->put('.gitignore', '*');
+
     $this->actingAs($admin)->postJson('/api/admin/backups/upload-con-storage.zip/restore')
         ->assertOk()
         ->assertJsonPath('restored', 'db-dumps/sqlite-database.sql')
@@ -263,6 +276,13 @@ it('restaurar devuelve a su sitio el storage que traiga la copia (originales)', 
     Storage::disk('public')->assertExists('icon/2/icono.svg');
     // La entrada con `..` se ha saltado (restored_files = 2, no 3).
     expect(Storage::disk('public')->get('card/1/arte.png'))->toBe('PNG-ARTE');
+
+    // El storage queda COMO EN LA COPIA: fuera lo huérfano; previews, PDF y
+    // la raíz intactos.
+    Storage::disk('public')->assertMissing('card/9/99/vieja.png');
+    Storage::disk('public')->assertExists('previews/card-1-es.png');
+    Storage::disk('public')->assertExists('pdfs/mazo.pdf');
+    Storage::disk('public')->assertExists('.gitignore');
 
     @unlink($zip);
 });

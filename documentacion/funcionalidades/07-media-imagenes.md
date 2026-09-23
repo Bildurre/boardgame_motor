@@ -27,6 +27,13 @@ previews), atributos de color/coste.
   - `HasColorAttribute` / `HasCostAttribute` — utilidades reutilizables.
 - Almacenamiento por disco configurable; helper de URL; borrado al eliminar el
   modelo; soporte de "dados"/iconos inline en texto rico (relación con doc 03).
+- **Limpieza de huérfanos**: `php artisan motor:media:prune [--dry-run]`
+  borra las carpetas `{modelo}/{id}/{mediaId}` del disco público sin
+  registro en `media` (mediaId inexistente, o de otro registro/modelo). Solo
+  mira dentro de las carpetas de los modelos con media; previews, PDF y
+  contenido del CRM no se tocan. Los huérfanos aparecen al restaurar una
+  copia de solo BBDD (el disco conserva media de registros que ya no
+  existen) o al sustituir imágenes sin que el registro viejo se borrara.
 
 **Frontend (`@edc-motor/ui`):**
 - `ImageUpload` (drag&drop + preview) y variante multilingüe (una por locale).

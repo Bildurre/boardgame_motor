@@ -87,8 +87,12 @@ async function load() {
     pending.value = data.pending ?? false
     // Si hay una copia en curso (p. ej. al volver a la vista), sigue el sondeo.
     if (pending.value) void poll()
-  } catch {
-    toast.danger(t('common.errors.load'))
+  } catch (error) {
+    // Tras restaurar una copia la sesión puede haberse ido con la BBDD
+    // (401): el cliente de la API ya manda al login; sin toast rojo encima
+    // del verde de «restaurada».
+    const status = (error as { response?: { status?: number } })?.response?.status
+    if (status !== 401) toast.danger(t('common.errors.load'))
   } finally {
     loading.value = false
   }
