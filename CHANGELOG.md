@@ -12,6 +12,15 @@ El formato sigue [Keep a Changelog](https://keepachangelog.com/es/) y el
 versionado, [SemVer](https://semver.org/lang/es/) (mientras estemos en `0.x`,
 los cambios de API pueden llegar en versiones menores).
 
+## [Sin publicar]
+
+- Plantilla: `update-motor.sh` espera a que Packagist y npm SIRVAN la
+  versión pedida antes de instalar (hasta 10 min, `MOTOR_ESPERA_MAX`) y
+  usa `npm install --prefer-online`: un `--finish --motor` lanzado nada
+  más releasear se partía por la mitad con `ETARGET` porque la action
+  «Publicar» y la propagación de npm tardan unos minutos (nos pasó en
+  0.5.51 y 0.5.52). Migración del cascarón: copiar el script en cada juego.
+
 ## [0.5.52] — 2026-09-23
 
 - Sin cambios propios: versión de tren.
