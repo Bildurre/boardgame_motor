@@ -4,6 +4,17 @@ Componentes Vue 3 + SCSS para las webs públicas (y piezas compartidas con el
 admin). Paquete **fuente** (se consume vía Vite). Versión de tren con
 `edc-motor/core` y `@edc-motor/admin-kit`.
 
+## [Sin publicar]
+
+### Añadido
+
+- **`BaseButton` como enlace**: nueva prop `href`; con URL se renderiza
+  `<a>` con el mismo aspecto (sin `type`). Para las acciones que navegan
+  (abrir el detalle de un elemento), y así se pueden abrir en otra pestaña
+  (clic derecho, botón central, ctrl+clic). Con vue-router:
+  `<RouterLink v-slot="{ href, navigate }" :to custom><BaseButton :href="href" @click="navigate">`.
+  `.edc-button` lleva `text-decoration: none`.
+
 ## [0.5.51] — 2026-09-09
 
 - Sin cambios propios: versión de tren.

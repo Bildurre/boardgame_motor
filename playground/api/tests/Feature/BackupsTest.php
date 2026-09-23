@@ -58,10 +58,20 @@ it('el admin crea (en cola), lista, descarga y borra copias de seguridad', funct
         ->assertJsonPath('data.0.file', $file)
         ->assertJsonPath('pending', false);
 
-    // Descargar.
+    // Descargar por la API (autenticada)…
     $this->actingAs($admin)->get("/api/admin/backups/{$file}/download")
         ->assertOk()
         ->assertDownload($file);
+
+    // …y por el enlace firmado temporal que abre el navegador (sin auth);
+    // sin firma válida, 403. Un nombre desconocido no da enlace.
+    $url = $this->actingAs($admin)->getJson("/api/admin/backups/{$file}/download-url")
+        ->assertOk()
+        ->json('url');
+    expect($url)->toContain("/api/backups/{$file}/download?")->toContain('signature=');
+    $this->get($url)->assertOk()->assertDownload($file);
+    $this->get("/api/backups/{$file}/download")->assertForbidden();
+    $this->actingAs($admin)->getJson('/api/admin/backups/nope.zip/download-url')->assertNotFound();
 
     // Borrar (y un nombre desconocido da 404).
     $this->actingAs($admin)->deleteJson("/api/admin/backups/{$file}")
@@ -101,6 +111,41 @@ it('la copia automática puede llevar el storage y la manual decide por su cuent
     // automática lo lleve (el job reaplica la config con su elección).
     MotorBackup::applyConfig(includeMedia: false);
     expect(config('backup.backup.source.files.include'))->not->toContain(storage_path('app/public'));
+
+    // Y en un worker de larga vida la config vigente es la del ÚLTIMO job,
+    // no la del boot: con la automática SIN storage, tras una manual CON
+    // imágenes la siguiente SIN ellas debe reaplicar la config y salir sin
+    // el storage (antes se comparaba con la automática y salía con él).
+    // Un fichero sqlite ficticio hace de BBDD a incluir (la de tests es
+    // :memory: y una copia sin storage ni BBDD no tendría nada que zipear).
+    $this->actingAs($admin)->putJson('/api/admin/backups/schedule', [
+        'auto' => true, 'frequency' => 'daily', 'time' => '03:00', 'weekday' => 1,
+        'keep_days' => 14, 'include_media' => false,
+    ])->assertOk();
+    $database = tempnam(sys_get_temp_dir(), 'motor-db-').'.sqlite';
+    file_put_contents($database, 'sqlite');
+    config(['database.connections.'.config('database.default').'.database' => $database]);
+
+    (new RunBackupJob('manual-con.zip', true))->handle();
+    (new RunBackupJob('manual-sin.zip', false))->handle();
+
+    $entries = function (string $file): array {
+        $zip = new ZipArchive;
+        $zip->open(Storage::disk('backups')->path(config('backup.backup.name')."/{$file}"));
+        $names = [];
+        for ($i = 0; $i < $zip->numFiles; $i++) {
+            $names[] = $zip->getNameIndex($i);
+        }
+        $zip->close();
+
+        return $names;
+    };
+    $withStorage = fn (array $names) => collect($names)->contains(fn (string $n) => str_contains($n, 'storage/app/public/'));
+
+    expect($withStorage($entries('manual-con.zip')))->toBeTrue()
+        ->and($withStorage($entries('manual-sin.zip')))->toBeFalse()
+        ->and($entries('manual-sin.zip'))->not->toBeEmpty();
+    @unlink($database);
 });
 
 it('la copia manual va en cola con flag pending mientras el worker no acaba', function () {
@@ -302,4 +347,5 @@ it('las copias de seguridad son solo de manage-web', function () {
     $this->actingAs($editor)->post('/api/admin/backups/upload')->assertForbidden();
     $this->actingAs($editor)->postJson('/api/admin/backups/algo.zip/restore')->assertForbidden();
     $this->actingAs($editor)->putJson('/api/admin/backups/schedule', [])->assertForbidden();
+    $this->actingAs($editor)->getJson('/api/admin/backups/algo.zip/download-url')->assertForbidden();
 });

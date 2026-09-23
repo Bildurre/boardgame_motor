@@ -13,6 +13,7 @@ import {
 } from '@edc-motor/ui'
 import { useRightSidebar } from '@edc-motor/admin-kit'
 import { api } from '@/lib/api'
+import { apiMessage } from '@/lib/apiError'
 
 // Copias de seguridad (doc 06): crear (EN COLA: la petición no espera al
 // zip y la vista sondea el flag `pending`), subir una copia externa,
@@ -178,8 +179,15 @@ async function upload() {
     uploadFile.value = null
     if (uploadInput.value) uploadInput.value.value = ''
     toast.success(t('backups.toast.uploaded'))
-  } catch {
-    toast.danger(t('backups.upload.invalid'))
+  } catch (error) {
+    // El motivo REAL: el mensaje de la API en los 4xx (422: no es una copia
+    // válida, demasiado grande…) y, si el servidor web corta la subida (413,
+    // tope de nginx/PHP), «demasiado grande». Antes se decía siempre «no es
+    // una copia válida» y escondía la causa.
+    const status = (error as { response?: { status?: number } })?.response?.status
+    toast.danger(
+      apiMessage(error, status === 413 ? t('common.fileTooLarge') : t('common.errors.action')),
+    )
   } finally {
     uploading.value = false
   }
@@ -213,18 +221,14 @@ async function restore(backup: BackupRow) {
   }
 }
 
-/** Descarga autenticada: el zip llega por la API con el token. */
+/** Descarga delegada al navegador: la API da un enlace firmado y temporal
+ *  (doc 06) y el navegador lo abre, así se ve la descarga y su progreso (por
+ *  la API con el token habría que bajar el zip a memoria y aparecía de
+ *  golpe al final). */
 async function download(backup: BackupRow) {
   try {
-    const { data } = await api.get(`/admin/backups/${backup.file}/download`, {
-      responseType: 'blob',
-    })
-    const url = URL.createObjectURL(data)
-    const link = document.createElement('a')
-    link.href = url
-    link.download = backup.file
-    link.click()
-    URL.revokeObjectURL(url)
+    const { data } = await api.get<{ url: string }>(`/admin/backups/${backup.file}/download-url`)
+    window.location.assign(data.url)
   } catch {
     toast.danger(t('common.errors.action'))
   }

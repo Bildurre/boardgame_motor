@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { useI18n } from 'vue-i18n'
+import type { RouteLocationRaw } from 'vue-router'
 import {
   ArrowRight,
   Camera,
@@ -34,10 +35,12 @@ defineProps<{
   hasNext?: boolean
   /** La entidad se renderiza a PNG: muestra regenerar + imágenes por idioma. */
   hasPreview?: boolean
+  /** Ruta del detalle del elemento: botón «abrir» como ENLACE real (se
+   *  puede abrir en otra pestaña). Sin ruta, sin botón. */
+  openTo?: RouteLocationRaw
 }>()
 
 defineEmits<{
-  open: []
   edit: []
   togglePublish: []
   regenerate: []
@@ -103,10 +106,12 @@ const locales = useLocalesStore()
             </BaseButton>
           </template>
           <template v-else>
-            <BaseButton @click="$emit('open')">
-              <template #icon><ArrowRight :size="14" /></template>
-              {{ t('common.actions.open') }}
-            </BaseButton>
+            <RouterLink v-if="openTo" v-slot="{ href, navigate }" :to="openTo" custom>
+              <BaseButton :href="href" @click="navigate">
+                <template #icon><ArrowRight :size="14" /></template>
+                {{ t('common.actions.open') }}
+              </BaseButton>
+            </RouterLink>
             <BaseButton variant="info" @click="$emit('edit')">
               <template #icon><SquarePen :size="14" /></template>
               {{ t('common.actions.edit') }}

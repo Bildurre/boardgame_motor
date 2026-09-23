@@ -24,7 +24,7 @@ const {
   formSlug,
   openCreate,
   edit,
-  goSingle,
+  singleTo,
   onSaved,
   togglePublish,
   del,
@@ -82,9 +82,9 @@ onMounted(init)
 
         <!-- La tarjeta solo lleva "entrar" al single; el resto, en el panel -->
         <template #actions>
-          <button v-if="!item.deleted_at" type="button" class="card-enter" @click="goSingle(item)">
+          <RouterLink v-if="!item.deleted_at" class="card-enter" :to="singleTo(item)">
             {{ t('common.actions.enter') }} <ArrowRight :size="14" />
-          </button>
+          </RouterLink>
         </template>
 
         <template #badges>
@@ -114,9 +114,9 @@ onMounted(init)
       :empty="t('houses.panelEmpty')"
       :has-prev="hasPrev"
       :has-next="hasNext"
+      :open-to="selected ? singleTo(selected) : undefined"
       @prev="selectPrev"
       @next="selectNext"
-      @open="selected && goSingle(selected)"
       @edit="selected && edit(selected)"
       @toggle-publish="selected && togglePublish(selected)"
       @del="selected && del(selected)"

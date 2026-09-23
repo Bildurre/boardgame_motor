@@ -3,6 +3,17 @@
 Kit de construcción del panel de administración (sobre `@edc-motor/ui`). Paquete
 **fuente** (se consume vía Vite). Versión de tren con `edc-motor/core` y `@edc-motor/ui`.
 
+## [Sin publicar]
+
+### Añadido
+
+- **Tooltip en el carril de iconos** (`AdminLayout`): con el sidebar
+  colapsado, al pasar el ratón (o enfocar) por un `nav-item` se muestra su
+  `.nav-label` flotando a la derecha (`.nav-tooltip`, `position: fixed`
+  porque el nav hace scroll). Delegado en el contenedor del slot `#nav`:
+  vale para enlaces sueltos y para cabeceras e hijos de `NavGroup`, sin
+  cambios en las apps.
+
 ## [0.5.51] — 2026-09-09
 
 ### Añadido

@@ -34,6 +34,7 @@
   color: $accent-500;
   font-size: $fs-13;
   font-weight: $k-fw-semibold;
+  text-decoration: none; // es un enlace (RouterLink)
   cursor: pointer;
   transition: background-color 0.15s ease;
 

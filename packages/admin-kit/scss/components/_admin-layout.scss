@@ -360,6 +360,26 @@
   }
 }
 
+// Tooltip del carril de iconos: la etiqueta del nav-item bajo el ratón (o
+// con foco), flotando a su derecha. `position: fixed` (lo coloca
+// AdminLayout con la caja del ítem): el nav hace scroll y recortaría un
+// hijo absoluto que sobresaliera del sidebar.
+.nav-tooltip {
+  position: fixed;
+  z-index: 110;
+  transform: translateY(-50%);
+  padding: $space-1 $space-2;
+  border-radius: $radius-sm;
+  background: $text-1;
+  color: $bg;
+  font-size: $fs-13;
+  font-weight: $k-fw-medium;
+  line-height: 1.4;
+  white-space: nowrap;
+  pointer-events: none;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+}
+
 // ---- Modo móvil (< bp-md): el sidebar se vuelve drawer ----
 .is-mobile {
   .sidebar {

@@ -84,13 +84,35 @@ watch(sidebarMobileOpen, (open) => {
 function toggleSidebar() {
   sidebarCollapsed.value = !sidebarCollapsed.value
   localStorage.setItem('edc_admin_collapsed', sidebarCollapsed.value ? '1' : '0')
+  hideRailTip()
 }
 
 // Estado "carril de iconos" para los NavGroup del slot #nav (ver keys.ts).
-provide(
-  SIDEBAR_RAIL,
-  computed(() => sidebarCollapsed.value && !isMobile.value),
-)
+const isRail = computed(() => sidebarCollapsed.value && !isMobile.value)
+provide(SIDEBAR_RAIL, isRail)
+
+// Tooltip del carril de iconos: colapsado, las etiquetas no se ven; al pasar
+// el ratón (o enfocar con teclado) por un nav-item se muestra su `.nav-label`
+// flotando a la derecha. Delegado en el contenedor del slot: vale para
+// cualquier nav-item (enlaces sueltos, cabeceras e hijos de NavGroup). Va
+// en `position: fixed` porque el nav hace scroll y recortaría un hijo
+// absoluto que sobresaliera del sidebar.
+const railTip = ref<{ label: string; top: number; left: number } | null>(null)
+
+function showRailTip(event: Event) {
+  if (!isRail.value) return
+  const item = (event.target as HTMLElement).closest<HTMLElement>('.nav-item')
+  const label = item?.querySelector('.nav-label')?.textContent?.trim()
+  if (!item || !label) return
+  const rect = item.getBoundingClientRect()
+  railTip.value = { label, top: rect.top + rect.height / 2, left: rect.right + 8 }
+}
+
+function hideRailTip() {
+  railTip.value = null
+}
+
+watch(() => route.fullPath, hideRailTip)
 
 // En móvil, tocar un ENLACE del menú cierra el drawer; los toggles de grupo
 // (NavGroup) no navegan y deben dejarlo abierto.
@@ -146,8 +168,15 @@ function onNavClick(event: MouseEvent) {
         />
       </div>
 
-      <nav class="sidebar-nav">
-        <div class="sidebar-items" @click="onNavClick">
+      <nav class="sidebar-nav" @scroll="hideRailTip">
+        <div
+          class="sidebar-items"
+          @click="onNavClick"
+          @mouseover="showRailTip"
+          @mouseout="hideRailTip"
+          @focusin="showRailTip"
+          @focusout="hideRailTip"
+        >
           <slot name="nav" />
         </div>
       </nav>
@@ -159,6 +188,16 @@ function onNavClick(event: MouseEvent) {
         <slot name="user" :collapsed="sidebarCollapsed && !isMobile" />
       </div>
     </aside>
+
+    <!-- Etiqueta del nav-item bajo el ratón, solo en el carril de iconos -->
+    <div
+      v-if="railTip"
+      class="nav-tooltip"
+      role="tooltip"
+      :style="{ top: `${railTip.top}px`, left: `${railTip.left}px` }"
+    >
+      {{ railTip.label }}
+    </div>
 
     <div class="main-wrapper">
       <header class="navbar">

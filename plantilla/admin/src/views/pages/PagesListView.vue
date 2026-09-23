@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { useRouter } from 'vue-router'
+import type { RouteLocationRaw } from 'vue-router'
 import {
   ArrowLeft,
   ArrowRight,
@@ -34,7 +34,6 @@ import { useLocalesStore } from '@/stores/locales'
 // en el hueco entre cards raíz saca una hija a la raíz (única forma: el
 // panel ya no repite esa acción, es un caso particular del propio arrastre).
 const { t, te } = useI18n()
-const router = useRouter()
 const toast = useToast()
 const { confirm } = useConfirm()
 const locales = useLocalesStore()
@@ -150,8 +149,10 @@ function select(page: PageRow, event: MouseEvent) {
 // deselecciona y el panel vuelve a los filtros.
 useCardDeselect(() => (selectedId.value = null), '.pages-view__item')
 
-function open(page: PageRow) {
-  router.push({ name: 'page', params: { id: page.id } })
+/** Ruta del detalle de la página: los botones de entrar/abrir son enlaces
+ *  reales (se pueden abrir en otra pestaña). */
+function pageTo(page: PageRow): RouteLocationRaw {
+  return { name: 'page', params: { id: page.id } }
 }
 
 function openCreate() {
@@ -351,9 +352,9 @@ onMounted(load)
         @dragend="onDragEnd"
       >
         <span class="pages-view__grip"><GripVertical :size="16" /></span>
-        <button type="button" class="pages-view__title" @click="open(page)">
+        <RouterLink class="pages-view__title" :to="pageTo(page)">
           {{ pageTitle(page) }}
-        </button>
+        </RouterLink>
         <span class="pages-view__slug">
           /{{ page.slug[locales.current] ?? page.slug.es ?? '' }}
           <em v-if="page.parent_id" class="pages-view__parent">
@@ -369,9 +370,9 @@ onMounted(load)
           <span class="chip">{{ page.blocks_count ?? 0 }} ▤</span>
         </span>
         <span class="pages-view__buttons">
-          <button type="button" class="card-enter" @click="open(page)">
+          <RouterLink class="card-enter" :to="pageTo(page)">
             {{ t('common.actions.enter') }} <ArrowRight :size="14" />
-          </button>
+          </RouterLink>
         </span>
       </article>
     </div>
@@ -407,10 +408,12 @@ onMounted(load)
           <!-- Acciones de verdad (patrón panel): los interruptores de
                estado van en su propia sección, debajo -->
           <div class="manager-detail__actions">
-            <BaseButton @click="open(selected)">
-              <template #icon><ArrowRight :size="14" /></template>
-              {{ t('pages.open') }}
-            </BaseButton>
+            <RouterLink v-slot="{ href, navigate }" :to="pageTo(selected)" custom>
+              <BaseButton :href="href" @click="navigate">
+                <template #icon><ArrowRight :size="14" /></template>
+                {{ t('pages.open') }}
+              </BaseButton>
+            </RouterLink>
             <BaseButton variant="info" @click="openEdit(selected)">
               <template #icon><SquarePen :size="14" /></template>
               {{ t('common.actions.edit') }}

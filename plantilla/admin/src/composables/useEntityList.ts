@@ -1,6 +1,6 @@
 import { computed, onBeforeUnmount, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { useRouter } from 'vue-router'
+import { useRouter, type RouteLocationRaw } from 'vue-router'
 import { CircleCheck, FilePen, Trash } from '@lucide/vue'
 import { useResource, useRightSidebar } from '@edc-motor/admin-kit'
 import { useConfirm, useToast } from '@edc-motor/ui'
@@ -127,8 +127,13 @@ export function useEntityList<T extends EntityBase>(options: EntityListOptions<T
     formOpen.value = true
   }
 
+  /** Destino del detalle: para enlaces reales (abrir en otra pestaña). */
+  function singleTo(item: T): RouteLocationRaw {
+    return { name: options.singleRoute, params: { slug: slugFor(item) } }
+  }
+
   function goSingle(item: T) {
-    router.push({ name: options.singleRoute, params: { slug: slugFor(item) } })
+    router.push(singleTo(item))
   }
 
   function onSaved() {
@@ -236,6 +241,7 @@ export function useEntityList<T extends EntityBase>(options: EntityListOptions<T
     formSlug,
     openCreate,
     edit,
+    singleTo,
     goSingle,
     onSaved,
     togglePublish,

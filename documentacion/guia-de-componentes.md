@@ -37,7 +37,8 @@ Los estilos se importan vía SCSS:
   el "← volver" de los singles).
 - **Props:** `variant?: 'primary' | 'secondary' | 'danger' | 'success' |
   'text' | 'text-danger'` (def. `primary`), `type?: 'button' | 'submit'`
-  (def. `button`).
+  (def. `button`), `href?: string` (con URL se renderiza como **enlace**
+  `<a>` con el mismo aspecto, sin `type`).
 - **Slot:** contenido del botón (texto/icono).
 - **Uso:**
 
@@ -45,6 +46,17 @@ Los estilos se importan vía SCSS:
 <BaseButton @click="save">Guardar</BaseButton>
 <BaseButton variant="secondary" @click="cancel">Cancelar</BaseButton>
 <BaseButton variant="danger" type="submit">Eliminar</BaseButton>
+```
+
+- **Como enlace** (`href`): para las acciones que NAVEGAN (abrir el detalle
+  de un elemento), y así el usuario puede abrirlas en otra pestaña (clic
+  derecho, botón central, ctrl+clic). Con vue-router, `RouterLink` en modo
+  `custom` aporta la URL y la navegación SPA:
+
+```vue
+<RouterLink v-slot="{ href, navigate }" :to="{ name: 'hero', params: { slug } }" custom>
+  <BaseButton :href="href" @click="navigate">Abrir</BaseButton>
+</RouterLink>
 ```
 
 - **Slot `icon`** (patrón kontuan): coloca el icono a la izquierda y hace el
@@ -465,6 +477,11 @@ if (!ok) return
   grupos plegables con `NavGroup`, abajo), `actions` (zona derecha del
   navbar), `user` (pie del sidebar; recibe `{ collapsed }`), por defecto
   (cuerpo de la página).
+- **Carril de iconos (colapsado):** al pasar el ratón (o enfocar) un
+  `nav-item` se muestra su `.nav-label` como tooltip a la derecha
+  (`.nav-tooltip`, delegado en el contenedor del slot: vale para enlaces
+  sueltos y para cabeceras e hijos de `NavGroup`). No hay que añadir nada:
+  basta con que cada ítem lleve su `.nav-label`.
 - **Uso:**
 
 ```vue

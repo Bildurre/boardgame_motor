@@ -81,6 +81,7 @@
     border: 0;
     padding: 0;
     color: $text-1;
+    text-decoration: none; // es un enlace (RouterLink)
     font-weight: $k-fw-semibold;
     cursor: pointer;
     text-align: left;

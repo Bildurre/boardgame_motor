@@ -46,10 +46,20 @@ descargable desde el admin, y programable. Una salvaguarda simple por juego.
 ```
 GET    /api/v1/admin/backups            # listar
 POST   /api/v1/admin/backups            # crear (sync o en cola)
-GET    /api/v1/admin/backups/{id}/download
+GET    /api/v1/admin/backups/{id}/download       # por la API (con token)
+GET    /api/v1/admin/backups/{id}/download-url   # { url } firmada y temporal (5 min)
+GET    /api/v1/backups/{id}/download             # pública, solo con firma válida
 DELETE /api/v1/admin/backups/{id}
 ```
 - `BackupManager` en admin-kit: crear, listar, descargar, borrar; aviso de tamaño.
+- **Descarga delegada al navegador**: la vista pide `download-url` y abre la
+  URL firmada (`window.location.assign`), así el navegador muestra la
+  descarga con su progreso. Por la API con el token habría que bajar el zip
+  entero a memoria (blob) y «aparecía» de golpe al final.
+- **Storage en la manual**: `RunBackupJob` reaplica la config de spatie si
+  la vigente en el proceso (`MotorBackup::appliedWithMedia()`: el boot o el
+  último job) no es la suya. En un worker de larga vida, la config no es la
+  del boot sino la del último job.
 
 ## Frontera motor ↔ juego
 
