@@ -12,7 +12,7 @@ El formato sigue [Keep a Changelog](https://keepachangelog.com/es/) y el
 versionado, [SemVer](https://semver.org/lang/es/) (mientras estemos en `0.x`,
 los cambios de API pueden llegar en versiones menores).
 
-## [Sin publicar]
+## [0.5.53] — 2026-09-23
 
 - Plantilla: `update-motor.sh` espera a que Packagist y npm SIRVAN la
   versión pedida antes de instalar (hasta 10 min, `MOTOR_ESPERA_MAX`) y
