@@ -54,7 +54,12 @@ packagist_tiene() {
 }
 
 npm_tiene() {
-  [[ "$(npm view "$1@$VERSION" version --prefer-online 2>/dev/null)" == "$VERSION" ]]
+  # No basta con que los metadatos listen la versión: npm los publica antes
+  # de que el tarball esté en su CDN (E404 al instalar segundos después de
+  # publicar). Se comprueba el tarball de verdad.
+  local tarball
+  tarball="$(npm view "$1@$VERSION" dist.tarball --prefer-online 2>/dev/null)"
+  [[ -n "$tarball" ]] && curl -sIL -o /dev/null -w '%{http_code}' "$tarball" | grep -q '^200$'
 }
 
 echo "==> Backend: edc-motor/core ^$VERSION"
