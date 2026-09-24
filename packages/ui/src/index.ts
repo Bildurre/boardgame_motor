@@ -64,6 +64,7 @@ export { createApi, type CreateApiOptions } from './lib/createApi'
 export {
   watchSplash,
   dismissSplash,
+  removeSplash,
   setupNavigationSplash,
   type WatchSplashOptions,
   type NavigationSplashOptions,

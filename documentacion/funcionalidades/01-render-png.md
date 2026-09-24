@@ -131,8 +131,15 @@ actual, pero **declarativa**: la entidad lista qué campos disparan regeneració
   (def. 300 s): `RenderToken::issue()` al lanzar Browsershot; `GET api/render/{entity}/{id}`
   lo exige y solo vale para esa entidad+id.
 - La ruta `/_render` marca `window.__bgmRenderReady` cuando el componente está
-  montado con datos, fuentes (`document.fonts.ready`) e imágenes cargadas;
+  montado con datos, fuentes (`document.fonts.ready`) e imágenes cargadas, y
+  tras dos `requestAnimationFrame` (el último render ya pintado);
   `PreviewRenderer` espera esa señal (`waitForFunction`) además de `networkidle`.
+- **El splash de arranque no pinta en `/_render`**: `RenderView` llama a
+  `removeSplash()` (`@edc-motor/ui`) al arrancar, que elimina `#edc-splash`
+  al instante. Sin eso, el velo se retiraba por reposo de red más fundido
+  (200 ms + 250 ms) y la captura, que llega 500 ms tras la última actividad
+  de red, lo pillaba a veces a medio fundir. Cinturón y tirantes:
+  `PreviewRenderer` exige también que `#edc-splash` no exista.
 - Los PNG se guardan **versionados** (`{locale}-{rand}.png`): cada render produce
   una URL nueva (sin cachés rancias) y borra el fichero anterior.
 - La **imagen** de la entidad vive en MediaLibrary (no es columna), así que el

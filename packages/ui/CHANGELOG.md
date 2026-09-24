@@ -4,6 +4,14 @@ Componentes Vue 3 + SCSS para las webs públicas (y piezas compartidas con el
 admin). Paquete **fuente** (se consume vía Vite). Versión de tren con
 `edc-motor/core` y `@edc-motor/admin-kit`.
 
+## [Sin publicar]
+
+### Añadido
+
+- **`removeSplash()`**: quita el splash de arranque (`#edc-splash`) al
+  instante y para siempre, sin fundido ni temporizadores. Para rutas que
+  nadie mira: la de render a PNG lo llama al arrancar (doc 01).
+
 ## [0.5.54] — 2026-09-24
 
 - Sin cambios propios: versión de tren.

@@ -14,6 +14,10 @@ los cambios de API pueden llegar en versiones menores).
 
 ## [Sin publicar]
 
+- Plantilla y playground: `RenderView` quita el splash de arranque al
+  entrar (`removeSplash()`) y avisa a Browsershot tras dos
+  `requestAnimationFrame` (último render pintado). Migración del cascarón:
+  copiar `app/src/views/RenderView.vue` en cada juego.
 - Plantilla: `update-motor.sh` comprueba que npm sirve el TARBALL de la
   versión (no solo que la lista en los metadatos: los publica antes y el
   install daba E404 segundos después del release, nos pasó en 0.5.54).

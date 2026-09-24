@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed, nextTick, onMounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
+import { removeSplash } from '@edc-motor/ui'
 import { api } from '@/lib/api'
 import { renderRegistry } from '@/render/registry'
 
@@ -8,6 +9,11 @@ import { renderRegistry } from '@/render/registry'
 // componente visual de la entidad, con los datos que la API entrega a cambio
 // del token de servicio que emitió el backend al lanzar Browsershot.
 const route = useRoute()
+
+// El splash de arranque (#edc-splash del index.html) se retira solo por
+// reposo de red + fundido, ajeno a esta vista: la captura de Browsershot
+// podía pillarlo a medio fundir. Aquí nadie mira la pantalla: fuera ya.
+removeSplash()
 
 const entity = computed(() => String(route.params.entity))
 const id = computed(() => String(route.params.id))
@@ -49,6 +55,11 @@ onMounted(async () => {
         }),
   )
   await Promise.all(images)
+  // Dos frames más: que el último render esté PINTADO antes de avisar (la
+  // captura llega nada más verse la señal).
+  await new Promise<void>((resolve) => {
+    requestAnimationFrame(() => requestAnimationFrame(() => resolve()))
+  })
   window.__bgmRenderReady = true
 })
 </script>

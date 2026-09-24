@@ -98,6 +98,22 @@ export function dismissSplash(): void {
   setTimeout(finish, 600)
 }
 
+/**
+ * Quita el velo AL INSTANTE, sin fundido ni temporizadores, y para siempre
+ * (el elemento se elimina: ni el arranque ni las navegaciones lo vuelven a
+ * enseñar). Para las rutas que nadie mira: la de render a PNG (`/_render`)
+ * lo llama al arrancar, porque la captura de Browsershot no espera al
+ * fundido y, con el reposo de red y el fundido medidos desde el mismo
+ * instante, a veces pillaba el velo a medias.
+ */
+export function removeSplash(): void {
+  const el = splashEl()
+  if (!el) return
+  clearTimeout(quietTimer)
+  onQuiet = null
+  el.remove()
+}
+
 /** Re-enseña el velo (fundido de entrada por la misma transición). */
 function showSplash(): void {
   const el = splashEl()
