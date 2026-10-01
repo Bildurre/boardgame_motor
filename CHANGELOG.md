@@ -12,7 +12,7 @@ El formato sigue [Keep a Changelog](https://keepachangelog.com/es/) y el
 versionado, [SemVer](https://semver.org/lang/es/) (mientras estemos en `0.x`,
 los cambios de API pueden llegar en versiones menores).
 
-## [Sin publicar]
+## [0.5.55] — 2026-10-01
 
 - Plantilla y playground: `RenderView` quita el splash de arranque al
   entrar (`removeSplash()`) y avisa a Browsershot tras dos
